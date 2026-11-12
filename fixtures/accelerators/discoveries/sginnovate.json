@@ -1,0 +1,54 @@
+{
+  "programId": "sginnovate",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.sginnovate.com/faq",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/deep-tech-community",
+      "page": "details",
+      "anchor": "Deep Tech Community Learn more about emerging tech trends and opportunities",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/career-development-jobs",
+      "page": "details",
+      "anchor": "Career Development & Jobs Discover Deep Tech jobs and development programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/startup-growth-funding",
+      "page": "portfolio",
+      "anchor": "Startup Growth & Funding Access resources and support dedicated to Deep Tech companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/our-portfolio",
+      "page": "portfolio",
+      "anchor": "Our Portfolio Explore our portfolio companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.sginnovate.com/dtc?tab=companies",
+      "page": "portfolio",
+      "anchor": "For Organisation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

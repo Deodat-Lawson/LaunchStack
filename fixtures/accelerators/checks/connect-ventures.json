@@ -1,0 +1,79 @@
+{
+  "programId": "connect-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.connectventures.co/",
+    "https://www.connectventures.co/team-members/sai-tatireddy"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-bfea2b90e3",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — homepage checked by scrape.py",
+      "excerpt": "in London. We’re a partner-only, Europe-wide, high conviction investment team. Stage We are pre-seed specialists since 2012. We lead or co-lead rounds between $500k-$5m. Geo We invest across Europe, from our home in London. Focus We back founders building at the intersection of AI, hardware, and automation. Team We're a",
+      "page": "details"
+    },
+    {
+      "id": "check-name-be07479779",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — homepage checked by scrape.py",
+      "excerpt": "Connect Ventures | Home We use cookies to enhance your browsing experience,",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3863c5e9b4",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — homepage checked by scrape.py",
+      "excerpt": "Show more → https://www.connectventures.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e5e9cfa615",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.connectventures.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7d309c4e86",
+      "url": "https://www.connectventures.co/team-members/sai-tatireddy",
+      "title": "Connect Ventures — terms page checked by scrape.py",
+      "excerpt": "https://www.connectventures.co/",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.connectventures.co/",
+        "evidenceId": "check-route-7d309c4e86"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "in London. We’re a partner-only, Europe-wide, high conviction investment team. Stage We are pre-seed specialists since 2012. We lead or co-lead rounds between $500k-$5m. Geo We invest across Europe, from our home in London. Focus We back founders building at the intersection of AI, hardware, and automation. Team We're a",
+        "evidenceId": "check-deal-bfea2b90e3"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.connectventures.co/companies",
+        "evidenceId": "check-portfolio-e5e9cfa615"
+      }
+    ],
+    "name": [
+      {
+        "value": "Connect Ventures",
+        "evidenceId": "check-name-be07479779"
+      }
+    ],
+    "examplePages": []
+  }
+}

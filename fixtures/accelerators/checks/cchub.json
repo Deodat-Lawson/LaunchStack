@@ -1,0 +1,129 @@
+{
+  "programId": "cchub",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://cchub.africa/",
+    "https://cchub.africa/about/",
+    "https://cchub.africa/blog/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-ba5883ff22",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "details"
+    },
+    {
+      "id": "check-email-caecabd998",
+      "url": "https://cchub.africa/blog/",
+      "title": "CcHUB — batches page checked by scrape.py",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-cd9b5d4629",
+      "url": "https://cchub.africa/about/",
+      "title": "CcHUB — details page checked by scrape.py",
+      "excerpt": "Incubation Innovation Support Design Lab Contact Us info@cchub.africa 294 Herbert Macaulay Way, Sabo Yaba, Lagos, Nigeria",
+      "page": "details"
+    },
+    {
+      "id": "check-name-98b6b784a9",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "Home - Co-creation HUB Africa (CcHUB) : Co-creation HUB Africa (CcHUB) ­ ­ ­ ­ Security",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-372eee0ddc",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4b9be6cb83",
+      "url": "https://cchub.africa/blog/",
+      "title": "CcHUB — batches page checked by scrape.py",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-52bd024432",
+      "url": "https://cchub.africa/about/",
+      "title": "CcHUB — details page checked by scrape.py",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-61f84a9763",
+      "url": "https://cchub.africa/about/",
+      "title": "CcHUB — details page checked by scrape.py",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7045f1fca5",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "Learn More → https://cchub.africa/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3193bf807",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "Incubation → https://cchub.africa/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f231525ea6",
+      "url": "https://cchub.africa/blog/",
+      "title": "CcHUB — batches page checked by scrape.py",
+      "excerpt": "Startups → https://cchub.africa/startups/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-56113e8bda",
+      "url": "https://cchub.africa/",
+      "title": "CcHUB — homepage checked by scrape.py",
+      "excerpt": "https://cchub.africa",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@cchub.africa",
+        "evidenceId": "check-email-ba5883ff22"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://cchub.africa",
+        "evidenceId": "check-route-56113e8bda"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://cchub.africa/startups/",
+        "evidenceId": "check-portfolio-372eee0ddc"
+      }
+    ],
+    "name": [
+      {
+        "value": "CcHUB",
+        "evidenceId": "check-name-98b6b784a9"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "programId": "sheraa",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://sheraa.ae/",
+    "https://sheraa.ae/about-us",
+    "https://sheraa.ae/deal-dock"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-461f3ed872",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage checked by scrape.py",
+      "excerpt": "and industry access, using the latest AI tools. Apply Now Applications close 19 November 2026. Apply early. Applications are reviewed on a rolling",
+      "page": "details"
+    },
+    {
+      "id": "check-name-f9f0089057",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage checked by scrape.py",
+      "excerpt": "an idea, building a startup, or scaling a business, Sheraa Membership connects you to the right people,",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0ed71e637e",
+      "url": "https://sheraa.ae/about-us",
+      "title": "Sheraa — details page checked by scrape.py",
+      "excerpt": "+971 6 532 6483",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-17a1f7a308",
+      "url": "https://sheraa.ae/about-us",
+      "title": "Sheraa — details page checked by scrape.py",
+      "excerpt": "+971 6 569 4939",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2e96c1b0fb",
+      "url": "https://sheraa.ae/about-us",
+      "title": "Sheraa — details page checked by scrape.py",
+      "excerpt": "+971 6 509 4000",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c4257f31cc",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage checked by scrape.py",
+      "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd6fd5b2dc",
+      "url": "https://sheraa.ae/about-us",
+      "title": "Sheraa — details page checked by scrape.py",
+      "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ef4909c13d",
+      "url": "https://sheraa.ae/deal-dock",
+      "title": "Sheraa — terms page checked by scrape.py",
+      "excerpt": "Our Startups → https://sheraa.ae/meet-our-startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-78d024bd82",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — homepage checked by scrape.py",
+      "excerpt": "https://sheraa.ae",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+971 6 509 4000",
+        "evidenceId": "check-phone-2e96c1b0fb"
+      },
+      {
+        "value": "+971 6 569 4939",
+        "evidenceId": "check-phone-17a1f7a308"
+      },
+      {
+        "value": "+971 6 532 6483",
+        "evidenceId": "check-phone-0ed71e637e"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://sheraa.ae",
+        "evidenceId": "check-route-78d024bd82"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2026-11-19",
+        "evidenceId": "check-deadline-461f3ed872"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://sheraa.ae/meet-our-startups",
+        "evidenceId": "check-portfolio-c4257f31cc"
+      }
+    ],
+    "name": [
+      {
+        "value": "Sheraa",
+        "evidenceId": "check-name-f9f0089057"
+      }
+    ],
+    "examplePages": []
+  }
+}

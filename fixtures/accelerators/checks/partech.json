@@ -1,0 +1,73 @@
+{
+  "programId": "partech",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://partechpartners.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-4684a64455",
+      "url": "https://partechpartners.com/",
+      "title": "Partech — homepage checked by scrape.py",
+      "excerpt": "Homepage | Partech INDEPENDENT IN THOUGHT. Putting ambition in motion.",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d811753cf",
+      "url": "https://partechpartners.com/",
+      "title": "Partech — homepage checked by scrape.py",
+      "excerpt": "( All Portfolio ) → https://partechpartners.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-421eae1902",
+      "url": "https://partechpartners.com/",
+      "title": "Partech — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://partechpartners.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7383c50acf",
+      "url": "https://partechpartners.com/",
+      "title": "Partech — homepage checked by scrape.py",
+      "excerpt": "( Discover Portfolio ) → https://partechpartners.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fdef6d862d",
+      "url": "https://partechpartners.com/",
+      "title": "Partech — homepage checked by scrape.py",
+      "excerpt": "https://partechpartners.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://partechpartners.com/",
+        "evidenceId": "check-route-fdef6d862d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://partechpartners.com/companies",
+        "evidenceId": "check-portfolio-7383c50acf"
+      }
+    ],
+    "name": [
+      {
+        "value": "Partech",
+        "evidenceId": "check-name-4684a64455"
+      }
+    ],
+    "examplePages": []
+  }
+}

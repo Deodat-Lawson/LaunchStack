@@ -1,0 +1,142 @@
+{
+  "programId": "tech-wildcatters",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://techwildcatters.com/",
+    "https://techwildcatters.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-4fa4139731",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5bb10317b3",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "excerpt": "info@techwildcatters.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8234363a45",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here Tech Wildcatters is a venture capital firm",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8ad261ecc3",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "and create opportunities. Gallery Gallery Contact info@techwildcatters.com © All Copyright 2024 by Tech Wildcatters",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a117f15a4d",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d7f4ad7436",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "excerpt": "to content 5960 Berkshire Ln, 6th Floor, Dallas, TX 75225 info@techwildcatters.com Investor Login Follow us: Home About Us Team News &",
+      "page": "details"
+    },
+    {
+      "id": "check-email-da56c8815d",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "info@techwildcatters.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-eb64a5882b",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "excerpt": "Portfolio Careers Mentorship Program Investor Contact info@techwildcatters.com search here About Us Tech Wildcatters About Us 00 Years of",
+      "page": "details"
+    },
+    {
+      "id": "check-name-61a0dda85e",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Tech Wildcatters Skip to content 5960 Berkshire Ln, 6th Floor, Dallas, TX",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-559db0bfd2",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Scalable Pathway → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8a0806d6fb",
+      "url": "https://techwildcatters.com/about-us/",
+      "title": "Tech Wildcatters — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c6c32b9de0",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cdb5afd5df",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://techwildcatters.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3c72985a2d",
+      "url": "https://techwildcatters.com/",
+      "title": "Tech Wildcatters — homepage checked by scrape.py",
+      "excerpt": "https://techwildcatters.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@techwildcatters.com",
+        "evidenceId": "check-email-da56c8815d"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://techwildcatters.com/",
+        "evidenceId": "check-route-3c72985a2d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://techwildcatters.com/portfolio/",
+        "evidenceId": "check-portfolio-cdb5afd5df"
+      }
+    ],
+    "name": [
+      {
+        "value": "Tech Wildcatters",
+        "evidenceId": "check-name-61a0dda85e"
+      }
+    ],
+    "examplePages": []
+  }
+}

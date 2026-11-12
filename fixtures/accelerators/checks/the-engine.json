@@ -1,0 +1,141 @@
+{
+  "programId": "the-engine",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://engine.xyz/",
+    "https://engine.xyz/spaces/residency/resident-programs",
+    "https://engine.xyz/landing/apply-for-residency"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-2513160732",
+      "url": "https://engine.xyz/landing/apply-for-residency",
+      "title": "The Engine — application page checked by scrape.py",
+      "excerpt": "\"email\": \"hello@engine.xyz\"",
+      "page": "application"
+    },
+    {
+      "id": "check-email-6a5f1b5b62",
+      "url": "https://engine.xyz/",
+      "title": "The Engine — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"hello@engine.xyz\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c1d523c699",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "\"email\": \"hello@engine.xyz\"",
+      "page": "details"
+    },
+    {
+      "id": "check-name-95d3295358",
+      "url": "https://engine.xyz/",
+      "title": "The Engine — homepage checked by scrape.py",
+      "excerpt": "The Home for Tough Tech | The Engine Skip to content Global navigation DONATE Home Explore The",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5b0e3e4286",
+      "url": "https://engine.xyz/",
+      "title": "The Engine — homepage checked by scrape.py",
+      "excerpt": "Companies → https://engine.xyz/resident-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-800a6ff018",
+      "url": "https://engine.xyz/landing/apply-for-residency",
+      "title": "The Engine — application page checked by scrape.py",
+      "excerpt": "Companies → https://engine.xyz/resident-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-edcda693e9",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "Companies → https://engine.xyz/resident-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-179abc6941",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "Request a Tour → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-723c2f9197",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "Learn More → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8b298c9f39",
+      "url": "https://engine.xyz/",
+      "title": "The Engine — homepage checked by scrape.py",
+      "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e3e65ecf5",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "Apply for Residency → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c383f1bc09",
+      "url": "https://engine.xyz/",
+      "title": "The Engine — homepage checked by scrape.py",
+      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d6d0d8f83a",
+      "url": "https://engine.xyz/spaces/residency/resident-programs",
+      "title": "The Engine — details page checked by scrape.py",
+      "excerpt": "Contact Us → https://engine.xyz/landing/apply-for-residency",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@engine.xyz",
+        "evidenceId": "check-email-6a5f1b5b62"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://engine.xyz/landing/apply-for-residency",
+        "evidenceId": "check-route-8b298c9f39"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://engine.xyz/landing/apply-for-residency",
+        "evidenceId": "check-route-8b298c9f39"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://engine.xyz/resident-companies",
+        "evidenceId": "check-portfolio-5b0e3e4286"
+      }
+    ],
+    "name": [
+      {
+        "value": "The Engine",
+        "evidenceId": "check-name-95d3295358"
+      }
+    ],
+    "examplePages": []
+  }
+}

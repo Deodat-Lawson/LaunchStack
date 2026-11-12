@@ -1,0 +1,38 @@
+{
+  "programId": "startup-yard",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/faq/",
+      "page": "terms",
+      "anchor": "our full FAQ here",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "page": "batches",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupyard.com/frequently-asked-questions-about-startupyard/",
+      "page": "terms",
+      "anchor": "FAQ- Frequently Asked Questions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "programId": "lventure",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://zestgroup.vc/en",
+    "https://zestgroup.vc/en/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-063732a89d",
+      "url": "https://zestgroup.vc/en/about-us",
+      "title": "LVenture Group — details page checked by scrape.py",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5a1ffb3f82",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "info@zestgroup.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-80c2d4fa55",
+      "url": "https://zestgroup.vc/en/about-us",
+      "title": "LVenture Group — details page checked by scrape.py",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "details"
+    },
+    {
+      "id": "check-email-84c061f24c",
+      "url": "https://zestgroup.vc/en/about-us",
+      "title": "LVenture Group — details page checked by scrape.py",
+      "excerpt": "info@zestgroup.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cba3c5d79e",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "Google Privacy Policy and Terms of Service apply. Email: info@zestgroup.vc Certified Email (PEC): zestgroup.pec@legalmail.it VAT",
+      "page": "details"
+    },
+    {
+      "id": "check-email-db5a8ed13d",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "Contact Us (info@zestgroup.vc)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-642be0c8e1",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "It is the fruit of the merger between Digital Magics and LVenture Group, the pioneers of innovation in Italy. For over 20 years,",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-78554b2fad",
+      "url": "https://zestgroup.vc/en/about-us",
+      "title": "LVenture Group — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9898a6e96a",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "Discover our Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f89e3e7fbb",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://zestgroup.vc/en/portfolio",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@zestgroup.vc",
+        "evidenceId": "check-email-db5a8ed13d"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://zestgroup.vc/en/portfolio",
+        "evidenceId": "check-portfolio-f89e3e7fbb"
+      }
+    ],
+    "name": [
+      {
+        "value": "LVenture Group",
+        "evidenceId": "check-name-642be0c8e1"
+      }
+    ],
+    "examplePages": []
+  }
+}

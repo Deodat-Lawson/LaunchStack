@@ -1,0 +1,293 @@
+{
+  "programId": "bessemer",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.bvp.com/",
+    "https://www.bvp.com/about",
+    "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-f8482c41b8",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Bessemer Venture Partners Portfolio Team Atlas Beyond the capital Portfolio Team",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2d83ebf690",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+1 (914) 833-9100",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-41658b478e",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+1 (650) 853-7000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5b5836efb8",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+972 (3) 373-9880",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-5b671fabd9",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+1 (415) 800-8982",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-7a784e0203",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+1 (617) 588-1700",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b83ffc5bd0",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+91 (80) 6146-9000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f8d22294de",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "+1 (212) 653-1900",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-07ee0a4214",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Enterprise → https://www.bvp.com/portfolio?sectors=enterprise",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1c6dec2015",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Data & Cloud → https://www.bvp.com/portfolio?sectors=data-and-cloud",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-20321befd3",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Cybersecurity → https://www.bvp.com/portfolio?sectors=cybersecurity",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2752f571ac",
+      "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "title": "Bessemer Venture Partners — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-27c3158853",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Explore our portfolio → https://www.bvp.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-45b83f7476",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Consumer → https://www.bvp.com/portfolio?sectors=consumer",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-56834e9da3",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "AI → https://www.bvp.com/portfolio?sectors=ai",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-58178f5d61",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Developer → https://www.bvp.com/portfolio?sectors=developer",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8d88bcb77c",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Crypto → https://www.bvp.com/portfolio?sectors=crypto",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9298c1ca3a",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Healthcare → https://www.bvp.com/portfolio?sectors=healthcare",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aaa5df5df5",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Infrastructure → https://www.bvp.com/portfolio?sectors=infrastructure",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b8bb2d7a76",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Vertical → https://www.bvp.com/portfolio?sectors=vertical",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ba46e7537e",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Marketplaces → https://www.bvp.com/portfolio?sectors=marketplaces",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c3bb5366bc",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Biotech → https://www.bvp.com/portfolio?sectors=biotech",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cff3366578",
+      "url": "https://www.bvp.com/about",
+      "title": "Bessemer Venture Partners — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d9fbb6ad55",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Fintech → https://www.bvp.com/portfolio?sectors=fintech",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e45d81c754",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bvp.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ed9200c7c7",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Physical AI & Robotics → https://www.bvp.com/portfolio?sectors=physical-ai-and-robotics",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ef1f3eaeba",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Deep Tech & Defense → https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
+      "page": "details"
+    },
+    {
+      "id": "check-route-74742ca7dd",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "https://www.bvp.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7bc85d711b",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — homepage checked by scrape.py",
+      "excerpt": "News Dreeze: pioneering 'Application Revival' for the agentic age November 10, 2026 Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery for businesses. → https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+16508537000",
+        "evidenceId": "check-phone-41658b478e"
+      },
+      {
+        "value": "+14158008982",
+        "evidenceId": "check-phone-5b671fabd9"
+      },
+      {
+        "value": "+16175881700",
+        "evidenceId": "check-phone-7a784e0203"
+      },
+      {
+        "value": "+12126531900",
+        "evidenceId": "check-phone-f8d22294de"
+      },
+      {
+        "value": "+19148339100",
+        "evidenceId": "check-phone-2d83ebf690"
+      },
+      {
+        "value": "+918061469000",
+        "evidenceId": "check-phone-b83ffc5bd0"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+        "evidenceId": "check-route-7bc85d711b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.bvp.com/",
+        "evidenceId": "check-route-74742ca7dd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.bvp.com/portfolio",
+        "evidenceId": "check-portfolio-e45d81c754"
+      },
+      {
+        "value": "https://www.bvp.com/portfolio?sectors=vertical",
+        "evidenceId": "check-portfolio-b8bb2d7a76"
+      },
+      {
+        "value": "https://www.bvp.com/portfolio?sectors=crypto",
+        "evidenceId": "check-portfolio-8d88bcb77c"
+      },
+      {
+        "value": "https://www.bvp.com/portfolio?sectors=fintech",
+        "evidenceId": "check-portfolio-d9fbb6ad55"
+      },
+      {
+        "value": "https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
+        "evidenceId": "check-portfolio-ef1f3eaeba"
+      },
+      {
+        "value": "https://www.bvp.com/portfolio?sectors=enterprise",
+        "evidenceId": "check-portfolio-07ee0a4214"
+      }
+    ],
+    "name": [
+      {
+        "value": "Bessemer Venture Partners",
+        "evidenceId": "check-name-f8482c41b8"
+      }
+    ],
+    "examplePages": []
+  }
+}

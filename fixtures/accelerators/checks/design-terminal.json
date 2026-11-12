@@ -1,0 +1,48 @@
+{
+  "programId": "design-terminal",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://civitta.com/hu",
+    "https://civitta.com/hu/nemzeti-tehetseg-kozpont-start-programcsalad/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-1c23efebcf",
+      "url": "https://civitta.com/hu",
+      "title": "Design Terminal — homepage checked by scrape.py",
+      "excerpt": "Budapest Határőr st. 36, 1122 Telephone +36 70 669 1466 Design Terminal Public Benefit Non-profit Ltd. VAT HU25717002 Péter",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2de29f6eb8",
+      "url": "https://civitta.com/hu",
+      "title": "Design Terminal — homepage checked by scrape.py",
+      "excerpt": "https://civitta.com/hu",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://civitta.com/hu",
+        "evidenceId": "check-route-2de29f6eb8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Design Terminal",
+        "evidenceId": "check-name-1c23efebcf"
+      }
+    ],
+    "examplePages": []
+  }
+}

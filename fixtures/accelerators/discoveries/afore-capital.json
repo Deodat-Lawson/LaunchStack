@@ -1,0 +1,22 @@
+{
+  "programId": "afore-capital",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.afore.vc/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.afore.vc/residence",
+      "page": "details",
+      "anchor": ".n-banner:hover .n-banner__learn-more-text { color: #001632;} .n-banner:hover .n-banner__arrow-img_init { opacity: 0; } .n-banner:hover .n-banner__arrow-img_hover { opacity: 1; } H",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "programId": "eit-urban-mobility",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.eiturbanmobility.eu/",
+    "https://www.eiturbanmobility.eu/who-we-are/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-aced287dd4",
+      "url": "https://www.eiturbanmobility.eu/",
+      "title": "EIT Urban Mobility — homepage checked by scrape.py",
+      "excerpt": "EIT Urban Mobility - largest community for urban mobility innovation Skip to",
+      "page": "details"
+    },
+    {
+      "id": "check-route-044fb8e962",
+      "url": "https://www.eiturbanmobility.eu/",
+      "title": "EIT Urban Mobility — homepage checked by scrape.py",
+      "excerpt": ".st0 { stroke: #fff; stroke-miterlimit: 10; stroke-width: 2px; } .st0, .st1, .st2 { fill: #184595; } .st3 { fill: #76bc21; } .st2 { fill-rule: evenodd; } → https://www.eiturbanmobility.eu",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.eiturbanmobility.eu",
+        "evidenceId": "check-route-044fb8e962"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "EIT Urban Mobility",
+        "evidenceId": "check-name-aced287dd4"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "programId": "techstars",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.techstars.com/",
+    "https://www.techstars.com/newsroom/investment-terms",
+    "https://www.techstars.com/about",
+    "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-86f8d216af",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "our partners, and access to our world-class network of investors, partners, mentors, and alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8f6ca8437f",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "a side letter. One investment is a $20,000 fixed-percentage convertible equity agreement for 5% common stock (on a post-money basis). Another investment is a $200,000 uncapped MFN post-money Safe. The side letter sets out certain rights Techstars needs in the future. $20,000 fixed percentage convertible equity agreement",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ac949ae7ed",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "and to learn how we can partner to make the world a better place for everyone. David The Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs. This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money Convertible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b60cced620",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "instruments have been converted alongside the round. The CEA and Safe are diluted by any new money in the priced round, as well as any option pool increases. $200,000 uncapped MFN Safe . The Safe will also convert when the company does a priced round of at least $1 million. It is uncapped, meaning there is no pre-determined",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f70054dc0b",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M pre-money, the $200,000 MFN Safe would then convert into 1% additional ownership at that",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f97aac51fb",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "founder-friendly and does not signal or pre-establish any valuation limit. *The only exception is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe. Incorporating Techstars invests in US corporations or foreign equivalents (or holding companies). For those companies that haven’t",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-87d18b4b7c",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Techstars: the early-stage accelerator and investor Join Us",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1166fe14b8",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-57523c024a",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5a49a5b0af",
+      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
+      "title": "Techstars — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-5a6f9785ed",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6d81acfa6d",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6fb5410f83",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars — details page checked by scrape.py",
+      "excerpt": "Explore the Portfolio → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-81d3a48e47",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8201ff2841",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Learn more → https://www.techstars.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-930a31138b",
+      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
+      "title": "Techstars — batches page checked by scrape.py",
+      "excerpt": "Alumni → https://www.techstars.com/for/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9378a16d54",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.techstars.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e59508468a",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "Startups → https://www.techstars.com/blog/tags/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2855a04baa",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b973284dd",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars — details page checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5689983934",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars — homepage checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9928ea31a2",
+      "url": "https://www.techstars.com/newsroom/investment-terms",
+      "title": "Techstars — terms page checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9fefe22c6d",
+      "url": "https://www.techstars.com/about",
+      "title": "Techstars — details page checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c7ec111747",
+      "url": "https://www.techstars.com/newsroom/techstars-announces-the-fall-2026-founder-catalyst-global-cohort",
+      "title": "Techstars — batches page checked by scrape.py",
+      "excerpt": "Apply Today → https://apply.techstars.com/",
+      "page": "batches"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.techstars.com/",
+        "evidenceId": "check-route-5689983934"
+      },
+      {
+        "value": "https://apply.techstars.com",
+        "evidenceId": "check-route-2855a04baa"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.techstars.com/",
+        "evidenceId": "check-route-5689983934"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "our partners, and access to our world-class network of investors, partners, mentors, and alumni. The $220,000 offer is made up of two components, including $200,000 through an uncapped MFN Safe and $20,000 through a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company",
+        "evidenceId": "check-deal-86f8d216af"
+      },
+      {
+        "value": "a Post-Money Convertible Equity Agreement (CEA). The total equity Techstars receives will be 5% of the company in common stock plus the future value of the $200,000 uncapped MFN Safe. For example, if your next round is valued at $20M pre-money, the $200,000 MFN Safe would then convert into 1% additional ownership at that",
+        "evidenceId": "check-deal-f70054dc0b"
+      },
+      {
+        "value": "and to learn how we can partner to make the world a better place for everyone. David The Details of Techstars’ Accelerator Investment Offer Techstars invests $220,000* in companies accepted into its accelerator programs. This offer includes $200,000 through an uncapped MFN Safe, plus $20,000 through a Post-Money Convertible",
+        "evidenceId": "check-deal-ac949ae7ed"
+      },
+      {
+        "value": "a side letter. One investment is a $20,000 fixed-percentage convertible equity agreement for 5% common stock (on a post-money basis). Another investment is a $200,000 uncapped MFN post-money Safe. The side letter sets out certain rights Techstars needs in the future. $20,000 fixed percentage convertible equity agreement",
+        "evidenceId": "check-deal-8f6ca8437f"
+      },
+      {
+        "value": "instruments have been converted alongside the round. The CEA and Safe are diluted by any new money in the priced round, as well as any option pool increases. $200,000 uncapped MFN Safe . The Safe will also convert when the company does a priced round of at least $1 million. It is uncapped, meaning there is no pre-determined",
+        "evidenceId": "check-deal-b60cced620"
+      },
+      {
+        "value": "founder-friendly and does not signal or pre-establish any valuation limit. *The only exception is that Techstars accelerator programs in Asia-Pacific offer a $100,000 uncapped MFN Safe. Incorporating Techstars invests in US corporations or foreign equivalents (or holding companies). For those companies that haven’t",
+        "evidenceId": "check-deal-f97aac51fb"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.techstars.com/portfolio",
+        "evidenceId": "check-portfolio-6d81acfa6d"
+      },
+      {
+        "value": "https://www.techstars.com/for/alumni",
+        "evidenceId": "check-portfolio-5a6f9785ed"
+      },
+      {
+        "value": "https://www.techstars.com/blog/tags/startups",
+        "evidenceId": "check-portfolio-e59508468a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Techstars",
+        "evidenceId": "check-name-87d18b4b7c"
+      }
+    ],
+    "examplePages": []
+  }
+}

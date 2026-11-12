@@ -1,0 +1,22 @@
+{
+  "programId": "lightspeed-india",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://lsip.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsip.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

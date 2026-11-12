@@ -1,0 +1,22 @@
+{
+  "programId": "newlab",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.newlab.com/about",
+      "page": "details",
+      "anchor": "platform",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.newlab.com/apply",
+      "page": "application",
+      "anchor": "JOIN",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

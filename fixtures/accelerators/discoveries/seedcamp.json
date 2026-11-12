@@ -1,0 +1,30 @@
+{
+  "programId": "seedcamp",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://seedcamp.com/our-companies/",
+      "page": "portfolio",
+      "anchor": "Our Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seedcamp.com/views/how-to-build-a-company-worth-protecting-with-eric-ries/",
+      "page": "portfolio",
+      "anchor": "How great companies can stay great with Eric Ries",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seedcamp.com/faqs/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

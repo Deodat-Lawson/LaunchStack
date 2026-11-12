@@ -1,0 +1,192 @@
+{
+  "programId": "startup-yard",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startupyard.com/",
+    "https://startupyard.com/apply-to-startupyard-remote-lab/",
+    "https://startupyard.com/faq/",
+    "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-670a3d25a7",
+      "url": "https://startupyard.com/faq/",
+      "title": "Startup Yard — terms page checked by scrape.py",
+      "excerpt": "If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind investment) + €25,000 (in cash). In exchange for the program and funding, we typically target around 5% equity in your startup. The convertible note is valid for 24 months.",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-9745e09ea4",
+      "url": "https://startupyard.com/faq/",
+      "title": "Startup Yard — terms page checked by scrape.py",
+      "excerpt": "banks, and tech companies. Participation is completely free: there are no upfront costs. We provide the acceleration program through a convertible note worth €45,000 (in-kind investment). If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-14405134a5",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage checked by scrape.py",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a267e82c2e",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page checked by scrape.py",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bbffd81875",
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "title": "Startup Yard — batches page checked by scrape.py",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ed6aea0851",
+      "url": "https://startupyard.com/faq/",
+      "title": "Startup Yard — terms page checked by scrape.py",
+      "excerpt": "Startups → https://startupyard.com/category/startup/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1354d81d24",
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "title": "Startup Yard — batches page checked by scrape.py",
+      "excerpt": "Apply page → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-52a4e3183d",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://thefintechers.notion.site/26e1e81998138112b6bdc73da32d03e0?pvs=105",
+      "page": "application"
+    },
+    {
+      "id": "check-route-562946f059",
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "title": "Startup Yard — batches page checked by scrape.py",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-7739476d90",
+      "url": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "title": "Startup Yard — application page checked by scrape.py",
+      "excerpt": "Click to open the search input field Click to open the search input field Search → https://startupyard.com/apply-to-startupyard-remote-lab/?s=",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e013cca86",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a29dddb24e",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage checked by scrape.py",
+      "excerpt": "Apply Now and Take Off → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c45a07d1a1",
+      "url": "https://startupyard.com/faq/",
+      "title": "Startup Yard — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d6d11c4600",
+      "url": "https://startupyard.com/faq/",
+      "title": "Startup Yard — terms page checked by scrape.py",
+      "excerpt": "just go to our apply page → https://startupyard.com/apply-to-startupyard-remote-lab/",
+      "page": "terms"
+    },
+    {
+      "id": "check-selectivity-16c182f16f",
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "title": "Startup Yard — batches page checked by scrape.py",
+      "excerpt": "Thanks guys! ” Mergim Cahani CEO, Gjirafa, StartupYard Alum Why Now We accept less than 3% of applications and we operate on a rolling basis. The best time to apply is now. The longer",
+      "page": "batches"
+    },
+    {
+      "id": "check-selectivity-5ddfa575cb",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage checked by scrape.py",
+      "excerpt": "Only the best make it through to our highly selective program. We accept less than 3% of applicants. Mentorship Our Top Gun’ mentors and management team guide you through the",
+      "page": "details"
+    },
+    {
+      "id": "check-selectivity-989521cc0b",
+      "url": "https://startupyard.com/the-next-wave-begins-startupyard-announces-batch-15/",
+      "title": "Startup Yard — batches page checked by scrape.py",
+      "excerpt": "way. Thanks guys! ” Mergim Cahani CEO, Gjirafa, StartupYard Alum Why Now We accept less than 3% of applications and we operate on a rolling basis. The best time to apply is now. The longer",
+      "page": "batches"
+    },
+    {
+      "id": "check-selectivity-b9582ba1e4",
+      "url": "https://startupyard.com/",
+      "title": "Startup Yard — homepage checked by scrape.py",
+      "excerpt": "your mettle. Only the best make it through to our highly selective program. We accept less than 3% of applicants. Mentorship Our Top Gun’ mentors and management team guide you through the",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+        "evidenceId": "check-route-9e013cca86"
+      },
+      {
+        "value": "https://startupyard.com/apply-to-startupyard-remote-lab/?s=",
+        "evidenceId": "check-route-7739476d90"
+      },
+      {
+        "value": "https://thefintechers.notion.site/26e1e81998138112b6bdc73da32d03e0?pvs=105",
+        "evidenceId": "check-route-52a4e3183d"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://startupyard.com/apply-to-startupyard-remote-lab/",
+        "evidenceId": "check-route-9e013cca86"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-5ddfa575cb"
+      }
+    ],
+    "dealText": [
+      {
+        "value": "banks, and tech companies. Participation is completely free: there are no upfront costs. We provide the acceleration program through a convertible note worth €45,000 (in-kind investment). If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind",
+        "evidenceId": "check-deal-9745e09ea4"
+      },
+      {
+        "value": "If your startup needs funding, you can receive €25,000 in cash – bringing the total convertible note value to €70,000 = €45,000 (in-kind investment) + €25,000 (in cash). In exchange for the program and funding, we typically target around 5% equity in your startup. The convertible note is valid for 24 months.",
+        "evidenceId": "check-deal-670a3d25a7"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://startupyard.com/category/startup/",
+        "evidenceId": "check-portfolio-14405134a5"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

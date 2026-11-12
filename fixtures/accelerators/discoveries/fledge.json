@@ -1,0 +1,78 @@
+{
+  "programId": "fledge",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.fledge.co/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/apply/",
+      "page": "application",
+      "anchor": "Startups",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/angels/",
+      "page": "details",
+      "anchor": "Angel Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/startups/",
+      "page": "details",
+      "anchor": "Startup Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/co-ops/",
+      "page": "details",
+      "anchor": "Co-ops",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/details/",
+      "page": "details",
+      "anchor": "Startup accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/annotated-application/",
+      "page": "application",
+      "anchor": "Annotated Application",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.fledge.co/about/recommendations/",
+      "page": "details",
+      "anchor": "Recommendations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "programId": "ucl-business",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio",
+      "page": "portfolio",
+      "anchor": "Spinout portfolio Browse our portfolio of spinout companies, based on UCL research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/social-ventures?search_api_fulltext=&field_area_of_operation%5B387%5D=387",
+      "page": "portfolio",
+      "anchor": "Social Ventures Ventures driving impact in communities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/who-we-are",
+      "page": "details",
+      "anchor": "Learn more about UCL Ventures",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/gigaton",
+      "page": "portfolio",
+      "anchor": "Gigaton",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/endomag",
+      "page": "portfolio",
+      "anchor": "Endomag",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio/autolus-therapeutics",
+      "page": "portfolio",
+      "anchor": "Autolus Therapeutics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio-news/2026/octopath-ai-secures-ps15-million-support-cancer-pathology",
+      "page": "portfolio",
+      "anchor": "Octopath AI secures £1.5 million to support cancer pathology",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.uclventures.com/spinout-portfolio-news/2026/new-path-forward-gene-therapy-targeting-rare-childhood-disease",
+      "page": "portfolio",
+      "anchor": "New path forward for gene therapy targeting rare childhood disease",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "programId": "index-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.indexventures.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-eaa9902cd4",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "Index Ventures Skip to main content Team Philosophy Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-46a0fc3a6d",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "Browse companies → https://www.indexventures.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-92f014468d",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "And many others → https://www.indexventures.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-95fe2120af",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "founders we work with → https://www.indexventures.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f91f874d54",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.indexventures.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-91c72599b5",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.indexventures.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.indexventures.com/",
+        "evidenceId": "check-route-91c72599b5"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.indexventures.com/companies/",
+        "evidenceId": "check-portfolio-f91f874d54"
+      }
+    ],
+    "name": [
+      {
+        "value": "Index Ventures",
+        "evidenceId": "check-name-eaa9902cd4"
+      }
+    ],
+    "examplePages": []
+  }
+}

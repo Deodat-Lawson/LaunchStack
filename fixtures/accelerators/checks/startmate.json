@@ -1,0 +1,254 @@
+{
+  "programId": "startmate",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startmate.com/",
+    "https://www.startmate.com/accelerator",
+    "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+    "https://www.startmate.com/about-us",
+    "https://www.startmate.com/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-5ce885221f",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "want, and raise their next round. Apply now Last chance – applications close 8 November Program dates Feb 1 – May 7, 2027 14 weeks tailored to your stage Investment $120k AUD at a",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-ef17a2ad13",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "6–12 months since your last application. Summer ’27 cohort Applications close 8 November. 14 weeks, Feb 1 to May 7, 2027. Remote-first, with three weeks together in person and our",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-68ca9c811c",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "week and Demo Day week. Does a founder need to be full-time? Yes. At least one founder must already be full-time or go full-time for the program. We invest $120k so you can focus 100% on your company. Can I apply as a solo founder? Yes. We love solo founders just as much as teams. What matters is showing us why you're",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-dd5ffac3cd",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Startmate Summer ’27 Accelerator Get $120k and ANZ's best mentors behind your startup For 14 weeks, we help Australia and New Zealand's most ambitious founders move faster, build something people want,",
+      "page": "application"
+    },
+    {
+      "id": "check-name-b567602998",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "Startmate offerings offerings Founders Founders Accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-26218b70d3",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2db8087ec3",
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "title": "Startmate — batches page checked by scrape.py",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-3a9926b529",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4673e55257",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page checked by scrape.py",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5cdc09f091",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5d70f85c06",
+      "url": "https://www.startmate.com/about-us",
+      "title": "Startmate — details page checked by scrape.py",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8cf1b809fb",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-93e318998a",
+      "url": "https://www.startmate.com/about-us",
+      "title": "Startmate — details page checked by scrape.py",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-95101606e4",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page checked by scrape.py",
+      "excerpt": "Portfolio Portfolio → https://www.startmate.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-994317e082",
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "title": "Startmate — batches page checked by scrape.py",
+      "excerpt": "portfolio portfolio → https://www.startmate.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-239132daaf",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "Apply to Accelerator → Apply to Accelerator → → https://www.startmate.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4523c23783",
+      "url": "https://www.startmate.com/about-us",
+      "title": "Startmate — details page checked by scrape.py",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-64a5c13d19",
+      "url": "https://www.startmate.com/about-us",
+      "title": "Startmate — details page checked by scrape.py",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6fd0716bd5",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8045e79590",
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "title": "Startmate — batches page checked by scrape.py",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-81e17ea157",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-898ae4bc4f",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page checked by scrape.py",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9ab89cc508",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page checked by scrape.py",
+      "excerpt": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE. → https://www.startmate.com/accelerator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a18cf10700",
+      "url": "https://www.startmate.com/accelerator",
+      "title": "Startmate — application page checked by scrape.py",
+      "excerpt": "Read the application guide → https://www.startmate.com/writing/your-ultimate-guide-for-getting-through-the-first-round-of-the-startmate-accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b0f3b30293",
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "title": "Startmate — batches page checked by scrape.py",
+      "excerpt": "APPLY TO ACCELERATOR APPLY TO ACCELERATOR → https://www.startmate.com/accelerator",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d85f4f7ef4",
+      "url": "https://www.startmate.com/",
+      "title": "Startmate — homepage checked by scrape.py",
+      "excerpt": "https://www.startmate.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e4fa3108db",
+      "url": "https://www.startmate.com/faq",
+      "title": "Startmate — terms page checked by scrape.py",
+      "excerpt": "Apply to the Accelerator → https://www.startmate.com/accelerator",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.startmate.com/accelerator",
+        "evidenceId": "check-route-6fd0716bd5"
+      },
+      {
+        "value": "https://www.startmate.com/writing/your-ultimate-guide-for-getting-through-the-first-round-of-the-startmate-accelerator",
+        "evidenceId": "check-route-a18cf10700"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.startmate.com/",
+        "evidenceId": "check-route-d85f4f7ef4"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2027-05-07",
+        "evidenceId": "check-deadline-5ce885221f"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "with us portfolio portfolio about about Our story Our story team team FAQ FAQ APPLY TO ACCELERATOR APPLY TO ACCELERATOR Startmate Summer ’27 Accelerator Get $120k and ANZ's best mentors behind your startup For 14 weeks, we help Australia and New Zealand's most ambitious founders move faster, build something people want,",
+        "evidenceId": "check-deal-dd5ffac3cd"
+      },
+      {
+        "value": "week and Demo Day week. Does a founder need to be full-time? Yes. At least one founder must already be full-time or go full-time for the program. We invest $120k so you can focus 100% on your company. Can I apply as a solo founder? Yes. We love solo founders just as much as teams. What matters is showing us why you're",
+        "evidenceId": "check-deal-68ca9c811c"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.startmate.com/portfolio",
+        "evidenceId": "check-portfolio-3a9926b529"
+      }
+    ],
+    "name": [
+      {
+        "value": "Startmate",
+        "evidenceId": "check-name-b567602998"
+      }
+    ],
+    "examplePages": []
+  }
+}

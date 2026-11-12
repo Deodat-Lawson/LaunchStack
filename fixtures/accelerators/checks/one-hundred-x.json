@@ -1,0 +1,48 @@
+{
+  "programId": "one-hundred-x",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.100x.vc/",
+    "https://www.100x.vc/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-62d38ac6b9",
+      "url": "https://www.100x.vc/",
+      "title": "100X.VC — homepage checked by scrape.py",
+      "excerpt": "100X.VC | Funding Simplified. Mentoring Unlimited. Home | 100X.VC",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cee8d79f5b",
+      "url": "https://www.100x.vc/",
+      "title": "100X.VC — homepage checked by scrape.py",
+      "excerpt": "https://www.100x.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.100x.vc/",
+        "evidenceId": "check-route-cee8d79f5b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "100X.VC",
+        "evidenceId": "check-name-62d38ac6b9"
+      }
+    ],
+    "examplePages": []
+  }
+}

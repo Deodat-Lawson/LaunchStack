@@ -1,0 +1,38 @@
+{
+  "programId": "launch-africa",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "portfolio",
+      "anchor": "Seed Fund I Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/seed-fund-ii-portfolio",
+      "page": "portfolio",
+      "anchor": "Seed Fund II Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/faqs",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.launchafrica.vc/portfolio-2",
+      "page": "portfolio",
+      "anchor": "Folder: Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

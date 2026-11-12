@@ -1,0 +1,92 @@
+{
+  "programId": "localglobe",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.phoenixcourt.vc/funds/localglobe",
+    "https://www.phoenixcourt.vc/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b7dfc1ce94",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "title": "LocalGlobe — homepage checked by scrape.py",
+      "excerpt": "LocalGlobe | Phoenix Court Skip to content Phoenix Court About Us",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2957e21dc4",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "title": "LocalGlobe — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4c3160d678",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "title": "LocalGlobe — homepage checked by scrape.py",
+      "excerpt": "View all LocalGlobe companies → https://www.phoenixcourt.vc/companies?fund=localglobe",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4ec5ce9153",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "title": "LocalGlobe — homepage checked by scrape.py",
+      "excerpt": "LocalGlobe Companies → https://www.phoenixcourt.vc/companies?fund=localglobe",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-65f18411eb",
+      "url": "https://www.phoenixcourt.vc/about",
+      "title": "LocalGlobe — details page checked by scrape.py",
+      "excerpt": "Our Companies → https://www.phoenixcourt.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fcd3f24a10",
+      "url": "https://www.phoenixcourt.vc/about",
+      "title": "LocalGlobe — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.phoenixcourt.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9c09de84c8",
+      "url": "https://www.phoenixcourt.vc/funds/localglobe",
+      "title": "LocalGlobe — homepage checked by scrape.py",
+      "excerpt": "LocalGlobe → https://www.phoenixcourt.vc/funds/localglobe",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.phoenixcourt.vc/funds/localglobe",
+        "evidenceId": "check-route-9c09de84c8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.phoenixcourt.vc/companies",
+        "evidenceId": "check-portfolio-2957e21dc4"
+      },
+      {
+        "value": "https://www.phoenixcourt.vc/companies?fund=localglobe",
+        "evidenceId": "check-portfolio-4ec5ce9153"
+      }
+    ],
+    "name": [
+      {
+        "value": "LocalGlobe",
+        "evidenceId": "check-name-b7dfc1ce94"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "programId": "prime-coalition",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.primecoalition.org/about",
+      "page": "details",
+      "anchor": "Folder: About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.primecoalition.org/insights-impact",
+      "page": "details",
+      "anchor": "Explore our team’s research, recent events, program highlights, and the climate solutions Prime has supported with catalytic capital. ➜",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

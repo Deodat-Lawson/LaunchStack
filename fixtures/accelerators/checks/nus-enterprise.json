@@ -1,0 +1,262 @@
+{
+  "programId": "nus-enterprise",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://nusx.edu.sg/",
+    "https://nusx.edu.sg/programmes",
+    "https://nusx.edu.sg/programmes/noc/application"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0bb0601fca",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-34398ab355",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4a23787a83",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "CONNECT@NUSX.EDU.SG",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4ada507442",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "application"
+    },
+    {
+      "id": "check-email-af3e3fddd3",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f60d132f26",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Keng Terrace, Level 5 Singapore 119613 P +65 6516 7175 E CONNECT@NUSX.EDU.SG NUS 2026 © All rights reserved / Cookie settings NUSX",
+      "page": "details"
+    },
+    {
+      "id": "check-name-efc46febbd",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "and ideas find a path to use and scale. NUSX was known as NUS Enterprise until September 2026. [2] What happened to NUS Enterprise?",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-06e22c1145",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-aa62179c92",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "+65 6516 7175",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-cedfe6b671",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "+65 6516 7175",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-011e418ca0",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1a7fa5ef10",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-282789e53f",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2d579bb0ea",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "For Founders → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4cc40cee05",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4db400d16c",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "See alumni stories → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4fe249f1ba",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Startups Overview → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-501d0dc3bb",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6fd17456e1",
+      "url": "https://nusx.edu.sg/programmes/noc/application",
+      "title": "NUS Enterprise — application page checked by scrape.py",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-79edd36cb2",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b79aba9b43",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf311ea60b",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Our alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c997c6be89",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Startups Overview See how NUSX backs startups → https://nusx.edu.sg/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3d60a69b9",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "NOC Alumni → https://nusx.edu.sg/programmes/noc/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1de3dfd879",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "https://nusx.edu.sg/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-412bf43114",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-72825e1115",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a421cea954",
+      "url": "https://nusx.edu.sg/programmes",
+      "title": "NUS Enterprise — details page checked by scrape.py",
+      "excerpt": "Apply for NOC → → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ccd6492cad",
+      "url": "https://nusx.edu.sg/",
+      "title": "NUS Enterprise — homepage checked by scrape.py",
+      "excerpt": "Application → https://nusx.edu.sg/programmes/noc/application",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "connect@nusx.edu.sg",
+        "evidenceId": "check-email-0bb0601fca"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+6565167175",
+        "evidenceId": "check-phone-06e22c1145"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://nusx.edu.sg/programmes/noc/application",
+        "evidenceId": "check-route-72825e1115"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://nusx.edu.sg/",
+        "evidenceId": "check-route-1de3dfd879"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://nusx.edu.sg/startups",
+        "evidenceId": "check-portfolio-79edd36cb2"
+      },
+      {
+        "value": "https://nusx.edu.sg/programmes/noc/alumni",
+        "evidenceId": "check-portfolio-bf311ea60b"
+      }
+    ],
+    "name": [
+      {
+        "value": "NUS Enterprise",
+        "evidenceId": "check-name-efc46febbd"
+      }
+    ],
+    "examplePages": []
+  }
+}

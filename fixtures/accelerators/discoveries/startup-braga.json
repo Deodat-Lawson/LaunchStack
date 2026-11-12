@@ -1,0 +1,62 @@
+{
+  "programId": "startup-braga",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "page": "details",
+      "anchor": "Saber Mais",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Programs/Aceleracao",
+      "page": "details",
+      "anchor": "Saber Mais",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Programs/Incubation",
+      "page": "details",
+      "anchor": "Saber Mais",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Detail/Index/74c9f40b-dc5c-11f1-bcf5-000d3ad7a4dc",
+      "page": "details",
+      "anchor": "Estamos a recrutar | Gestor(a) de Programas Júnior",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Detail/Index/d22ec7c4-dc5b-11f1-bcf5-000d3ad7a4dc",
+      "page": "details",
+      "anchor": "Estamos a recrutar | Gestor(a) de Programas Sénior",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Detail/Index/d89e5e89-1c79-11f1-b67e-000d3ad7a4dc",
+      "page": "details",
+      "anchor": "Candidaturas ao 10.º Programa de Aceleração prolongadas até 31 de março",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startupbraga.com/Detail/Index/86805bed-0cf5-11f1-b67e-000d3ad7a4dc",
+      "page": "details",
+      "anchor": "A 10.ª Edição do Programa de Aceleração está à tua espera!",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

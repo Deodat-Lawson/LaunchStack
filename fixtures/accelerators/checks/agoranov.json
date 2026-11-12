@@ -1,0 +1,77 @@
+{
+  "programId": "agoranov",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.agoranov.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-3e05f09f54",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — homepage checked by scrape.py",
+      "excerpt": "Accueil Agoranov Offre Startups Équipe Startups à l'École Se connecter FR",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-467d45e63b",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.agoranov.com/startups#Nos-startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c575a688c1",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — homepage checked by scrape.py",
+      "excerpt": "Voir toutes les startups → https://www.agoranov.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ccb1659718",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.agoranov.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cbbeda5b8e",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — homepage checked by scrape.py",
+      "excerpt": "https://www.agoranov.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.agoranov.com/",
+        "evidenceId": "check-route-cbbeda5b8e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.agoranov.com/startups",
+        "evidenceId": "check-portfolio-ccb1659718"
+      },
+      {
+        "value": "https://www.agoranov.com/startups#Nos-startups",
+        "evidenceId": "check-portfolio-467d45e63b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Agoranov",
+        "evidenceId": "check-name-3e05f09f54"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "programId": "imperial-enterprise",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.imperialenterpriselab.com/",
+    "https://www.imperialenterpriselab.com/programmes/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-834486cf2b",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "excerpt": "Home | Imperial Enterprise Lab Search Imperial’s Entrepreneurship Eco-System 🔎 What’s on",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b69ff8ab2c",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://www.imperialenterpriselab.com/programmes/we-innovate/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c97f52e77e",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "excerpt": "https://www.imperialenterpriselab.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-19e5e87eed",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — homepage checked by scrape.py",
+      "excerpt": "Resource Finder Recommended Suppliers List About Our Team Co-working Contact Support Us Select Page Applications are now open for WE Innovate 2027 Apply to Imperial’s award winning programme for female founders. Selected teams will",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.imperialenterpriselab.com/programmes/we-innovate/",
+        "evidenceId": "check-route-b69ff8ab2c"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.imperialenterpriselab.com/",
+        "evidenceId": "check-route-c97f52e77e"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-19e5e87eed"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Imperial Enterprise Lab",
+        "evidenceId": "check-name-834486cf2b"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "programId": "building-global-innovators",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.bgi.pt/",
+    "https://www.bgi.pt/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-9f7e264a8e",
+      "url": "https://www.bgi.pt/",
+      "title": "Building Global Innovators — homepage checked by scrape.py",
+      "excerpt": "https://www.bgi.pt/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.bgi.pt/",
+        "evidenceId": "check-route-9f7e264a8e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

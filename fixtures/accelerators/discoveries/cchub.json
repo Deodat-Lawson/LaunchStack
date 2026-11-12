@@ -1,0 +1,62 @@
+{
+  "programId": "cchub",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://cchub.africa/about/",
+      "page": "details",
+      "anchor": "Meet the team",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/blog/",
+      "page": "batches",
+      "anchor": "News & Updates",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/meet-three-women-founders-from-gcip-nigeria/",
+      "page": "details",
+      "anchor": "GCIP Nigeria Meet the Women Behind Solar-Powered Solutions in Nigeria Of the 75 founders in the Global Cleantech Innovation Programme (GCIP) Nigeria, 27 are women. Across Africa, u",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/expression-of-interest-eoi-pre-qualification-of-device-vendors-for-the-gateway-program/",
+      "page": "details",
+      "anchor": "Nigeria GATEWAY Program Expression of interest (EOI): pre-qualification of device vendors for the gateway program About the Program The Nigeria GATEWAY Program is a five-year initi",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/call-for-expressions-of-interest-short-term-data-analysis-data-systems-consultant-gateway-program/",
+      "page": "batches",
+      "anchor": "Nigeria GATEWAY Program Call for Expressions of Interest: Short-Term Data Analysis & Data Systems Consultant, GATEWAY Program Duration: 6 weeksDeadline: 9th October 2026, 5:00 PM W",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/turn-your-creative-talent-into-a-paying-business/",
+      "page": "details",
+      "anchor": "Creative Skills Turn your creative talent into a paying business The Creative Skills Exchange & Industry Development Program The Creative Skills Exchange is five days of hands-on t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cchub.africa/the-mastercard-foundation-edtech-fellowship-backs-12-early-stage-nigerian-startups-advancing-inclusive-education-through-innovation-and-evidence/",
+      "page": "batches",
+      "anchor": "Mastercard Foundation The Mastercard Foundation EdTech Fellowship Backs 12 Early-Stage Nigerian Startups Advancing Inclusive Education Through Innovation and Evidence Lagos, Nigeri",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

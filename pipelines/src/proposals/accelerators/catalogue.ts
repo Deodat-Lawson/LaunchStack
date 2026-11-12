@@ -93,6 +93,30 @@ type DiscoveryFile = {
     pages?: ProgramIntelligence["discovery"]["pages"];
 };
 
+type Finding<T> = { value: T; evidenceId: string };
+
+/** Written by fixtures/accelerators/scrape.py: what the official pages stated, with excerpts. */
+type ChecksFile = {
+    programId: string;
+    checkedAt: string;
+    pagesRead: string[];
+    evidence: { id: string; url: string; title: string; excerpt: string; page: PageKind }[];
+    findings: {
+        emails: Finding<string>[];
+        phones: Finding<string>[];
+        routes: Finding<string>[];
+        applicationUrl: Finding<string>[];
+        applicationsOpen: Finding<boolean>[];
+        operatingStatus: Finding<"closed" | "paused">[];
+        deadlines: Finding<string>[];
+        selectivity: Finding<{ rate: number | null; bounded: boolean }>[];
+        dealText: Finding<string>[];
+        portfolioPages: Finding<string>[];
+        name?: Finding<string>[];
+        examplePages?: Finding<string>[];
+    };
+};
+
 const RELATIONSHIPS: Record<string, PortfolioCompany["relationship"]> = {
     participation: "participation",
     investment: "investment",
@@ -121,6 +145,17 @@ const COMPONENT_KINDS: Record<string, DealComponent["kind"]> = {
 
 function readJson(path: string): unknown {
     return JSON.parse(readFileSync(path, "utf8")) as unknown;
+}
+
+function readOptionalDir(path: string): string[] {
+    try {
+        return readdirSync(path)
+            .filter(file => file.endsWith(".json"))
+            .sort();
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+        throw error;
+    }
 }
 
 function classify(url: string, title: string): PageKind {
@@ -245,6 +280,11 @@ export function loadPublishedCatalogue(root: string): {
         const portfolio = readJson(join(root, "portfolio", name)) as PortfolioFile;
         portfolios.set(portfolio.programId, portfolio);
     }
+    const checks = new Map<string, ChecksFile>();
+    for (const name of readOptionalDir(join(root, "checks"))) {
+        const file = readJson(join(root, "checks", name)) as ChecksFile;
+        checks.set(file.programId, file);
+    }
     const taxonomy = TaxonomySchema.parse(readJson(join(root, "taxonomy.json")));
     const historical = readJson(
         join(root, "examples", "historical-applications.json")
@@ -273,6 +313,7 @@ export function loadPublishedCatalogue(root: string): {
                     taxonomy,
                     historical: historical.programs.filter(item => item.programId === program.id),
                     gaps: gaps.items.filter(item => item.programId === program.id),
+                    checks: checks.get(program.id) ?? null,
                 })
             )
     );
@@ -316,11 +357,29 @@ function assembleProgram(
         taxonomy: Taxonomy;
         historical: HistoricalFile["programs"];
         gaps: GapFile["items"];
+        checks: ChecksFile | null;
     }
 ): ProgramIntelligence {
     const evidence = program.sources.map(evidenceFromSource);
     const byId = new Map(evidence.map(item => [item.id, item]));
     const review: ReviewItem[] = [];
+    const checks = input.checks;
+    const recorded = [...evidence];
+    for (const item of checks?.evidence ?? []) {
+        if (byId.has(item.id)) continue;
+        const cited: Evidence = {
+            id: item.id,
+            url: item.url,
+            title: item.title,
+            excerpt: item.excerpt,
+            checkedAt: checks!.checkedAt,
+            kind: "fact",
+            origin: "official",
+            page: item.page,
+        };
+        evidence.push(cited);
+        byId.set(cited.id, cited);
+    }
     const tags = input.taxonomy.tags.filter(tag =>
         tag.evidence.some(item => item.programId === program.id)
     );
@@ -356,26 +415,26 @@ function assembleProgram(
 
     const emails = [
         ...new Set(
-            evidence.flatMap(
+            recorded.flatMap(
                 item => item.excerpt.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) ?? []
             )
         ),
     ];
     const phones = [
-        ...new Set(evidence.flatMap(item => item.excerpt.match(/\+\d[\d\s().-]{7,}\d/g) ?? [])),
+        ...new Set(recorded.flatMap(item => item.excerpt.match(/\+\d[\d\s().-]{7,}\d/g) ?? [])),
     ];
-    const openSources = evidence.filter(item =>
+    const openSources = recorded.filter(item =>
         /applications?(?:\s+\w+){0,8}\s+(?:are|is)\s+open|\bopen now\b/i.test(item.excerpt)
     );
 
     let email: InformationSlot<string> = unchecked();
     if (emails.length === 1) {
-        const source = evidence.find(item => item.excerpt.includes(emails[0]!));
+        const source = recorded.find(item => item.excerpt.includes(emails[0]!));
         email = available(emails[0]!, source ? [source.id] : [], "fact");
     } else if (emails.length > 1) {
         email = conflicting(
             "More than one public address is in the checked excerpts. None was selected.",
-            evidence
+            recorded
                 .filter(item => emails.some(address => item.excerpt.includes(address)))
                 .map(item => item.id)
         );
@@ -383,12 +442,12 @@ function assembleProgram(
     }
     let phone: InformationSlot<string> = unchecked();
     if (phones.length === 1) {
-        const source = evidence.find(item => item.excerpt.includes(phones[0]!));
+        const source = recorded.find(item => item.excerpt.includes(phones[0]!));
         phone = available(phones[0]!, source ? [source.id] : [], "fact");
     } else if (phones.length > 1) {
         phone = conflicting(
             "More than one public phone number is in the checked excerpts. None was selected.",
-            evidence
+            recorded
                 .filter(item => phones.some(value => item.excerpt.includes(value)))
                 .map(item => item.id)
         );
@@ -694,7 +753,13 @@ function assembleProgram(
             officialUrl: official
                 ? available(program.websiteUrl, [official.id], "fact")
                 : unchecked(),
-            location: unchecked(),
+            location: program.location
+                ? available(
+                      program.location.text,
+                      program.location.sourceIds,
+                      program.location.interpretation ? "interpretation" : "fact"
+                  )
+                : unchecked(),
             locationCount: unchecked(),
             operatingStatus: unchecked(),
             applicationsOpen: openSources.length
@@ -756,11 +821,227 @@ function assembleProgram(
             examples,
         },
         tagIds: tags.map(tag => tag.id),
+        tags: tags.map(tag => ({
+            id: tag.id,
+            facet: tag.facet,
+            label: tag.label,
+            evidenceIds: [
+                ...new Set(
+                    tag.evidence
+                        .filter(item => item.programId === program.id)
+                        .map(item => item.sourceId)
+                ),
+            ],
+        })),
         review,
     };
 
+    if (checks) applyChecks(dossier, program, checks);
     for (const gap of input.gaps) applyGap(dossier, gap);
     return ProgramIntelligenceSchema.parse(dossier);
+}
+
+function distinct<T>(findings: Finding<T>[]): { values: T[]; evidenceIds: string[] } {
+    const values: T[] = [];
+    for (const finding of findings) {
+        if (!values.some(value => JSON.stringify(value) === JSON.stringify(finding.value))) {
+            values.push(finding.value);
+        }
+    }
+    return { values, evidenceIds: [...new Set(findings.map(finding => finding.evidenceId))] };
+}
+
+/**
+ * Fill groups that the stored sources left not checked from scrape.py's reading of the
+ * official pages. A group that was read and states nothing becomes unavailable, never a
+ * negative finding. Curated sources and operator gaps keep precedence.
+ */
+function applyChecks(
+    dossier: ProgramIntelligence,
+    program: CatalogueProgram,
+    checks: ChecksFile
+): void {
+    const { findings } = checks;
+    const read = `${checks.pagesRead.length} official page${checks.pagesRead.length === 1 ? "" : "s"} read`;
+    const open = (slot: { state: InformationState }) => slot.state === "not_checked";
+    const conflict = <T>(
+        group: InformationGroup,
+        field: string,
+        detail: string,
+        evidenceIds: string[]
+    ): InformationSlot<T> => {
+        const item = reviewFor(dossier.programId, group, field, detail, evidenceIds);
+        if (!dossier.review.some(existing => existing.id === item.id)) dossier.review.push(item);
+        return conflicting<T>(detail, evidenceIds);
+    };
+
+    if (open(dossier.identity.name)) {
+        const named = distinct(findings.name ?? []);
+        dossier.identity.name = named.values.length
+            ? available(program.name, named.evidenceIds, "fact")
+            : unavailable(
+                  "The homepage text does not spell out the Program name; it may appear only in a logo."
+              );
+    }
+    if (dossier.historicalExamples.state === "not_checked") {
+        const examples = distinct(findings.examplePages ?? []);
+        dossier.historicalExamples.state = examples.values.length ? "partial" : "unavailable";
+        dossier.historicalExamples.detail = examples.values.length
+            ? `The official site links application examples (${examples.values[0]}). They were not reviewed for acceptance evidence.`
+            : `The checked pages do not link a published application example (${read}). Examples published elsewhere were not searched.`;
+    }
+    if (open(dossier.contact.email)) {
+        const emails = distinct(findings.emails);
+        dossier.contact.email = emails.values.length
+            ? available(
+                  emails.values.join(", "),
+                  emails.evidenceIds,
+                  "fact",
+                  emails.values.length > 1 ? "Several public addresses are listed." : null
+              )
+            : unavailable(`No public program address on the checked pages (${read}).`);
+    }
+    if (open(dossier.contact.phone)) {
+        const phones = distinct(findings.phones);
+        dossier.contact.phone = phones.values.length
+            ? available(phones.values.join(", "), phones.evidenceIds, "fact")
+            : unavailable(`No public phone link on the checked pages (${read}).`);
+    }
+    if (open(dossier.contact.routes)) {
+        const routes = distinct(findings.routes);
+        dossier.contact.routes = routes.values.length
+            ? available(routes.values, routes.evidenceIds, "fact")
+            : unavailable(
+                  `No application link or application address on the checked pages (${read}).`
+              );
+    }
+    if (open(dossier.contact.applicationUrl)) {
+        const linked = distinct(findings.applicationUrl);
+        dossier.contact.applicationUrl = linked.values.length
+            ? available(program.applyUrl, linked.evidenceIds, "fact")
+            : unavailable(`The checked pages do not link the recorded application URL (${read}).`);
+    }
+    if (open(dossier.identity.applicationsOpen)) {
+        const stated = distinct(findings.applicationsOpen);
+        dossier.identity.applicationsOpen =
+            stated.values.length === 1
+                ? available(stated.values[0]!, stated.evidenceIds, "fact")
+                : stated.values.length > 1
+                  ? conflict(
+                        "identity",
+                        "applicationsOpen",
+                        "The checked pages say both that applications are open and that they are closed.",
+                        stated.evidenceIds
+                    )
+                  : unavailable(
+                        `The checked pages do not say whether applications are open (${read}).`
+                    );
+    }
+    if (open(dossier.identity.operatingStatus)) {
+        const stated = distinct(findings.operatingStatus);
+        dossier.identity.operatingStatus =
+            stated.values.length === 1
+                ? available(stated.values[0]!, stated.evidenceIds, "fact")
+                : stated.values.length > 1
+                  ? conflict(
+                        "identity",
+                        "operatingStatus",
+                        "The checked pages describe the Program as both closed and paused.",
+                        stated.evidenceIds
+                    )
+                  : unavailable(
+                        `The checked pages do not state an operating status (${read}). A reachable website is not proof that the Program runs.`
+                    );
+    }
+    const deadlines = distinct(findings.deadlines);
+    if (open(dossier.batches.nextDeadline)) {
+        dossier.batches.nextDeadline =
+            deadlines.values.length === 1
+                ? available(
+                      deadlines.values[0]!,
+                      deadlines.evidenceIds,
+                      "fact",
+                      "Date only, published beside deadline wording on the official page. It is not tied to a Cycle and has no clock."
+                  )
+                : deadlines.values.length > 1
+                  ? partialSlot(
+                        `Several future dates appear beside deadline wording (${deadlines.values.join(", ")}). None was promoted to the next deadline.`,
+                        deadlines.evidenceIds
+                    )
+                  : unavailable(`The checked pages do not publish a dated deadline (${read}).`);
+    }
+    if (deadlines.values.length === 0) {
+        for (const cycle of dossier.batches.cycles) {
+            if (open(cycle.announcedDeadline)) {
+                cycle.announcedDeadline = unavailable(
+                    `The checked pages do not publish a deadline for this cycle (${read}).`
+                );
+            }
+        }
+    }
+    if (open(dossier.selectivity)) {
+        const exact = distinct(findings.selectivity.filter(item => !item.value.bounded));
+        const all = distinct(findings.selectivity);
+        dossier.selectivity =
+            exact.values.length === 1 && all.values.length === 1
+                ? available(
+                      {
+                          rate: exact.values[0]!.rate,
+                          applicants: null,
+                          admits: null,
+                          population: null,
+                          method: "Percentage reported on the official page. No applicant or admit counts were published with it.",
+                      },
+                      exact.evidenceIds,
+                      "fact"
+                  )
+                : all.values.length
+                  ? partialSlot(
+                        "The official page reports an approximate or more than one acceptance rate. No number was stored.",
+                        all.evidenceIds
+                    )
+                  : unavailable(
+                        `The checked pages do not report an acceptance rate or applicant counts (${read}). Unknown is not zero.`
+                    );
+    }
+    if (dossier.deal.state === "not_checked") {
+        const wording = distinct(findings.dealText);
+        if (wording.values.length) {
+            dossier.deal.state = "partial";
+            dossier.deal.detail =
+                "Investment wording that names an amount is on the checked pages. It was not structured into components, so no dilution or package is implied.";
+            dossier.deal.formatted = available(
+                wording.values.join("\n\n"),
+                wording.evidenceIds,
+                "fact",
+                "Excerpts from the official pages, not a structured deal."
+            );
+            dossier.deal.blocks = wording.values.map(text => ({
+                type: "paragraph" as const,
+                text,
+                href: null,
+            }));
+        } else {
+            dossier.deal.state = "unavailable";
+            dossier.deal.detail = `The checked pages do not publish investment terms with an amount (${read}).`;
+        }
+    }
+    if (dossier.portfolio.state === "not_checked") {
+        const pages = distinct(findings.portfolioPages);
+        if (pages.values.length) {
+            dossier.portfolio.detail = `A portfolio page is linked (${pages.values[0]}). Company identities have not been collected from it.`;
+        } else {
+            dossier.portfolio.state = "unavailable";
+            dossier.portfolio.detail = `No portfolio or companies page is linked from the checked pages (${read}).`;
+            dossier.portfolio.returns = unavailable(
+                "No portfolio is published, so no investment return is reported."
+            );
+        }
+    }
+}
+
+function partialSlot<T>(detail: string, evidenceIds: string[]): InformationSlot<T> {
+    return { state: "partial", detail, evidenceIds, claim: "fact", value: null };
 }
 
 function singleFixedDilution(components: DealComponent[]): boolean {
@@ -992,6 +1273,12 @@ export function coverageMarkdown(dossiers: ProgramIntelligence[]): string {
     const conflicts = dossiers.flatMap(dossier =>
         dossier.review.filter(item => item.state === "conflicting")
     );
+    const stale = dossiers.flatMap(dossier =>
+        dossier.review.filter(item => item.state === "stale")
+    );
+    const inaccessible = dossiers.flatMap(dossier =>
+        dossier.review.filter(item => item.state === "inaccessible")
+    );
     const mixed = dossiers.filter(dossier => {
         const kinds = new Set(dossier.deal.components.map(component => component.kind));
         if (kinds.size > 1) return true;
@@ -1017,12 +1304,14 @@ export function coverageMarkdown(dossiers: ProgramIntelligence[]): string {
         "",
         `Open conflicts on the operator review queue: ${conflicts.length}. The matcher and the screens are not asked to pick a winner.`,
         "",
+        `Latest refresh: ${stale.length} stored excerpts are no longer on their page (${new Set(stale.map(item => item.programId)).size} programs) and ${inaccessible.length} sources could not be fetched (${new Set(inaccessible.map(item => item.programId)).size} programs). Both stay on the operator review queue; the stored excerpt and its last successful check are kept.`,
+        "",
         "Representative cases:",
         "",
         `- Mixed instruments: ${mixed.map(dossier => dossier.programId).join(", ") || "none"}. Cash, SAFEs, grants, credits, and follow-on amounts stay separate. comparableDilution is false for those packages.`,
         `- Multiple batches: ${multiCycle.map(dossier => `${dossier.programId} (${dossier.batches.cycles.map(cycle => cycle.id).join(", ")})`).join("; ") || "none"}.`,
         `- Conflicts left unresolved: ${conflicts.map(item => `${item.programId} ${item.field}`).join("; ") || "none"}.`,
-        "- Historical example: a public application is recorded only with a separate acceptance excerpt. Answers are not copied, and a missing example stays not checked rather than a rejection.",
+        "- Historical example: a public application is recorded only with a separate acceptance excerpt. Answers are not copied. When the checked official pages link no example, that is recorded as unavailable on those pages, not as a rejection, and sites elsewhere were not searched.",
         "",
         "Company-fit scoring and the discovery, detail, and tracker screens are outside this delivery.",
         "",

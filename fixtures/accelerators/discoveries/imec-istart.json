@@ -1,0 +1,62 @@
+{
+  "programId": "imec-istart",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.imec-int.com/en/applications",
+      "page": "application",
+      "anchor": "Applications",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/about-us",
+      "page": "details",
+      "anchor": "About imec",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application",
+      "anchor": "Semiconductor technology",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application",
+      "anchor": "Data and telecommunication",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application",
+      "anchor": "Automotive technologies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application",
+      "anchor": "Robotics technology for Industry 4.0",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application",
+      "anchor": "Life sciences and health solutions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

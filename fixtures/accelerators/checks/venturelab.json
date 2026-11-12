@@ -1,0 +1,74 @@
+{
+  "programId": "venturelab",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.venturelab.swiss/",
+    "https://www.venturelab.swiss/programs"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a55171e2f5",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — homepage checked by scrape.py",
+      "excerpt": "Venturelab - World-class startups. Swiss made. - 20 years sailing the",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-08a2950b75",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — homepage checked by scrape.py",
+      "excerpt": "Discover all guided startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6597d74065",
+      "url": "https://www.venturelab.swiss/programs",
+      "title": "Venturelab — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f4bda4c22a",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.venturelab.swiss/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-540ab6ab2b",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — homepage checked by scrape.py",
+      "excerpt": "Venturelab → https://www.venturelab.swiss/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.venturelab.swiss/",
+        "evidenceId": "check-route-540ab6ab2b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.venturelab.swiss/startups",
+        "evidenceId": "check-portfolio-f4bda4c22a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Venturelab",
+        "evidenceId": "check-name-a55171e2f5"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "programId": "a16z-speedrun",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://speedrun.a16z.com/apply",
+    "https://speedrun.a16z.com/application-login",
+    "https://speedrun.a16z.com/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-3e57e2fd17",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "your application, so the interview builds on that. Think of it as a conversation, not a test. Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-714d6c193b",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "If you’re building something you believe in, we’d love for you to apply. What's the difference between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d29a20a4b7",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d73387bb6f",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "of progress to show. Is this only for the twelve weeks? No. The residency lasts twelve weeks, but we see this as a long-term partnership. We invest another $500K in your next round (subject to terms), and we ask for pro rata rights so we have the option to keep investing as you grow. Do you lead seed rounds? Generally,",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-dbeecf390e",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "a16z speedrun — homepage checked by scrape.py",
+      "excerpt": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency.",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0c90cb5474",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "a16z speedrun — homepage checked by scrape.py",
+      "excerpt": "View application status → https://speedrun.a16z.com/application-login",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2689d2cdab",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "a16z speedrun — homepage checked by scrape.py",
+      "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b37944971",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "speedrun.a16z.com/apply → https://speedrun.a16z.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-72c5b9aa18",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "here → https://speedrun.a16z.com/application-login",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7bed0f8985",
+      "url": "https://speedrun.a16z.com/application-login",
+      "title": "a16z speedrun — application page checked by scrape.py",
+      "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8e4ee38871",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "status page → https://speedrun.a16z.com/application-login",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b67dbcb43c",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "a16z speedrun — homepage checked by scrape.py",
+      "excerpt": "Log in here. → https://speedrun.a16z.com/application-login",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c7685dbf6e",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "speedrun.a16z.com/application-login → https://speedrun.a16z.com/application-login",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f7b146272b",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "Apply to speedrun → https://speedrun.a16z.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-selectivity-acbf2030bb",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "a16z speedrun — terms page checked by scrape.py",
+      "excerpt": "do you back each residency? Recent residencies have had 70 to 80 companies. Fewer than 0.4% of applicants are accepted. Who will I work with? Your investing partner and the wider",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://speedrun.a16z.com/application-login",
+        "evidenceId": "check-route-b67dbcb43c"
+      },
+      {
+        "value": "https://speedrun.a16z.com/apply",
+        "evidenceId": "check-route-7bed0f8985"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://speedrun.a16z.com/apply",
+        "evidenceId": "check-route-2689d2cdab"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-acbf2030bb"
+      }
+    ],
+    "dealText": [
+      {
+        "value": "Apply to speedrun today. We invest up to $1M in your new startup. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency.",
+        "evidenceId": "check-deal-dbeecf390e"
+      },
+      {
+        "value": "terms Residency and the office Demo Day and fundraising Customers, talent, and visas Investors and executives About speedrun What is speedrun? We invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of",
+        "evidenceId": "check-deal-d29a20a4b7"
+      },
+      {
+        "value": "If you’re building something you believe in, we’d love for you to apply. What's the difference between speedrun and alpha? The alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are",
+        "evidenceId": "check-deal-714d6c193b"
+      },
+      {
+        "value": "your application, so the interview builds on that. Think of it as a conversation, not a test. Capital and terms What are the terms? Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not",
+        "evidenceId": "check-deal-3e57e2fd17"
+      },
+      {
+        "value": "of progress to show. Is this only for the twelve weeks? No. The residency lasts twelve weeks, but we see this as a long-term partnership. We invest another $500K in your next round (subject to terms), and we ask for pro rata rights so we have the option to keep investing as you grow. Do you lead seed rounds? Generally,",
+        "evidenceId": "check-deal-d73387bb6f"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

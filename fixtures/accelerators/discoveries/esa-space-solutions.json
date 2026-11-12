@@ -1,0 +1,46 @@
+{
+  "programId": "esa-space-solutions",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://business.esa.int/about-us",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://business.esa.int/how-to-apply",
+      "page": "application",
+      "anchor": "How to apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application",
+      "anchor": "Kick-starts",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application",
+      "anchor": "Proof-of-concept Studies and Pilot Projects",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://business.esa.int/projects",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

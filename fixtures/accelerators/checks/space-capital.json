@@ -1,0 +1,93 @@
+{
+  "programId": "space-capital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.spacecapital.com/",
+    "https://www.spacecapital.com/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ccb723691c",
+      "url": "https://www.spacecapital.com/",
+      "title": "Space Capital — homepage checked by scrape.py",
+      "excerpt": "Space Capital | Space Tech for the Real World LP LOGIN About Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a139efa42",
+      "url": "https://www.spacecapital.com/about",
+      "title": "Space Capital — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-441726b0b9",
+      "url": "https://www.spacecapital.com/about",
+      "title": "Space Capital — details page checked by scrape.py",
+      "excerpt": "See the full portfolio → https://www.spacecapital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-775fdab5e7",
+      "url": "https://www.spacecapital.com/",
+      "title": "Space Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.spacecapital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf15ef388a",
+      "url": "https://www.spacecapital.com/",
+      "title": "Space Capital — homepage checked by scrape.py",
+      "excerpt": "document.addEventListener('DOMContentLoaded', () => { const poster = document.querySelector('[mobile-hero-poster]'); if (!poster) return; const video = document.createElement('video'); video.autoplay = true; video.muted = true; video.playsInline = true; video.loop = true; video.setAttribute('mobile-hero-video', ''); const source = document.createElement('source'); // source.src = 'https://js.spacecapital.com/videos/mobile-orbit_video.webm'; source.src = 'https://js.spacecapital.com/videos/orbit_video(h.265).mp4'; video.appendChild(source); video.addEventListener('canplay', () => { poster.replaceWith(video); }, { once: true }); video.load(); }); [mobile-hero-video] { display: flex; } → https://www.spacecapital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5000c96e31",
+      "url": "https://www.spacecapital.com/about",
+      "title": "Space Capital — details page checked by scrape.py",
+      "excerpt": "Reports & Playbooks Investment frameworks for understanding the space economy as a stack of infrastructure, distribution, and applications. GPS, GEOINT, SatComm and more. → https://www.spacecapital.com/research",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ebaa1e28f2",
+      "url": "https://www.spacecapital.com/",
+      "title": "Space Capital — homepage checked by scrape.py",
+      "excerpt": "https://www.spacecapital.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.spacecapital.com/research",
+        "evidenceId": "check-route-5000c96e31"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.spacecapital.com/",
+        "evidenceId": "check-route-ebaa1e28f2"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.spacecapital.com/portfolio",
+        "evidenceId": "check-portfolio-775fdab5e7"
+      }
+    ],
+    "name": [
+      {
+        "value": "Space Capital",
+        "evidenceId": "check-name-ccb723691c"
+      }
+    ],
+    "examplePages": []
+  }
+}

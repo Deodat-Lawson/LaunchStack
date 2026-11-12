@@ -1,0 +1,62 @@
+{
+  "programId": "free-electrons",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://freeelectrons.org/2026-program/",
+      "page": "details",
+      "anchor": "PROGRAM",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/2027-program/",
+      "page": "details",
+      "anchor": "2027 Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/faqs/",
+      "page": "terms",
+      "anchor": "FAQS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/our-alumni/",
+      "page": "portfolio",
+      "anchor": "ALUMNI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/",
+      "page": "details",
+      "anchor": "ABOUT US",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/recap-of-the-free-electrons-10th-edition-master-module-in-london/",
+      "page": "details",
+      "anchor": "September 17, 2026 Program Modules Recap of the Free Electrons 10th Edition Master Module in London Free Electrons 2026 Master Module: Turning Collaboration into Action Against the",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

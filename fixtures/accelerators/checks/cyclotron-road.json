@@ -1,0 +1,101 @@
+{
+  "programId": "cyclotron-road",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://cyclotronroad.lbl.gov/",
+    "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+    "https://cyclotronroad.lbl.gov/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-62a5fec3bd",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "excerpt": "Cyclotron Road – Cyclotron Road Skip to main content Applications are now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3506600a94",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f6612d799",
+      "url": "https://cyclotronroad.lbl.gov/about-us/",
+      "title": "Cyclotron Road — details page checked by scrape.py",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6438d310ea",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9b43581f55",
+      "url": "https://cyclotronroad.lbl.gov/about-us/",
+      "title": "Cyclotron Road — details page checked by scrape.py",
+      "excerpt": "How to Apply → https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-3aa0c4e9c5",
+      "url": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+      "title": "Cyclotron Road — application page checked by scrape.py",
+      "excerpt": "How to Apply – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "application"
+    },
+    {
+      "id": "check-status-7a776814b0",
+      "url": "https://cyclotronroad.lbl.gov/",
+      "title": "Cyclotron Road — homepage checked by scrape.py",
+      "excerpt": "Cyclotron Road – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    },
+    {
+      "id": "check-status-bbba55c513",
+      "url": "https://cyclotronroad.lbl.gov/about-us/",
+      "title": "Cyclotron Road — details page checked by scrape.py",
+      "excerpt": "About Us – Cyclotron Road Skip to main content Applications are now open until October 30, 2026! Apply now ! About Us Team Contact Scientific Resources Fellows Current Fellows",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+        "evidenceId": "check-route-6438d310ea"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://cyclotronroad.lbl.gov/engage/how-to-apply/",
+        "evidenceId": "check-route-6438d310ea"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-7a776814b0"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Cyclotron Road",
+        "evidenceId": "check-name-62a5fec3bd"
+      }
+    ],
+    "examplePages": []
+  }
+}

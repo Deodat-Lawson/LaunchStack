@@ -1,0 +1,61 @@
+{
+  "programId": "fitt-iitd",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://fitt-iitd.in/web/home",
+    "https://fitt-iitd.in/web/aboutus",
+    "https://accubate.fitt-iitd.in/ext/form/3403/1/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-9f4a20df9b",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage checked by scrape.py",
+      "excerpt": "| Offline FICCI, in collaboration with FICCLI FLO and FITT IIT Delhi... View More View More Stakeholders We handhold startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8851ef7fea",
+      "url": "https://fitt-iitd.in/web/aboutus",
+      "title": "FITT IIT Delhi — details page checked by scrape.py",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c69ece602a",
+      "url": "https://fitt-iitd.in/web/home",
+      "title": "FITT IIT Delhi — homepage checked by scrape.py",
+      "excerpt": "Apply for Incubation → https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+        "evidenceId": "check-route-c69ece602a"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+        "evidenceId": "check-route-c69ece602a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "FITT IIT Delhi",
+        "evidenceId": "check-name-9f4a20df9b"
+      }
+    ],
+    "examplePages": []
+  }
+}

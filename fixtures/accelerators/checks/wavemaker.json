@@ -1,0 +1,70 @@
+{
+  "programId": "wavemaker",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://wavemaker.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-80e9e232e8",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "excerpt": "Investment Thesis Our Partnership Approach Sustainability Wavemaker Partners Our Portfolio Our Team News and Insights Contact Menu",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2a876c0753",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4ec7251161",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://wavemaker.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7ed7ae4c3d",
+      "url": "https://wavemaker.vc/",
+      "title": "Wavemaker Partners — homepage checked by scrape.py",
+      "excerpt": "Wavemaker Ventures → https://wavemaker.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://wavemaker.vc/",
+        "evidenceId": "check-route-7ed7ae4c3d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://wavemaker.vc/portfolio/",
+        "evidenceId": "check-portfolio-2a876c0753"
+      },
+      {
+        "value": "https://wavemaker.vc/portfolio",
+        "evidenceId": "check-portfolio-4ec7251161"
+      }
+    ],
+    "name": [
+      {
+        "value": "Wavemaker Partners",
+        "evidenceId": "check-name-80e9e232e8"
+      }
+    ],
+    "examplePages": []
+  }
+}

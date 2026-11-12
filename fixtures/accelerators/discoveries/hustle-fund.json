@@ -1,0 +1,22 @@
+{
+  "programId": "hustle-fund",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.hustlefund.vc/founders",
+      "page": "portfolio",
+      "anchor": "Meet the Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hustlefund.vc/faq",
+      "page": "terms",
+      "anchor": "Founder FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

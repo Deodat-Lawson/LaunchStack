@@ -1,0 +1,38 @@
+{
+  "programId": "parallel18",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://parallel18.com/about-us/",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/bioleap/",
+      "page": "details",
+      "anchor": "Incubation program for Life Sciences Startups. Discover",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/p18/",
+      "page": "details",
+      "anchor": "Acceleration program for Puerto Rican and international startups. Discover",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://parallel18.com/xpand/",
+      "page": "portfolio",
+      "anchor": "Scale up program designed for growth-stage companies. Discover",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

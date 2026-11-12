@@ -1,0 +1,124 @@
+{
+  "programId": "first-round",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.firstround.com/",
+    "https://www.firstround.com/angel-track"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-8118a9914b",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "First Round participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Do partners take board seats? Yes, we often do. It’s not",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-c111a0a7c5",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "rounds do you participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Will you only invest if you can lead? No. We don't care about",
+      "page": "details"
+    },
+    {
+      "id": "check-name-4f6080905e",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "Home | First Round Home Companies How we work Team Who we back PMF Method The",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5b07864287",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-63a4dab88a",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "Imagine if the web was built with, by, and for AIs. → https://www.firstround.com/companies?category=all&q=parallel",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69ade25b4d",
+      "url": "https://www.firstround.com/angel-track",
+      "title": "First Round — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.firstround.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-df48af1379",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "Imagine if any phone could accept credit cards anywhere. → https://www.firstround.com/companies/?category=all&q=square",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3cde586dc1",
+      "url": "https://www.firstround.com/",
+      "title": "First Round — homepage checked by scrape.py",
+      "excerpt": "https://www.firstround.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cd380f3a50",
+      "url": "https://www.firstround.com/angel-track",
+      "title": "First Round — terms page checked by scrape.py",
+      "excerpt": "Apply now → https://firstround.typeform.com/to/kzG9SaGj",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://firstround.typeform.com/to/kzG9SaGj",
+        "evidenceId": "check-route-cd380f3a50"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.firstround.com/",
+        "evidenceId": "check-route-3cde586dc1"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "First Round participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Do partners take board seats? Yes, we often do. It’s not",
+        "evidenceId": "check-deal-8118a9914b"
+      },
+      {
+        "value": "rounds do you participate in? No round is too small for us to invest. Our average initial investment is $3.5 million, but we’ve invested in rounds as small as $100,000 and as large as $20 million. Regardless of check size, you get the same First Round experience. Will you only invest if you can lead? No. We don't care about",
+        "evidenceId": "check-deal-c111a0a7c5"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.firstround.com/companies",
+        "evidenceId": "check-portfolio-5b07864287"
+      },
+      {
+        "value": "https://www.firstround.com/companies/?category=all&q=square",
+        "evidenceId": "check-portfolio-df48af1379"
+      },
+      {
+        "value": "https://www.firstround.com/companies?category=all&q=parallel",
+        "evidenceId": "check-portfolio-63a4dab88a"
+      }
+    ],
+    "name": [
+      {
+        "value": "First Round",
+        "evidenceId": "check-name-4f6080905e"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "programId": "porter-shed",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://portershed.com/",
+    "https://portershed.com/about/",
+    "https://portershed.com/ai-venture-forge-cohort/",
+    "https://portershed.com/membership/membership-application-form/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ba9ace0f99",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage checked by scrape.py",
+      "excerpt": "PorterShed | #supporteddbyAIB Skip to content About Our Team Our",
+      "page": "details"
+    },
+    {
+      "id": "check-route-90dba7dc89",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage checked by scrape.py",
+      "excerpt": "https://portershed.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-99aaca1092",
+      "url": "https://portershed.com/",
+      "title": "Portershed — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://portershed.com/membership/membership-application-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b0edb21e46",
+      "url": "https://portershed.com/about/",
+      "title": "Portershed — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://portershed.com/membership/membership-application-form/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://portershed.com/membership/membership-application-form/",
+        "evidenceId": "check-route-99aaca1092"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://portershed.com",
+        "evidenceId": "check-route-90dba7dc89"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Portershed",
+        "evidenceId": "check-name-ba9ace0f99"
+      }
+    ],
+    "examplePages": []
+  }
+}

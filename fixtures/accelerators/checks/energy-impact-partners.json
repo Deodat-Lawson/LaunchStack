@@ -1,0 +1,71 @@
+{
+  "programId": "energy-impact-partners",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.energyimpactpartners.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-7bb53d1853",
+      "url": "https://www.energyimpactpartners.com/",
+      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "excerpt": "$10M in Funding as it Launches Digital CEO Protection Offering - April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator Innovator, Oxford Flow - December 5, 2024 Oxford Flow eSmart Systems raises EUR 30 million in investment to accelerate growth -",
+      "page": "details"
+    },
+    {
+      "id": "check-name-970c1534db",
+      "url": "https://www.energyimpactpartners.com/",
+      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "excerpt": "- April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-658055e302",
+      "url": "https://www.energyimpactpartners.com/",
+      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "excerpt": "portfolio → https://www.energyimpactpartners.com/_portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0b7d2fe3b6",
+      "url": "https://www.energyimpactpartners.com/",
+      "title": "Energy Impact Partners — homepage checked by scrape.py",
+      "excerpt": "https://www.energyimpactpartners.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.energyimpactpartners.com/",
+        "evidenceId": "check-route-0b7d2fe3b6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "$10M in Funding as it Launches Digital CEO Protection Offering - April 22, 2025 GlobeNewswire News Room BP Ventures and Energy Impact Partners (EIP) Invest $25 Million Into Valve and Regulator Innovator, Oxford Flow - December 5, 2024 Oxford Flow eSmart Systems raises EUR 30 million in investment to accelerate growth -",
+        "evidenceId": "check-deal-7bb53d1853"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.energyimpactpartners.com/_portfolio/",
+        "evidenceId": "check-portfolio-658055e302"
+      }
+    ],
+    "name": [
+      {
+        "value": "Energy Impact Partners",
+        "evidenceId": "check-name-970c1534db"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "programId": "nexus-venture-partners",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.nexusvp.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-55eddc4bbc",
+      "url": "https://www.nexusvp.com/",
+      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Nexus Venture Partners | Investing before the world agrees companies team",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a57c346aff",
+      "url": "https://www.nexusvp.com/",
+      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "excerpt": "See all companies → https://www.nexusvp.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a594838358",
+      "url": "https://www.nexusvp.com/",
+      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "excerpt": "companies → https://www.nexusvp.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1de6c85b9f",
+      "url": "https://www.nexusvp.com/",
+      "title": "Nexus Venture Partners — homepage checked by scrape.py",
+      "excerpt": "https://www.nexusvp.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.nexusvp.com/",
+        "evidenceId": "check-route-1de6c85b9f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.nexusvp.com/companies",
+        "evidenceId": "check-portfolio-a594838358"
+      }
+    ],
+    "name": [
+      {
+        "value": "Nexus Venture Partners",
+        "evidenceId": "check-name-55eddc4bbc"
+      }
+    ],
+    "examplePages": []
+  }
+}

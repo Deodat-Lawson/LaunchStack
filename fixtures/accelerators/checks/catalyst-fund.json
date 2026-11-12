@@ -1,0 +1,108 @@
+{
+  "programId": "catalyst-fund",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.thecatalystfund.com/",
+    "https://www.thecatalystfund.com/our-story",
+    "https://www.thecatalystfund.com/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-0b008ab905",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "excerpt": "turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation and resilience solutions in",
+      "page": "details"
+    },
+    {
+      "id": "check-name-4761e2eb2c",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "excerpt": "The Catalyst Fund: Pre-seed VC fund and venture builder Who we are Our Story",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-07be180ba3",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-15101c1cbc",
+      "url": "https://www.thecatalystfund.com/faqs",
+      "title": "Catalyst Fund — terms page checked by scrape.py",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-69e26ce085",
+      "url": "https://www.thecatalystfund.com/our-story",
+      "title": "Catalyst Fund — details page checked by scrape.py",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7dc58753c4",
+      "url": "https://www.thecatalystfund.com/our-story",
+      "title": "Catalyst Fund — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b7704caebd",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d447f764a3",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "excerpt": "Who we've invested in → https://www.thecatalystfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f137fcf40d",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — homepage checked by scrape.py",
+      "excerpt": "https://www.thecatalystfund.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.thecatalystfund.com/",
+        "evidenceId": "check-route-f137fcf40d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS Who we are VC fund and Venture Builder We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation and resilience solutions in",
+        "evidenceId": "check-deal-0b008ab905"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.thecatalystfund.com/portfolio",
+        "evidenceId": "check-portfolio-b7704caebd"
+      }
+    ],
+    "name": [
+      {
+        "value": "Catalyst Fund",
+        "evidenceId": "check-name-4761e2eb2c"
+      }
+    ],
+    "examplePages": []
+  }
+}

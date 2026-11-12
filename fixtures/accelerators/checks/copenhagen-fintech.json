@@ -1,0 +1,107 @@
+{
+  "programId": "copenhagen-fintech",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://copenhagenfintech.dk/",
+    "https://copenhagenfintech.dk/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0b1f9ad9a7",
+      "url": "https://copenhagenfintech.dk/about",
+      "title": "Copenhagen Fintech — details page checked by scrape.py",
+      "excerpt": "Partners Strategic R&D Partners Scale-up Partners hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "details"
+    },
+    {
+      "id": "check-email-36e6011eb4",
+      "url": "https://copenhagenfintech.dk/about",
+      "title": "Copenhagen Fintech — details page checked by scrape.py",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "details"
+    },
+    {
+      "id": "check-email-60f767039b",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "Partners Corporate Partners Next Current Members More hello@copenhagenfintech.dk Applebys Plads 7, 1411 København K Press Room Privacy",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7825c37398",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "hello@copenhagenfintech.dk",
+      "page": "details"
+    },
+    {
+      "id": "check-name-724880d2a4",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "Copenhagen Fintech | Nordic Fintech Innovation Hub Nordic Fintech Week Home",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1a2ffeb006",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-21c97801b9",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "Startups & Scaleups → → https://copenhagenfintech.dk/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b15c7bfda0",
+      "url": "https://copenhagenfintech.dk/about",
+      "title": "Copenhagen Fintech — details page checked by scrape.py",
+      "excerpt": "Startups & Scaleups → https://copenhagenfintech.dk/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8ebbbf9331",
+      "url": "https://copenhagenfintech.dk/",
+      "title": "Copenhagen Fintech — homepage checked by scrape.py",
+      "excerpt": "https://copenhagenfintech.dk/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@copenhagenfintech.dk",
+        "evidenceId": "check-email-7825c37398"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://copenhagenfintech.dk/",
+        "evidenceId": "check-route-8ebbbf9331"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://copenhagenfintech.dk/startups",
+        "evidenceId": "check-portfolio-1a2ffeb006"
+      }
+    ],
+    "name": [
+      {
+        "value": "Copenhagen Fintech",
+        "evidenceId": "check-name-724880d2a4"
+      }
+    ],
+    "examplePages": []
+  }
+}

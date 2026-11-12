@@ -1,0 +1,107 @@
+{
+  "programId": "utrechtinc",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://utrechtinc.nl/",
+    "https://utrechtinc.nl/programs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-070725fd32",
+      "url": "https://utrechtinc.nl/programs/",
+      "title": "UtrechtInc — details page checked by scrape.py",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0962380df8",
+      "url": "https://utrechtinc.nl/programs/",
+      "title": "UtrechtInc — details page checked by scrape.py",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-email-59f82ac194",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "Inclusivity, and Sustainability Privacy Policy Contact us: info@utrechtinc.nl +31 (0)30 253 6169 Go to facebook Go to instagram Go to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e33c74b756",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "info@utrechtinc.nl",
+      "page": "details"
+    },
+    {
+      "id": "check-name-85d5b45f5b",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "Home - UtrechtInc Startup Incubator To main content To navigation UtrechtInc",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a973199509",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "See more startups → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c18e84c115",
+      "url": "https://utrechtinc.nl/programs/",
+      "title": "UtrechtInc — details page checked by scrape.py",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fe608142b4",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "Startups & Graduates → https://utrechtinc.nl/community/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8d4bb1b71a",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — homepage checked by scrape.py",
+      "excerpt": "UtrechtInc Startup Incubator → https://utrechtinc.nl",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@utrechtinc.nl",
+        "evidenceId": "check-email-e33c74b756"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://utrechtinc.nl",
+        "evidenceId": "check-route-8d4bb1b71a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://utrechtinc.nl/community/startups/",
+        "evidenceId": "check-portfolio-fe608142b4"
+      }
+    ],
+    "name": [
+      {
+        "value": "UtrechtInc",
+        "evidenceId": "check-name-85d5b45f5b"
+      }
+    ],
+    "examplePages": []
+  }
+}

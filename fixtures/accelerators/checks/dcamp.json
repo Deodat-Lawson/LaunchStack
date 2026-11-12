@@ -1,0 +1,70 @@
+{
+  "programId": "dcamp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://dcamp.kr/",
+    "https://dcamp.kr/about/who-we-are",
+    "https://dcamp.kr/program/batch"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-3ff65c3332",
+      "url": "https://dcamp.kr/",
+      "title": "D.CAMP — homepage checked by scrape.py",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8833cf1354",
+      "url": "https://dcamp.kr/program/batch",
+      "title": "D.CAMP — batches page checked by scrape.py",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-cc6d3369c0",
+      "url": "https://dcamp.kr/about/who-we-are",
+      "title": "D.CAMP — details page checked by scrape.py",
+      "excerpt": "Startup → https://dcamp.kr/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3e584c3b6",
+      "url": "https://dcamp.kr/program/batch",
+      "title": "D.CAMP — batches page checked by scrape.py",
+      "excerpt": "More → https://dcamp.kr/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-5781de6ad2",
+      "url": "https://dcamp.kr/",
+      "title": "D.CAMP — homepage checked by scrape.py",
+      "excerpt": "https://dcamp.kr/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://dcamp.kr/",
+        "evidenceId": "check-route-5781de6ad2"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://dcamp.kr/startups",
+        "evidenceId": "check-portfolio-3ff65c3332"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

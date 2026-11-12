@@ -1,0 +1,54 @@
+{
+  "programId": "copenhagen-fintech",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://copenhagenfintech.dk/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.copenhagenfintech.dk/program/tech-for-fin",
+      "page": "details",
+      "anchor": "Tech for Fin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.copenhagenfintech.dk/program/incubation-program",
+      "page": "details",
+      "anchor": "Incubation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.copenhagenfintech.dk/program/mentorship",
+      "page": "details",
+      "anchor": "Mentorship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.copenhagenfintech.dk/program/delegations",
+      "page": "details",
+      "anchor": "Delegations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://copenhagenfintech.dk/fast-track-program",
+      "page": "details",
+      "anchor": "Partnership Fast Track",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "programId": "nsrcel",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://nsrcel.org/",
+    "https://nsrcel.org/about-us/",
+    "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ec022b1a5d",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage checked by scrape.py",
+      "excerpt": "NSRCEL - Incubation Centre for Startups & Entrepreneurs Skip to",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-12aaa4ad3d",
+      "url": "https://nsrcel.org/about-us/",
+      "title": "NSRCEL — details page checked by scrape.py",
+      "excerpt": "Explore Our Startups → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9014e77d4e",
+      "url": "https://nsrcel.org/about-us/",
+      "title": "NSRCEL — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d900d5cca3",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://nsrcel.org/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-39355c27e6",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-26b79aa66c",
+      "url": "https://nsrcel.org/",
+      "title": "NSRCEL — homepage checked by scrape.py",
+      "excerpt": "globally, and create lasting impact. Find your fit Take the next step in your startup journey with NSRCEL Applications are now open for Impact Orbit - AgeTech Innovations Circular Bharat Accelerator Impact Orbit - Skilling and Livelihood",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+        "evidenceId": "check-route-39355c27e6"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://kotakbizlabs.accubate.app/ext/form/23736/1/apply",
+        "evidenceId": "check-route-39355c27e6"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-26b79aa66c"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://nsrcel.org/portfolio/",
+        "evidenceId": "check-portfolio-d900d5cca3"
+      }
+    ],
+    "name": [
+      {
+        "value": "NSRCEL",
+        "evidenceId": "check-name-ec022b1a5d"
+      }
+    ],
+    "examplePages": []
+  }
+}

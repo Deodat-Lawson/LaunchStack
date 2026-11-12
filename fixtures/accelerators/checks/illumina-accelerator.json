@@ -1,0 +1,233 @@
+{
+  "programId": "illumina-accelerator",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.illumina.com/company/illumina-for-startups.html",
+    "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+    "https://www.illumina.com/company/about-us/management-team.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-274c483be7",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "startups@illumina.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c23503c56d",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "to subject-matter experts To find out more please contact startups@illumina.com *The grant is valid for 6 months from the date awarded.",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ee09774469",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Let us know how we can help! Illumina for Startups startups@illumina.com Follow us on LinkedIn Looking for Illumina Ventures or",
+      "page": "details"
+    },
+    {
+      "id": "check-name-80b5fe22f4",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Follow us on LinkedIn Looking for Illumina Ventures or Illumina Accelerator? Illumina Ventures is an independently managed venture",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0127f11b10",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Cancer Research Applications → https://www.illumina.com/areas-of-interest/cancer/research/applications.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-06fb2591c5",
+      "url": "https://www.illumina.com/company/about-us/management-team.html",
+      "title": "Illumina Accelerator — details page checked by scrape.py",
+      "excerpt": "Commercial Agricultural Applications → https://www.illumina.com/areas-of-interest/agrigenomics/commercial-agriculture.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0ece6bbbc2",
+      "url": "https://www.illumina.com/company/about-us/management-team.html",
+      "title": "Illumina Accelerator — details page checked by scrape.py",
+      "excerpt": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-11c927e65d",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-13d1e22b6d",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Applications & Methods → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2ac0be698a",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.illumina.com/landing/illumina-accelerator/grant-competition-application.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2d1d76435a",
+      "url": "https://www.illumina.com/company/about-us/management-team.html",
+      "title": "Illumina Accelerator — details page checked by scrape.py",
+      "excerpt": "Cancer Research Applications → https://www.illumina.com/areas-of-interest/cancer/research/applications.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3e17bbe2fa",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Omics Solutions → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/omics-solutions.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-685af71855",
+      "url": "https://www.illumina.com/company/about-us/management-team.html",
+      "title": "Illumina Accelerator — details page checked by scrape.py",
+      "excerpt": "Genotyping → https://www.illumina.com/techniques/popular-applications/genotyping.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-77fd314229",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "See timeline → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-86d7aae921",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Broader, Deeper Sequencing → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/broad-sequencing.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-96670cee67",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Illumina for Startups → https://www.illumina.com/company/illumina-for-startups.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9a533558b6",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Cancer Research Applications → https://www.illumina.com/areas-of-interest/cancer/research/applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9e0f80b79a",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Genotyping → https://www.illumina.com/techniques/popular-applications/genotyping.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ae2d814751",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Overview → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bc826b95be",
+      "url": "https://www.illumina.com/company/illumina-for-startups.html",
+      "title": "Illumina Accelerator — homepage checked by scrape.py",
+      "excerpt": "Commercial Agricultural Applications → https://www.illumina.com/areas-of-interest/agrigenomics/commercial-agriculture.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-db38047c65",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Genotyping → https://www.illumina.com/techniques/popular-applications/genotyping.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ee3c78f6aa",
+      "url": "https://www.illumina.com/company/about-us/management-team.html",
+      "title": "Illumina Accelerator — details page checked by scrape.py",
+      "excerpt": "See timeline → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fd234b17cd",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Transition to High-Throughput → https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/transition.html",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fde3578f80",
+      "url": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+      "title": "Illumina Accelerator — application page checked by scrape.py",
+      "excerpt": "Commercial Agricultural Applications → https://www.illumina.com/areas-of-interest/agrigenomics/commercial-agriculture.html",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "startups@illumina.com",
+        "evidenceId": "check-email-274c483be7"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications/innovation-roadmap.html",
+        "evidenceId": "check-route-11c927e65d"
+      },
+      {
+        "value": "https://www.illumina.com/techniques/popular-applications/genotyping.html",
+        "evidenceId": "check-route-9e0f80b79a"
+      },
+      {
+        "value": "https://www.illumina.com/areas-of-interest/cancer/research/applications.html",
+        "evidenceId": "check-route-0127f11b10"
+      },
+      {
+        "value": "https://www.illumina.com/areas-of-interest/agrigenomics/commercial-agriculture.html",
+        "evidenceId": "check-route-bc826b95be"
+      },
+      {
+        "value": "https://www.illumina.com/landing/illumina-accelerator/grant-competition-application.html",
+        "evidenceId": "check-route-2ac0be698a"
+      },
+      {
+        "value": "https://www.illumina.com/systems/sequencing-platforms/novaseq-x-plus/applications.html",
+        "evidenceId": "check-route-13d1e22b6d"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.illumina.com/company/illumina-for-startups.html",
+        "evidenceId": "check-route-96670cee67"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Illumina Accelerator",
+        "evidenceId": "check-name-80b5fe22f4"
+      }
+    ],
+    "examplePages": []
+  }
+}

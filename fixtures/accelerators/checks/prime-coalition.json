@@ -1,0 +1,67 @@
+{
+  "programId": "prime-coalition",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.primecoalition.org/",
+    "https://www.primecoalition.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-38773b738f",
+      "url": "https://www.primecoalition.org/",
+      "title": "Prime Coalition — homepage checked by scrape.py",
+      "excerpt": "Email Us ➜ (partnerships@primecoalition.org)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-81e1c60ec8",
+      "url": "https://www.primecoalition.org/about",
+      "title": "Prime Coalition — details page checked by scrape.py",
+      "excerpt": "Email Us ➜ (partnerships@primecoalition.org)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-7cfe937c76",
+      "url": "https://www.primecoalition.org/",
+      "title": "Prime Coalition — homepage checked by scrape.py",
+      "excerpt": "Prime Coalition Donate Subscribe 0 Skip to Content About Mission & Vision",
+      "page": "details"
+    },
+    {
+      "id": "check-route-57f75c4fef",
+      "url": "https://www.primecoalition.org/",
+      "title": "Prime Coalition — homepage checked by scrape.py",
+      "excerpt": "https://www.primecoalition.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "partnerships@primecoalition.org",
+        "evidenceId": "check-email-38773b738f"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.primecoalition.org/",
+        "evidenceId": "check-route-57f75c4fef"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Prime Coalition",
+        "evidenceId": "check-name-7cfe937c76"
+      }
+    ],
+    "examplePages": []
+  }
+}

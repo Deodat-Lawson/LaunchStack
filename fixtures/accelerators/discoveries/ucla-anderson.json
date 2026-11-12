@@ -1,0 +1,4094 @@
+{
+  "programId": "ucla-anderson",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.anderson.ucla.edu/about",
+      "page": "details",
+      "anchor": "About UCLA Anderson",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/our-character",
+      "page": "details",
+      "anchor": "Our Character",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/our-dean",
+      "page": "details",
+      "anchor": "Our Dean",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/our-leadership",
+      "page": "details",
+      "anchor": "Our Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/our-history",
+      "page": "details",
+      "anchor": "Our History",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations",
+      "page": "details",
+      "anchor": "Clubs and Associations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/ai-anderson",
+      "page": "details",
+      "anchor": "AI @ Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence",
+      "page": "details",
+      "anchor": "Office of Inclusive Excellence (OIE)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers",
+      "page": "details",
+      "anchor": "Our Centers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation",
+      "page": "details",
+      "anchor": "Center for Healthcare Innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management",
+      "page": "details",
+      "anchor": "Center for Global Management",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports",
+      "page": "details",
+      "anchor": "Center for Media, Entertainment & Sports",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center",
+      "page": "details",
+      "anchor": "Easton Technology Management Center",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance",
+      "page": "details",
+      "anchor": "Fink Center for Finance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson",
+      "page": "details",
+      "anchor": "Center for Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics",
+      "page": "details",
+      "anchor": "Morrison Center for Marketing and Data Analytics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast",
+      "page": "details",
+      "anchor": "UCLA Anderson Forecast",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute",
+      "page": "details",
+      "anchor": "UCLA Ziman Institute for Real Estate and Urban Economics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development",
+      "page": "details",
+      "anchor": "Office of Development",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-technology/overview",
+      "page": "details",
+      "anchor": "Information and Technology",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees",
+      "page": "details",
+      "anchor": "Degree Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program",
+      "page": "details",
+      "anchor": "Ph.D. Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/accounting-minor-program",
+      "page": "details",
+      "anchor": "Accounting Minor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator",
+      "page": "details",
+      "anchor": "Anderson Venture Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs",
+      "page": "details",
+      "anchor": "Riordan Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program",
+      "page": "details",
+      "anchor": "Information Systems Research Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/for-companies/recruit",
+      "page": "portfolio",
+      "anchor": "Hire an MBA",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/for-companies/recruit-an-mfe",
+      "page": "portfolio",
+      "anchor": "Hire an MFE",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/recruit-msbas",
+      "page": "portfolio",
+      "anchor": "Hire an MSBA",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/for-companies/engage-a-student-team",
+      "page": "portfolio",
+      "anchor": "Engage a Student Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/capstone-applied-analytics-project",
+      "page": "portfolio",
+      "anchor": "Applied Analytics Project",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/for-companies/early-stage-investment-fund",
+      "page": "portfolio",
+      "anchor": "Early-Stage Investment Fund",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/for-companies/field-experiments-in-strategy",
+      "page": "portfolio",
+      "anchor": "Field Experiments in Strategy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/alumni-weekend-2027/reunions",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend and Reunions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/equity-diversity-and-inclusion/embracing-diversity-week",
+      "page": "details",
+      "anchor": "Embracing Diversity Week",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/alumni-directory",
+      "page": "portfolio",
+      "anchor": "Alumni Directory",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/chapters-and-groups",
+      "page": "portfolio",
+      "anchor": "Chapters & Groups",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/calendar",
+      "page": "portfolio",
+      "anchor": "Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/anderson-beyond-2026",
+      "page": "portfolio",
+      "anchor": "Anderson Beyond",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/career-services",
+      "page": "portfolio",
+      "anchor": "Career Services",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/alumni-awards",
+      "page": "portfolio",
+      "anchor": "Alumni Awards",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/ander10/alumni-launch",
+      "page": "portfolio",
+      "anchor": "Alumni Launch",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected",
+      "page": "portfolio",
+      "anchor": "Stay Connected",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/help",
+      "page": "portfolio",
+      "anchor": "Help",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/meet-our-team",
+      "page": "portfolio",
+      "anchor": "Meet Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/how-to-give",
+      "page": "details",
+      "anchor": "How to Give",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/apply",
+      "page": "application",
+      "anchor": "Application Checklist",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-students",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-students/academics",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-students/fellowships",
+      "page": "details",
+      "anchor": "Fellowships",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-students/student-investment-fund",
+      "page": "details",
+      "anchor": "Student Investment Fund",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals",
+      "page": "details",
+      "anchor": "For Professionals Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/health-care-executive-program",
+      "page": "details",
+      "anchor": "Health Care Executive Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/entrepreneurship-bootcamp-for-veterans",
+      "page": "details",
+      "anchor": "Entrepreneurship Bootcamp for Veterans",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/ucla-head-start-management-fellows-program",
+      "page": "details",
+      "anchor": "UCLA Head Start Management Fellows Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/steinbeck-family-business-seminar",
+      "page": "details",
+      "anchor": "Steinbeck Family Business Seminar",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/management-development-for-entrepreneurs",
+      "page": "details",
+      "anchor": "Management Development for Entrepreneurs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/for-professionals/ucla-health-care-institute",
+      "page": "details",
+      "anchor": "UCLA Health Care Institute",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/faculty-and-research",
+      "page": "details",
+      "anchor": "Faculty and Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-programs",
+      "page": "details",
+      "anchor": "Our Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "portfolio",
+      "anchor": "Our Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/partners",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/mentors-and-advisors",
+      "page": "details",
+      "anchor": "Mentors and Advisors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/why-us",
+      "page": "details",
+      "anchor": "Why Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/news-and-events",
+      "page": "details",
+      "anchor": "News and Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "page": "details",
+      "anchor": "Showcase 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2025",
+      "page": "details",
+      "anchor": "Showcase 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2024",
+      "page": "details",
+      "anchor": "Showcase 2024",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2023",
+      "page": "details",
+      "anchor": "Showcase 2023",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/news-and-events/showcase-2022",
+      "page": "details",
+      "anchor": "Showcase 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/news-and-events/showcase-2021",
+      "page": "details",
+      "anchor": "Showcase 2021",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/news-and-events/showcase-2020",
+      "page": "details",
+      "anchor": "Showcase 2020",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/news-and-events/meet-our-team",
+      "page": "details",
+      "anchor": "Meet Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/institutions/entrepreneur-association-ea",
+      "page": "details",
+      "anchor": "Entrepreneur Association (EA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/hire-an-anderson-intern",
+      "page": "details",
+      "anchor": "Hire an Anderson Intern",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/about-us",
+      "page": "details",
+      "anchor": "About Us Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/about-us/board-advisors",
+      "page": "details",
+      "anchor": "Board of Advisors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/about-us/our-team",
+      "page": "details",
+      "anchor": "Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/price-center-train-trainer-programs-work",
+      "page": "details",
+      "anchor": "Read More Price Center Train-the-Trainer Programs Work ⟶",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/maps-and-directions",
+      "page": "details",
+      "anchor": "Maps & Directions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-and-technology",
+      "page": "details",
+      "anchor": "Computing Services",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/our-strategic-plan",
+      "page": "details",
+      "anchor": "Our Strategic Plan",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-development/impact-stories",
+      "page": "details",
+      "anchor": "Impact Stories",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/deans-society",
+      "page": "details",
+      "anchor": "Dean’s Society Leadership Giving",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/reunion-giving",
+      "page": "details",
+      "anchor": "Reunion Giving",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/anderson-affiliates",
+      "page": "details",
+      "anchor": "Anderson Affiliates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/ucla-anderson-planned-giving",
+      "page": "details",
+      "anchor": "Planned Giving",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-development/our-team",
+      "page": "details",
+      "anchor": "Contact Development",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/for-students",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/for-students/healthcare-specialization",
+      "page": "details",
+      "anchor": "Healthcare Specialization",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/for-students/fellowship-programs",
+      "page": "details",
+      "anchor": "Fellowship Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/faculty-and-research",
+      "page": "details",
+      "anchor": "Faculty and Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/events",
+      "page": "details",
+      "anchor": "Healthcare Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-healthcare-innovation/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/our-leadership",
+      "page": "details",
+      "anchor": "Our Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/specialize-in-global-management",
+      "page": "details",
+      "anchor": "Specialize In Global Management",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/on-campus-and-or-hybrid-global-management-courses",
+      "page": "details",
+      "anchor": "On-Campus and/or Hybrid Global Management Courses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/global-immersion-courses",
+      "page": "details",
+      "anchor": "Global Immersion Courses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/global-nonprofit-capstone-projects",
+      "page": "details",
+      "anchor": "Global Nonprofit Capstone Projects",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/mba-research-assistants",
+      "page": "details",
+      "anchor": "MBA Research Assistants",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/career-and-personal-development",
+      "page": "details",
+      "anchor": "Career and Personal Development",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/femba-emba-international-exchange",
+      "page": "details",
+      "anchor": "F/EMBA International Exchange",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/emba-international-business-residency",
+      "page": "details",
+      "anchor": "EMBA International Business Residency",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/global-management-seminars",
+      "page": "details",
+      "anchor": "Global Management Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/for-students/international-exchange",
+      "page": "details",
+      "anchor": "International Exchange",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions",
+      "page": "details",
+      "anchor": "Events and Discussions Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/global-conferences",
+      "page": "details",
+      "anchor": "Global Conferences",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/global-conferences/greater-china-and-latam",
+      "page": "details",
+      "anchor": "Greater China and LatAm Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/global-management-speaker-series",
+      "page": "details",
+      "anchor": "Global Management Speaker Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/global-business-and-policy-forums",
+      "page": "details",
+      "anchor": "Global Business & Policy Forums",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/world-today-discussion-series",
+      "page": "details",
+      "anchor": "World Today Discussion Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/lunch-and-dinner-series",
+      "page": "details",
+      "anchor": "Lunch and Dinner Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/external-collaborative-partnerships",
+      "page": "details",
+      "anchor": "External Collaborative Partnerships",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/upcoming-events",
+      "page": "details",
+      "anchor": "Upcoming Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/past-events-archive",
+      "page": "details",
+      "anchor": "Past Center Sponsored Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/events-and-discussions/other-ucla-events",
+      "page": "details",
+      "anchor": "Other UCLA Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/faculty-and-global-research",
+      "page": "details",
+      "anchor": "Faculty & Global Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/video-gallery",
+      "page": "details",
+      "anchor": "Video Gallery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/center-for-global-management/support-the-center",
+      "page": "details",
+      "anchor": "Support The Center",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs",
+      "page": "details",
+      "anchor": "Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/slam-salon",
+      "page": "details",
+      "anchor": "SLAM Salon",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/pulse-conference",
+      "page": "details",
+      "anchor": "Pulse Conference Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/pulse-conference/entertainment-case-competition",
+      "page": "details",
+      "anchor": "Entertainment Case Competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/pulse-conference/game-changer-award",
+      "page": "details",
+      "anchor": "Game Changer Award",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/game-day-sports-case-competition",
+      "page": "details",
+      "anchor": "Game Day Sports Case Competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-sports/global-sports-business-forum",
+      "page": "details",
+      "anchor": "Global Sports Business Forum",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/events-and-programs/real-madrid-global-sports-leadership",
+      "page": "details",
+      "anchor": "Real Madrid Global Sports Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/research-and-insights",
+      "page": "details",
+      "anchor": "Research & Insights",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/corporate-partnership",
+      "page": "details",
+      "anchor": "Corporate Partnership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/student-experience",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/student-experience/academics",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/student-experience/industry-network",
+      "page": "details",
+      "anchor": "Industry Network",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-sports/sports-leadership-management-program",
+      "page": "details",
+      "anchor": "Sports Leadership Management Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/student-experience/high-school-summer-discovery",
+      "page": "details",
+      "anchor": "High School Summer Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-sports/fellows",
+      "page": "details",
+      "anchor": "Student Fellows",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/about-us",
+      "page": "details",
+      "anchor": "About The Center for Media, Entertainment & Sports",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/about-us/board-of-directors",
+      "page": "details",
+      "anchor": "Board of Directors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/media-entertainment-sports/about-us/executive-advisory-board",
+      "page": "details",
+      "anchor": "Executive Advisory Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/easton-courses",
+      "page": "details",
+      "anchor": "Easton Courses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/specialization",
+      "page": "details",
+      "anchor": "Specialization",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/fellows",
+      "page": "details",
+      "anchor": "Fellows",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge",
+      "page": "details",
+      "anchor": "Innovation Challenge Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge/winners",
+      "page": "details",
+      "anchor": "Winners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge/innovation-challenge-tracks",
+      "page": "details",
+      "anchor": "Innovation Challenge Tracks",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge/advisors",
+      "page": "details",
+      "anchor": "Mentors & Advisors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge/competition-details",
+      "page": "details",
+      "anchor": "Competition Details",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/for-students/innovation-challenge/innovation-challenge-events",
+      "page": "details",
+      "anchor": "Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/easton-events",
+      "page": "details",
+      "anchor": "Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/innovate-conference",
+      "page": "details",
+      "anchor": "Innovate Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/easton-events/tech-society-conference",
+      "page": "details",
+      "anchor": "Tech + Society Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/tech-business-association-at-anderson-andertech/emerging-tech-conference",
+      "page": "details",
+      "anchor": "Emerging Tech Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/easton-instructors",
+      "page": "details",
+      "anchor": "Easton Instructors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/get-involved",
+      "page": "details",
+      "anchor": "Get Involved",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/about-us",
+      "page": "details",
+      "anchor": "About The Easton Technology Management Center",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/about-us/board-of-advisors",
+      "page": "details",
+      "anchor": "Board of Advisors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/easton-technology-management-center/about-us/faculty-advisory-board",
+      "page": "details",
+      "anchor": "Faculty Advisory Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/academics",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/student-fellowships",
+      "page": "details",
+      "anchor": "Student Fellowships Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/student-fellowships/investment-banking-fellowship",
+      "page": "details",
+      "anchor": "Investment Banking Fellowship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/student-fellowships/kayne-investment-management-fellowship",
+      "page": "details",
+      "anchor": "Kayne Investment Management Fellowship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/student-fellowships/brown-private-equity-and-alternatives-fellowship",
+      "page": "details",
+      "anchor": "Brown Private Equity and Alternatives Fellowship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/for-students/student-fellowships/quantitative-finance-fellowship",
+      "page": "details",
+      "anchor": "Quantitative Finance Fellowship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/news-and-events",
+      "page": "details",
+      "anchor": "News and Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/news-and-events/conference-financial-markets",
+      "page": "details",
+      "anchor": "Conference on Financial Markets",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/news-and-events/fink-investing-conference",
+      "page": "details",
+      "anchor": "Fink Investing Conference Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/news-and-events/private-equity-roundtable",
+      "page": "details",
+      "anchor": "Private Equity Roundtable",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/news-and-events/fink-credit-pitch-competition",
+      "page": "details",
+      "anchor": "Fink Credit Pitch Competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/faculty-and-research",
+      "page": "details",
+      "anchor": "Faculty & Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/our-leadership",
+      "page": "details",
+      "anchor": "Meet Our Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/our-leadership/meet-our-team",
+      "page": "details",
+      "anchor": "Meet Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/get-involved",
+      "page": "details",
+      "anchor": "Get Involved",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/fink-center-for-finance/subscribe",
+      "page": "details",
+      "anchor": "Subscribe",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/academics",
+      "page": "details",
+      "anchor": "Academics Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/academics/courses",
+      "page": "details",
+      "anchor": "Courses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/academics/specializations-and-certificates",
+      "page": "details",
+      "anchor": "Specializations and Certificates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/impact-investing",
+      "page": "details",
+      "anchor": "Impact Investing",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/social-impact-consulting",
+      "page": "details",
+      "anchor": "Social Impact Consulting",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/golub-capital-ucla-anderson-board-fellows-program",
+      "page": "details",
+      "anchor": "Golub Capital Board Fellows Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/corporate-sustainability/about-open-for-good",
+      "page": "details",
+      "anchor": "About Open For Good",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/corporate-sustainability/reports",
+      "page": "details",
+      "anchor": "Reports",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/corporate-sustainability/reports/our-methodology",
+      "page": "details",
+      "anchor": "Our Methodology",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/corporate-sustainability/reports/open-for-good-dashboard",
+      "page": "details",
+      "anchor": "Dashboard",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/corporate-sustainability/insights-in-practice",
+      "page": "details",
+      "anchor": "Insights In Practice",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/faculty-and-research",
+      "page": "details",
+      "anchor": "Faculty and Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/faculty-and-research/research-and-seminars",
+      "page": "details",
+      "anchor": "Research and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/events",
+      "page": "details",
+      "anchor": "Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/video-gallery",
+      "page": "details",
+      "anchor": "Video Gallery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/get-involved",
+      "page": "details",
+      "anchor": "Get Involved",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/events",
+      "page": "details",
+      "anchor": "Events and Seminars Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/gilbert-symposium",
+      "page": "details",
+      "anchor": "Gilbert Symposium",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-marketing-and-data-analytics/healthcare-analytics-symposium-2023",
+      "page": "details",
+      "anchor": "Healthcare Analytics Symposium",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/events/past-events",
+      "page": "details",
+      "anchor": "Past Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/research",
+      "page": "details",
+      "anchor": "Research Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/research/morrison-working-paper-series",
+      "page": "details",
+      "anchor": "Working Paper Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/executive-in-residence",
+      "page": "details",
+      "anchor": "Executive-in-Residence",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/academic-fellows",
+      "page": "details",
+      "anchor": "Academic Fellows",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/student-programs",
+      "page": "details",
+      "anchor": "For Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/student-programs/case-competitions",
+      "page": "details",
+      "anchor": "Case Competitions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/mentorship-program",
+      "page": "details",
+      "anchor": "Mentorship Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/about-us/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-marketing-and-data-analytics/about-us/morrison-center-advisory-board",
+      "page": "details",
+      "anchor": "Morrison Center Advisory Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/morrison-center-for-marketing-and-data-analytics/get-involved",
+      "page": "details",
+      "anchor": "Get Involved",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/board-of-advisors",
+      "page": "details",
+      "anchor": "Board of Advisors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/events",
+      "page": "details",
+      "anchor": "Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/events/robertson-lecture-series-global-business-leadership",
+      "page": "details",
+      "anchor": "Robertson Lecture Series on Business Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/research-and-reports",
+      "page": "details",
+      "anchor": "Research and Reports Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/research-and-reports/forecast-direct-podcast",
+      "page": "details",
+      "anchor": "Forecast Direct Podcast",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/research-and-reports/forecast-in-five",
+      "page": "details",
+      "anchor": "Forecast In FIVE",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships",
+      "page": "details",
+      "anchor": "Projects and Partnerships Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/forecast-fellows",
+      "page": "details",
+      "anchor": "Forecast Fellows Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/allen-matkins",
+      "page": "details",
+      "anchor": "Allen Matkins",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/cathay-bank",
+      "page": "details",
+      "anchor": "Cathay Bank",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/godaddy",
+      "page": "details",
+      "anchor": "GoDaddy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/city-human-capital-index",
+      "page": "details",
+      "anchor": "City Human Capital Index",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/los-angeles-city-employment",
+      "page": "details",
+      "anchor": "Los Angeles City Employment",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/projects-and-partnerships/mercury-insurance-climate-economist",
+      "page": "details",
+      "anchor": "Mercury Insurance Climate Economist",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/california-construction-housing-update",
+      "page": "details",
+      "anchor": "CA Construction & Housing Update",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/engage-with-us",
+      "page": "details",
+      "anchor": "Engage with Us Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/engage-with-us/become-a-member",
+      "page": "details",
+      "anchor": "Become A Member",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/engage-with-us/become-a-sponsor",
+      "page": "details",
+      "anchor": "Become A Sponsor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-anderson-forecast/engage-with-us/speaking-engagements",
+      "page": "details",
+      "anchor": "Speaking Engagements",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/25-years-impact",
+      "page": "details",
+      "anchor": "25 Years of Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students",
+      "page": "details",
+      "anchor": "For Students Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/academics",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/career-resources",
+      "page": "details",
+      "anchor": "Career Resources",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/challenges",
+      "page": "details",
+      "anchor": "Challenges",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/fellowships",
+      "page": "details",
+      "anchor": "Fellowships",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/fellowships/howard-and-irene-levine-fellows",
+      "page": "details",
+      "anchor": "Howard and Irene Levine Fellows",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/fellowships/peter-bren-fellows-in-entrepreneurial-real-estate",
+      "page": "details",
+      "anchor": "Peter Bren Fellows in Entrepreneurial Real Estate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-students/undergraduate-program/undergraduate-career-resources",
+      "page": "details",
+      "anchor": "Undergraduate Career Resources",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-professionals",
+      "page": "details",
+      "anchor": "For Professionals Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-professionals/corporate-concierge-recruiting",
+      "page": "details",
+      "anchor": "Corporate Concierge Recruiting",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-professionals/howard-and-irene-levine-affordable-housing-development-program",
+      "page": "details",
+      "anchor": "Howard and Irene Levine Affordable Housing Development Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/for-professionals/reag-retreat-event",
+      "page": "details",
+      "anchor": "REAG Endowment Circle Annual Retreat",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/intervals",
+      "page": "details",
+      "anchor": "News",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/events",
+      "page": "details",
+      "anchor": "Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/events/howard-j-levine-distinguished-lecture-on-business-ethics-and-social-responsibility",
+      "page": "details",
+      "anchor": "Howard J. Levine Distinguished Lecture on Business Ethics & Social Responsibility",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/events/ucla-distinguished-speaker-series-in-affordable-housing",
+      "page": "details",
+      "anchor": "UCLA Distinguished Speaker Series in Affordable Housing",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research",
+      "page": "details",
+      "anchor": "Faculty & Research Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research/ucla-gilbert-program-in-real-estate-finance-and-urban-economics",
+      "page": "details",
+      "anchor": "UCLA Gilbert Program in Real Estate, Finance and Urban Economics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research/ucla-economic-letter",
+      "page": "details",
+      "anchor": "UCLA Economic Letter",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research/ucla-affordable-housing-policy-brief",
+      "page": "details",
+      "anchor": "UCLA Affordable Housing Policy Brief",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research/academic-working-papers",
+      "page": "details",
+      "anchor": "Academic Working Papers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/faculty-and-research/crsp/ziman-reit-data-series",
+      "page": "details",
+      "anchor": "CRSP/Ziman REIT Data Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/impact-on-our-community",
+      "page": "details",
+      "anchor": "Impact on Our Community Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/housing-as-health-care-initiative",
+      "page": "details",
+      "anchor": "Housing as Health Care Initiative",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/impact-on-our-community/howard-and-irene-levine-program-in-housing-and-social-responsibility",
+      "page": "details",
+      "anchor": "Howard and Irene Levine Program in Housing and Social Responsibility",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/wildfire-responses",
+      "page": "details",
+      "anchor": "Wildfire Responses",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/our-leadership",
+      "page": "details",
+      "anchor": "Our Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/our-leadership/board-leadership",
+      "page": "details",
+      "anchor": "Board Leadership",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/ucla-ziman-institute/our-leadership/meet-our-team",
+      "page": "details",
+      "anchor": "Meet Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/anderson-student-association-asa",
+      "page": "details",
+      "anchor": "Anderson Student Association (ASA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional",
+      "page": "details",
+      "anchor": "Professional Clubs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/association-for-real-estate-at-anderson-area",
+      "page": "details",
+      "anchor": "Association for Real Estate at Anderson (AREA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/energy-and-cleantech-association-eca",
+      "page": "details",
+      "anchor": "Energy and Cleantech Association (ECA) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/energy-and-cleantech-association-eca/energy-innovation-conference",
+      "page": "details",
+      "anchor": "Energy Innovation Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/entertainment-management-association-ema",
+      "page": "details",
+      "anchor": "Entertainment Management Association (EMA) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/entertainment-management-association-ema/international-film-festival",
+      "page": "details",
+      "anchor": "International Film Festival",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/healthcare-business-association-hba",
+      "page": "details",
+      "anchor": "Healthcare Business Association (HBA) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/healthcare-business-association-hba/hba-vitals-conference",
+      "page": "details",
+      "anchor": "HBA VITALS Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/investment-finance-association-ifa",
+      "page": "details",
+      "anchor": "Investment Finance Association (IFA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/management-consulting-association-mca",
+      "page": "details",
+      "anchor": "Management Consulting Association (MCA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/marketing-association-ma",
+      "page": "details",
+      "anchor": "Marketing Association (MA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/net-impact-ni",
+      "page": "details",
+      "anchor": "Net Impact (NI) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/net-impact-ni/high-impact-tea",
+      "page": "details",
+      "anchor": "High Impact Tea",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/sports-business-association-sba",
+      "page": "details",
+      "anchor": "Sports Business Association (SBA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/strategy-and-operations-management-association-soma",
+      "page": "details",
+      "anchor": "Strategy & Operations Management Association (SOMA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/tech-business-association-at-anderson-andertech",
+      "page": "details",
+      "anchor": "Tech Business Association at Anderson (AnderTech) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/tech-business-association-at-anderson-andertech/embracing-ai-summit",
+      "page": "details",
+      "anchor": "The Embracing AI Summit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/tech-business-association-at-anderson-andertech/unchained",
+      "page": "details",
+      "anchor": "Unchained: Blockchain Business Forum",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/professional/video-game-business-association",
+      "page": "details",
+      "anchor": "Video Game Business Association (VGBA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity",
+      "page": "details",
+      "anchor": "Identity Clubs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/the-alliance-for-latinx-management-at-anderson-alma",
+      "page": "details",
+      "anchor": "The Alliance for Latinx Management at Anderson (ALMA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/asian-management-student-association-amsa",
+      "page": "details",
+      "anchor": "Asian Management Student Association (AMSA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/association-of-veterans-at-anderson-ava",
+      "page": "details",
+      "anchor": "Association of Veterans at Anderson (AVA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/black-business-students-association-bbsa",
+      "page": "details",
+      "anchor": "Black Business Students Association (BBSA) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/bbsa-legacy-conference",
+      "page": "details",
+      "anchor": "BBSA Legacy Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/equity-diversity-and-inclusion/blackanderson/black-history-month-events",
+      "page": "details",
+      "anchor": "BHM Events - Better Together",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/christian-student-fellowship-csf",
+      "page": "details",
+      "anchor": "Christian Student Fellowship (CSF)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/european-business-association-eba",
+      "page": "details",
+      "anchor": "European Business Association (EBA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/greater-china-business-association-gcba",
+      "page": "details",
+      "anchor": "Greater China Business Association (GCBA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/japan-america-business-association-jaba",
+      "page": "details",
+      "anchor": "Japan America Business Association (JABA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/jewish-business-students-association-jbsa",
+      "page": "details",
+      "anchor": "Jewish Business Students Association (JBSA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/korean-business-student-association-kbsa",
+      "page": "details",
+      "anchor": "Korean Business Student Association (KBSA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/latin-american-business-association-laba",
+      "page": "details",
+      "anchor": "Latin American Business Association (LABA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/middle-east-africa-club-mea",
+      "page": "details",
+      "anchor": "Middle East and Africa Club (MEA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/muslim-business-student-association-mbsa",
+      "page": "details",
+      "anchor": "Muslim Business Student Association (MBSA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/outanderson-oa",
+      "page": "details",
+      "anchor": "Out@Anderson (O@A) Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/outanderson-oa/lgbtq-awareness-week",
+      "page": "details",
+      "anchor": "LGBTQ Awareness Week",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/south-asian-business-association-saba",
+      "page": "details",
+      "anchor": "South Asian Business Association (SABA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/southeast-asian-business-association-seaba",
+      "page": "details",
+      "anchor": "Southeast Asian Business Association (SEABA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/taiwanese-student-business-association-tsba",
+      "page": "details",
+      "anchor": "Taiwanese Student Business Association (TSBA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/identity/womens-business-connection-wbc",
+      "page": "details",
+      "anchor": "Women’s Business Connection (WBC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/institutions",
+      "page": "details",
+      "anchor": "Institutions Clubs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/institutions/anderson-onboarding-committee",
+      "page": "details",
+      "anchor": "Anderson Onboarding Committee (AOC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/institutions/admissions-ambassador-corps-aac",
+      "page": "details",
+      "anchor": "Admissions Ambassador Corps (AAC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/institutions/entrepreneur-association-ea/entrepreneurship-through-acquisition",
+      "page": "details",
+      "anchor": "Entrepreneurship Through Acquisition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/interest",
+      "page": "details",
+      "anchor": "Interest Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/interest/adam-smith-society-smithsoc",
+      "page": "details",
+      "anchor": "Adam Smith Society (SmithSoc)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/interest/craft-beverages-club",
+      "page": "details",
+      "anchor": "Craft Beverages Club",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/interest/eats-andereats",
+      "page": "details",
+      "anchor": "Eats (AnderEats)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-associations/interest/indoor-adventure-club-iac",
+      "page": "details",
+      "anchor": "Indoor Adventure Club (IAC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/interest/wine-club-at-anderson-wca",
+      "page": "details",
+      "anchor": "Wine Club at Anderson (WCA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics",
+      "page": "details",
+      "anchor": "Athletics Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics/basketball-club-at-anderson-anderball",
+      "page": "details",
+      "anchor": "Basketball Club at Anderson (Anderball)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics/john-anderson-golf-club",
+      "page": "details",
+      "anchor": "John Anderson Golf Club",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics/outdoor-adventure-club-oac",
+      "page": "details",
+      "anchor": "Outdoor Adventure Club (OAC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics/soccer-club-sc",
+      "page": "details",
+      "anchor": "Soccer Club (SC)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/clubs-and-associations/athletics/tennis-club-at-anderson-tca",
+      "page": "details",
+      "anchor": "Tennis Club at Anderson (TCA)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/inclusive-ethics-initiative",
+      "page": "details",
+      "anchor": "Inclusive Ethics Initiative Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/inclusive-ethics-initiative/education",
+      "page": "details",
+      "anchor": "Education",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/inclusive-ethics-initiative/research",
+      "page": "details",
+      "anchor": "Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/events-and-spotlights",
+      "page": "details",
+      "anchor": "Events and Spotlights",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/embracing-inclusion-series",
+      "page": "details",
+      "anchor": "Embracing Inclusion Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/what-you-can-do",
+      "page": "details",
+      "anchor": "What You Can Do",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/echo",
+      "page": "details",
+      "anchor": "ECHO",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/ASCIE",
+      "page": "details",
+      "anchor": "Student Council (ASCIE)",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/management-pathways-initiative",
+      "page": "details",
+      "anchor": "Management Pathway Initiatives Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/equity-diversity-and-inclusion/pathway-guidance-program",
+      "page": "details",
+      "anchor": "Pathway Guidance Program Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/equity-diversity-and-inclusion/pathway-guidance-program/explorers",
+      "page": "details",
+      "anchor": "Explorers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/equity-diversity-and-inclusion/pathway-guidance-program/guides",
+      "page": "details",
+      "anchor": "Guides",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/asiananderson",
+      "page": "details",
+      "anchor": "Asian@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/blackanderson",
+      "page": "details",
+      "anchor": "Black@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/latinxanderson",
+      "page": "details",
+      "anchor": "Latinx@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/lgbtqanderson",
+      "page": "details",
+      "anchor": "LGBTQ@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/veteransanderson",
+      "page": "details",
+      "anchor": "Veterans@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/office-of-inclusive-excellence/womenanderson",
+      "page": "details",
+      "anchor": "Women@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-technology/new-faculty-information",
+      "page": "details",
+      "anchor": "New Faculty Information",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-technology/new-phd-information",
+      "page": "details",
+      "anchor": "New PhD Information",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-technology/new-student-information",
+      "page": "details",
+      "anchor": "New Student Information",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/information-technology/meet-our-team",
+      "page": "details",
+      "anchor": "Meet Our Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/databases",
+      "page": "details",
+      "anchor": "Databases Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/databases/business-databases-by-category",
+      "page": "details",
+      "anchor": "Business Databases by Category Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/discipline-esources",
+      "page": "details",
+      "anchor": "Discipline eSources Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/services",
+      "page": "details",
+      "anchor": "Services Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/course-reserves",
+      "page": "details",
+      "anchor": "Course Reserves Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/external-%28non-anderson%29-users-of-rosenfeld-library",
+      "page": "details",
+      "anchor": "External (Non-Anderson) Users of Rosenfeld Library",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/facility-use/rental-spaces",
+      "page": "details",
+      "anchor": "Rental Spaces Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "page": "batches",
+      "anchor": "Consortium Candidates",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/academics/capstone-project/anderson-student-asset-management-asam/portfolios",
+      "page": "portfolio",
+      "anchor": "Portfolios",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/financing",
+      "page": "details",
+      "anchor": "Financing Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/anderson-onboarding/anderson-onboarding-faq",
+      "page": "terms",
+      "anchor": "Anderson Onboarding FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/pre-mba-programs",
+      "page": "details",
+      "anchor": "Industry Camps",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/fully-employed-mba/admissions/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/admissions/requirements-and-deadlines",
+      "page": "batches",
+      "anchor": "Requirements and Deadlines",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/admissions/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/academics",
+      "page": "details",
+      "anchor": "Academics Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/culture",
+      "page": "details",
+      "anchor": "Culture Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/meet-the-team",
+      "page": "details",
+      "anchor": "Meet the Team Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/executive-mba/emba-admit-central/important-dates-and-events",
+      "page": "batches",
+      "anchor": "Important Dates and Events",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/admissions",
+      "page": "details",
+      "anchor": "Admissions Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/admissions/admissions-faq",
+      "page": "terms",
+      "anchor": "Admissions FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study",
+      "page": "details",
+      "anchor": "Areas of Study Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/accounting",
+      "page": "details",
+      "anchor": "Accounting Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/accounting/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/accounting/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/accounting/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/behavioral-decision-making",
+      "page": "details",
+      "anchor": "Behavioral Decision Making Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/behavioral-decision-making/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/behavioral-decision-making/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/behavioral-decision-making/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/decisions-operations-and-technology-management",
+      "page": "details",
+      "anchor": "Decisions, Operations and Technology Management Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/decisions-operations-and-technology-management/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/decisions-operations-and-technology-management/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/decisions-operations-and-technology-management/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/finance",
+      "page": "details",
+      "anchor": "Finance Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/finance/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/finance/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/finance/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/global-economics-and-management",
+      "page": "details",
+      "anchor": "Global Economics and Management Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/global-economics-and-management/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/global-economics-and-management/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/global-economics-and-management/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/management-and-organizations",
+      "page": "details",
+      "anchor": "Management and Organizations Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/management-and-organizations/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/management-and-organizations/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/management-and-organizations/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/marketing",
+      "page": "details",
+      "anchor": "Marketing Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/marketing/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/marketing/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/marketing/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/strategy",
+      "page": "details",
+      "anchor": "Strategy Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/strategy/faculty",
+      "page": "details",
+      "anchor": "Faculty",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/strategy/meet-the-students",
+      "page": "details",
+      "anchor": "Meet the Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/areas-of-study/strategy/courses-and-seminars",
+      "page": "details",
+      "anchor": "Courses and Seminars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/current-job-market-candidates",
+      "page": "batches",
+      "anchor": "Current Job Market Candidates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/placement",
+      "page": "details",
+      "anchor": "Placement",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/phd-program/contact",
+      "page": "details",
+      "anchor": "Contact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/ucla-nus-executive-mba/ucla-nus-alumni-connect",
+      "page": "portfolio",
+      "anchor": "UCLA NUS Alumni Connect",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/admissions",
+      "page": "details",
+      "anchor": "Admissions Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/admissions/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/academics",
+      "page": "details",
+      "anchor": "Academics Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/career-impact",
+      "page": "details",
+      "anchor": "Career Impact Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/career-impact/career-paths",
+      "page": "details",
+      "anchor": "Career Paths Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/career-impact/career-paths/portfolio-management",
+      "page": "portfolio",
+      "anchor": "Portfolio Management",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/career-impact/alumni-coaches",
+      "page": "portfolio",
+      "anchor": "Alumni Coaches",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/for-companies/for-companies-overview",
+      "page": "portfolio",
+      "anchor": "For Companies Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/for-companies/class-of-2026",
+      "page": "portfolio",
+      "anchor": "MFE Class of 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/for-companies/class-of-2025",
+      "page": "portfolio",
+      "anchor": "MFE Class of 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-financial-engineering/meet-our-team/meet-our-team-overview",
+      "page": "details",
+      "anchor": "Meet our Team Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-financial-engineering/mfe-admit-central/program-calendar-and-fees",
+      "page": "details",
+      "anchor": "Program Calendar and Fees",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/admissions",
+      "page": "details",
+      "anchor": "Admissions Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/admissions/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/meet-our-students",
+      "page": "portfolio",
+      "anchor": "Meet Our Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-of-2026",
+      "page": "portfolio",
+      "anchor": "Class of 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-of-2025",
+      "page": "portfolio",
+      "anchor": "Class of 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-of-2024",
+      "page": "portfolio",
+      "anchor": "Class of 2024",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-of-2023",
+      "page": "portfolio",
+      "anchor": "Class of 2023",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-of-2022",
+      "page": "portfolio",
+      "anchor": "Class of 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/for-companies/class-2021",
+      "page": "portfolio",
+      "anchor": "Class of 2021",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/meet-our-team",
+      "page": "details",
+      "anchor": "Meet Our Team Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/degrees/master-of-science-in-business-analytics/admit-central/program-calendar-and-fees",
+      "page": "details",
+      "anchor": "Program Calendar and Fees",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment",
+      "page": "details",
+      "anchor": "Open Enrollment Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment/executive-program",
+      "page": "details",
+      "anchor": "Executive Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment/board-director-program",
+      "page": "details",
+      "anchor": "Board Director Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment/chro-program",
+      "page": "details",
+      "anchor": "Chief Human Resources Officer Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment/women-in-governance",
+      "page": "details",
+      "anchor": "Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/executive-education/open-enrollment/women-in-governance/board-ready-candidates",
+      "page": "batches",
+      "anchor": "Board Ready Candidates",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program",
+      "page": "details",
+      "anchor": "Accounting Minor Program Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program/admissions",
+      "page": "details",
+      "anchor": "Admissions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program/academics",
+      "page": "details",
+      "anchor": "Academics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program/careers",
+      "page": "details",
+      "anchor": "Careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program/useful-links",
+      "page": "details",
+      "anchor": "Useful Links",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/accounting-minor-program/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "application",
+      "anchor": "Apply to the Minor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/real-estate-minor",
+      "page": "details",
+      "anchor": "Real Estate Minor Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/undergraduate-education/sports-leadership-and-management-minor",
+      "page": "details",
+      "anchor": "Sports Leadership and Management Minor Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/about/centers/impactanderson/for-students/specializations-and-certificates",
+      "page": "details",
+      "anchor": "Leaders in Sustainability Certificate Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-scholars-program",
+      "page": "details",
+      "anchor": "Riordan Scholars Program Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-scholars-program/saturday-business-institute",
+      "page": "details",
+      "anchor": "Saturday Business Institute",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-scholars-program/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-mba-fellows-program",
+      "page": "details",
+      "anchor": "Riordan MBA Fellows Program Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-mba-fellows-program/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-college-to-career-program",
+      "page": "details",
+      "anchor": "Riordan College to Career Program Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-college-to-career-program/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/alumni-association",
+      "page": "portfolio",
+      "anchor": "Alumni Association",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/our-purpose",
+      "page": "details",
+      "anchor": "Our Purpose",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/get-involved/donations",
+      "page": "details",
+      "anchor": "Donations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/get-involved",
+      "page": "details",
+      "anchor": "Get Involved Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/get-involved/donor-honor-roll",
+      "page": "details",
+      "anchor": "Donor Honor Roll",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/get-involved/volunteer-opportunities",
+      "page": "details",
+      "anchor": "Volunteer Opportunities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/get-involved/spark-campaign",
+      "page": "details",
+      "anchor": "Spark Campaign",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/who-we-are",
+      "page": "details",
+      "anchor": "Who We Are Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/who-we-are/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/who-we-are/advisory-board",
+      "page": "details",
+      "anchor": "Advisory Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/who-we-are/volunteers-and-mentors",
+      "page": "details",
+      "anchor": "Volunteers and Mentors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-podcast",
+      "page": "details",
+      "anchor": "Riordan Podcast",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/team",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/research",
+      "page": "details",
+      "anchor": "Research",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/connections",
+      "page": "details",
+      "anchor": "Connections",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/visitors",
+      "page": "details",
+      "anchor": "Visitors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/is-history",
+      "page": "details",
+      "anchor": "IS History Home",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/is-history/grads",
+      "page": "details",
+      "anchor": "Grads",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/is-history/wisrd",
+      "page": "details",
+      "anchor": "WISRD",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/sponsors",
+      "page": "details",
+      "anchor": "Sponsors",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/faculty-and-research/information-systems-research-program/contact-us",
+      "page": "details",
+      "anchor": "Contact Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events",
+      "page": "details",
+      "anchor": "Signature Events Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement",
+      "page": "details",
+      "anchor": "Commencement Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement/mba-emba-femba-phd-commencement",
+      "page": "details",
+      "anchor": "MBA, EMBA, FEMBA, Ph.D. Commencement Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement/mba-emba-femba-phd-commencement/faq-students",
+      "page": "terms",
+      "anchor": "FAQ Students",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement/mba-emba-femba-phd-commencement/faq-guests",
+      "page": "terms",
+      "anchor": "FAQ Guests",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement/guest-faq",
+      "page": "terms",
+      "anchor": "FAQ Guest",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/commencement/student-faq",
+      "page": "terms",
+      "anchor": "FAQ Student",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards",
+      "page": "details",
+      "anchor": "John Wooden Global Leadership Awards Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "application",
+      "anchor": "Fellowship Application",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/friday-faculty-chats",
+      "page": "portfolio",
+      "anchor": "Friday Faculty Chats",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/anderson-beyond-2025",
+      "page": "portfolio",
+      "anchor": "Anderson Beyond 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/alumni-weekend-2026",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/alumni-weekend-2026/pricing",
+      "page": "portfolio",
+      "anchor": "Pricing",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/alumni-weekend-2026/conference",
+      "page": "portfolio",
+      "anchor": "Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/alumni-weekend-2025",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2024",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2024",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2023/alumni-weekend",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2023/conference",
+      "page": "portfolio",
+      "anchor": "Conference",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2023/reunions",
+      "page": "portfolio",
+      "anchor": "Reunions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2022",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2021",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2021",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2019",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2019",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/alumni-weekend-2018",
+      "page": "portfolio",
+      "anchor": "Alumni Weekend 2018",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/worldwide-welcome-weeks-2023",
+      "page": "portfolio",
+      "anchor": "Worldwide Welcome Weeks 2023",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/worldwide-welcome-weeks-2022",
+      "page": "portfolio",
+      "anchor": "Worldwide Welcome Weeks 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/worldwide-welcome-weeks-2021",
+      "page": "portfolio",
+      "anchor": "Worldwide Welcome Weeks 2021",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/worldwide-welcome-weeks-2018",
+      "page": "portfolio",
+      "anchor": "Worldwide Welcome Weeks 2018",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/worldwide-welcome-weeks-2017",
+      "page": "portfolio",
+      "anchor": "Worldwide Welcome Weeks 2017",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/events/past-events/career-re-launch",
+      "page": "portfolio",
+      "anchor": "Career Re-LAUNCH",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/career-services/webinars",
+      "page": "portfolio",
+      "anchor": "Webinars",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/alumni-community",
+      "page": "portfolio",
+      "anchor": "Alumni Community",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/email-lists",
+      "page": "portfolio",
+      "anchor": "Email Lists",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/class-notes",
+      "page": "portfolio",
+      "anchor": "Class Notes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/newsanderson",
+      "page": "portfolio",
+      "anchor": "News@Anderson",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/facebook",
+      "page": "portfolio",
+      "anchor": "Facebook",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/linkedin",
+      "page": "portfolio",
+      "anchor": "LinkedIn",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/stay-connected/get-involved",
+      "page": "portfolio",
+      "anchor": "Get Involved",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/ander10",
+      "page": "portfolio",
+      "anchor": "Ander10 Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/meet-our-team/board-of-directors",
+      "page": "portfolio",
+      "anchor": "Board of Directors Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.anderson.ucla.edu/alumni/meet-our-team/board-of-directors/letter-from-the-president",
+      "page": "portfolio",
+      "anchor": "Letter from the President",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

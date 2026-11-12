@@ -1,0 +1,36 @@
+{
+  "programId": "eit-digital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://28digital.eu/",
+    "https://28digital.eu/our-community/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-87540c154b",
+      "url": "https://28digital.eu/",
+      "title": "EIT Digital — homepage checked by scrape.py",
+      "excerpt": "28Digital → https://28digital.eu/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://28digital.eu/",
+        "evidenceId": "check-route-87540c154b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

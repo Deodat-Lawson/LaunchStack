@@ -1,0 +1,177 @@
+{
+  "programId": "epfl-innovation",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.epfl-innovationpark.ch/",
+    "https://www.epfl-innovationpark.ch/about/mission"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-3374879ceb",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Grant provides an extensive support package designed to propel the success of early-stage digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO services to enhance team capabilities, and invaluable market feedback sourced from a network of",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2f722b8b0f",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3f2490c0c8",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "info@epfl-innovationpark.ch",
+      "page": "details"
+    },
+    {
+      "id": "check-email-54f1f96a00",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "info@epfl-innovationpark.ch",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7c91b830ec",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "Park Bâtiment C CH-1015 Lausanne +41 (0)21 353 80 00 info@epfl-innovationpark.ch Terms of use Cookie Preferences Follow Us © EPFL",
+      "page": "details"
+    },
+    {
+      "id": "check-name-b1b86ffa3b",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "EPFL Innovation Park - Home Startups Corporates Community Societal Impact About",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-534801e505",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "+41 (0)21 353 80 00",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-cac80f43b9",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "+41 (0)21 353 80 00",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-14a5ed762d",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3b0caac0f9",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6b6e8063b3",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Company list → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7a22bf929a",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7f28b64882",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.epfl-innovationpark.ch/startups/incubating-hosting",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8c0401f7dc",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "Community → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd77fc1d4d",
+      "url": "https://www.epfl-innovationpark.ch/about/mission",
+      "title": "EPFL Innovation Park — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c3cc00a59b",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.epfl-innovationpark.ch/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eeaa0aa7c4",
+      "url": "https://www.epfl-innovationpark.ch/",
+      "title": "EPFL Innovation Park — homepage checked by scrape.py",
+      "excerpt": "https://www.epfl-innovationpark.ch/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@epfl-innovationpark.ch",
+        "evidenceId": "check-email-3f2490c0c8"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+41213538000",
+        "evidenceId": "check-phone-534801e505"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.epfl-innovationpark.ch/",
+        "evidenceId": "check-route-eeaa0aa7c4"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Grant provides an extensive support package designed to propel the success of early-stage digital health startups. This encompassing initiative includes up to CHF 90,000 in non-dilutive funding, personalized coaching, on-demand CxO services to enhance team capabilities, and invaluable market feedback sourced from a network of",
+        "evidenceId": "check-deal-3374879ceb"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.epfl-innovationpark.ch/startups/incubating-hosting",
+        "evidenceId": "check-portfolio-7a22bf929a"
+      },
+      {
+        "value": "https://www.epfl-innovationpark.ch/companies",
+        "evidenceId": "check-portfolio-14a5ed762d"
+      }
+    ],
+    "name": [
+      {
+        "value": "EPFL Innovation Park",
+        "evidenceId": "check-name-b1b86ffa3b"
+      }
+    ],
+    "examplePages": []
+  }
+}

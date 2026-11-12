@@ -1,0 +1,22 @@
+{
+  "programId": "sheraa",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://sheraa.ae/about-us",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://sheraa.ae/deal-dock",
+      "page": "terms",
+      "anchor": "Deal Dock",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

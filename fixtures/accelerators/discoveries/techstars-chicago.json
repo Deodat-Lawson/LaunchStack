@@ -1,0 +1,62 @@
+{
+  "programId": "techstars-chicago",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://www.techstars.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://apply.techstars.com/",
+      "page": "application",
+      "anchor": "Apply Today",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/portfolio?program=Techstars%20Chicago",
+      "page": "portfolio",
+      "anchor": "Past Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/newsroom/meet-the-startups-joining-techstars-spring-2026-accelerator-programs",
+      "page": "details",
+      "anchor": "Newsroom 9 March 2026 Meet the Startups Joining Techstars' Spring 2026 Accelerator Programs Read More",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/about",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/for/alumni",
+      "page": "portfolio",
+      "anchor": "Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.techstars.com/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

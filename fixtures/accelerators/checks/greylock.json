@@ -1,0 +1,47 @@
+{
+  "programId": "greylock",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://greylock.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b9b301d7e1",
+      "url": "https://greylock.com/",
+      "title": "Greylock — homepage checked by scrape.py",
+      "excerpt": "Greylock Partners Skip to main content Portfolio Edge Team Firm",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cc459a52c8",
+      "url": "https://greylock.com/",
+      "title": "Greylock — homepage checked by scrape.py",
+      "excerpt": "https://greylock.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://greylock.com/",
+        "evidenceId": "check-route-cc459a52c8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Greylock",
+        "evidenceId": "check-name-b9b301d7e1"
+      }
+    ],
+    "examplePages": []
+  }
+}

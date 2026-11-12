@@ -1,0 +1,36 @@
+{
+  "programId": "one-eight-seven-one",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://1871.com/",
+    "https://1871.com/about/our-board/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-e115241518",
+      "url": "https://1871.com/",
+      "title": "1871 — homepage checked by scrape.py",
+      "excerpt": "1871 - Independent Innovation hub Menu Join Membership Early",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "1871",
+        "evidenceId": "check-name-e115241518"
+      }
+    ],
+    "examplePages": []
+  }
+}

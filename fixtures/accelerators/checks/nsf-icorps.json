@@ -1,0 +1,121 @@
+{
+  "programId": "nsf-icorps",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.nsf.gov/funding/initiatives/i-corps",
+    "https://www.nsf.gov/about",
+    "https://www.nsf.gov/updates-on-priorities",
+    "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-5b2e944f04",
+      "url": "https://www.nsf.gov/updates-on-priorities",
+      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "excerpt": "Submit your questions Media inquiries: Please email media@nsf.gov or call (703) 292-7090. Statement of NSF priorities April",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-5ecfce093b",
+      "url": "https://www.nsf.gov/updates-on-priorities",
+      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "excerpt": "media@nsf.gov",
+      "page": "batches"
+    },
+    {
+      "id": "check-name-9535a94328",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — homepage checked by scrape.py",
+      "excerpt": "NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-334ab7f8c0",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
+      "title": "NSF I-Corps — terms page checked by scrape.py",
+      "excerpt": "(703) 292-5111",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-4eb81199f9",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — homepage checked by scrape.py",
+      "excerpt": "(703) 292-5111",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a520f574e5",
+      "url": "https://www.nsf.gov/updates-on-priorities",
+      "title": "NSF I-Corps — batches page checked by scrape.py",
+      "excerpt": "(703) 292-5111",
+      "page": "batches"
+    },
+    {
+      "id": "check-phone-ef6b24542d",
+      "url": "https://www.nsf.gov/about",
+      "title": "NSF I-Corps — details page checked by scrape.py",
+      "excerpt": "(703) 292-5111",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b4e19c82c3",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — homepage checked by scrape.py",
+      "excerpt": "Cohorts → https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e6e4aebe43",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
+      "title": "NSF I-Corps — terms page checked by scrape.py",
+      "excerpt": "Cohorts → https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-42021c989d",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/webinars-resources",
+      "title": "NSF I-Corps — terms page checked by scrape.py",
+      "excerpt": "NSF I-Corps™ → https://www.nsf.gov/funding/initiatives/i-corps",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "media@nsf.gov",
+        "evidenceId": "check-email-5ecfce093b"
+      }
+    ],
+    "phones": [
+      {
+        "value": "(703)292-5111",
+        "evidenceId": "check-phone-4eb81199f9"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.nsf.gov/funding/initiatives/i-corps",
+        "evidenceId": "check-route-42021c989d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.nsf.gov/funding/initiatives/i-corps/cohorts",
+        "evidenceId": "check-portfolio-b4e19c82c3"
+      }
+    ],
+    "name": [
+      {
+        "value": "NSF I-Corps",
+        "evidenceId": "check-name-9535a94328"
+      }
+    ],
+    "examplePages": []
+  }
+}

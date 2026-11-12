@@ -1,0 +1,46 @@
+{
+  "programId": "startup-health",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.startuphealth.com/community",
+      "page": "portfolio",
+      "anchor": "Community Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/portfolio-dropdown",
+      "page": "portfolio",
+      "anchor": "Folder: Community",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/contact",
+      "page": "details",
+      "anchor": "Talk to us about a campaign",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/sponsorships",
+      "page": "details",
+      "anchor": "Sponsorship overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startuphealth.com/home",
+      "page": "terms",
+      "anchor": "Frequently Asked Questions",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

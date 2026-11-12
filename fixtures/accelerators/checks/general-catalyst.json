@@ -1,0 +1,83 @@
+{
+  "programId": "general-catalyst",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.generalcatalyst.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-10de222952",
+      "url": "https://www.generalcatalyst.com/",
+      "title": "General Catalyst — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"info@generalcatalyst.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-name-84679d2a5e",
+      "url": "https://www.generalcatalyst.com/",
+      "title": "General Catalyst — homepage checked by scrape.py",
+      "excerpt": "General Catalyst Portfolio Capital Create Seed Grow Customer Value Fund",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-9e5f14e0c3",
+      "url": "https://www.generalcatalyst.com/",
+      "title": "General Catalyst — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"+12127754000\"",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b01f7f9e13",
+      "url": "https://www.generalcatalyst.com/",
+      "title": "General Catalyst — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.generalcatalyst.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8417810681",
+      "url": "https://www.generalcatalyst.com/",
+      "title": "General Catalyst — homepage checked by scrape.py",
+      "excerpt": "https://www.generalcatalyst.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@generalcatalyst.com",
+        "evidenceId": "check-email-10de222952"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+12127754000",
+        "evidenceId": "check-phone-9e5f14e0c3"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.generalcatalyst.com/",
+        "evidenceId": "check-route-8417810681"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.generalcatalyst.com/portfolio",
+        "evidenceId": "check-portfolio-b01f7f9e13"
+      }
+    ],
+    "name": [
+      {
+        "value": "General Catalyst",
+        "evidenceId": "check-name-84679d2a5e"
+      }
+    ],
+    "examplePages": []
+  }
+}

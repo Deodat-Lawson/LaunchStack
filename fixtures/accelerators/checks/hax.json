@@ -1,0 +1,200 @@
+{
+  "programId": "hax",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://hax.co/",
+    "https://hax.co/program/",
+    "https://sosv.com/apply/hax/",
+    "https://hax.co/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-49302c5d8f",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "have a whole host of perks including AWS and Google credits, Solidworks discounts, Hubspot discounts and many others. The total value of these perks stands at $1M per team. Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-b2c1fbbcf8",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "rounds usually up to a Series C/D, through our new SOSV V fund or our growth fund, SOSV Select . Across these rounds we can deploy an aggregate total of up to $4M per company. We rarely lead rounds and will most often just ask for a non-voting, observer seat on your board (along with information rights so we know what’s",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-4b816ce733",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage checked by scrape.py",
+      "excerpt": "HAX – Hands-on Venture Capital for Hard Tech Skip to content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1bfca60709",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage checked by scrape.py",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-33d23a4eb8",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3f431a666a",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5cb2d3368e",
+      "url": "https://hax.co/program/",
+      "title": "HAX — details page checked by scrape.py",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b5530df31",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "Companies → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-89e446d889",
+      "url": "https://hax.co/program/",
+      "title": "HAX — details page checked by scrape.py",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9f50181cc9",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage checked by scrape.py",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd88cb1494",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "Startups → https://hax.co/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-08b61a2d07",
+      "url": "https://hax.co/program/",
+      "title": "HAX — details page checked by scrape.py",
+      "excerpt": "APPLY → https://sosv.com/apply/hax/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-40c6b529ab",
+      "url": "https://hax.co/program/",
+      "title": "HAX — details page checked by scrape.py",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-82e852e791",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-cf8cbf04df",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage checked by scrape.py",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d429837585",
+      "url": "https://hax.co/",
+      "title": "HAX — homepage checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e07aa29590",
+      "url": "https://hax.co/faq/",
+      "title": "HAX — terms page checked by scrape.py",
+      "excerpt": "Apply to HAX → https://sosv.com/apply/hax/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f025e73fae",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "HAX — application page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f087d99b84",
+      "url": "https://hax.co/program/",
+      "title": "HAX — details page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply/hax/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://sosv.com/apply/hax/",
+        "evidenceId": "check-route-d429837585"
+      },
+      {
+        "value": "https://sosv.com/apply",
+        "evidenceId": "check-route-f025e73fae"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://sosv.com/apply/hax/",
+        "evidenceId": "check-route-d429837585"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "rounds usually up to a Series C/D, through our new SOSV V fund or our growth fund, SOSV Select . Across these rounds we can deploy an aggregate total of up to $4M per company. We rarely lead rounds and will most often just ask for a non-voting, observer seat on your board (along with information rights so we know what’s",
+        "evidenceId": "check-deal-b2c1fbbcf8"
+      },
+      {
+        "value": "have a whole host of perks including AWS and Google credits, Solidworks discounts, Hubspot discounts and many others. The total value of these perks stands at $1M per team. Learn About the Program Case Studies Startups Our Team FAQ Contact Apply How to Apply Apply to HAX Invest Investing with SOSV Participate Become a",
+        "evidenceId": "check-deal-49302c5d8f"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://hax.co/startups/",
+        "evidenceId": "check-portfolio-1bfca60709"
+      },
+      {
+        "value": "https://sosv.com/portfolio/",
+        "evidenceId": "check-portfolio-3f431a666a"
+      },
+      {
+        "value": "https://sosv.com/portfolio",
+        "evidenceId": "check-portfolio-33d23a4eb8"
+      }
+    ],
+    "name": [
+      {
+        "value": "HAX",
+        "evidenceId": "check-name-4b816ce733"
+      }
+    ],
+    "examplePages": []
+  }
+}

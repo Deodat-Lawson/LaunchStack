@@ -1,0 +1,174 @@
+{
+  "programId": "kalaari",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://kalaari.com/about-us",
+      "page": "details",
+      "anchor": "About Kalaari",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/digantara",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/resilience-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/samosa-party",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/bytexl",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/zocket",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/hyperbots",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/zluri",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/eloelo",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/pascal-ai-labs",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/peer-robotics",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/modulus-housing",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/kindlife",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/chara-motors",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/matters-ai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/portfolio/deconstruct",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-hindsight-building-the-india-space-stack",
+      "page": "details",
+      "anchor": "In Episode 05 of The Hindsight, Vani Kola speaks with Sanjay Nekkanti, Founder and CEO of Dhruva Space, about his journey building an entire spacetech stack. View Podcast",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/building-the-ai-layer-for-legal-teams",
+      "page": "details",
+      "anchor": "In Episode 04 of The Hindsight, Vani Kola speaks with Shashank Bijapur: Founder and CEO of Spotdraft, about building an AI-powered contract management platform for in-house legal t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kalaari.com/insights-from-the-fronlines/ashok-jhunjhunwala-the-architect-of-indias-deep-tech-ecosystem-changemakers-ep-1",
+      "page": "details",
+      "anchor": "Twenty years ago, before Kalaari Capital existed, a conversation with Professor Ashok Jhunjhunwala helped shape the decision to return to India and build here. When we launched Cha",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://kalaari.com/insights-from-the-fronlines/the-builders-the-believers",
+      "page": "portfolio",
+      "anchor": "The Builders, The Believers It takes exceptional people and an ecosystem that brings together founders, researchers, investors, and operators to build the next generation of India’",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

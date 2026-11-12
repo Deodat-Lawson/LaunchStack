@@ -1,0 +1,128 @@
+{
+  "programId": "mhub",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://mhub.org/",
+    "https://mhub.org/apply-to-be-a-member",
+    "https://mhub.org/accelerator",
+    "https://mhub.org/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-646790d045",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — details page checked by scrape.py",
+      "excerpt": "mHUB’s unmatched resources help exceptional startups turn their product ideas into scalable, sustainable businesses. $200K Invested Initial investment of $142.5K in cash and $60K in services, programming and hardware for 6.5% equity 6-Month Accelerator Hands-on accelerated incubation with 18 months of follow-on support",
+      "page": "details"
+    },
+    {
+      "id": "check-name-f610ce4fe6",
+      "url": "https://mhub.org/",
+      "title": "mHUB — homepage checked by scrape.py",
+      "excerpt": "Hub for Physical Product Development & HardTech | mHUB Skip to content Book a Tour Log In Apply Now Donate",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3bf1d4b7b3",
+      "url": "https://mhub.org/apply-to-be-a-member",
+      "title": "mHUB — application page checked by scrape.py",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7a76dd66f4",
+      "url": "https://mhub.org/",
+      "title": "mHUB — homepage checked by scrape.py",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d358085e1a",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — details page checked by scrape.py",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fa014c7d42",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page checked by scrape.py",
+      "excerpt": "Startups → https://mhub.org/become-a-member",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-088fe5f622",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page checked by scrape.py",
+      "excerpt": "Apply to be an mHUB member → https://mhub.org/apply-to-be-a-member",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-17f2f71438",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-428eecac68",
+      "url": "https://mhub.org/accelerator",
+      "title": "mHUB — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bb32f59960",
+      "url": "https://mhub.org/",
+      "title": "mHUB — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://mhub.org/apply-to-be-a-member",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ea43db9b73",
+      "url": "https://mhub.org/faq",
+      "title": "mHUB — terms page checked by scrape.py",
+      "excerpt": "Apply to mHUB. → https://mhub.org/apply-to-be-a-member",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://mhub.org/apply-to-be-a-member",
+        "evidenceId": "check-route-bb32f59960"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://mhub.org/apply-to-be-a-member",
+        "evidenceId": "check-route-bb32f59960"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "mHUB’s unmatched resources help exceptional startups turn their product ideas into scalable, sustainable businesses. $200K Invested Initial investment of $142.5K in cash and $60K in services, programming and hardware for 6.5% equity 6-Month Accelerator Hands-on accelerated incubation with 18 months of follow-on support",
+        "evidenceId": "check-deal-646790d045"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://mhub.org/become-a-member",
+        "evidenceId": "check-portfolio-7a76dd66f4"
+      }
+    ],
+    "name": [
+      {
+        "value": "mHUB",
+        "evidenceId": "check-name-f610ce4fe6"
+      }
+    ],
+    "examplePages": []
+  }
+}

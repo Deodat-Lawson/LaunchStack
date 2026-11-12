@@ -1,0 +1,48 @@
+{
+  "programId": "la-french-tech",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://lafrenchtech.gouv.fr/",
+    "https://lafrenchtech.gouv.fr/fr/programme/french-tech-next-40-120/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-388da2ace6",
+      "url": "https://lafrenchtech.gouv.fr/",
+      "title": "La French Tech — homepage checked by scrape.py",
+      "excerpt": "Présentation Notre équipe Nos actualités Qu'est-ce que la French Tech ? Présentation de l'écosystème start-up Les données sur",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a38509cd3c",
+      "url": "https://lafrenchtech.gouv.fr/",
+      "title": "La French Tech — homepage checked by scrape.py",
+      "excerpt": "La mission French Tech → https://lafrenchtech.gouv.fr/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://lafrenchtech.gouv.fr/",
+        "evidenceId": "check-route-a38509cd3c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "La French Tech",
+        "evidenceId": "check-name-388da2ace6"
+      }
+    ],
+    "examplePages": []
+  }
+}

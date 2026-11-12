@@ -1,0 +1,36 @@
+{
+  "programId": "lawrence-berkeley",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://ipo.lbl.gov/",
+    "https://ipo.lbl.gov/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-902f65b470",
+      "url": "https://ipo.lbl.gov/",
+      "title": "Berkeley Lab IPO — homepage checked by scrape.py",
+      "excerpt": "https://ipo.lbl.gov",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://ipo.lbl.gov",
+        "evidenceId": "check-route-902f65b470"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

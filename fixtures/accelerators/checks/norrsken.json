@@ -1,0 +1,48 @@
+{
+  "programId": "norrsken",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.norrsken.org/",
+    "https://www.norrsken.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-953a33bd0f",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage checked by scrape.py",
+      "excerpt": "Norrsken - Be part of the solution Close Houses Investments Good",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e16dac6c26",
+      "url": "https://www.norrsken.org/",
+      "title": "Norrsken — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.norrsken.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.norrsken.org/",
+        "evidenceId": "check-route-e16dac6c26"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Norrsken",
+        "evidenceId": "check-name-953a33bd0f"
+      }
+    ],
+    "examplePages": []
+  }
+}

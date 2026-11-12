@@ -1,0 +1,67 @@
+{
+  "programId": "rev1-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.rev1ventures.com/",
+    "https://www.rev1ventures.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a99f0a05e5",
+      "url": "https://www.rev1ventures.com/",
+      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "excerpt": "Venture Studio - Columbus, Ohio | Rev1 Ventures Search for Menu About + Overview Impact Partners Team Blog",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-46db2b76d3",
+      "url": "https://www.rev1ventures.com/about/",
+      "title": "Rev1 Ventures — details page checked by scrape.py",
+      "excerpt": "(614) 487-3700",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b63f9df41b",
+      "url": "https://www.rev1ventures.com/",
+      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "excerpt": "(614) 487-3700",
+      "page": "details"
+    },
+    {
+      "id": "check-route-416166fa38",
+      "url": "https://www.rev1ventures.com/",
+      "title": "Rev1 Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.rev1ventures.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "6144873700",
+        "evidenceId": "check-phone-b63f9df41b"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.rev1ventures.com",
+        "evidenceId": "check-route-416166fa38"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Rev1 Ventures",
+        "evidenceId": "check-name-a99f0a05e5"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "programId": "500-global",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://500.co/",
+    "https://500.co/venture-education/vcu/stanford",
+    "https://500.co/founders/flagship"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-03dfc23e66",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": "500 Global | 500 Global We invest in the world's potential 500 Global is a VC firm with $2.0B ¹ in AUM investing in globally ambitious founders building fast-growing technology companies. We focus on the U.S. and global markets where innovation,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-569aed6ab0",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Global — application page checked by scrape.py",
+      "excerpt": "that offers the crucial capital needed to build, launch, and quickly grow your startup. Companies accepted into the 500 Fellowship can receive up to $50K right away with the potential for up to $1M more as you progress. Network Navigate the complexities of building alongside 500 Global's vast network of VCs,",
+      "page": "application"
+    },
+    {
+      "id": "check-name-8e6f0be0dc",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": "500 Global | 500 Global We invest in the world's potential 500 Global",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-21e5c10768",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2242b97734",
+      "url": "https://500.co/venture-education/vcu/stanford",
+      "title": "500 Global — details page checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-38f54fc254",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cda5186aeb",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Global — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cfdb10963f",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Global — application page checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://500.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-efc8194910",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": ".css-2jbgoq.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;height:auto;margin-right:auto;font-family:\"Apercu Mono Pro\",sans-serif;font-size:14px;-webkit-letter-spacing:1.5px;-moz-letter-spacing:1.5px;-ms-letter-spacing:1.5px;letter-spacing:1.5px;margin-top:auto;margin-bottom:auto;margin-left:auto;} See our full portfolio .css-5fe5mb.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;height:24px;margin-left:auto;font-family:\"Apercu Mono Pro\",sans-serif;font-size:14px;-webkit-letter-spacing:1.5px;-moz-letter-spacing:1.5px;-ms-letter-spacing:1.5px;letter-spacing:1.5px;margin-top:auto;margin-bottom:auto;width:24px;background-color:rgba(10,30,37,1);color:rgba(245,245,235,1);margin-right:auto;text-align:center;line-height:14px;border-radius:50px;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;} → → https://500.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f70ca82e18",
+      "url": "https://500.co/venture-education/vcu/stanford",
+      "title": "500 Global — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://500.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-21e71377d4",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Global — application page checked by scrape.py",
+      "excerpt": ".css-2jbgoq.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;height:auto;margin-right:auto;font-family:\"Apercu Mono Pro\",sans-serif;font-size:14px;-webkit-letter-spacing:1.5px;-moz-letter-spacing:1.5px;-ms-letter-spacing:1.5px;letter-spacing:1.5px;margin-top:auto;margin-bottom:auto;margin-left:auto;} Apply Today .css-5fe5mb.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;height:24px;margin-left:auto;font-family:\"Apercu Mono Pro\",sans-serif;font-size:14px;-webkit-letter-spacing:1.5px;-moz-letter-spacing:1.5px;-ms-letter-spacing:1.5px;letter-spacing:1.5px;margin-top:auto;margin-bottom:auto;width:24px;background-color:rgba(10,30,37,1);color:rgba(245,245,235,1);margin-right:auto;text-align:center;line-height:14px;border-radius:50px;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;} → → https://flagship.aplica.500.co/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-259d0e19c5",
+      "url": "https://500.co/",
+      "title": "500 Global — homepage checked by scrape.py",
+      "excerpt": "US/Global FOR FOUNDERS Flagship Accelerator FOR FOUNDERS → https://500.co/founders/flagship",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e13b84071e",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Global — application page checked by scrape.py",
+      "excerpt": ".css-ztc3du.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;line-height:44px;height:auto;font-family:\"Tobias Light\",serif;font-size:48px;-webkit-letter-spacing:-.02em;-moz-letter-spacing:-.02em;-ms-letter-spacing:-.02em;letter-spacing:-.02em;color:rgba(10,30,37,1);text-align:center;margin-bottom:40px;} Ready to build in SF? .css-1tq0y21.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;gap:8px;margin-right:auto;text-transform:uppercase;padding-left:1em;padding-top:0.2em;padding-right:0.2em;padding-bottom:0.2em;border-width:0.1em;border-style:solid;border-color:rgba(10,30,37,1);border-radius:50px;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;position:relative;margin-left:auto;} .css-q4ma7x.builder-block{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;position:relative;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;height:auto;margin-left:auto;margin-right:auto;font-family:\"Apercu Mono Pro\",sans-serif;font-size:14px;-webkit-letter-spacing:1.5px;-moz-letter-spacing:1.5px;-ms-letter-spacing:1.5px;letter-spacing:1.5px;margin-top:auto;margin-bottom:auto;} Apply now → → https://flagship.aplica.500.co/",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://flagship.aplica.500.co/",
+        "evidenceId": "check-route-21e71377d4"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://500.co/founders/flagship",
+        "evidenceId": "check-route-259d0e19c5"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "500 Global | 500 Global We invest in the world's potential 500 Global is a VC firm with $2.0B ¹ in AUM investing in globally ambitious founders building fast-growing technology companies. We focus on the U.S. and global markets where innovation,",
+        "evidenceId": "check-deal-03dfc23e66"
+      },
+      {
+        "value": "that offers the crucial capital needed to build, launch, and quickly grow your startup. Companies accepted into the 500 Fellowship can receive up to $50K right away with the potential for up to $1M more as you progress. Network Navigate the complexities of building alongside 500 Global's vast network of VCs,",
+        "evidenceId": "check-deal-569aed6ab0"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://500.co/portfolio",
+        "evidenceId": "check-portfolio-efc8194910"
+      }
+    ],
+    "name": [
+      {
+        "value": "500 Global",
+        "evidenceId": "check-name-8e6f0be0dc"
+      }
+    ],
+    "examplePages": []
+  }
+}

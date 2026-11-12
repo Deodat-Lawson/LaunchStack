@@ -1,0 +1,70 @@
+{
+  "programId": "sequoia",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://sequoiacap.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-1f316c61a2",
+      "url": "https://sequoiacap.com/",
+      "title": "Sequoia — homepage checked by scrape.py",
+      "excerpt": "Home | Sequoia Capital our founders our companies our team stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e9e458076",
+      "url": "https://sequoiacap.com/",
+      "title": "Sequoia — homepage checked by scrape.py",
+      "excerpt": "our companies → https://sequoiacap.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fb8e37c27a",
+      "url": "https://sequoiacap.com/",
+      "title": "Sequoia — homepage checked by scrape.py",
+      "excerpt": "https://sequoiacap.com/our-companies?spotlight=no",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eb4b560faf",
+      "url": "https://sequoiacap.com/",
+      "title": "Sequoia — homepage checked by scrape.py",
+      "excerpt": "https://sequoiacap.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://sequoiacap.com/",
+        "evidenceId": "check-route-eb4b560faf"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://sequoiacap.com/our-companies",
+        "evidenceId": "check-portfolio-9e9e458076"
+      },
+      {
+        "value": "https://sequoiacap.com/our-companies?spotlight=no",
+        "evidenceId": "check-portfolio-fb8e37c27a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Sequoia",
+        "evidenceId": "check-name-1f316c61a2"
+      }
+    ],
+    "examplePages": []
+  }
+}

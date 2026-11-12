@@ -1,0 +1,97 @@
+{
+  "programId": "startx",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://web.startx.com/",
+    "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+    "https://web.startx.com/programs",
+    "https://web.startx.com/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-cc82b3584d",
+      "url": "https://web.startx.com/programs",
+      "title": "StartX — details page checked by scrape.py",
+      "excerpt": "your startup in a safe environment, alongside experienced entrepreneurs. Participate in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to the full-time accelerator post graduation. Gain first-hand insight into the power of the",
+      "page": "details"
+    },
+    {
+      "id": "check-name-050f497814",
+      "url": "https://web.startx.com/",
+      "title": "StartX — homepage checked by scrape.py",
+      "excerpt": "Home Want to break into startups or VC? Apply to StartX Fellows by Nov 1 → PROGRAMS AI Verticals Med / Biotech",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2d331842ff",
+      "url": "https://web.startx.com/",
+      "title": "StartX — homepage checked by scrape.py",
+      "excerpt": "Apply to StartX Fellows by Nov 1 → → https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a921d212ad",
+      "url": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+      "title": "StartX — application page checked by scrape.py",
+      "excerpt": "Click here to apply. → https://forms.gle/eJTPhvfzyzShaVXf7",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bd1024f70c",
+      "url": "https://web.startx.com/",
+      "title": "StartX — homepage checked by scrape.py",
+      "excerpt": "https://web.startx.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-faa50c2eb9",
+      "url": "https://web.startx.com/faqs",
+      "title": "StartX — terms page checked by scrape.py",
+      "excerpt": "StartX community.​ Eligibility & Who Can Apply What are the deadlines to apply and dates for the next batch? Applications are open from mid-January to mid-February for the Summer cohort, from mid-May to mid-June for the Fall cohort, and",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://web.startx.com/fellows?utm_source=website&utm_medium=notification_bar&utm_campaign=fellows_application_2026",
+        "evidenceId": "check-route-2d331842ff"
+      },
+      {
+        "value": "https://forms.gle/eJTPhvfzyzShaVXf7",
+        "evidenceId": "check-route-a921d212ad"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://web.startx.com/",
+        "evidenceId": "check-route-bd1024f70c"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-faa50c2eb9"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "your startup in a safe environment, alongside experienced entrepreneurs. Participate in a fundraising sprint and investor pitch opportunities. Pitch for $10K in non-dilutive grant funding. Learn best practices for applying to the full-time accelerator post graduation. Gain first-hand insight into the power of the",
+        "evidenceId": "check-deal-cc82b3584d"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "StartX",
+        "evidenceId": "check-name-050f497814"
+      }
+    ],
+    "examplePages": []
+  }
+}

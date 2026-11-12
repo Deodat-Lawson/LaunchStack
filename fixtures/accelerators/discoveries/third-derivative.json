@@ -1,0 +1,70 @@
+{
+  "programId": "third-derivative",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.third-derivative.org/portfolio",
+      "page": "portfolio",
+      "anchor": "Our Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/startup-application",
+      "page": "application",
+      "anchor": "How to Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "page": "batches",
+      "anchor": "Industrial Innovation Cohorts",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/clean-mobile-power-initiative-cohort",
+      "page": "batches",
+      "anchor": "Clean Mobile Power Initiative Cohort",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/about",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/about?hsLang=en",
+      "page": "details",
+      "anchor": "LEARN MORE ABOUT US",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/portfolio?hsLang=en",
+      "page": "portfolio",
+      "anchor": "Explore our Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "page": "application",
+      "anchor": "APPLY TODAY",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "programId": "setsquared",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.setsquared.co.uk/",
+    "https://www.setsquared.co.uk/about-setsquared/",
+    "https://www.setsquared.co.uk/deal-readiness-toolkit/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-5400002866",
+      "url": "https://www.setsquared.co.uk/",
+      "title": "SETsquared — homepage checked by scrape.py",
+      "excerpt": "SETsquared Partnership | the University Enterprise Collaboration",
+      "page": "details"
+    },
+    {
+      "id": "check-route-498b062c66",
+      "url": "https://www.setsquared.co.uk/",
+      "title": "SETsquared — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.setsquared.co.uk/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.setsquared.co.uk/",
+        "evidenceId": "check-route-498b062c66"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "SETsquared",
+        "evidenceId": "check-name-5400002866"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "programId": "district3",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.district3.co/about",
+      "page": "details",
+      "anchor": "about",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.district3.co/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.district3.co/apply",
+      "page": "application",
+      "anchor": "apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.district3.co/startups",
+      "page": "portfolio",
+      "anchor": "Startup portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "programId": "startuplab",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startuplab.no/",
+    "https://www.startuplab.no/apply/incubator",
+    "https://www.startuplab.no/ventures"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1c890180d0",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bbf26d5a4c",
+      "url": "https://www.startuplab.no/apply/incubator",
+      "title": "Startuplab — application page checked by scrape.py",
+      "excerpt": "Get in touch (hello@startuplab.no)",
+      "page": "application"
+    },
+    {
+      "id": "check-name-4f83564629",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Startuplab | Empowering Tech Founders To Go Further Apply to",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4d9bc8e451",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Investment that counts Investment that counts The right investment at the right time can change everything. Through Startuplab Ventures , we invest early and introduce you to investors who are actively looking for startups like yours. The right investment at the right time can change everything. Through Startuplab Ventures , we invest early and introduce you to investors who are actively looking for startups like yours. Learn more → https://www.startuplab.no/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a670bf948b",
+      "url": "https://www.startuplab.no/ventures",
+      "title": "Startuplab — details page checked by scrape.py",
+      "excerpt": "Explore our portfolio → https://www.startuplab.no/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c7d2f6816d",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Funding Supporting bold ideas. We invest in teams daring to change the game, both through our programs and directly. Get funding → https://www.startuplab.no/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-route-35617e5921",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-73ddefceaa",
+      "url": "https://www.startuplab.no/ventures",
+      "title": "Startuplab — details page checked by scrape.py",
+      "excerpt": "Apply for funding → https://www.startuplab.no/apply/funding",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7a7792c671",
+      "url": "https://www.startuplab.no/apply/incubator",
+      "title": "Startuplab — application page checked by scrape.py",
+      "excerpt": "Student → https://www.startuplab.no/apply/student",
+      "page": "application"
+    },
+    {
+      "id": "check-route-93a1a51e20",
+      "url": "https://www.startuplab.no/ventures",
+      "title": "Startuplab — details page checked by scrape.py",
+      "excerpt": "Apply to incubator → https://www.startuplab.no/apply/incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d5445a707d",
+      "url": "https://www.startuplab.no/apply/incubator",
+      "title": "Startuplab — application page checked by scrape.py",
+      "excerpt": "Accelerator → https://www.startuplab.no/apply/accelerator",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d87e4edb4b",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — homepage checked by scrape.py",
+      "excerpt": "Accelerator Ready, set, grow! A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Apply today → https://www.startuplab.no/accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-efc0bf2edc",
+      "url": "https://www.startuplab.no/apply/incubator",
+      "title": "Startuplab — application page checked by scrape.py",
+      "excerpt": "Funding → https://www.startuplab.no/apply/funding",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@startuplab.no",
+        "evidenceId": "check-email-1c890180d0"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.startuplab.no/apply/incubator",
+        "evidenceId": "check-route-35617e5921"
+      },
+      {
+        "value": "https://www.startuplab.no/accelerator",
+        "evidenceId": "check-route-d87e4edb4b"
+      },
+      {
+        "value": "https://www.startuplab.no/apply/accelerator",
+        "evidenceId": "check-route-d5445a707d"
+      },
+      {
+        "value": "https://www.startuplab.no/apply/funding",
+        "evidenceId": "check-route-efc0bf2edc"
+      },
+      {
+        "value": "https://www.startuplab.no/apply/student",
+        "evidenceId": "check-route-7a7792c671"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.startuplab.no/apply/incubator",
+        "evidenceId": "check-route-35617e5921"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.startuplab.no/ventures",
+        "evidenceId": "check-portfolio-c7d2f6816d"
+      },
+      {
+        "value": "https://www.startuplab.no/companies",
+        "evidenceId": "check-portfolio-a670bf948b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Startuplab",
+        "evidenceId": "check-name-4f83564629"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,438 @@
+{
+  "programId": "htgf",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://www.htgf.de/en/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/about-us/",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/about-us/esg/",
+      "page": "details",
+      "anchor": "ESG",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/investors/",
+      "page": "portfolio",
+      "anchor": "from third parties into our portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/egym/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/simscale/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/vmray/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/instagrid/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/tubulis/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/arga-medtech/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/eeden/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/doinstruct/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/proxima-fusion/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/portfolio",
+      "page": "portfolio",
+      "anchor": "discover now",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/meinprospekt-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/contros-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/qurie/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/pressmatrix-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/sierra-sensors-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/visumotion-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/capical-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ci-hub/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/magazino-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/deepscenario/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ctrls/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/srtd-biotech/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/wetransform-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/nanda-technologies-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/marble-imaging/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/variolytics/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/urotec-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/audavis/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/dotega/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/dxi/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/cutanos/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/nanostruct/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/extoll/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/gilupi-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/co-reactive/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/biovox/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/rimasys/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/alentis-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/dcubed/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/syte/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/bab-la/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/trans-duodenal-concepts/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/biograil/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/zeeg/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/urge-io-2/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/ailos-robotics/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/jupus/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/qnami/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/praxiseins/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.htgf.de/en/portfolio/htgffamily/rabot-energy/",
+      "page": "portfolio",
+      "anchor": "Unternehmen ansehen",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "programId": "angelpad",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://angelpad.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://angelpad.com/#apply",
+      "page": "application",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

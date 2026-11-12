@@ -1,0 +1,111 @@
+{
+  "programId": "beta-i",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://beta-i.com/",
+    "https://beta-i.com/about.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-113333a371",
+      "url": "https://beta-i.com/about.html",
+      "title": "Beta-i — details page checked by scrape.py",
+      "excerpt": "hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-497df82591",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5bfe9c0605",
+      "url": "https://beta-i.com/about.html",
+      "title": "Beta-i — details page checked by scrape.py",
+      "excerpt": "or write to hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-96fe7c1952",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Subscribe to our newsletter Beta-i Brasil ↗ Lisbon ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c5b613af48",
+      "url": "https://beta-i.com/about.html",
+      "title": "Beta-i — details page checked by scrape.py",
+      "excerpt": "innovation Who we are Careers Privacy and cookies hello@beta-i.com Newsletter Beta-i Brasil ↗ Lisbon · Brussels · Boston ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d0b825acbe",
+      "url": "https://beta-i.com/about.html",
+      "title": "Beta-i — details page checked by scrape.py",
+      "excerpt": "you like to move forward? Send your challenge or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e59d8665cc",
+      "url": "https://beta-i.com/about.html",
+      "title": "Beta-i — details page checked by scrape.py",
+      "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e8a1d5af53",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fd5d8d676f",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "or write to hello@beta-i.com Your message goes straight to hello@beta-i.com. We reply within two working days. Beta-i © 2026 ·",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fda179d310",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "or write to hello@beta-i.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-83796e4a7f",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — homepage checked by scrape.py",
+      "excerpt": "Beta-i · Collaborative Innovation · Innovation that gets",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@beta-i.com",
+        "evidenceId": "check-email-fda179d310"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Beta-i",
+        "evidenceId": "check-name-83796e4a7f"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "programId": "astrolabs",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://astrolabs.com/",
+    "https://insight.astrolabs.com/banque-saudi-fransi-and-astrolabs-announce-2nd-cohort-of-the-banker-technologist-to-empower-saudi-arabias-next-gen-talents-in-the-financial-sector/",
+    "https://insight.astrolabs.com/majid-al-futtaim-announces-winners-of-the-second-edition-of-its-launchpad-accelerator-programme/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-c4717a0b4f",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage checked by scrape.py",
+      "excerpt": "Business Expansion in Saudi Arabia & UAE | AstroLabs Products Solutions Company Saudization Calculator Free",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6c7ca38c4f",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — homepage checked by scrape.py",
+      "excerpt": "https://astrolabs.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://astrolabs.com/",
+        "evidenceId": "check-route-6c7ca38c4f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "AstroLabs",
+        "evidenceId": "check-name-c4717a0b4f"
+      }
+    ],
+    "examplePages": []
+  }
+}

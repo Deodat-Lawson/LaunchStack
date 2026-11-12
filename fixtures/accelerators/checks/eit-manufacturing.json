@@ -1,0 +1,37 @@
+{
+  "programId": "eit-manufacturing",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.eit.europa.eu/",
+    "https://www.eit.europa.eu/global-challenges/about-our-knowledge-and-innovation-communities",
+    "https://www.eit.europa.eu/our-activities/call-for-eit-communities/2021/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-9d9db44c93",
+      "url": "https://www.eit.europa.eu/",
+      "title": "EIT Manufacturing — homepage checked by scrape.py",
+      "excerpt": "https://www.eit.europa.eu/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.eit.europa.eu/",
+        "evidenceId": "check-route-9d9db44c93"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

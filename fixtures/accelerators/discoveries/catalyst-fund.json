@@ -1,0 +1,62 @@
+{
+  "programId": "catalyst-fund",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.thecatalystfund.com/our-story",
+      "page": "details",
+      "anchor": "Our Story Learn about our mission, vision and journey",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/community-overview",
+      "page": "details",
+      "anchor": "Overview Learn more about our community",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/catalyst-climate-champions",
+      "page": "details",
+      "anchor": "Catalyst Climate Champions A 12-month program empowering individuals",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/past-accelerators-overview",
+      "page": "details",
+      "anchor": "Overview Learn more about our Past Accelerators",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/inclusive-digital-commerce",
+      "page": "portfolio",
+      "anchor": "Inclusive Digital Commerce Scaled digital commerce companies in Ghana",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.thecatalystfund.com/faqs",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

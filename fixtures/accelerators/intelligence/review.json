@@ -2,6 +2,42 @@
   "contract": "program-intelligence/v1",
   "items": [
     {
+      "id": "500-global:stale:flagship",
+      "programId": "500-global",
+      "group": "identity",
+      "field": "stale:flagship",
+      "state": "stale",
+      "evidenceIds": [
+        "flagship"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "500-global:stale:homepage",
+      "programId": "500-global",
+      "group": "identity",
+      "field": "stale:homepage",
+      "state": "stale",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "500-global:stale:official-logo",
+      "programId": "500-global",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
       "id": "a16z-speedrun:residencyEnd",
       "programId": "a16z-speedrun",
       "group": "batches",
@@ -15,6 +51,90 @@
       "status": "open"
     },
     {
+      "id": "a16z-speedrun:stale:sr-apply-window",
+      "programId": "a16z-speedrun",
+      "group": "identity",
+      "field": "stale:sr-apply-window",
+      "state": "stale",
+      "evidenceIds": [
+        "sr-apply-window"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "a16z-speedrun:stale:sr-faq-incorporation",
+      "programId": "a16z-speedrun",
+      "group": "identity",
+      "field": "stale:sr-faq-incorporation",
+      "state": "stale",
+      "evidenceIds": [
+        "sr-faq-incorporation"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "abovea-startup-accelerator:stale:abovea-hidden-infrastructure",
+      "programId": "abovea-startup-accelerator",
+      "group": "identity",
+      "field": "stale:abovea-hidden-infrastructure",
+      "state": "stale",
+      "evidenceIds": [
+        "abovea-hidden-infrastructure"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "abovea-startup-accelerator:stale:abovea-public-form-input-markup",
+      "programId": "abovea-startup-accelerator",
+      "group": "identity",
+      "field": "stale:abovea-public-form-input-markup",
+      "state": "stale",
+      "evidenceIds": [
+        "abovea-public-form-input-markup"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "agoranov:stale:official-logo",
+      "programId": "agoranov",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "alchemist:stale:flagship",
+      "programId": "alchemist",
+      "group": "identity",
+      "field": "stale:flagship",
+      "state": "stale",
+      "evidenceIds": [
+        "flagship"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "alchemist:stale:homepage",
+      "programId": "alchemist",
+      "group": "identity",
+      "field": "stale:homepage",
+      "state": "stale",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
       "id": "antler:locationCount",
       "programId": "antler",
       "group": "identity",
@@ -24,6 +144,477 @@
         "antler-homepage"
       ],
       "detail": "The homepage says Antler is active across 30 locations and also says 26 locations worldwide. Neither number was chosen.",
+      "status": "open"
+    },
+    {
+      "id": "antler:stale:antler-cohort-dates",
+      "programId": "antler",
+      "group": "identity",
+      "field": "stale:antler-cohort-dates",
+      "state": "stale",
+      "evidenceIds": [
+        "antler-cohort-dates"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "antler:stale:antler-public-form",
+      "programId": "antler",
+      "group": "identity",
+      "field": "stale:antler-public-form",
+      "state": "stale",
+      "evidenceIds": [
+        "antler-public-form"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "antler:stale:official-logo",
+      "programId": "antler",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "atomico:inaccessible:homepage",
+      "programId": "atomico",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "bp-ventures:inaccessible:homepage",
+      "programId": "bp-ventures",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
+      "id": "chain-reaction:inaccessible:homepage",
+      "programId": "chain-reaction",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
+      "id": "climate-launchpad:applicationsOpen",
+      "programId": "climate-launchpad",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-12383f291f",
+        "check-status-12d60f956e"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
+      "id": "creative-destruction-lab:stale:official-logo",
+      "programId": "creative-destruction-lab",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "entrepreneurs-first:stale:ef-apply-hub",
+      "programId": "entrepreneurs-first",
+      "group": "identity",
+      "field": "stale:ef-apply-hub",
+      "state": "stale",
+      "evidenceIds": [
+        "ef-apply-hub"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "entrepreneurs-first:stale:ef-bangalore-page",
+      "programId": "entrepreneurs-first",
+      "group": "identity",
+      "field": "stale:ef-bangalore-page",
+      "state": "stale",
+      "evidenceIds": [
+        "ef-bangalore-page"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "entrepreneurs-first:stale:ef-bridge-page",
+      "programId": "entrepreneurs-first",
+      "group": "identity",
+      "field": "stale:ef-bridge-page",
+      "state": "stale",
+      "evidenceIds": [
+        "ef-bridge-page"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "entrepreneurs-first:stale:official-logo",
+      "programId": "entrepreneurs-first",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "esa-bic:inaccessible:homepage",
+      "programId": "esa-bic",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
+      "status": "open"
+    },
+    {
+      "id": "founder-institute:stale:dc-program",
+      "programId": "founder-institute",
+      "group": "identity",
+      "field": "stale:dc-program",
+      "state": "stale",
+      "evidenceIds": [
+        "dc-program"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "founder-institute:stale:official-logo",
+      "programId": "founder-institute",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "founders-factory:stale:official-logo",
+      "programId": "founders-factory",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "gener8tor:stale:investment",
+      "programId": "gener8tor",
+      "group": "identity",
+      "field": "stale:investment",
+      "state": "stale",
+      "evidenceIds": [
+        "investment"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "gener8tor:stale:official-logo",
+      "programId": "gener8tor",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "google-for-startups:stale:programs",
+      "programId": "google-for-startups",
+      "group": "identity",
+      "field": "stale:programs",
+      "state": "stale",
+      "evidenceIds": [
+        "programs"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "hax:stale:official-logo",
+      "programId": "hax",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "hax:stale:program",
+      "programId": "hax",
+      "group": "identity",
+      "field": "stale:program",
+      "state": "stale",
+      "evidenceIds": [
+        "program"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "hf0:inaccessible:apply",
+      "programId": "hf0",
+      "group": "identity",
+      "field": "inaccessible:apply",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "apply"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "hf0:inaccessible:homepage",
+      "programId": "hf0",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "hf0:inaccessible:official-logo",
+      "programId": "hf0",
+      "group": "identity",
+      "field": "inaccessible:official-logo",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "microsoft-for-startups:stale:official-logo",
+      "programId": "microsoft-for-startups",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "next-canada:applicationsOpen",
+      "programId": "next-canada",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-8ebc37b58c",
+        "check-status-b3830bfde9"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
+      "id": "sebrae:stale:official-logo",
+      "programId": "sebrae",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "sequoia-arc:inaccessible:homepage",
+      "programId": "sequoia-arc",
+      "group": "identity",
+      "field": "inaccessible:homepage",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The page could not be fetched. The stored excerpt and last successful check were kept.",
+      "status": "open"
+    },
+    {
+      "id": "sosv:stale:about",
+      "programId": "sosv",
+      "group": "identity",
+      "field": "stale:about",
+      "state": "stale",
+      "evidenceIds": [
+        "about"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "south-park-commons:applicationsOpen",
+      "programId": "south-park-commons",
+      "group": "identity",
+      "field": "applicationsOpen",
+      "state": "conflicting",
+      "evidenceIds": [
+        "check-status-98ab697c5c",
+        "check-status-a4466d688e"
+      ],
+      "detail": "The checked pages say both that applications are open and that they are closed.",
+      "status": "open"
+    },
+    {
+      "id": "south-park-commons:stale:official-logo",
+      "programId": "south-park-commons",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "startup-portugal:stale:official-logo",
+      "programId": "startup-portugal",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "t-hub:stale:official-logo",
+      "programId": "t-hub",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "techstars:stale:homepage",
+      "programId": "techstars",
+      "group": "identity",
+      "field": "stale:homepage",
+      "state": "stale",
+      "evidenceIds": [
+        "homepage"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "techstars:stale:official-logo",
+      "programId": "techstars",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "techstars-london:stale:london-schedule",
+      "programId": "techstars-london",
+      "group": "identity",
+      "field": "stale:london-schedule",
+      "state": "stale",
+      "evidenceIds": [
+        "london-schedule"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "unternehmertum:stale:official-logo",
+      "programId": "unternehmertum",
+      "group": "identity",
+      "field": "stale:official-logo",
+      "state": "stale",
+      "evidenceIds": [
+        "official-logo"
+      ],
+      "detail": "The stored logo URL is no longer on the page and no header mark could replace it. The stored logo was kept.",
+      "status": "open"
+    },
+    {
+      "id": "y-combinator:stale:yc-apply-cycle",
+      "programId": "y-combinator",
+      "group": "identity",
+      "field": "stale:yc-apply-cycle",
+      "state": "stale",
+      "evidenceIds": [
+        "yc-apply-cycle"
+      ],
+      "detail": "The stored excerpt is no longer on the page. It was not replaced.",
+      "status": "open"
+    },
+    {
+      "id": "y-combinator:inaccessible:yc-portal-login",
+      "programId": "y-combinator",
+      "group": "identity",
+      "field": "inaccessible:yc-portal-login",
+      "state": "inaccessible",
+      "evidenceIds": [
+        "yc-portal-login"
+      ],
+      "detail": "robots.txt disallows a refresh of this URL. The stored excerpt was kept.",
       "status": "open"
     }
   ]

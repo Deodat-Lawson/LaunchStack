@@ -1,0 +1,255 @@
+{
+  "programId": "y-combinator",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.ycombinator.com/",
+    "https://www.ycombinator.com/about",
+    "https://www.ycombinator.com/apply",
+    "https://www.ycombinator.com/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-770ae0a531",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "at over $9B. Now Twitch was acquired by Amazon for nearly $1B. In 2005, Y Combinator developed a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three months, where we work intensively with them to get the company into the best possible",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b4a31773bb",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "anywhere in the world. You can apply here . How can we get funding for our startup? Apply online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use the YC investment for anything that you believe helps your business. In most cases, the",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-eeb266c1cd",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — details page checked by scrape.py",
+      "excerpt": "out the best in them. And since most people have way more potential than they realize, they're often surprised by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE with an MFN. Groups During the batch, startups are sorted into 3 groups.",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b4cb382f8f",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "email (apply@ycombinator.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-name-638a344b9a",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "Y Combinator Open menu About What Happens at YC? Apply YC Interview",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-053eec452c",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "YC companies → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-29146cbf8f",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — details page checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-495ef41591",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6974ecfda3",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "All companies → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-82a21a65bc",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-835d747ce2",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "YC Startup Directory → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a214c9fa21",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-bbb9acbd7d",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c521248f5c",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d9dfc3149e",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.ycombinator.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-faf888f100",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.ycombinator.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0085c768f7",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "Apply online → https://www.ycombinator.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3d6dc25ffd",
+      "url": "https://www.ycombinator.com/",
+      "title": "Y Combinator — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-830e7880a7",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "here → https://apply.ycombinator.com/app/edit",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a4eee954f0",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "Sign up for reminders → https://www.ycombinator.com/apply/reminder",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b10c5b4f63",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "here → https://www.ycombinator.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bb393b959b",
+      "url": "https://www.ycombinator.com/about",
+      "title": "Y Combinator — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cc24b26e26",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Y Combinator — terms page checked by scrape.py",
+      "excerpt": "Apply → https://www.ycombinator.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d1907ffdf6",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "Apply → https://apply.ycombinator.com/home",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f52c68d418",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Y Combinator — application page checked by scrape.py",
+      "excerpt": "application online → https://apply.ycombinator.com/home",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "apply@ycombinator.com",
+        "evidenceId": "check-email-b4cb382f8f"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.ycombinator.com/apply",
+        "evidenceId": "check-route-3d6dc25ffd"
+      },
+      {
+        "value": "https://apply.ycombinator.com/home",
+        "evidenceId": "check-route-d1907ffdf6"
+      },
+      {
+        "value": "https://www.ycombinator.com/apply/reminder",
+        "evidenceId": "check-route-a4eee954f0"
+      },
+      {
+        "value": "mailto:apply@ycombinator.com",
+        "evidenceId": "check-email-b4cb382f8f"
+      },
+      {
+        "value": "https://apply.ycombinator.com/app/edit",
+        "evidenceId": "check-route-830e7880a7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.ycombinator.com/home",
+        "evidenceId": "check-route-d1907ffdf6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "at over $9B. Now Twitch was acquired by Amazon for nearly $1B. In 2005, Y Combinator developed a new model of startup funding. Four times a year we invest $500k in a select group of startups. They move to San Francisco for three months, where we work intensively with them to get the company into the best possible",
+        "evidenceId": "check-deal-770ae0a531"
+      },
+      {
+        "value": "out the best in them. And since most people have way more potential than they realize, they're often surprised by what they're capable of. Funding YC invests $500k per company: $125k for 7% on a post-money SAFE and another $375k on an uncapped SAFE with an MFN. Groups During the batch, startups are sorted into 3 groups.",
+        "evidenceId": "check-deal-eeb266c1cd"
+      },
+      {
+        "value": "anywhere in the world. You can apply here . How can we get funding for our startup? Apply online for our next funding cycle. How much do you invest? We invest $500,000 in each company. What can I use the YC investment for? You can use the YC investment for anything that you believe helps your business. In most cases, the",
+        "evidenceId": "check-deal-b4a31773bb"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.ycombinator.com/companies",
+        "evidenceId": "check-portfolio-d9dfc3149e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Y Combinator",
+        "evidenceId": "check-name-638a344b9a"
+      }
+    ],
+    "examplePages": []
+  }
+}

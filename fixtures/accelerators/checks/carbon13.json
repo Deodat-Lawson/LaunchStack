@@ -1,0 +1,172 @@
+{
+  "programId": "carbon13",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://carbonthirteen.com/",
+    "https://carbonthirteen.com/programmes/",
+    "https://carbonthirteen.com/programmes/apply-now/",
+    "https://carbonthirteen.com/frequently-asked-questions/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-03d50f704b",
+      "url": "https://carbonthirteen.com/programmes/apply-now/",
+      "title": "Carbon13 — application page checked by scrape.py",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "application"
+    },
+    {
+      "id": "check-email-32d5403735",
+      "url": "https://carbonthirteen.com/programmes/",
+      "title": "Carbon13 — details page checked by scrape.py",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-35a56e5b60",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page checked by scrape.py",
+      "excerpt": "need any further information or help, please contact us on hello@carbonthirteen.com. K L How do the teams/ventures get funded? The investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c540242fa1",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page checked by scrape.py",
+      "excerpt": "need any further information or help, please contact us on hello@carbonthirteen.com. K L How do the teams/ventures get funded The investment",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e8e2edd02c",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-ed281eb550",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page checked by scrape.py",
+      "excerpt": "\"email\": \"info@carbonthirteen.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-7ce2f97d78",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "Home - Carbon13 Programmes Portfolio About us News Investors Jobs Apply",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-08612b29bf",
+      "url": "https://carbonthirteen.com/programmes/apply-now/",
+      "title": "Carbon13 — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-5838e49906",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7a6c4f719f",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ac3f95dcc1",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cfce3b25c8",
+      "url": "https://carbonthirteen.com/programmes/",
+      "title": "Carbon13 — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://carbonthirteen.com/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-06cc394ae7",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2d9121c11f",
+      "url": "https://carbonthirteen.com/programmes/",
+      "title": "Carbon13 — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b4930e6dc4",
+      "url": "https://carbonthirteen.com/frequently-asked-questions/",
+      "title": "Carbon13 — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://carbonthirteen.com/programmes/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-fa2e64347d",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — homepage checked by scrape.py",
+      "excerpt": "of domain expertise, investors, and partners. Apply Now to The super advisor for ambitious climate startups Applications Now Open Carbon13’s Venture Accelerator Programme Investing in over 100 climate-tech start-ups since 2021, Carbon13",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@carbonthirteen.com",
+        "evidenceId": "check-email-e8e2edd02c"
+      },
+      {
+        "value": "hello@carbonthirteen.com",
+        "evidenceId": "check-email-35a56e5b60"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://carbonthirteen.com/programmes/apply-now/",
+        "evidenceId": "check-route-06cc394ae7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://carbonthirteen.com/programmes/apply-now/",
+        "evidenceId": "check-route-06cc394ae7"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-fa2e64347d"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://carbonthirteen.com/our-portfolio/",
+        "evidenceId": "check-portfolio-ac3f95dcc1"
+      }
+    ],
+    "name": [
+      {
+        "value": "Carbon13",
+        "evidenceId": "check-name-7ce2f97d78"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "programId": "arch-grants",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://archgrants.org/about-us/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/about-us/team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/about-us/our-impact/",
+      "page": "details",
+      "anchor": "Our Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/about-us/our-supporters/",
+      "page": "details",
+      "anchor": "Our Supporters",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/about-us/sustained-impact/",
+      "page": "details",
+      "anchor": "Sustained Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/startup-competition/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "page": "application",
+      "anchor": "Application Reminder Form",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/faqs/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/fellows-program/",
+      "page": "details",
+      "anchor": "Fellows Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/growth-grants/",
+      "page": "details",
+      "anchor": "Growth Grants",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/investor-masterclass-series/",
+      "page": "details",
+      "anchor": "Investor Masterclass Series",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/innovation-summit/",
+      "page": "details",
+      "anchor": "Innovation Summit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/programs/founder-lending-program/",
+      "page": "details",
+      "anchor": "Founder Lending Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/",
+      "page": "portfolio",
+      "anchor": "The Startups",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/get-involved/expert-in-residence-program/",
+      "page": "details",
+      "anchor": "Expert-in-Residence Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/equine-smartbit/",
+      "page": "portfolio",
+      "anchor": "Equine Smartbit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/balto/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/clever-real-estate/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/giftameal/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/inclusively/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://archgrants.org/companies/NATIVE-PET/",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/companies/",
+      "page": "portfolio",
+      "anchor": "Explore All Startups",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "http://archgrants.org/programs/startup-competition/",
+      "page": "details",
+      "anchor": "Learn about the Competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

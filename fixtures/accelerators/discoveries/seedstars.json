@@ -1,0 +1,134 @@
+{
+  "programId": "seedstars",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.seedstars.com/about/",
+      "page": "details",
+      "anchor": "ABOUT",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/about/theory-of-change/",
+      "page": "details",
+      "anchor": "Our 'Theory of Change'",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/programs/",
+      "page": "details",
+      "anchor": "PROGRAMS",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/programs/acceleration/",
+      "page": "details",
+      "anchor": "Acceleration program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/programs/growth/",
+      "page": "details",
+      "anchor": "Growth program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/programs/investment-readiness/",
+      "page": "details",
+      "anchor": "Investment readiness program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/community/entrepreneurs/programs/",
+      "page": "details",
+      "anchor": "OPEN CALLS FOR ENTREPRENEURS",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/services/",
+      "page": "portfolio",
+      "anchor": "VIEW ALL SERVICES We tackle some of the toughest challenges in society by supporting and investing in entrepreneurs who are building impactful companies.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/newsroom/",
+      "page": "batches",
+      "anchor": "NEWSROOM The source of news about Seedstars and our activities around the world. Access, here, our brand and press kits, read all of our press releases, and get the latest updates.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/seedstars-international-ventures-adds-six-new-companies-portfolio/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Seedstars International Ventures Adds Six New Companies To Portfolio Seedstars International Ventures now has 80 companies in it’s portfolio. Mar. 02, 2022",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/investing-beyond-capital-seedstars-international-ventures/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Investing beyond capital with Seedstars International Ventures On top of capital Seedstars portfolio companies get access our Value Creation Platform where they",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/newest-additions-seedstars-portfolio/",
+      "page": "portfolio",
+      "anchor": "GLOBAL • INVESTMENT Newest Additions to the Seedstars Portfolio Our team has once again selected 8 of the most promising ventures to join the Seedstars Portfolio and to participate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/learning-resources/fundraising-strategy-early-stage-startup-z/",
+      "page": "details",
+      "anchor": "GLOBAL • INVESTMENT Fundraising Strategy for an Early-Stage Startup From A to Z The article is based on the training we provide for startups during the Growth Programs . Feb. 24, 2",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/goal-cure-slightly-sick-investment-fund-sector-bas-godska/",
+      "page": "portfolio",
+      "anchor": "CENTRAL AND EASTERN EUROPE • INVESTMENT \"The Goal Is to 'Cure' a Slightly Sick Investment Fund Sector,\" Bas Godska What does it take to be an investor? How venture capitalists choo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/insights/how-grow-startup-using-referral-program/",
+      "page": "details",
+      "anchor": "GLOBAL • How To Grow A Startup Using A Referral Program Referral programs are one of the most cost-effective ways for a startup to grow. Imagine turning every new customer into ano",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.seedstars.com/content-hub/life/bridging-financial-inclusion-gap-includes-education-financial-literacy/",
+      "page": "details",
+      "anchor": "AFRICA • FINANCIAL SERVICES Why Bridging The Financial Inclusion Gap Includes Education On Financial Literacy QuickCheck not only bridges the financial inclusion gap but also educa",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

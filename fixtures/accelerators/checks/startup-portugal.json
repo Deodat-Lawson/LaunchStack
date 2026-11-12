@@ -1,0 +1,36 @@
+{
+  "programId": "startup-portugal",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startupportugal.com/",
+    "https://startupportugal.com/programa/above-beyond-hangouts/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-0dc41cf3c2",
+      "url": "https://startupportugal.com/",
+      "title": "Startup Portugal — homepage checked by scrape.py",
+      "excerpt": "Homepage • Startup Portugal Jump to main content Investors & Decision Makers Discover",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup Portugal",
+        "evidenceId": "check-name-0dc41cf3c2"
+      }
+    ],
+    "examplePages": []
+  }
+}

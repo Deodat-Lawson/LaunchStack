@@ -1,0 +1,86 @@
+{
+  "programId": "enterprise-ireland",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.enterprise-ireland.com/en/",
+    "https://www.enterprise-ireland.com/en/about-enterprise-ireland"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-f20ca6b5e4",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "excerpt": "Helping Irish Business Go Global | Enterprise Ireland How can we help? Search See Results I’m an Irish company I",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-47f23aa8e5",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b41475f7b3",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
+      "title": "Enterprise Ireland — details page checked by scrape.py",
+      "excerpt": "+353 (1) 7272000",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7631b97b0b",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eda3d5f703",
+      "url": "https://www.enterprise-ireland.com/en/about-enterprise-ireland",
+      "title": "Enterprise Ireland — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.enterprise-ireland.com/en/supports/start-ups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c911c2a1c3",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — homepage checked by scrape.py",
+      "excerpt": "I’m an Irish company → https://www.enterprise-ireland.com/en/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+353(1)7272000",
+        "evidenceId": "check-phone-47f23aa8e5"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.enterprise-ireland.com/en/",
+        "evidenceId": "check-route-c911c2a1c3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.enterprise-ireland.com/en/supports/start-ups",
+        "evidenceId": "check-portfolio-7631b97b0b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Enterprise Ireland",
+        "evidenceId": "check-name-f20ca6b5e4"
+      }
+    ],
+    "examplePages": []
+  }
+}

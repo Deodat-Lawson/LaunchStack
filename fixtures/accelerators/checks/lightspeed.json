@@ -1,0 +1,130 @@
+{
+  "programId": "lightspeed",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://lsvp.com/",
+    "https://lsvp.com/about/",
+    "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-bb1a29d050",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "Lightspeed Venture Partners menu menu About Team Companies Founder",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a1f4c1c66",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-46e7d055aa",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "meet the founders → https://lsvp.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4d3c609e45",
+      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "title": "Lightspeed — application page checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-903227eca5",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-90f9153f9a",
+      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "title": "Lightspeed — application page checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-db3af3a4a0",
+      "url": "https://lsvp.com/about/",
+      "title": "Lightspeed — details page checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ec4a268d9c",
+      "url": "https://lsvp.com/about/",
+      "title": "Lightspeed — details page checked by scrape.py",
+      "excerpt": "Companies → https://lsvp.com/companies-india/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c377ced2d6",
+      "url": "https://lsvp.com/about/",
+      "title": "Lightspeed — details page checked by scrape.py",
+      "excerpt": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application → https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f0ff1e9385",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "https://lsvp.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ff97559e31",
+      "url": "https://lsvp.com/",
+      "title": "Lightspeed — homepage checked by scrape.py",
+      "excerpt": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application → https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+        "evidenceId": "check-route-ff97559e31"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://lsvp.com/",
+        "evidenceId": "check-route-f0ff1e9385"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://lsvp.com/companies/",
+        "evidenceId": "check-portfolio-3a1f4c1c66"
+      },
+      {
+        "value": "https://lsvp.com/companies-india/",
+        "evidenceId": "check-portfolio-903227eca5"
+      },
+      {
+        "value": "https://lsvp.com/companies",
+        "evidenceId": "check-portfolio-46e7d055aa"
+      }
+    ],
+    "name": [
+      {
+        "value": "Lightspeed",
+        "evidenceId": "check-name-bb1a29d050"
+      }
+    ],
+    "examplePages": []
+  }
+}

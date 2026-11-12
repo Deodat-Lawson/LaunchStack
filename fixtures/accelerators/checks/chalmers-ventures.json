@@ -1,0 +1,118 @@
+{
+  "programId": "chalmers-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://chalmersventures.com/",
+    "https://www.chalmersventures.com/programs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-216a7674ae",
+      "url": "https://www.chalmersventures.com/programs/",
+      "title": "Chalmers Ventures — details page checked by scrape.py",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a27f846bfc",
+      "url": "https://www.chalmersventures.com/programs/",
+      "title": "Chalmers Ventures — details page checked by scrape.py",
+      "excerpt": "info@chalmersventures.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f4dc89417f",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "info@chalmersventures.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f931b7ce41",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "our newsletters. Subscribe Contact us See all staff » info@chalmersventures.com Visiting address Show on map Vasa Vera Sandbergs Allé 8, 4",
+      "page": "details"
+    },
+    {
+      "id": "check-name-ca3e48c32e",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "- Chalmers Ventures | Tech Investor and Venture Builder - Chalmers Ventures |",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2ee113f41a",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-335191be9f",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3863dfb486",
+      "url": "https://www.chalmersventures.com/programs/",
+      "title": "Chalmers Ventures — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://chalmersventures.com/startups/#current",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-888e47b4fa",
+      "url": "https://www.chalmersventures.com/programs/",
+      "title": "Chalmers Ventures — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.chalmersventures.com/startups/#current",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6575f05152",
+      "url": "https://chalmersventures.com/",
+      "title": "Chalmers Ventures — homepage checked by scrape.py",
+      "excerpt": "https://chalmersventures.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@chalmersventures.com",
+        "evidenceId": "check-email-f4dc89417f"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://chalmersventures.com/",
+        "evidenceId": "check-route-6575f05152"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.chalmersventures.com/startups/#current",
+        "evidenceId": "check-portfolio-2ee113f41a"
+      },
+      {
+        "value": "https://chalmersventures.com/startups/#current",
+        "evidenceId": "check-portfolio-335191be9f"
+      }
+    ],
+    "name": [
+      {
+        "value": "Chalmers Ventures",
+        "evidenceId": "check-name-ca3e48c32e"
+      }
+    ],
+    "examplePages": []
+  }
+}

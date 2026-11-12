@@ -1,0 +1,135 @@
+{
+  "programId": "alven",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://alven.co/",
+    "https://alven.co/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-07afd39df0",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "details"
+    },
+    {
+      "id": "check-email-41bee8dc34",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6809d0ae7c",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-email-751ef8c18a",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b18cd98138",
+      "url": "https://alven.co/about-us",
+      "title": "Alven — details page checked by scrape.py",
+      "excerpt": "contact@alven.co contact@alven.co",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b9b59a9470",
+      "url": "https://alven.co/about-us",
+      "title": "Alven — details page checked by scrape.py",
+      "excerpt": "+33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue Réaumur, 75002 Paris",
+      "page": "details"
+    },
+    {
+      "id": "check-email-dc0424caa7",
+      "url": "https://alven.co/about-us",
+      "title": "Alven — details page checked by scrape.py",
+      "excerpt": "their vision. Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e7112414b3",
+      "url": "https://alven.co/about-us",
+      "title": "Alven — details page checked by scrape.py",
+      "excerpt": "Use of cookies Contact +33 1 55 34 38 38 +33 1 55 34 38 38 contact@alven.co contact@alven.co LinkedIn LinkedIn Address 124 rue",
+      "page": "details"
+    },
+    {
+      "id": "check-name-70752dfcb9",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "Alven WHO WE ARE PORTFOLIO NEWS Contact Menu Independent",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2167acef03",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "View all companies → https://alven.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-36c1748a5a",
+      "url": "https://alven.co/about-us",
+      "title": "Alven — details page checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5be34cf673",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://alven.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a9cef778d6",
+      "url": "https://alven.co/",
+      "title": "Alven — homepage checked by scrape.py",
+      "excerpt": "https://alven.co/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "contact@alven.co",
+        "evidenceId": "check-email-41bee8dc34"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://alven.co/",
+        "evidenceId": "check-route-a9cef778d6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://alven.co/portfolio",
+        "evidenceId": "check-portfolio-5be34cf673"
+      }
+    ],
+    "name": [
+      {
+        "value": "Alven",
+        "evidenceId": "check-name-70752dfcb9"
+      }
+    ],
+    "examplePages": []
+  }
+}

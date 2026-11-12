@@ -1,0 +1,47 @@
+{
+  "programId": "startup-energy-transition",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startup-energy-transition.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-f27bd78003",
+      "url": "https://www.startup-energy-transition.com/",
+      "title": "Startup Energy Transition — homepage checked by scrape.py",
+      "excerpt": "#Startups → https://www.startup-energy-transition.com/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1f3fc705f6",
+      "url": "https://www.startup-energy-transition.com/",
+      "title": "Startup Energy Transition — homepage checked by scrape.py",
+      "excerpt": "https://www.startup-energy-transition.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.startup-energy-transition.com",
+        "evidenceId": "check-route-1f3fc705f6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.startup-energy-transition.com/category/startups/",
+        "evidenceId": "check-portfolio-f27bd78003"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

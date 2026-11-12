@@ -1,0 +1,183 @@
+{
+  "programId": "south-park-commons",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.southparkcommons.com/",
+    "https://www.southparkcommons.com/apply",
+    "https://www.southparkcommons.com/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-2d40c69224",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "where founders cross paths and collaborate daily. Read More Resources Building something new requires more than just the people around you. We offer up to $1M in credits and perks from companies including Anthropic, OpenAI, Microsoft, GCP, AWS, Baseten, Render, Figma, and more. Apply Stay in the Loop Get Updates",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-7fe8848377",
+      "url": "https://www.southparkcommons.com/faq",
+      "title": "South Park Commons — terms page checked by scrape.py",
+      "excerpt": "not have a demo day, and when the time is right for you to raise, we'll make introductions to the best investors. We do not force strict timelines. We offer $400,000 in exchange for 7% equity via a SAFE, plus $600,000 guaranteed in your next venture round. We help you identify the right market, support you as you build your",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-9dd3cdcf69",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "South Park Commons Apply Residency Companies Writing Our Story Residency",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1120ada30e",
+      "url": "https://www.southparkcommons.com/faq",
+      "title": "South Park Commons — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.southparkcommons.com/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-2a95dd2466",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "See More → https://www.southparkcommons.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-829e2364bf",
+      "url": "https://www.southparkcommons.com/apply",
+      "title": "South Park Commons — application page checked by scrape.py",
+      "excerpt": "Companies → https://www.southparkcommons.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-88fa03ba23",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.southparkcommons.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1d6383ff15",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Apply to SPC → https://www.southparkcommons.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-285a994485",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Get started → https://www.southparkcommons.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3bee118250",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.southparkcommons.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-842306c07b",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Funding $1M to $10M · Exploration & Conviction Funding from $1M to $10M for founders who want to build a venture-scale company. Not all our members are ready for funding; for those who are, we're ready to write the first check. → https://www.southparkcommons.com/apply?pathway=funding",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8bc4a96469",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "Residency 6 months · No cost or equity · Ideation & Exploration A talent-dense community of technical founders, researchers, and domain-experts testing each other's ideas, finding collaborators, and reaching conviction on what to build and how to build it. → https://www.southparkcommons.com/apply?pathway=residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a59a0e1107",
+      "url": "https://www.southparkcommons.com/faq",
+      "title": "South Park Commons — terms page checked by scrape.py",
+      "excerpt": "Apply → https://www.southparkcommons.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b5d60b36af",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons — homepage checked by scrape.py",
+      "excerpt": "A P P L Y T O S P C → https://www.southparkcommons.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-98ab697c5c",
+      "url": "https://www.southparkcommons.com/apply",
+      "title": "South Park Commons — application page checked by scrape.py",
+      "excerpt": "for those who need it. We accept applications for our $1M Founder Fellowship twice per year. Our Fall 2026 applications are closed; we will open applications for our Spring 2027 Fellowship later this year. Getting started About You",
+      "page": "application"
+    },
+    {
+      "id": "check-status-a4466d688e",
+      "url": "https://www.southparkcommons.com/faq",
+      "title": "South Park Commons — terms page checked by scrape.py",
+      "excerpt": "deadlines ahead of the cohort start date. Applications are reviewed on a rolling basis while the application is open. We fund teams immediately on acceptance to the program, even if the official start date isn't for a while.",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.southparkcommons.com/apply",
+        "evidenceId": "check-route-3bee118250"
+      },
+      {
+        "value": "https://www.southparkcommons.com/apply?pathway=residency",
+        "evidenceId": "check-route-8bc4a96469"
+      },
+      {
+        "value": "https://www.southparkcommons.com/apply?pathway=funding",
+        "evidenceId": "check-route-842306c07b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.southparkcommons.com/apply",
+        "evidenceId": "check-route-3bee118250"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-98ab697c5c"
+      },
+      {
+        "value": true,
+        "evidenceId": "check-status-a4466d688e"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "where founders cross paths and collaborate daily. Read More Resources Building something new requires more than just the people around you. We offer up to $1M in credits and perks from companies including Anthropic, OpenAI, Microsoft, GCP, AWS, Baseten, Render, Figma, and more. Apply Stay in the Loop Get Updates",
+        "evidenceId": "check-deal-2d40c69224"
+      },
+      {
+        "value": "not have a demo day, and when the time is right for you to raise, we'll make introductions to the best investors. We do not force strict timelines. We offer $400,000 in exchange for 7% equity via a SAFE, plus $600,000 guaranteed in your next venture round. We help you identify the right market, support you as you build your",
+        "evidenceId": "check-deal-7fe8848377"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.southparkcommons.com/companies",
+        "evidenceId": "check-portfolio-88fa03ba23"
+      }
+    ],
+    "name": [
+      {
+        "value": "South Park Commons",
+        "evidenceId": "check-name-9dd3cdcf69"
+      }
+    ],
+    "examplePages": []
+  }
+}

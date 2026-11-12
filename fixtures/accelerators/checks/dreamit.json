@@ -1,0 +1,94 @@
+{
+  "programId": "dreamit",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://dreamit.com/",
+    "https://dreamit.com/faq",
+    "https://dreamit.com/pitch-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-9fac022577",
+      "url": "https://dreamit.com/faq",
+      "title": "Dreamit — terms page checked by scrape.py",
+      "excerpt": "Complete our intake form here , and you will receive a message from a Dreamit team member. What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are earlier in their development, Dreamit may consider alternative investment structures Will you",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-380b2139c9",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit — homepage checked by scrape.py",
+      "excerpt": "Dreamit Ventures | Early-Stage Cybersecurity Investor Platform",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1b401f5a83",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit — homepage checked by scrape.py",
+      "excerpt": "View Full Portfolio → https://dreamit.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2766f724cc",
+      "url": "https://dreamit.com/pitch-us",
+      "title": "Dreamit — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-737629ba0e",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fd1a07fe13",
+      "url": "https://dreamit.com/faq",
+      "title": "Dreamit — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://dreamit.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5d0250f5d8",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit — homepage checked by scrape.py",
+      "excerpt": "Pitch Us → https://dreamit.com/pitch-us",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://dreamit.com/pitch-us",
+        "evidenceId": "check-route-5d0250f5d8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Complete our intake form here , and you will receive a message from a Dreamit team member. What is Dreamit’s offer? Dreamit gets the right to invest up to $1M and receives a small amount of equity. For companies that are earlier in their development, Dreamit may consider alternative investment structures Will you",
+        "evidenceId": "check-deal-9fac022577"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://dreamit.com/portfolio",
+        "evidenceId": "check-portfolio-737629ba0e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Dreamit",
+        "evidenceId": "check-name-380b2139c9"
+      }
+    ],
+    "examplePages": []
+  }
+}

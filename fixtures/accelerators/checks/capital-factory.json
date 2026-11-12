@@ -1,0 +1,80 @@
+{
+  "programId": "capital-factory",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://capitalfactory.com/",
+    "https://apply.workable.com/capital-factory/",
+    "https://capitalfactory.com/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-9626e8f2d0",
+      "url": "https://capitalfactory.com/",
+      "title": "Capital Factory — homepage checked by scrape.py",
+      "excerpt": "Capital Factory — Startups advancing civilization Skip to content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-570532fcf0",
+      "url": "https://capitalfactory.com/about",
+      "title": "Capital Factory — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-87e7542e5c",
+      "url": "https://capitalfactory.com/",
+      "title": "Capital Factory — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://capitalfactory.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-23e7fbfcae",
+      "url": "https://capitalfactory.com/",
+      "title": "Capital Factory — homepage checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-55b83db491",
+      "url": "https://capitalfactory.com/about",
+      "title": "Capital Factory — details page checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/capital-factory/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.workable.com/capital-factory/",
+        "evidenceId": "check-route-23e7fbfcae"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.workable.com/capital-factory/",
+        "evidenceId": "check-route-23e7fbfcae"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://capitalfactory.com/portfolio",
+        "evidenceId": "check-portfolio-87e7542e5c"
+      }
+    ],
+    "name": [
+      {
+        "value": "Capital Factory",
+        "evidenceId": "check-name-9626e8f2d0"
+      }
+    ],
+    "examplePages": []
+  }
+}

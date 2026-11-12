@@ -1,0 +1,74 @@
+{
+  "programId": "kalaari",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://kalaari.com/",
+    "https://kalaari.com/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-4116d41d8d",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "excerpt": "Championing India's Alpha | Kalaari Capital Skip to main content About About Kalaari Team Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-63dcfcdb2d",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c94fd99436",
+      "url": "https://kalaari.com/about-us",
+      "title": "Kalaari Capital — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-da078937e7",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "excerpt": "View Portfolio → https://kalaari.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7ef36f29af",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — homepage checked by scrape.py",
+      "excerpt": "https://kalaari.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://kalaari.com/",
+        "evidenceId": "check-route-7ef36f29af"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://kalaari.com/portfolio",
+        "evidenceId": "check-portfolio-63dcfcdb2d"
+      }
+    ],
+    "name": [
+      {
+        "value": "Kalaari Capital",
+        "evidenceId": "check-name-4116d41d8d"
+      }
+    ],
+    "examplePages": []
+  }
+}

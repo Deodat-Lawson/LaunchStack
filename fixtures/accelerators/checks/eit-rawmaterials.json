@@ -1,0 +1,90 @@
+{
+  "programId": "eit-rawmaterials",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://eitrawmaterials.eu/",
+    "https://eitrawmaterials.eu/knowledge-innovation"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-fd26c12907",
+      "url": "https://eitrawmaterials.eu/knowledge-innovation",
+      "title": "EIT RawMaterials — details page checked by scrape.py",
+      "excerpt": "Interview Mapping the unknown: How Xcalibur is unlocking the resources that will define our future May 12, 2026 Sustainable Mining EIT RawMaterials invests €0.9 million in award-winning circularity innovator Sofi Filtration November 28, 2025 See more news Filter Content Reset all Filters Need more info? Connect with us! Legal",
+      "page": "details"
+    },
+    {
+      "id": "check-name-330ba97701",
+      "url": "https://eitrawmaterials.eu/",
+      "title": "EIT RawMaterials — homepage checked by scrape.py",
+      "excerpt": "Home | EIT RawMaterials - Developing raw materials into a major strength for",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-64642568e9",
+      "url": "https://eitrawmaterials.eu/knowledge-innovation",
+      "title": "EIT RawMaterials — details page checked by scrape.py",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7ecc1c95f9",
+      "url": "https://eitrawmaterials.eu/",
+      "title": "EIT RawMaterials — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://alumni.eitrawmaterials.eu/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a41b1ae65d",
+      "url": "https://eitrawmaterials.eu/",
+      "title": "EIT RawMaterials — homepage checked by scrape.py",
+      "excerpt": "View our startup portfolio → https://eitrawmaterials.eu/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d3bc91d11a",
+      "url": "https://eitrawmaterials.eu/",
+      "title": "EIT RawMaterials — homepage checked by scrape.py",
+      "excerpt": "https://eitrawmaterials.eu/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://eitrawmaterials.eu/",
+        "evidenceId": "check-route-d3bc91d11a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Interview Mapping the unknown: How Xcalibur is unlocking the resources that will define our future May 12, 2026 Sustainable Mining EIT RawMaterials invests €0.9 million in award-winning circularity innovator Sofi Filtration November 28, 2025 See more news Filter Content Reset all Filters Need more info? Connect with us! Legal",
+        "evidenceId": "check-deal-fd26c12907"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://alumni.eitrawmaterials.eu/",
+        "evidenceId": "check-portfolio-7ecc1c95f9"
+      },
+      {
+        "value": "https://eitrawmaterials.eu/our-portfolio",
+        "evidenceId": "check-portfolio-a41b1ae65d"
+      }
+    ],
+    "name": [
+      {
+        "value": "EIT RawMaterials",
+        "evidenceId": "check-name-330ba97701"
+      }
+    ],
+    "examplePages": []
+  }
+}

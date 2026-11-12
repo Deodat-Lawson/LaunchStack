@@ -1,0 +1,70 @@
+{
+  "programId": "creative-destruction-lab",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://creativedestructionlab.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/program/",
+      "page": "details",
+      "anchor": "Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/program/putting-ai-to-work/",
+      "page": "details",
+      "anchor": "Putting AI to Work",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/partners-program/",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/blog/cleveland/",
+      "page": "details",
+      "anchor": "Announcements Creative Destruction Lab Launches CDL-Cleveland in Partnership with University Hospitals and Case Western Reserve University CDL-Cleveland is the first site in the CD",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://creativedestructionlab.com/faq/",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

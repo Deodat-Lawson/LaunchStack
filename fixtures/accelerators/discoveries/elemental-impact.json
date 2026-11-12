@@ -1,0 +1,54 @@
+{
+  "programId": "elemental-impact",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://elementalimpact.com/companies/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "application",
+      "anchor": "Apply Now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/funding-opportunities/",
+      "page": "application",
+      "anchor": "Apply for funding → We invest in exceptional entrepreneurs who are solving the world’s most pressing environmental challenges.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/how-policy-uncertainty-is-shaping-climate-innovation/",
+      "page": "portfolio",
+      "anchor": "Elemental Insights How Policy Uncertainty is Shaping Climate Innovation For climate companies, policy can determine whether projects are deployed, delayed, or derailed. In 2025, th",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://elementalimpact.com/annual-report-2025/",
+      "page": "portfolio",
+      "anchor": "Annual Report 2025: A Year of Extremes Today, we invite you to explore our 2025 Annual Report. In it, we reflect on the stories that shaped our year, the on-the-ground strategies t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

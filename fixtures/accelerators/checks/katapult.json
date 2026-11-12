@@ -1,0 +1,35 @@
+{
+  "programId": "katapult",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://katapult.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-2e9e01e2c7",
+      "url": "https://katapult.vc/",
+      "title": "Katapult — homepage checked by scrape.py",
+      "excerpt": "Katapult — Investing in a thriving world for all Ecosystem Approach",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Katapult",
+        "evidenceId": "check-name-2e9e01e2c7"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "programId": "lifeline-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.lifelineventures.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-45efea62d8",
+      "url": "https://www.lifelineventures.com/",
+      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "excerpt": "Lifeline Ventures | Supporting resilient founders Lifeline Ventures Menu",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1b475ed541",
+      "url": "https://www.lifelineventures.com/",
+      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.lifelineventures.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0cb0272e03",
+      "url": "https://www.lifelineventures.com/",
+      "title": "Lifeline Ventures — homepage checked by scrape.py",
+      "excerpt": "Lifeline Ventures → https://www.lifelineventures.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.lifelineventures.com",
+        "evidenceId": "check-route-0cb0272e03"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.lifelineventures.com/companies/",
+        "evidenceId": "check-portfolio-1b475ed541"
+      }
+    ],
+    "name": [
+      {
+        "value": "Lifeline Ventures",
+        "evidenceId": "check-name-45efea62d8"
+      }
+    ],
+    "examplePages": []
+  }
+}

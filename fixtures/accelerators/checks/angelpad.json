@@ -1,0 +1,117 @@
+{
+  "programId": "angelpad",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://angelpad.com/",
+    "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+    "https://angelpad.com/#apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-5492b62d00",
+      "url": "https://angelpad.com/#apply",
+      "title": "AngelPad — application page checked by scrape.py",
+      "excerpt": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-6885b44912",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage checked by scrape.py",
+      "excerpt": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
+      "page": "details"
+    },
+    {
+      "id": "check-name-6a3965bf4d",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage checked by scrape.py",
+      "excerpt": "AngelPad – #1 U.S Accelerator based in SF and NYC Skip to content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-21914383b6",
+      "url": "https://angelpad.com/#apply",
+      "title": "AngelPad — application page checked by scrape.py",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c0845cff69",
+      "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+      "title": "AngelPad — terms page checked by scrape.py",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-dd2affa470",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage checked by scrape.py",
+      "excerpt": "portfolio → https://angelpad.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ed955ed488",
+      "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+      "title": "AngelPad — terms page checked by scrape.py",
+      "excerpt": "ALUMNI → https://angelpad.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2d4b46d553",
+      "url": "https://angelpad.com/b/self-driving-truck-startup-gatik-raises-200m-following-massive-pepsico-deal/",
+      "title": "AngelPad — terms page checked by scrape.py",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-366f5cfb88",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad — homepage checked by scrape.py",
+      "excerpt": "APPLY → https://angelpad.com/#apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://angelpad.com/#apply",
+        "evidenceId": "check-route-2d4b46d553"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://angelpad.com/#apply",
+        "evidenceId": "check-route-366f5cfb88"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "the startup founders. We roll up our sleeves and figure stuff out – everything – together with the founders. Funding Starting a company costs money. We invest $120,000 in each company. Startups have also access to more than $300,000 in cloud credits from AWS, Google and Digital Ocean. Community Working, not just alongside us,",
+        "evidenceId": "check-deal-6885b44912"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://angelpad.com/portfolio/",
+        "evidenceId": "check-portfolio-dd2affa470"
+      },
+      {
+        "value": "https://angelpad.com/#portfolio",
+        "evidenceId": "check-portfolio-ed955ed488"
+      }
+    ],
+    "name": [
+      {
+        "value": "AngelPad",
+        "evidenceId": "check-name-6a3965bf4d"
+      }
+    ],
+    "examplePages": []
+  }
+}

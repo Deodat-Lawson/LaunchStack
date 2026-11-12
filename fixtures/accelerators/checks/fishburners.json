@@ -1,0 +1,48 @@
+{
+  "programId": "fishburners",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://fishburners.org/",
+    "https://fishburners.org/about-fishburners"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-3a9328ac5b",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — homepage checked by scrape.py",
+      "excerpt": "The Leading Startup Community in Australia FISHBURNERS FISHBURNERS FISHBURNERS How It Works About us Residency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2e661fda2b",
+      "url": "https://fishburners.org/about-fishburners",
+      "title": "Fishburners — details page checked by scrape.py",
+      "excerpt": "FISHBURNERS → https://fishburners.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://fishburners.org/",
+        "evidenceId": "check-route-2e661fda2b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Fishburners",
+        "evidenceId": "check-name-3a9328ac5b"
+      }
+    ],
+    "examplePages": []
+  }
+}

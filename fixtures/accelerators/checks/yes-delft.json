@@ -1,0 +1,114 @@
+{
+  "programId": "yes-delft",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://yesdelft.com/",
+    "https://yesdelft.com/support/",
+    "https://yesdelft.com/about/",
+    "https://yesdelft.com/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-944ed8d1a4",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page checked by scrape.py",
+      "excerpt": "place in our incubator in Delft. What are the costs for participating in the Validation program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the Validation Program? By participating in the Validation Program , you acquire the right skills,",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-aeb0ff69c6",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page checked by scrape.py",
+      "excerpt": "small success fee based on revenue milestones which is reinvested into the incubator. What are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either €1,000,000 in additional",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-dcdd0d5d33",
+      "url": "https://yesdelft.com/faq/",
+      "title": "YES!Delft — terms page checked by scrape.py",
+      "excerpt": "in or willing to relocate to the Netherlands. How much do the YES!Delft programs cost? The Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-ddbc05d848",
+      "url": "https://yesdelft.com/",
+      "title": "YES!Delft — homepage checked by scrape.py",
+      "excerpt": "YES!Delft | Tech Startup Incubator YES!Delft Search Menu Building",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56618b8a5b",
+      "url": "https://yesdelft.com/support/",
+      "title": "YES!Delft — application page checked by scrape.py",
+      "excerpt": "Apply → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8cf80a78c9",
+      "url": "https://yesdelft.com/",
+      "title": "YES!Delft — homepage checked by scrape.py",
+      "excerpt": "Apply → https://yesdelft.com/support/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9bb19f4a27",
+      "url": "https://yesdelft.com/support/",
+      "title": "YES!Delft — application page checked by scrape.py",
+      "excerpt": "Apply now → https://yes-delft.typeform.com/to/h6xUfXYv",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c5cdf5f4be",
+      "url": "https://yesdelft.com/",
+      "title": "YES!Delft — homepage checked by scrape.py",
+      "excerpt": "YES!Delft → https://yesdelft.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://yesdelft.com/support/",
+        "evidenceId": "check-route-8cf80a78c9"
+      },
+      {
+        "value": "https://yes-delft.typeform.com/to/h6xUfXYv",
+        "evidenceId": "check-route-56618b8a5b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://yesdelft.com/",
+        "evidenceId": "check-route-c5cdf5f4be"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "in or willing to relocate to the Netherlands. How much do the YES!Delft programs cost? The Incubator (Validation Program) has a participation contribution of €900 (excl. VAT) per team of two founders. The Accelerator has a participation fee of €3,500 (excl. VAT) per team, plus a €25,000 (excl. VAT) success fee that",
+        "evidenceId": "check-deal-dcdd0d5d33"
+      },
+      {
+        "value": "place in our incubator in Delft. What are the costs for participating in the Validation program? The Validation Program has a participation contribution of € 900,- (excl. VAT) per team of two founders. Why should I join the Validation Program? By participating in the Validation Program , you acquire the right skills,",
+        "evidenceId": "check-deal-944ed8d1a4"
+      },
+      {
+        "value": "small success fee based on revenue milestones which is reinvested into the incubator. What are the costs for joining the Accelerator? The participation fee is €3,500 excl. VAT per team. The Accelerator contract also includes a €25,000 excl. VAT success fee, payable once the company reaches either €1,000,000 in additional",
+        "evidenceId": "check-deal-aeb0ff69c6"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "YES!Delft",
+        "evidenceId": "check-name-ddbc05d848"
+      }
+    ],
+    "examplePages": []
+  }
+}

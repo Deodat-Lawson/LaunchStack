@@ -1,0 +1,156 @@
+{
+  "programId": "surge",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://surge.peakxv.com/",
+    "https://surge.peakxv.com/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-48c23485dd",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors.",
+      "page": "details"
+    },
+    {
+      "id": "check-email-01dc3e02bc",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page checked by scrape.py",
+      "excerpt": "your connection and try again. If it keeps failing, email contactus@peakxv.com and we'll take it from there. *Clearing your cache will",
+      "page": "application"
+    },
+    {
+      "id": "check-email-068fe17065",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"contactus@peakxv.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1e238b760f",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page checked by scrape.py",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "application"
+    },
+    {
+      "id": "check-email-84feeae319",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page checked by scrape.py",
+      "excerpt": "contactus@peakxv.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-a9d2a4c1dc",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Startups How we",
+      "page": "details"
+    },
+    {
+      "id": "check-email-eb90010f28",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-9043404b13",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "Surge by Peak XV | Seed Funding for Day-Zero Founders Startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-14c1e200c2",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "See our companies → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-339693f912",
+      "url": "https://surge.peakxv.com/apply",
+      "title": "Surge — application page checked by scrape.py",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b3327c2001",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "Startups → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c1485c09d0",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "See more → https://surge.peakxv.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-37fb0ab406",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "Apply → https://surge.peakxv.com/reach-out",
+      "page": "details"
+    },
+    {
+      "id": "check-route-92dde0a676",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — homepage checked by scrape.py",
+      "excerpt": "Apply → https://surge.peakxv.com/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "contactus@peakxv.com",
+        "evidenceId": "check-email-eb90010f28"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://surge.peakxv.com/apply",
+        "evidenceId": "check-route-92dde0a676"
+      },
+      {
+        "value": "https://surge.peakxv.com/reach-out",
+        "evidenceId": "check-route-37fb0ab406"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://surge.peakxv.com/apply",
+        "evidenceId": "check-route-92dde0a676"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter Score 17 + Nationalities in the founder community The Peak XV stack from day zero. $0.5M Meaningful capital at the earliest stage. We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors.",
+        "evidenceId": "check-deal-48c23485dd"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://surge.peakxv.com/companies",
+        "evidenceId": "check-portfolio-b3327c2001"
+      }
+    ],
+    "name": [
+      {
+        "value": "Surge",
+        "evidenceId": "check-name-9043404b13"
+      }
+    ],
+    "examplePages": []
+  }
+}

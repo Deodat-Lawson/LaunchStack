@@ -1,0 +1,54 @@
+{
+  "programId": "injini",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "page": "details",
+      "anchor": "About the EdTech Accelerator",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/about",
+      "page": "details",
+      "anchor": "About Injini",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/edtech-catalogue",
+      "page": "portfolio",
+      "anchor": "Our Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/s",
+      "page": "details",
+      "anchor": "South African EdTech Week 2026 | Insights Part 1 and 2 South African EdTech Week brought us closer to the voices and experiences of teachers, reminding us why they must remain cent",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/building-the-future-of-african-edtech-inside-injinis-ai-venture-builder",
+      "page": "details",
+      "anchor": "Building the Future of African EdTech: Inside Injini’s AI Ve An overview of Injini’s AI for Education Venture Builder (supported by Coefficient Giving), covering its structure, eli",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
+      "page": "terms",
+      "anchor": "What EdTech Founders Learn When Ideal Assumptions Meet Real- Testbeds across Kenya, South Africa, and Rwanda reveal why EdTech fails on real devices, and how native testing drives ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

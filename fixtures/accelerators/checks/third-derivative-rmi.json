@@ -1,0 +1,63 @@
+{
+  "programId": "third-derivative-rmi",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://rmi.org/third-derivative-2/",
+    "https://rmi.org/about/",
+    "https://rmi.org/get-updates/",
+    "https://rmi.org/rmi-applications/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-057a923302",
+      "url": "https://rmi.org/rmi-applications/",
+      "title": "RMI Third Derivative — application page checked by scrape.py",
+      "excerpt": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1bbe9b1991",
+      "url": "https://rmi.org/third-derivative-2/",
+      "title": "RMI Third Derivative — homepage checked by scrape.py",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e2110c945",
+      "url": "https://rmi.org/about/",
+      "title": "RMI Third Derivative — details page checked by scrape.py",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-792df7a82f",
+      "url": "https://rmi.org/get-updates/",
+      "title": "RMI Third Derivative — batches page checked by scrape.py",
+      "excerpt": "Tools and Applications → https://rmi.org/rmi-applications/",
+      "page": "batches"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://rmi.org/rmi-applications/",
+        "evidenceId": "check-route-1bbe9b1991"
+      },
+      {
+        "value": "https://rmi.org/get-involved/donate-to-rmi/?c_src=donate_popup&c_src2=rmi-applications",
+        "evidenceId": "check-route-057a923302"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

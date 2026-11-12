@@ -1,0 +1,166 @@
+{
+  "programId": "berkeley-skydeck",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://skydeck.berkeley.edu/",
+    "https://skydeck.berkeley.edu/apply/",
+    "https://skydeck.berkeley.edu/our_team/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-1e1196e2c8",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "Fund SkyDeck’s Dedicated Venture Fund The Berkeley SkyDeck Fund is the investment partner for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in later stage investment rounds with Berkeley founders. One of the most active seed",
+      "page": "details"
+    },
+    {
+      "id": "check-name-23d371f307",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "Berkeley SKYDECK Top Right corner APPLY NEWSLETTER INVESTORS COMPANIES",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-21e03e389a",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-25d1b7c581",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-291e4492ea",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-361ca93bfd",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "See all the companies → https://skydeck.berkeley.edu/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4018d0ed19",
+      "url": "https://skydeck.berkeley.edu/our_team/",
+      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5006a17dea",
+      "url": "https://skydeck.berkeley.edu/our_team/",
+      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5f6ec5548c",
+      "url": "https://skydeck.berkeley.edu/our_team/",
+      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8925a3a55b",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "excerpt": "Companies → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9eb5916370",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://skydeck.berkeley.edu/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f159f43277",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — application page checked by scrape.py",
+      "excerpt": "COMPANIES → https://skydeck.berkeley.edu/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2b80af7b0a",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "APPLY NOW → https://skydeck.berkeley.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-34c3dd4994",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4bc423873c",
+      "url": "https://skydeck.berkeley.edu/our_team/",
+      "title": "Berkeley SkyDeck — details page checked by scrape.py",
+      "excerpt": "APPLY → https://skydeck.berkeley.edu/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d046e8162b",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck — homepage checked by scrape.py",
+      "excerpt": "LEARN MORE → https://skydeck.berkeley.edu/apply/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://skydeck.berkeley.edu/apply/",
+        "evidenceId": "check-route-34c3dd4994"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://skydeck.berkeley.edu/apply/",
+        "evidenceId": "check-route-34c3dd4994"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Fund SkyDeck’s Dedicated Venture Fund The Berkeley SkyDeck Fund is the investment partner for UC Berkeley’s SkyDeck Accelerator Program. The Fund invests $200K into each startup that goes through SkyDeck, and can participate in later stage investment rounds with Berkeley founders. One of the most active seed",
+        "evidenceId": "check-deal-1e1196e2c8"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://skydeck.berkeley.edu/portfolio/",
+        "evidenceId": "check-portfolio-291e4492ea"
+      },
+      {
+        "value": "https://skydeck.berkeley.edu/portfolio",
+        "evidenceId": "check-portfolio-25d1b7c581"
+      }
+    ],
+    "name": [
+      {
+        "value": "Berkeley SkyDeck",
+        "evidenceId": "check-name-23d371f307"
+      }
+    ],
+    "examplePages": []
+  }
+}

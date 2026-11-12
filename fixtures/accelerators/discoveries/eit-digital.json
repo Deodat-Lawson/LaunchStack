@@ -1,0 +1,54 @@
+{
+  "programId": "eit-digital",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://28digital.eu/newsroom/news/2026/28digital-beyond-graduation-opening-the-door-to-erasmus-for-young-entrepreneurs/",
+      "page": "portfolio",
+      "anchor": "4 November 2026 28DIGITAL Beyond Graduation: Opening the Door to Erasmus for Young Entrepreneurs Europe's small and medium-sized enterprises (SMEs) make up over 99% of all companie",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://28digital.eu/our-community/about-us/",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://28digital.eu/alumni-startup-competition/",
+      "page": "portfolio",
+      "anchor": "Alumni Startup Competition",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://28digital.eu/equity-portfolio/",
+      "page": "portfolio",
+      "anchor": "Equity Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://28digital.eu/digital-innovation-entrepreneurship/",
+      "page": "details",
+      "anchor": "Tech - Startup and Scaleups Programmes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://28digital.eu/venture-incubation-program/",
+      "page": "details",
+      "anchor": "Venture Incubation Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

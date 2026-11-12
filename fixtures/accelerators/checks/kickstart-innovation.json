@@ -1,0 +1,81 @@
+{
+  "programId": "kickstart-innovation",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.kickstart-innovation.com/",
+    "http://kickstart-innovation.com/apply",
+    "https://www.kickstart-innovation.com/about-impact",
+    "https://www.kickstart-innovation.com/about-faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1f19971e0c",
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "excerpt": "hello@kickstart-innovation.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6156465a0f",
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "excerpt": "Still can't find what you're looking for? Get in touch. (hello@kickstart-innovation.com)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8ba3c7b503",
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "title": "Kickstart Innovation — terms page checked by scrape.py",
+      "excerpt": "Still can't find what you're looking for? Get in touch. hello@kickstart-innovation.com 01 / 04 Subscribe to our newsletter About us Brand",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-69fa6f27d6",
+      "url": "https://www.kickstart-innovation.com/",
+      "title": "Kickstart Innovation — homepage checked by scrape.py",
+      "excerpt": "Kickstart Innovation | innovation ecosystems with purpose | Switzerland top of",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5535d9b6a7",
+      "url": "https://www.kickstart-innovation.com/",
+      "title": "Kickstart Innovation — homepage checked by scrape.py",
+      "excerpt": "Apply as a startup → http://kickstart-innovation.com/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@kickstart-innovation.com",
+        "evidenceId": "check-email-6156465a0f"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "http://kickstart-innovation.com/apply",
+        "evidenceId": "check-route-5535d9b6a7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "http://kickstart-innovation.com/apply",
+        "evidenceId": "check-route-5535d9b6a7"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Kickstart Innovation",
+        "evidenceId": "check-name-69fa6f27d6"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "programId": "northzone",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://northzone.com/",
+    "https://northzone.com/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-37e100c9b1",
+      "url": "https://northzone.com/",
+      "title": "Northzone — homepage checked by scrape.py",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9713913c7d",
+      "url": "https://northzone.com/about",
+      "title": "Northzone — details page checked by scrape.py",
+      "excerpt": "Contact (hello@northzone.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-6186669f26",
+      "url": "https://northzone.com/",
+      "title": "Northzone — homepage checked by scrape.py",
+      "excerpt": "Northzone About Portfolio Team Platform Insights Blitzy Growth 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0be4659e1d",
+      "url": "https://northzone.com/",
+      "title": "Northzone — homepage checked by scrape.py",
+      "excerpt": "View all → https://northzone.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1f1f882421",
+      "url": "https://northzone.com/",
+      "title": "Northzone — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7bd150f066",
+      "url": "https://northzone.com/about",
+      "title": "Northzone — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://northzone.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0d637d9a71",
+      "url": "https://northzone.com/",
+      "title": "Northzone — homepage checked by scrape.py",
+      "excerpt": "https://northzone.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@northzone.com",
+        "evidenceId": "check-email-37e100c9b1"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://northzone.com/",
+        "evidenceId": "check-route-0d637d9a71"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://northzone.com/portfolio",
+        "evidenceId": "check-portfolio-1f1f882421"
+      }
+    ],
+    "name": [
+      {
+        "value": "Northzone",
+        "evidenceId": "check-name-6186669f26"
+      }
+    ],
+    "examplePages": []
+  }
+}

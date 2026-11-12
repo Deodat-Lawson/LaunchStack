@@ -1,0 +1,113 @@
+{
+  "programId": "nxtp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.nxtp.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-51df37f564",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "Newsletter Subscribe Buenos Aires Sao Paulo Mexico City info@nxtp.vc © YEAR NXTP. All rights reserved.",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5c2fdccfe8",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "Condesa Cuauhtémoc, 06100, CDMX México General inquiries info@nxtp.vc X - CLOSE Sao Paulo Alameda Vicente Pinzon, 54 Vila",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5cf9f68829",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "Cdad. Autónoma de Buenos Aires Argentina General inquiries info@nxtp.vc X - CLOSE Buenos Aires Sao Paulo Mexico City NXTP is Latin",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a98af0745e",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "info@nxtp.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d912d1668c",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "São Paulo - SP, 04547-130 Brazil General inquiries info@nxtp.vc ‍ X - CLOSE Argentina Sucre 1530, of. 404 C1428 Cdad.",
+      "page": "details"
+    },
+    {
+      "id": "check-name-a94adefc6e",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "NXTP | Pioneers of early-stage B2B technology investing in",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2f8fb52927",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "Our PORTFOLIO → https://www.nxtp.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-50e3ba24cf",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.nxtp.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69763c90e8",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "PORTFOLIO → https://www.nxtp.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-91caf68386",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — homepage checked by scrape.py",
+      "excerpt": "https://www.nxtp.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@nxtp.vc",
+        "evidenceId": "check-email-a98af0745e"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.nxtp.vc/",
+        "evidenceId": "check-route-91caf68386"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.nxtp.vc/portfolio",
+        "evidenceId": "check-portfolio-69763c90e8"
+      }
+    ],
+    "name": [
+      {
+        "value": "NXTP",
+        "evidenceId": "check-name-a94adefc6e"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "programId": "industrifonden",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://industrifonden.com/",
+    "https://industrifonden.com/our-story",
+    "https://industrifonden.com/faq-our-investment-process"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-173fc53d1d",
+      "url": "https://industrifonden.com/our-story",
+      "title": "Industrifonden — details page checked by scrape.py",
+      "excerpt": "reshaped their industries – and we exit when the company is ready, not when a fund term ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's lifecycle. We invest across four areas – life science, deep tech, software, and growth –",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0ce88091da",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden Iframe is blocked. Accept cookies to",
+      "page": "details"
+    },
+    {
+      "id": "check-email-64c40a9b77",
+      "url": "https://industrifonden.com/our-story",
+      "title": "Industrifonden — details page checked by scrape.py",
+      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
+      "page": "details"
+    },
+    {
+      "id": "check-email-a277021f96",
+      "url": "https://industrifonden.com/faq-our-investment-process",
+      "title": "Industrifonden — terms page checked by scrape.py",
+      "excerpt": "Sweden Get directions Phone: +46 8 587 919 00 E-mail: info@industrifonden.com ⓒ 2026 Industrifonden",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-79ffda7be7",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "Industrifonden – Sweden’s Venture Capital Fund Home Team Portfolio About",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-404975177e",
+      "url": "https://industrifonden.com/faq-our-investment-process",
+      "title": "Industrifonden — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://industrifonden.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6c1a167592",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://industrifonden.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-80c2294d1d",
+      "url": "https://industrifonden.com/our-story",
+      "title": "Industrifonden — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://industrifonden.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c327fce23c",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "OUR COMPANIES → https://industrifonden.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fd60ec85ed",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "SEE ALL PORTFOLIO COMPANIES → https://industrifonden.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7e24a00d39",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — homepage checked by scrape.py",
+      "excerpt": "https://industrifonden.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@industrifonden.com",
+        "evidenceId": "check-email-0ce88091da"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://industrifonden.com/",
+        "evidenceId": "check-route-7e24a00d39"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "reshaped their industries – and we exit when the company is ready, not when a fund term ends. We invest in early-stage companies. Our first ticket is often €1–5million, with capacity to invest considerably more over a company's lifecycle. We invest across four areas – life science, deep tech, software, and growth –",
+        "evidenceId": "check-deal-173fc53d1d"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://industrifonden.com/portfolio",
+        "evidenceId": "check-portfolio-6c1a167592"
+      }
+    ],
+    "name": [
+      {
+        "value": "Industrifonden",
+        "evidenceId": "check-name-79ffda7be7"
+      }
+    ],
+    "examplePages": []
+  }
+}

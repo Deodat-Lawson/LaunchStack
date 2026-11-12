@@ -3,9 +3,12 @@
 
   python3 fixtures/accelerators/collect.py --self-test
   python3 fixtures/accelerators/collect.py --discover a16z-speedrun
+  python3 fixtures/accelerators/collect.py --all
   python3 fixtures/accelerators/collect.py --discover a16z-speedrun \\
       --secondary https://example.com/gap --gap portfolio
 
+--self-test checks the page classifier locally and does not fetch those sample
+URLs. --discover reads one Program file. --all reads every file in programs/.
 A secondary URL is recorded only for a named gap. It is not copied into a claim.
 """
 
@@ -117,6 +120,19 @@ def self_test() -> None:
     print("self-test ok")
 
 
+def program_ids() -> list[str]:
+    ids: list[str] = []
+    for path in sorted(PROGRAMS.glob("*.json")):
+        program = json.loads(path.read_text())
+        program_id = path.stem
+        if program.get("id") != program_id:
+            raise SystemExit(f"{path} id does not match the filename")
+        ids.append(program_id)
+    if not ids:
+        raise SystemExit(f"No Program files in {PROGRAMS}")
+    return ids
+
+
 def discover(program_id: str, secondary: str | None, gap: str | None) -> None:
     path = PROGRAMS / f"{program_id}.json"
     program = json.loads(path.read_text())
@@ -221,14 +237,23 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--discover")
+    parser.add_argument("--all", action="store_true")
     parser.add_argument("--secondary")
     parser.add_argument("--gap")
     args = parser.parse_args()
     if args.self_test:
         self_test()
         return
+    if args.all:
+        if args.discover or args.secondary or args.gap:
+            raise SystemExit("--all reads every Program file and does not take one id or a secondary URL")
+        ids = program_ids()
+        for program_id in ids:
+            discover(program_id, None, None)
+        print(f"discovered {len(ids)} programs")
+        return
     if not args.discover:
-        raise SystemExit("Use --self-test or --discover <program-id>")
+        raise SystemExit("Use --self-test, --discover <program-id>, or --all")
     discover(args.discover, args.secondary, args.gap)
 
 

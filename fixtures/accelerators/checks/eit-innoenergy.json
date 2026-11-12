@@ -1,0 +1,145 @@
+{
+  "programId": "eit-innoenergy",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://innoenergy.com/",
+    "https://innoenergy.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-20917af7b5",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our portfolio in renewables → https://innoenergy.com/portfolio/?page=1&productsThematicFields=renewable-energies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2bc6e01b62",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our startups in energy for circular economy → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-circular-economy",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2d32353901",
+      "url": "https://innoenergy.com/",
+      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "excerpt": "Invest in and de-risk early-stage startups → https://innoenergy.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2e3956ef85",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our startups in energy storage → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-storage",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3257eabb40",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3b5988723c",
+      "url": "https://innoenergy.com/",
+      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4eafb9b1e5",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our startups in energy for transport and mobility → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-transport-and-mobility",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5a7dc5f05e",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our portfolio in smart grids → https://innoenergy.com/portfolio/?page=1&productsThematicFields=smart-electric-grid",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-65bd2f1e2f",
+      "url": "https://innoenergy.com/",
+      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "excerpt": "For Startups → https://innoenergy.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ad26bf65e2",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://innoenergy.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c8961c0dca",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our initiatives for decarbonising the industry → https://innoenergy.com/portfolio/?page=1&productsThematicFields=decarbonizing-industry",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fa5f2c0fce",
+      "url": "https://innoenergy.com/about-us/",
+      "title": "EIT InnoEnergy — details page checked by scrape.py",
+      "excerpt": "Learn more about our startups in energy efficiency → https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-efficiency",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b98a9d535e",
+      "url": "https://innoenergy.com/",
+      "title": "EIT InnoEnergy — homepage checked by scrape.py",
+      "excerpt": "https://innoenergy.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://innoenergy.com/",
+        "evidenceId": "check-route-b98a9d535e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://innoenergy.com/portfolio/",
+        "evidenceId": "check-portfolio-3b5988723c"
+      },
+      {
+        "value": "https://innoenergy.com/startups/",
+        "evidenceId": "check-portfolio-65bd2f1e2f"
+      },
+      {
+        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-storage",
+        "evidenceId": "check-portfolio-2e3956ef85"
+      },
+      {
+        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=energy-for-transport-and-mobility",
+        "evidenceId": "check-portfolio-4eafb9b1e5"
+      },
+      {
+        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=decarbonizing-industry",
+        "evidenceId": "check-portfolio-c8961c0dca"
+      },
+      {
+        "value": "https://innoenergy.com/portfolio/?page=1&productsThematicFields=smart-electric-grid",
+        "evidenceId": "check-portfolio-5a7dc5f05e"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

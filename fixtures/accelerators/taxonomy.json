@@ -1,82 +1,5243 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-09T22:40:59Z",
+  "checkedAt": "2026-11-12T00:42:42.000Z",
   "note": "A tag is present only where the named source quote supports it. Aliases are labels for the same tag, not extra claims. No tag is a company-fit score.",
   "tags": [
     {
       "id": "instrument.post-money-safe",
       "facet": "instrument",
       "label": "Post-money SAFE",
-      "aliases": ["post-money SAFE", "6% post-money SAFE"],
+      "aliases": [
+        "post-money SAFE",
+        "6% post-money SAFE"
+      ],
       "evidence": [
-        { "programId": "entrepreneurs-roundtable-accelerator", "sourceId": "apply" },
-        { "programId": "y-combinator", "sourceId": "yc-standard-deal" }
+        {
+          "programId": "entrepreneurs-roundtable-accelerator",
+          "sourceId": "apply"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-standard-deal"
+        }
       ]
     },
     {
       "id": "instrument.safe",
       "facet": "instrument",
       "label": "SAFE",
-      "aliases": ["SAFE"],
+      "aliases": [
+        "SAFE"
+      ],
       "evidence": [
-        { "programId": "a16z-speedrun", "sourceId": "sr-faq-terms" },
-        { "programId": "y-combinator", "sourceId": "yc-standard-deal" }
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-terms"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-standard-deal"
+        }
       ]
     },
     {
       "id": "instrument.mfn-safe",
       "facet": "instrument",
       "label": "MFN SAFE",
-      "aliases": ["uncapped SAFE with a Most Favored Nation"],
-      "evidence": [{ "programId": "y-combinator", "sourceId": "yc-standard-deal" }]
+      "aliases": [
+        "uncapped SAFE with a Most Favored Nation"
+      ],
+      "evidence": [
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-standard-deal"
+        }
+      ]
     },
     {
       "id": "instrument.equity-free-grant",
       "facet": "instrument",
       "label": "Equity-free grant",
-      "aliases": ["equity-free grant"],
-      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+      "aliases": [
+        "equity-free grant"
+      ],
+      "evidence": [
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        }
+      ]
     },
     {
       "id": "benefit.partner-credits",
       "facet": "benefit",
       "label": "Partner credits",
-      "aliases": ["credits", "cloud credits"],
+      "aliases": [
+        "credits",
+        "cloud credits"
+      ],
       "evidence": [
-        { "programId": "a16z-speedrun", "sourceId": "sr-faq-terms" },
-        { "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-terms"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        }
       ]
     },
     {
       "id": "stage.very-early",
       "facet": "stage",
       "label": "Very early",
-      "aliases": ["idea", "prototype"],
-      "evidence": [{ "programId": "a16z-speedrun", "sourceId": "sr-faq-stage" }]
+      "aliases": [
+        "idea",
+        "prototype"
+      ],
+      "evidence": [
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-stage"
+        }
+      ]
     },
     {
       "id": "stage.pre-company",
       "facet": "stage",
       "label": "Pre-company",
-      "aliases": ["ideating", "before a company is formed"],
-      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+      "aliases": [
+        "ideating",
+        "before a company is formed"
+      ],
+      "evidence": [
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        }
+      ]
     },
     {
       "id": "geography.san-francisco",
       "facet": "geography",
       "label": "San Francisco",
-      "aliases": ["SF"],
+      "aliases": [
+        "SF"
+      ],
       "evidence": [
-        { "programId": "a16z-speedrun", "sourceId": "sr-faq-overview" },
-        { "programId": "y-combinator", "sourceId": "yc-apply-cycle" }
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-overview"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-apply-cycle"
+        }
       ]
     },
     {
       "id": "geography.london-bangalore-san-francisco",
       "facet": "geography",
       "label": "London, Bangalore, and San Francisco",
-      "aliases": ["London", "Bangalore", "San Francisco"],
-      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+      "aliases": [
+        "London",
+        "Bangalore",
+        "San Francisco"
+      ],
+      "evidence": [
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        }
+      ]
+    },
+    {
+      "id": "program_type.accelerator",
+      "facet": "program_type",
+      "label": "Accelerator",
+      "aliases": [
+        "accelerator",
+        "accelerators",
+        "accelerator program",
+        "acceleration program",
+        "aceleradora",
+        "aceleradoras",
+        "aceleração",
+        "aceleración",
+        "accélérateur",
+        "acceleratore",
+        "Accelerator-Programm",
+        "액셀러레이터"
+      ],
+      "evidence": [
+        {
+          "programId": "500-global",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-program-faq"
+        },
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-program-overview"
+        },
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-program-pace"
+        },
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-public-form-questions"
+        },
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "accelerating-asia",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "alchemist",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "angelpad",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "appworks",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "brinc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "building-global-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "falak",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "flat6labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fledge",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "gener8tor",
+          "sourceId": "investment"
+        },
+        {
+          "programId": "google-for-startups",
+          "sourceId": "programs"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "injini",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "katapult",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launchvic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mit-delta-v",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsrcel",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "pioneer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sparklabs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startmate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-braga",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-chile",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sting",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stone-and-chalk",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-anywhere",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "accelerator-support"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "london-schedule"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator-startup-school",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "zone-startups",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.incubator",
+      "facet": "program_type",
+      "label": "Incubator",
+      "aliases": [
+        "incubator",
+        "incubators",
+        "incubation",
+        "incubadora",
+        "incubação",
+        "incubateur",
+        "incubatore",
+        "Inkubator",
+        "인큐베이터",
+        "인큐베이팅"
+      ],
+      "evidence": [
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-program-pace"
+        },
+        {
+          "programId": "agoranov",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "czechinvest",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "district3",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "esa-bic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fitt-iitd",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hubraum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsrcel",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-portugal",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "utrechtinc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "villgro-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wennovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.venture-studio",
+      "facet": "program_type",
+      "label": "Venture studio",
+      "aliases": [
+        "venture studio",
+        "startup studio",
+        "company builder",
+        "venture builder",
+        "venture building"
+      ],
+      "evidence": [
+        {
+          "programId": "building-global-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "carbon13",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "chalmers-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-health",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hightechxl",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launch-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "zinc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.residency",
+      "facet": "program_type",
+      "label": "Residency or fellowship",
+      "aliases": [
+        "residency",
+        "founders-in-residence",
+        "founder in residence",
+        "entrepreneur in residence",
+        "entrepreneurs in residence",
+        "fellowship",
+        "fellowships",
+        "StartX Fellows"
+      ],
+      "evidence": [
+        {
+          "programId": "500-global",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-apply-window"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-deadline"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-international"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-overview"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-residency-dates"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-stage"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-student"
+        },
+        {
+          "programId": "activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "afore-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "boost-vc",
+          "sourceId": "fellowship"
+        },
+        {
+          "programId": "chain-reaction",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "company-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "conception-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cyclotron-road",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "district3",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-apply-hub"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-bridge-page"
+        },
+        {
+          "programId": "fishburners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs-houston",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "harvard-innovation-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hax",
+          "sourceId": "program"
+        },
+        {
+          "programId": "hf0",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "on-deck",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.investor",
+      "facet": "program_type",
+      "label": "Venture investor",
+      "aliases": [
+        "venture capital",
+        "VC",
+        "venture firm",
+        "investment firm",
+        "seed fund",
+        "venture fund",
+        "seed funding",
+        "pre-seed fund",
+        "we invest",
+        "invests in",
+        "invests at inception"
+      ],
+      "evidence": [
+        {
+          "programId": "500-global",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-incorporation"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-overview"
+        },
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "accelerating-asia",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "alven",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-homepage"
+        },
+        {
+          "programId": "apx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "atomico",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "backstage-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bethnal-green-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "boost-vc",
+          "sourceId": "fellowship"
+        },
+        {
+          "programId": "boost-vc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "clean-energy-trust",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "company-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "contrary",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-innoenergy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "elemental-impact",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        },
+        {
+          "programId": "eqt-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "founders-factory",
+          "sourceId": "accelerator"
+        },
+        {
+          "programId": "golden-gate-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "htgf",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hustle-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "icebreaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "industrifonden",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "iterative",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "katapult",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launch-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lifeline-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lightspeed",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lightspeed-india",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lventure",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-hundred-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "openspace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "peak-xv",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "pear-vc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "playfair-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sginnovate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "surge",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-wildcatters",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-anywhere",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "the-house-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "urban-us",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-global",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "villgro-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-incorporation"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-standard-deal"
+        }
+      ]
+    },
+    {
+      "id": "program_type.corporate-innovation",
+      "facet": "program_type",
+      "label": "Corporate innovation",
+      "aliases": [
+        "open innovation",
+        "collaborative innovation",
+        "corporate innovation",
+        "corporate venture",
+        "corporate venturing",
+        "Para Corporações",
+        "for corporates",
+        "corporações e startups",
+        "corporations and startups"
+      ],
+      "evidence": [
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "beta-i",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "darwin-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-rawmaterials",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "free-electrons",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "impact-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kickstart-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "liga-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lventure",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-autobahn",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venturelab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.university",
+      "facet": "program_type",
+      "label": "University program",
+      "aliases": [
+        "university spinouts",
+        "university spin-outs",
+        "spinouts",
+        "spin-outs",
+        "student founders",
+        "student entrepreneurs",
+        "student startups",
+        "faculty",
+        "academic context",
+        "contexto académico",
+        "academics",
+        "Stanford founders"
+      ],
+      "evidence": [
+        {
+          "programId": "berkeley-skydeck",
+          "sourceId": "program"
+        },
+        {
+          "programId": "dorm-room-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "next-canada",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-braga",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "the-house-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ucl-business",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.government",
+      "facet": "program_type",
+      "label": "Government program",
+      "aliases": [
+        "government agency",
+        "government program",
+        "government-backed",
+        "government-funded",
+        "public agency",
+        "state agency",
+        "창업지원포털"
+      ],
+      "evidence": [
+        {
+          "programId": "k-startup",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.community",
+      "facet": "program_type",
+      "label": "Founder community",
+      "aliases": [
+        "community of technologists",
+        "founder community",
+        "founder-led community",
+        "community of founders",
+        "startup community",
+        "private global membership",
+        "innovation hub",
+        "startup hub",
+        "innovation centre",
+        "innovation center",
+        "Entrepreneurship Hub"
+      ],
+      "evidence": [
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-international"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fishburners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ideaspace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ihub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "on-deck",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "porter-shed",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "south-park-commons",
+          "sourceId": "residency"
+        },
+        {
+          "programId": "startup-health",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stone-and-chalk",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "usc-startup-garage",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "zone-startups",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.education",
+      "facet": "program_type",
+      "label": "Founder education",
+      "aliases": [
+        "Startup School",
+        "online course",
+        "training program",
+        "training programme",
+        "programa intensivo de formação",
+        "capacitações",
+        "bootcamp",
+        "boot camp"
+      ],
+      "evidence": [
+        {
+          "programId": "sebrae",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startmate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-braga",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator-startup-school",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.competition",
+      "facet": "program_type",
+      "label": "Competition or award",
+      "aliases": [
+        "pitch competition",
+        "startup competition",
+        "business plan competition",
+        "startup of the year",
+        "award",
+        "awards"
+      ],
+      "evidence": [
+        {
+          "programId": "eit-manufacturing",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "free-electrons",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "illumina-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lawrence-berkeley",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "microsoft-for-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsf-icorps",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "partech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-energy-transition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venturelab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "program_type.grant",
+      "facet": "program_type",
+      "label": "Grant program",
+      "aliases": [
+        "grant program",
+        "grants program",
+        "equity-free grants",
+        "grants"
+      ],
+      "evidence": [
+        {
+          "programId": "arch-grants",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launchvic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsf-icorps",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.fintech",
+      "facet": "sector",
+      "label": "Fintech",
+      "aliases": [
+        "fintech",
+        "financial technology",
+        "financial services"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "passion-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.health",
+      "facet": "sector",
+      "label": "Health",
+      "aliases": [
+        "healthtech",
+        "health tech",
+        "digital health",
+        "healthcare",
+        "medtech",
+        "medical technology",
+        "medical devices"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "district3",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dorm-room-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-health",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "galen-growth",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "general-catalyst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "social-alpha",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "apply"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "villgro-africa",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.life-sciences",
+      "facet": "sector",
+      "label": "Life sciences",
+      "aliases": [
+        "life sciences",
+        "biotech",
+        "biotechnology",
+        "biopharma",
+        "therapeutics"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "conception-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "district3",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "german-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "htgf",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "industrifonden",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsf-icorps",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.climate",
+      "facet": "sector",
+      "label": "Climate",
+      "aliases": [
+        "climate",
+        "climate tech",
+        "climatetech",
+        "cleantech",
+        "clean tech",
+        "decarbonization",
+        "decarbonisation",
+        "net zero",
+        "net-zero"
+      ],
+      "evidence": [
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "carbon13",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cchub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "clean-energy-trust",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-kic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-kic-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-launchpad",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "congruent-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-innoenergy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-manufacturing",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "elemental-impact",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs-houston",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "harvard-innovation-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hub71",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "newlab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "prime-coalition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-energy-transition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sting",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stone-and-chalk",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-capital",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.energy",
+      "facet": "sector",
+      "label": "Energy",
+      "aliases": [
+        "renewable energy",
+        "clean energy",
+        "energy transition",
+        "energy storage",
+        "hydrogen",
+        "solar",
+        "oil and gas",
+        "hidrógeno",
+        "Hidrógeno Verde",
+        "energy startup",
+        "energy startups"
+      ],
+      "evidence": [
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bp-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "breakthrough-energy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cchub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "corfo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-innoenergy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "free-electrons",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "free-electrons-program",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lawrence-berkeley",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "social-alpha",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-energy-transition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "urban-us",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.education",
+      "facet": "sector",
+      "label": "Education",
+      "aliases": [
+        "edtech",
+        "education technology",
+        "EdTech"
+      ],
+      "evidence": [
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "injini",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.agrifood",
+      "facet": "sector",
+      "label": "Agriculture and food",
+      "aliases": [
+        "agtech",
+        "agritech",
+        "agrifood",
+        "agri-food",
+        "foodtech",
+        "food tech",
+        "agriculture"
+      ],
+      "evidence": [
+        {
+          "programId": "breakthrough-energy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "elemental-impact",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.mobility",
+      "facet": "sector",
+      "label": "Mobility",
+      "aliases": [
+        "mobility",
+        "transportation",
+        "automotive"
+      ],
+      "evidence": [
+        {
+          "programId": "breakthrough-energy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "building-global-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-manufacturing",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "elemental-impact",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "newlab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsrcel",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-capital",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.aerospace",
+      "facet": "sector",
+      "label": "Aerospace and space",
+      "aliases": [
+        "aerospace",
+        "space tech",
+        "spacetech",
+        "space industry",
+        "aviation"
+      ],
+      "evidence": [
+        {
+          "programId": "capital-factory",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eqt-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "esa-bic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seraphim-space",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "space-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.defense",
+      "facet": "sector",
+      "label": "Defense",
+      "aliases": [
+        "defense",
+        "defence",
+        "dual-use",
+        "national security"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "communitech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.cybersecurity",
+      "facet": "sector",
+      "label": "Cybersecurity",
+      "aliases": [
+        "cybersecurity",
+        "cyber security"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dreamit",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "energy-impact-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hubraum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nus-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "partech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.web3",
+      "facet": "sector",
+      "label": "Web3 and crypto",
+      "aliases": [
+        "web3",
+        "crypto",
+        "cryptocurrency",
+        "DeFi"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.property",
+      "facet": "sector",
+      "label": "Property and construction",
+      "aliases": [
+        "proptech",
+        "real estate",
+        "construction tech",
+        "contech"
+      ],
+      "evidence": [
+        {
+          "programId": "apx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "flat6labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ucla-anderson",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.insurance",
+      "facet": "sector",
+      "label": "Insurance",
+      "aliases": [
+        "insurtech",
+        "insurance"
+      ],
+      "evidence": [
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "passion-capital",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.govtech",
+      "facet": "sector",
+      "label": "Government technology",
+      "aliases": [
+        "govtech",
+        "civic tech"
+      ],
+      "evidence": [
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.manufacturing",
+      "facet": "sector",
+      "label": "Manufacturing",
+      "aliases": [
+        "manufacturing",
+        "industry 4.0",
+        "advanced manufacturing"
+      ],
+      "evidence": [
+        {
+          "programId": "breakthrough-energy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "czechinvest",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-manufacturing",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "apply"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.commerce",
+      "facet": "sector",
+      "label": "Retail and commerce",
+      "aliases": [
+        "e-commerce",
+        "ecommerce",
+        "retail"
+      ],
+      "evidence": [
+        {
+          "programId": "kickstart-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.media",
+      "facet": "sector",
+      "label": "Media and gaming",
+      "aliases": [
+        "gaming",
+        "entertainment",
+        "creator economy"
+      ],
+      "evidence": [
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lightspeed-india",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.logistics",
+      "facet": "sector",
+      "label": "Logistics",
+      "aliases": [
+        "logistics",
+        "supply chain"
+      ],
+      "evidence": [
+        {
+          "programId": "aws-activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.social-impact",
+      "facet": "sector",
+      "label": "Social impact",
+      "aliases": [
+        "social impact",
+        "social enterprise",
+        "social enterprises",
+        "impact-driven",
+        "impact startups"
+      ],
+      "evidence": [
+        {
+          "programId": "chalmers-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "harvard-innovation-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "villgro",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "sector.deep-tech",
+      "facet": "sector",
+      "label": "Deep tech",
+      "aliases": [
+        "deep tech",
+        "deeptech",
+        "deep-tech",
+        "hard tech",
+        "hardtech",
+        "Tough Tech"
+      ],
+      "evidence": [
+        {
+          "programId": "activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "boost-vc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-factory",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "chalmers-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "conception-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-digital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-health",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "epfl-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hax",
+          "sourceId": "program"
+        },
+        {
+          "programId": "hightechxl",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "htgf",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nus-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sginnovate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "social-alpha",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "apply"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "the-engine",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "technology.ai",
+      "facet": "technology",
+      "label": "Artificial intelligence",
+      "aliases": [
+        "AI",
+        "artificial intelligence",
+        "generative AI",
+        "GenAI",
+        "machine learning",
+        "LLM",
+        "LLMs",
+        "AI-native",
+        "AI-first"
+      ],
+      "evidence": [
+        {
+          "programId": "accel-atoms",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "accelerating-asia",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "alven",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "atomico",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "aws-activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "betaworks",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "brightlands",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "company-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "conception-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "connect-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cyclotron-road",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "design-terminal",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "distrito",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dorm-room-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eqt-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "factory-berlin",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "first-round",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "free-electrons-program",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "general-catalyst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "golden-gate-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "google-for-startups",
+          "sourceId": "programs"
+        },
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greylock",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hubraum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hustle-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "icebreaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "illumina-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "index-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "industrifonden",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "injini",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "microsoft-for-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "next-canada",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nexus-venture-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "partech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "passion-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "pear-vc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ref-studio",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rev1-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sequoia",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sheraa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stone-and-chalk",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-anywhere",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-global",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "technology.robotics",
+      "facet": "technology",
+      "label": "Robotics",
+      "aliases": [
+        "robotics",
+        "drones",
+        "autonomous systems"
+      ],
+      "evidence": [
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dorm-room-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-anywhere",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "technology.hardware",
+      "facet": "technology",
+      "label": "Hardware",
+      "aliases": [
+        "hardware",
+        "IoT",
+        "Internet of Things",
+        "semiconductors",
+        "semiconductor",
+        "electronics"
+      ],
+      "evidence": [
+        {
+          "programId": "dorm-room-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "imec-istart",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "index-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "samsung-next",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "technology.quantum",
+      "facet": "technology",
+      "label": "Quantum",
+      "aliases": [
+        "quantum"
+      ],
+      "evidence": [
+        {
+          "programId": "lawrence-berkeley",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsf-icorps",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-global",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "business_model.b2b",
+      "facet": "business_model",
+      "label": "B2B",
+      "aliases": [
+        "B2B",
+        "business-to-business"
+      ],
+      "evidence": [
+        {
+          "programId": "alchemist",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nxtp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "business_model.b2c",
+      "facet": "business_model",
+      "label": "B2C",
+      "aliases": [
+        "B2C",
+        "D2C",
+        "DTC",
+        "direct-to-consumer",
+        "business-to-consumer"
+      ],
+      "evidence": [
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "business_model.saas",
+      "facet": "business_model",
+      "label": "SaaS",
+      "aliases": [
+        "SaaS",
+        "software-as-a-service"
+      ],
+      "evidence": [
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "three-one-four",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "vertex-ventures",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "business_model.marketplace",
+      "facet": "business_model",
+      "label": "Marketplace",
+      "aliases": [
+        "marketplace",
+        "marketplaces"
+      ],
+      "evidence": [
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-terms"
+        },
+        {
+          "programId": "aws-activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bessemer",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lawrence-berkeley",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "microsoft-for-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "customer_type.enterprise",
+      "facet": "customer_type",
+      "label": "Enterprise",
+      "aliases": [
+        "enterprise customers",
+        "enterprise software",
+        "corporates",
+        "corporate partners",
+        "Fortune 500"
+      ],
+      "evidence": [
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "brinc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "clean-energy-trust",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-kic-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "energy-impact-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "epfl-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "founders-factory",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "impact-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "industrifonden",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "rainmaking",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sheraa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-autobahn",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-energy-transition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venturelab",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "customer_type.smb",
+      "facet": "customer_type",
+      "label": "Small businesses",
+      "aliases": [
+        "SMEs",
+        "SMBs",
+        "small businesses",
+        "small and medium-sized"
+      ],
+      "evidence": [
+        {
+          "programId": "aws-activate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "enterprise-ireland",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "esa-bic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "flat6labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "passion-capital",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "customer_type.consumer",
+      "facet": "customer_type",
+      "label": "Consumers",
+      "aliases": [
+        "consumer products",
+        "consumer brands",
+        "consumer tech",
+        "consumer startups"
+      ],
+      "evidence": [
+        {
+          "programId": "capital-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "customer_type.government",
+      "facet": "customer_type",
+      "label": "Government",
+      "aliases": [
+        "government agencies",
+        "public sector",
+        "public-sector"
+      ],
+      "evidence": [
+        {
+          "programId": "climate-kic-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fitt-iitd",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "how-to-web",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "impact-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "zinc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "stage.pre-seed",
+      "facet": "stage",
+      "label": "Pre-seed",
+      "aliases": [
+        "pre-seed",
+        "pre seed",
+        "preseed"
+      ],
+      "evidence": [
+        {
+          "programId": "accel-atoms",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-public-form"
+        },
+        {
+          "programId": "apx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "boost-vc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "connect-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "floodgate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "founders-factory",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hax",
+          "sourceId": "program"
+        },
+        {
+          "programId": "htgf",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hustle-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lifeline-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nexus-venture-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "playfair-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sequoia-arc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "stage.seed",
+      "facet": "stage",
+      "label": "Seed",
+      "aliases": [
+        "seed-stage",
+        "seed stage",
+        "seed round"
+      ],
+      "evidence": [
+        {
+          "programId": "angelpad",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "creative-destruction-lab",
+          "sourceId": "program"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lifeline-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sequoia-arc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "stage.early",
+      "facet": "stage",
+      "label": "Early stage",
+      "aliases": [
+        "early-stage",
+        "early stage",
+        "earliest stage"
+      ],
+      "evidence": [
+        {
+          "programId": "500-global",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-raised"
+        },
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-program-routes"
+        },
+        {
+          "programId": "accelerating-asia",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-homepage"
+        },
+        {
+          "programId": "appworks",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bethnal-green-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-factory",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "company-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "congruent-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "creative-destruction-lab",
+          "sourceId": "program"
+        },
+        {
+          "programId": "dreamit",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-innoenergy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "enterprise-ireland",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eqt-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "golden-gate-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs-houston",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ihub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launch-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lifeline-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lventure",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "masschallenge",
+          "sourceId": "accelerators"
+        },
+        {
+          "programId": "nxtp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-hundred-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "prime-coalition",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ref-studio",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sequoia-arc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sheraa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sting",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "accelerator-support"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "london-overview"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "three-one-four",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "urban-us",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "vertex-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "village-global",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wennovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-faq-stage"
+        }
+      ]
+    },
+    {
+      "id": "stage.idea",
+      "facet": "stage",
+      "label": "Idea stage",
+      "aliases": [
+        "idea stage",
+        "idea-stage",
+        "ideation",
+        "pre-idea"
+      ],
+      "evidence": [
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-public-form-questions"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "utrechtinc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "stage.growth",
+      "facet": "stage",
+      "label": "Growth stage",
+      "aliases": [
+        "growth-stage",
+        "growth stage",
+        "scaleup",
+        "scale-up",
+        "scaleups",
+        "scale-ups"
+      ],
+      "evidence": [
+        {
+          "programId": "abovea-startup-accelerator",
+          "sourceId": "abovea-public-form-questions"
+        },
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-public-form"
+        },
+        {
+          "programId": "appworks",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-digital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "google-for-startups",
+          "sourceId": "programs"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "la-french-tech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launchvic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eight-seven-one",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "openspace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "setsquared",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-bahrain",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "stage.pre-revenue",
+      "facet": "stage",
+      "label": "Pre-revenue",
+      "aliases": [
+        "pre-revenue"
+      ],
+      "evidence": [
+        {
+          "programId": "sequoia-arc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-faq-stage"
+        }
+      ]
+    },
+    {
+      "id": "instrument.non-dilutive",
+      "facet": "instrument",
+      "label": "Non-dilutive funding",
+      "aliases": [
+        "non-dilutive",
+        "equity-free",
+        "grant funding"
+      ],
+      "evidence": [
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "newlab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "on-deck",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-chile",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "benefit.mentorship",
+      "facet": "benefit",
+      "label": "Mentorship",
+      "aliases": [
+        "mentorship",
+        "mentoring",
+        "mentors"
+      ],
+      "evidence": [
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "alchemist",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "appworks",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "capital-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "chalmers-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-launchpad",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "creative-destruction-lab",
+          "sourceId": "program"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fishburners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fitt-iitd",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "fledge",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "gener8tor",
+          "sourceId": "investment"
+        },
+        {
+          "programId": "imperial-enterprise",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "lventure",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "masschallenge",
+          "sourceId": "accelerators"
+        },
+        {
+          "programId": "mit-delta-v",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "next-canada",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-hundred-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sheraa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "starburst",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startmate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startupbootcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tech-wildcatters",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "accelerator-support"
+        },
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "tenity",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "utrechtinc",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wennovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "z-fellows",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "zone-startups",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "benefit.workspace",
+      "facet": "benefit",
+      "label": "Workspace",
+      "aliases": [
+        "office space",
+        "co-working",
+        "coworking",
+        "desk space"
+      ],
+      "evidence": [
+        {
+          "programId": "communitech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        },
+        {
+          "programId": "falak",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ideaspace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launchvic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "benefit.lab-space",
+      "facet": "benefit",
+      "label": "Lab and prototyping space",
+      "aliases": [
+        "lab space",
+        "wet lab",
+        "laboratory space",
+        "prototyping"
+      ],
+      "evidence": [
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mhub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "benefit.demo-day",
+      "facet": "benefit",
+      "label": "Demo Day",
+      "aliases": [
+        "demo day"
+      ],
+      "evidence": [
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-overview"
+        },
+        {
+          "programId": "a16z-speedrun",
+          "sourceId": "sr-faq-residency-dates"
+        },
+        {
+          "programId": "berkeley-skydeck",
+          "sourceId": "program"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage"
+        },
+        {
+          "programId": "hf0",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "iterative",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "london-schedule"
+        }
+      ]
+    },
+    {
+      "id": "benefit.investor-access",
+      "facet": "benefit",
+      "label": "Investor access",
+      "aliases": [
+        "investor network",
+        "investor access",
+        "access to investors",
+        "investor introductions"
+      ],
+      "evidence": [
+        {
+          "programId": "alchemist",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "esa-bic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "greentown-labs",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.united-states",
+      "facet": "geography",
+      "label": "United States",
+      "aliases": [
+        "United States",
+        "USA",
+        "Washington DC",
+        "Washington, DC",
+        "Philadelphia"
+      ],
+      "evidence": [
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "founder-institute",
+          "sourceId": "dc-program"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nsf-icorps",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nxtp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seraphim-space",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.new-york",
+      "facet": "geography",
+      "label": "New York",
+      "aliases": [
+        "New York",
+        "NYC"
+      ],
+      "evidence": [
+        {
+          "programId": "angelpad",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        }
+      ]
+    },
+    {
+      "id": "geography.bay-area",
+      "facet": "geography",
+      "label": "San Francisco Bay Area",
+      "aliases": [
+        "Bay Area",
+        "Silicon Valley"
+      ],
+      "evidence": [
+        {
+          "programId": "500-global",
+          "sourceId": "flagship"
+        },
+        {
+          "programId": "alchemist",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-bridge-page"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nexus-venture-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "apply"
+        },
+        {
+          "programId": "vertex-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "z-fellows",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.boston",
+      "facet": "geography",
+      "label": "Boston",
+      "aliases": [
+        "Boston"
+      ],
+      "evidence": [
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.los-angeles",
+      "facet": "geography",
+      "label": "Los Angeles",
+      "aliases": [
+        "Los Angeles"
+      ],
+      "evidence": [
+        {
+          "programId": "techstars-usc",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.chicago",
+      "facet": "geography",
+      "label": "Chicago",
+      "aliases": [
+        "Chicago"
+      ],
+      "evidence": [
+        {
+          "programId": "techstars-chicago",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.canada",
+      "facet": "geography",
+      "label": "Canada",
+      "aliases": [
+        "Canada",
+        "Toronto",
+        "Waterloo",
+        "Montreal",
+        "Vancouver"
+      ],
+      "evidence": [
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "communitech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "district3",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dmz",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mars-discovery",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "next-canada",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eleven",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-incorporation"
+        }
+      ]
+    },
+    {
+      "id": "geography.united-kingdom",
+      "facet": "geography",
+      "label": "United Kingdom",
+      "aliases": [
+        "United Kingdom",
+        "UK"
+      ],
+      "evidence": [
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "playfair-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seraphim-space",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.london",
+      "facet": "geography",
+      "label": "London",
+      "aliases": [
+        "London"
+      ],
+      "evidence": [
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-apply-hub"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        },
+        {
+          "programId": "free-electrons-program",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "playfair-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "techstars-london",
+          "sourceId": "london-overview"
+        }
+      ]
+    },
+    {
+      "id": "geography.europe",
+      "facet": "geography",
+      "label": "Europe",
+      "aliases": [
+        "Europe",
+        "European"
+      ],
+      "evidence": [
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "alven",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "apx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "atomico",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "bethnal-green-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-kic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "climate-kic-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "conception-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "czechinvest",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-digital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-health",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-innoenergy",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-manufacturing",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-rawmaterials",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-urban-mobility",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-bridge-page"
+        },
+        {
+          "programId": "epfl-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eqt-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "esa-bic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "esa-space-solutions",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "german-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hightechxl",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "how-to-web",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "htgf",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kickstart-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "localglobe",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "partech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "passion-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "playfair-capital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "station-f",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "unternehmertum",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.france",
+      "facet": "geography",
+      "label": "France",
+      "aliases": [
+        "France",
+        "Paris"
+      ],
+      "evidence": [
+        {
+          "programId": "agoranov",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "la-french-tech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-eleven",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "partech",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.germany",
+      "facet": "geography",
+      "label": "Germany",
+      "aliases": [
+        "Germany",
+        "Berlin",
+        "Munich"
+      ],
+      "evidence": [
+        {
+          "programId": "apx",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "factory-berlin",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.netherlands",
+      "facet": "geography",
+      "label": "Netherlands",
+      "aliases": [
+        "Netherlands",
+        "Amsterdam",
+        "Delft"
+      ],
+      "evidence": [
+        {
+          "programId": "hightechxl",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "yes-delft",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.ireland",
+      "facet": "geography",
+      "label": "Ireland",
+      "aliases": [
+        "Ireland",
+        "Dublin"
+      ],
+      "evidence": [
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "eit-digital",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "enterprise-ireland",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        }
+      ]
+    },
+    {
+      "id": "geography.nordics",
+      "facet": "geography",
+      "label": "Nordics",
+      "aliases": [
+        "Nordic",
+        "Nordics",
+        "Sweden",
+        "Stockholm",
+        "Denmark",
+        "Copenhagen",
+        "Finland",
+        "Helsinki",
+        "Norway",
+        "Oslo"
+      ],
+      "evidence": [
+        {
+          "programId": "accelerace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "balderton",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "chalmers-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "copenhagen-fintech",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "icebreaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "industrifonden",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "katapult",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "mesh",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "northzone",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startuplab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sting",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.iberia",
+      "facet": "geography",
+      "label": "Spain and Portugal",
+      "aliases": [
+        "Spain",
+        "Barcelona",
+        "Madrid",
+        "Portugal",
+        "Lisbon"
+      ],
+      "evidence": [
+        {
+          "programId": "building-global-innovators",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-portugal",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.switzerland",
+      "facet": "geography",
+      "label": "Switzerland",
+      "aliases": [
+        "Switzerland",
+        "Zurich",
+        "Geneva",
+        "Lausanne"
+      ],
+      "evidence": [
+        {
+          "programId": "eth-entrepreneurship",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kickstart-innovation",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venturelab",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.central-eastern-europe",
+      "facet": "geography",
+      "label": "Central and Eastern Europe",
+      "aliases": [
+        "Central and Eastern Europe",
+        "CEE",
+        "Estonia",
+        "Poland",
+        "Hungary",
+        "Budapest",
+        "Czech Republic",
+        "Romania"
+      ],
+      "evidence": [
+        {
+          "programId": "climate-kic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "czechinvest",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "how-to-web",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "icebreaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedcamp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-wise-guys",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.israel",
+      "facet": "geography",
+      "label": "Israel",
+      "aliases": [
+        "Israel",
+        "Tel Aviv"
+      ],
+      "evidence": [
+        {
+          "programId": "insight-partners",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.middle-east",
+      "facet": "geography",
+      "label": "Middle East and North Africa",
+      "aliases": [
+        "Middle East",
+        "MENA",
+        "UAE",
+        "Dubai",
+        "Abu Dhabi",
+        "Saudi Arabia",
+        "Riyadh",
+        "Qatar",
+        "Doha",
+        "Egypt",
+        "Cairo",
+        "Bahrain"
+      ],
+      "evidence": [
+        {
+          "programId": "astrolabs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "flat6labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "flat6labs-bahrain",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "golden-gate-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hub71",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "newlab",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sheraa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-bahrain",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.africa",
+      "facet": "geography",
+      "label": "Africa",
+      "aliases": [
+        "Africa",
+        "African",
+        "Nigeria",
+        "Lagos",
+        "Kenya",
+        "Nairobi",
+        "South Africa",
+        "Ghana",
+        "Rwanda"
+      ],
+      "evidence": [
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "catalyst-fund",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "cchub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "dogpatch-labs",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "ihub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "injini",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "launch-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "norrsken22",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "seedstars",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "villgro-africa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wennovation",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.india",
+      "facet": "geography",
+      "label": "India",
+      "aliases": [
+        "India",
+        "Bangalore",
+        "Bengaluru",
+        "Hyderabad",
+        "Mumbai",
+        "Delhi"
+      ],
+      "evidence": [
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-apply-hub"
+        },
+        {
+          "programId": "entrepreneurs-first",
+          "sourceId": "ef-homepage-investment"
+        },
+        {
+          "programId": "fitt-iitd",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "kalaari",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "one-hundred-x",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        },
+        {
+          "programId": "stellaris-vp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "t-hub",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "three-one-four",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "venture-center",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.southeast-asia",
+      "facet": "geography",
+      "label": "Southeast Asia",
+      "aliases": [
+        "Southeast Asia",
+        "Singapore",
+        "Indonesia",
+        "Vietnam",
+        "Philippines",
+        "Malaysia",
+        "Thailand"
+      ],
+      "evidence": [
+        {
+          "programId": "golden-gate-ventures",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "gsf-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "openspace",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "peak-xv",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sginnovate",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wavemaker",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "y-combinator",
+          "sourceId": "yc-incorporation"
+        }
+      ]
+    },
+    {
+      "id": "geography.east-asia",
+      "facet": "geography",
+      "label": "East Asia",
+      "aliases": [
+        "China",
+        "Hong Kong",
+        "Taiwan",
+        "Taipei",
+        "Japan",
+        "Tokyo",
+        "Korea",
+        "Seoul"
+      ],
+      "evidence": [
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "cic",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "hkstp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv",
+          "sourceId": "about"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "third-derivative-rmi",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.oceania",
+      "facet": "geography",
+      "label": "Australia and New Zealand",
+      "aliases": [
+        "Australia",
+        "Sydney",
+        "Melbourne",
+        "New Zealand"
+      ],
+      "evidence": [
+        {
+          "programId": "antler",
+          "sourceId": "antler-cohort-dates"
+        },
+        {
+          "programId": "fishburners",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "murud",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "new-energy-nexus-usa",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "stone-and-chalk",
+          "sourceId": "homepage"
+        }
+      ]
+    },
+    {
+      "id": "geography.latin-america",
+      "facet": "geography",
+      "label": "Latin America",
+      "aliases": [
+        "Latin America",
+        "LatAm",
+        "Brazil",
+        "São Paulo",
+        "Mexico",
+        "Chile",
+        "Colombia",
+        "Argentina",
+        "Puerto Rico"
+      ],
+      "evidence": [
+        {
+          "programId": "cubo",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "german-accelerator",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "nxtp",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "orbit-startups",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "parallel18",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "sosv-ny",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "startup-chile",
+          "sourceId": "homepage"
+        },
+        {
+          "programId": "wayra",
+          "sourceId": "homepage"
+        }
+      ]
     }
   ]
 }

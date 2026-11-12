@@ -1,0 +1,47 @@
+{
+  "programId": "appworks",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://appworks.tw/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-1eccb79e89",
+      "url": "https://appworks.tw/",
+      "title": "AppWorks — homepage checked by scrape.py",
+      "excerpt": "Home - AppWorks 之初加速器 Toggle navigation Home Accelerator Investments",
+      "page": "details"
+    },
+    {
+      "id": "check-route-87be634d80",
+      "url": "https://appworks.tw/",
+      "title": "AppWorks — homepage checked by scrape.py",
+      "excerpt": "https://appworks.tw/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://appworks.tw/",
+        "evidenceId": "check-route-87be634d80"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "AppWorks",
+        "evidenceId": "check-name-1eccb79e89"
+      }
+    ],
+    "examplePages": []
+  }
+}

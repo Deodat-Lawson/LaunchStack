@@ -1,0 +1,98 @@
+{
+  "programId": "afore-capital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.afore.vc/",
+    "https://www.afore.vc/residence"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-bb84dd6600",
+      "url": "https://www.afore.vc/",
+      "title": "Afore Capital — homepage checked by scrape.py",
+      "excerpt": "raise later. Have an idea but not sure if it’s VC-ready? CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We don’t focus on what can go wrong. We look for what can go",
+      "page": "details"
+    },
+    {
+      "id": "check-name-fbdc203181",
+      "url": "https://www.afore.vc/",
+      "title": "Afore Capital — homepage checked by scrape.py",
+      "excerpt": "Afore Capital Portfolio Founders-In-Residence FIR University Investing",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2fa9a90079",
+      "url": "https://www.afore.vc/",
+      "title": "Afore Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.afore.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-08bbaf7957",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — details page checked by scrape.py",
+      "excerpt": "Apply now for Founders-in-residence → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2cca24c32f",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9403c88f96",
+      "url": "https://www.afore.vc/residence",
+      "title": "Afore Capital — details page checked by scrape.py",
+      "excerpt": "Apply now → https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c5780faeba",
+      "url": "https://www.afore.vc/",
+      "title": "Afore Capital — homepage checked by scrape.py",
+      "excerpt": "https://www.afore.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/apprAAsE4JhFBd8nL/pagGsh6fhh1fzZv6t/form",
+        "evidenceId": "check-route-2cca24c32f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.afore.vc/",
+        "evidenceId": "check-route-c5780faeba"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "raise later. Have an idea but not sure if it’s VC-ready? CHECK OUT OUR FOUNDERS-IN-RESIDENCE PROGRAM Learn more We don’t just say we invest Pre-Seed. We’re a $500M fund investing $500k - $2M+ with high conviction in pre-traction, pre-everything companies! We don’t focus on what can go wrong. We look for what can go",
+        "evidenceId": "check-deal-bb84dd6600"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.afore.vc/portfolio",
+        "evidenceId": "check-portfolio-2fa9a90079"
+      }
+    ],
+    "name": [
+      {
+        "value": "Afore Capital",
+        "evidenceId": "check-name-fbdc203181"
+      }
+    ],
+    "examplePages": []
+  }
+}

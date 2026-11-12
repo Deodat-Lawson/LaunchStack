@@ -1,0 +1,62 @@
+{
+  "programId": "unternehmertum",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://www.unternehmertum.de/en/offering/companies/",
+      "page": "portfolio",
+      "anchor": "Companies icons / arrow-right icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/facts-figures/",
+      "page": "details",
+      "anchor": "Facts & Figures icons / arrow-right",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/locations/",
+      "page": "details",
+      "anchor": "Locations icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/careers/",
+      "page": "details",
+      "anchor": "Careers icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/press/",
+      "page": "details",
+      "anchor": "Press icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/network/",
+      "page": "details",
+      "anchor": "Network icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.unternehmertum.de/en/about/",
+      "page": "details",
+      "anchor": "About icons / arrow-right",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

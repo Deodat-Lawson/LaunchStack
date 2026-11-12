@@ -1,0 +1,14 @@
+{
+  "programId": "energy-impact-partners",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.energyimpactpartners.com/_portfolio/",
+      "page": "portfolio",
+      "anchor": "portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

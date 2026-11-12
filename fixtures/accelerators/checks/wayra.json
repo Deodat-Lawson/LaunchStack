@@ -1,0 +1,48 @@
+{
+  "programId": "wayra",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://wayra.com/",
+    "https://wayra.com/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-e810a277ab",
+      "url": "https://wayra.com/",
+      "title": "Wayra — homepage checked by scrape.py",
+      "excerpt": "Wayra | Telefónica's Corporate Venture Capital Perks Reports",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b016f1b43f",
+      "url": "https://wayra.com/",
+      "title": "Wayra — homepage checked by scrape.py",
+      "excerpt": "EN → https://wayra.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://wayra.com/",
+        "evidenceId": "check-route-b016f1b43f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Wayra",
+        "evidenceId": "check-name-e810a277ab"
+      }
+    ],
+    "examplePages": []
+  }
+}

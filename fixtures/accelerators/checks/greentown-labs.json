@@ -1,0 +1,105 @@
+{
+  "programId": "greentown-labs",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://greentown.org/",
+    "https://greentown.org/about",
+    "https://greentown.org/apply-now"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6fc40cc26e",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage checked by scrape.py",
+      "excerpt": "01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-66a6b20ada",
+      "url": "https://greentown.org/apply-now",
+      "title": "Greentown Labs — application page checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7988407345",
+      "url": "https://greentown.org/about",
+      "title": "Greentown Labs — details page checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd186b5d53",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d589fb96e",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage checked by scrape.py",
+      "excerpt": "Join Greentown Join Greentown → https://greentown.org/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dad641aa64",
+      "url": "https://greentown.org/about",
+      "title": "Greentown Labs — details page checked by scrape.py",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e58b424fe4",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage checked by scrape.py",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fbc9b7bfc6",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — homepage checked by scrape.py",
+      "excerpt": "Applied Bioplastics Food, Water, & Land Plant-based polymers engineered to replace conventional petrochemical plastics in packaging and consumer applications → https://greentown.org/members/applied-bioplastics",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://greentown.org/apply-now",
+        "evidenceId": "check-route-e58b424fe4"
+      },
+      {
+        "value": "https://greentown.org/members/applied-bioplastics",
+        "evidenceId": "check-route-fbc9b7bfc6"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://greentown.org/apply-now",
+        "evidenceId": "check-route-e58b424fe4"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://greentown.org/members",
+        "evidenceId": "check-portfolio-bd186b5d53"
+      }
+    ],
+    "name": [
+      {
+        "value": "Greentown Labs",
+        "evidenceId": "check-name-6fc40cc26e"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "note": "Public lists that discover.py harvests for US startup programs. Add a source by giving its URL, where it came from, and a parser: directory-links reads any page of outside links (options: start and end markers in the HTML, exclude URL fragments, namePrefix, nameFrom order of title, text, bold, heading). Only list pages whose robots.txt allows crawling and whose content may be reused.",
+  "sources": [
+    {
+      "id": "sba-gafc-2014-2016",
+      "url": "https://www.loc.gov/static/services/federal-research-division/our-federal-research/documents/SBA_Accelerators.pdf",
+      "origin": "US government report (Library of Congress), SBA Growth Accelerator Fund winners 2014-16, Appendix IV",
+      "parser": "loc-gafc-appendix"
+    },
+    {
+      "id": "sba-gafc-2021",
+      "url": "https://www.sbir.gov/community/gafc",
+      "origin": "US government (SBIR.gov), SBA Growth Accelerator Fund winners 2021",
+      "parser": "sbir-gafc-table",
+      "year": 2021
+    },
+    {
+      "id": "sba-gafc-2025-republished",
+      "url": "https://forgeimpact.org/media_feature/sba-awards-5-7-million-through-the-2025-growth-accelerator-fund-competition-prioritizing-american-innovation/",
+      "origin": "SBA's 2025 Growth Accelerator Fund announcement as republished by FORGE (only the Lab-to-Market awardees are in the page)",
+      "parser": "ap-state-list",
+      "year": 2025
+    },
+    {
+      "id": "nsf-icorps-hubs",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps/view-hubs",
+      "origin": "US government (National Science Foundation), NSF I-Corps Hubs",
+      "parser": "directory-links",
+      "options": {
+        "start": "<h2 class=\"usa-accordion__heading\">",
+        "end": "<h2 class=\"headline--left",
+        "namePrefix": "NSF I-Corps ",
+        "nameFrom": ["heading"]
+      }
+    },
+    {
+      "id": "ny-certified-incubators",
+      "url": "https://esd.ny.gov/certified-business-incubator",
+      "origin": "New York State (Empire State Development / NYSTAR), Certified Business Incubators and Innovation Hot Spots",
+      "parser": "directory-links",
+      "state": "NY",
+      "options": {
+        "start": "<h1 class=\"three-up-cta-card-region__headline\">",
+        "end": "<h3>Contact Information</h3>",
+        "nameFrom": ["heading"]
+      }
+    },
+    {
+      "id": "ky-accelerators-incubators",
+      "url": "https://newkentuckyhome.ky.gov/Entrepreneurship/Accelerators_Incubators",
+      "origin": "Kentucky Cabinet for Economic Development, accelerators and incubators in Kentucky",
+      "parser": "directory-links",
+      "state": "KY",
+      "options": {
+        "start": "Accelerators &amp; Incubators</h1>",
+        "end": "<footer",
+        "nameFrom": ["bold", "title", "text"]
+      }
+    },
+    {
+      "id": "ok-certified-incubators",
+      "url": "https://www.okcommerce.gov/wp-content/uploads/Directory-of-Certified-Incubators.pdf",
+      "origin": "Oklahoma Department of Commerce, Directory of Certified Incubators",
+      "parser": "labelled-columns",
+      "state": "OK"
+    },
+    {
+      "id": "tx-incubator-directory-2015",
+      "url": "https://gov.texas.gov/uploads/files/business/business_incubators_directory.pdf",
+      "origin": "Office of the Texas Governor, Texas Business Incubators directory (April 2015; websites may be out of date)",
+      "parser": "texas-incubator-directory",
+      "state": "TX",
+      "year": 2015
+    }
+  ]
+}

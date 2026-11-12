@@ -1,0 +1,82 @@
+{
+  "programId": "accelerace",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://accelerace.io/",
+    "https://accelerace.io/about/",
+    "https://accelerace.io/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-bb35ae36aa",
+      "url": "https://accelerace.io/",
+      "title": "Accelerace — homepage checked by scrape.py",
+      "excerpt": "Accelerace – Leading Pre-Seed Investor & Accelerator Investments Get",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-32022d967f",
+      "url": "https://accelerace.io/about/",
+      "title": "Accelerace — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9dd1c045c1",
+      "url": "https://accelerace.io/",
+      "title": "Accelerace — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4263d70c4",
+      "url": "https://accelerace.io/faq/",
+      "title": "Accelerace — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://accelerace.io/startups/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ee6614cbd7",
+      "url": "https://accelerace.io/",
+      "title": "Accelerace — homepage checked by scrape.py",
+      "excerpt": "Meet our portfolio → https://accelerace.io/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8a47be0058",
+      "url": "https://accelerace.io/",
+      "title": "Accelerace — homepage checked by scrape.py",
+      "excerpt": "https://accelerace.io/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://accelerace.io/",
+        "evidenceId": "check-route-8a47be0058"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://accelerace.io/startups/",
+        "evidenceId": "check-portfolio-9dd1c045c1"
+      }
+    ],
+    "name": [
+      {
+        "value": "Accelerace",
+        "evidenceId": "check-name-bb35ae36aa"
+      }
+    ],
+    "examplePages": []
+  }
+}

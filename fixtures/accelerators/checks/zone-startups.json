@@ -1,0 +1,69 @@
+{
+  "programId": "zone-startups",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.zonestartups.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-959fe14442",
+      "url": "https://www.zonestartups.com/",
+      "title": "Zone Startups — homepage checked by scrape.py",
+      "excerpt": "Zone Startups Skip to content Menu Home Blog A global network of",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a8fbcd889d",
+      "url": "https://www.zonestartups.com/",
+      "title": "Zone Startups — homepage checked by scrape.py",
+      "excerpt": "https://www.zonestartups.com",
+      "page": "details"
+    },
+    {
+      "id": "check-selectivity-434fcd6059",
+      "url": "https://www.zonestartups.com/",
+      "title": "Zone Startups — homepage checked by scrape.py",
+      "excerpt": "world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
+      "page": "details"
+    },
+    {
+      "id": "check-selectivity-73435ae942",
+      "url": "https://www.zonestartups.com/",
+      "title": "Zone Startups — homepage checked by scrape.py",
+      "excerpt": "into world-class companies. The Zone Startups Method Screen companies, accepting approximately 1% of applicants. Help companies grow and scale. Focus on market validation and customer",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.zonestartups.com",
+        "evidenceId": "check-route-a8fbcd889d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-434fcd6059"
+      }
+    ],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Zone Startups",
+        "evidenceId": "check-name-959fe14442"
+      }
+    ],
+    "examplePages": []
+  }
+}

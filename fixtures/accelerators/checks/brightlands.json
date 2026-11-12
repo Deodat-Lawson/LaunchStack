@@ -1,0 +1,59 @@
+{
+  "programId": "brightlands",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.brightlands.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-432f7b4316",
+      "url": "https://www.brightlands.com/",
+      "title": "Brightlands — homepage checked by scrape.py",
+      "excerpt": "Brightlands | Waar Limburg vernieuwt zonder grenzen Overslaan en naar",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0e8b8c0791",
+      "url": "https://www.brightlands.com/",
+      "title": "Brightlands — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.brightlands.com/voor-wie/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-561a3e22ca",
+      "url": "https://www.brightlands.com/",
+      "title": "Brightlands — homepage checked by scrape.py",
+      "excerpt": "https://www.brightlands.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.brightlands.com/",
+        "evidenceId": "check-route-561a3e22ca"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.brightlands.com/voor-wie/startups",
+        "evidenceId": "check-portfolio-0e8b8c0791"
+      }
+    ],
+    "name": [
+      {
+        "value": "Brightlands",
+        "evidenceId": "check-name-432f7b4316"
+      }
+    ],
+    "examplePages": []
+  }
+}

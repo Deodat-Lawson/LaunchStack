@@ -1,0 +1,97 @@
+{
+  "programId": "launchvic",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://launchvic.org/",
+    "https://launchvic.org/about-the-ecosystem/",
+    "https://launchvic.org/faqs/",
+    "https://launchvic.org/news-hub/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-63ff51cb11",
+      "url": "https://launchvic.org/faqs/",
+      "title": "LaunchVic — terms page checked by scrape.py",
+      "excerpt": "Victor McKay Fund is a sidecar fund for Victorian AgTech startups, run by LaunchVic with funding from Agriculture Victoria. It co-invests between $100,000-$200,000 into early-stage AgTech startups, with 85% as equity and 15% as a non-dilutive grant. Program FAQs Information for program providers on grants, funding",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d8269581b6",
+      "url": "https://launchvic.org/faqs/",
+      "title": "LaunchVic — terms page checked by scrape.py",
+      "excerpt": "Victor McKay Fund is a sidecar fund for Victorian AgTech startups, run by LaunchVic with funding from Agriculture Victoria. It co-invests between $100,000-$200,000 into early-stage AgTech startups, with 85% as equity and 15% as a non-dilutive grant. What is CivVic Labs? CivVic Labs is the Victorian Government’s gateway",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-920eed920b",
+      "url": "https://launchvic.org/",
+      "title": "LaunchVic — homepage checked by scrape.py",
+      "excerpt": "Home | LaunchVic LaunchVic is now Innovation Victoria Explore",
+      "page": "details"
+    },
+    {
+      "id": "check-route-39019fa86f",
+      "url": "https://launchvic.org/news-hub/",
+      "title": "LaunchVic — batches page checked by scrape.py",
+      "excerpt": "Applications now open for NOVA NOVA → https://launchvic.org/nova/applications-now-open-for-nova/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ce06130df3",
+      "url": "https://launchvic.org/",
+      "title": "LaunchVic — homepage checked by scrape.py",
+      "excerpt": "https://launchvic.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-419cd87a82",
+      "url": "https://launchvic.org/news-hub/",
+      "title": "LaunchVic — batches page checked by scrape.py",
+      "excerpt": "Updates View all LaunchVic unveils 30X30 2025 Cohort 30X30 Inside LaunchVic’s first Basecamp cohort Basecamp Applications now open for NOVA NOVA Basecamp launches to help Founders scale the startup summit Basecamp Meet the teams: CivVic",
+      "page": "batches"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://launchvic.org/nova/applications-now-open-for-nova/",
+        "evidenceId": "check-route-39019fa86f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://launchvic.org/",
+        "evidenceId": "check-route-ce06130df3"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-419cd87a82"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Victor McKay Fund is a sidecar fund for Victorian AgTech startups, run by LaunchVic with funding from Agriculture Victoria. It co-invests between $100,000-$200,000 into early-stage AgTech startups, with 85% as equity and 15% as a non-dilutive grant. What is CivVic Labs? CivVic Labs is the Victorian Government’s gateway",
+        "evidenceId": "check-deal-d8269581b6"
+      },
+      {
+        "value": "Victor McKay Fund is a sidecar fund for Victorian AgTech startups, run by LaunchVic with funding from Agriculture Victoria. It co-invests between $100,000-$200,000 into early-stage AgTech startups, with 85% as equity and 15% as a non-dilutive grant. Program FAQs Information for program providers on grants, funding",
+        "evidenceId": "check-deal-63ff51cb11"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "LaunchVic",
+        "evidenceId": "check-name-920eed920b"
+      }
+    ],
+    "examplePages": []
+  }
+}

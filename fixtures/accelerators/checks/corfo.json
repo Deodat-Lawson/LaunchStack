@@ -1,0 +1,48 @@
+{
+  "programId": "corfo",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.corfo.gob.cl/sites/cpp/",
+    "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-0c2aa1477c",
+      "url": "https://www.corfo.gob.cl/sites/cpp/",
+      "title": "CORFO — homepage checked by scrape.py",
+      "excerpt": "Home - CORFO Sitio en inglés Contáctanos Ingreso usuario Inicio Sobre",
+      "page": "details"
+    },
+    {
+      "id": "check-route-deec599330",
+      "url": "https://www.corfo.gob.cl/sites/cpp/",
+      "title": "CORFO — homepage checked by scrape.py",
+      "excerpt": "https://www.corfo.gob.cl/sites/cpp",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.corfo.gob.cl/sites/cpp",
+        "evidenceId": "check-route-deec599330"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "CORFO",
+        "evidenceId": "check-name-0c2aa1477c"
+      }
+    ],
+    "examplePages": []
+  }
+}

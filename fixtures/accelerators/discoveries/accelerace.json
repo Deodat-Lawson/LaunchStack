@@ -1,0 +1,102 @@
+{
+  "programId": "accelerace",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://accelerace.io/startups/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/",
+      "page": "details",
+      "anchor": "About Accelerace",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/partner-programs/",
+      "page": "details",
+      "anchor": "Partner programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/careers/",
+      "page": "details",
+      "anchor": "Careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/presskit/",
+      "page": "details",
+      "anchor": "Presskit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/about/contact/",
+      "page": "details",
+      "anchor": "Contact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/partner-programs/",
+      "page": "details",
+      "anchor": "Get accelerated",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/ai-matchmaking-gor-smver-mere-produktive/",
+      "page": "details",
+      "anchor": "AI-matchmaking make SMEs more productive. A new matchmaking program is connecting Danish SMEs with cutting-edge AI startups, which can boost their productivity and save them valuab",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/dreamplan-raise-seed-round/",
+      "page": "portfolio",
+      "anchor": "Dreamplan raise seed-round Accelerace portfolio company, Dreamplan, have raised a seed round of DKK 20 mio. (approx. € 2,7 mio.) with leading investors and business angels. The fin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/portfolio-old/",
+      "page": "portfolio",
+      "anchor": "Accelerace Investment Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accelerace.io/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

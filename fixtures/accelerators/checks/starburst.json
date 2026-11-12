@@ -1,0 +1,96 @@
+{
+  "programId": "starburst",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://starburst.aero/",
+    "https://starburst.aero/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6268756c43",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage checked by scrape.py",
+      "excerpt": "Starburst About Startups Corporates Investors News Contact Us",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3e9a18cfb5",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5c6e62d53a",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7f85da0cb9",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage checked by scrape.py",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9564e30835",
+      "url": "https://starburst.aero/about/",
+      "title": "Starburst — details page checked by scrape.py",
+      "excerpt": "Startups → https://starburst.aero/accelerator-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d31f47ed0e",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → http://starburst.aero/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f2fa1f1b77",
+      "url": "https://starburst.aero/",
+      "title": "Starburst — homepage checked by scrape.py",
+      "excerpt": "https://starburst.aero",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://starburst.aero",
+        "evidenceId": "check-route-f2fa1f1b77"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://starburst.aero/accelerator-program/",
+        "evidenceId": "check-portfolio-7f85da0cb9"
+      },
+      {
+        "value": "https://starburst.aero/portfolio/",
+        "evidenceId": "check-portfolio-5c6e62d53a"
+      },
+      {
+        "value": "http://starburst.aero/portfolio/",
+        "evidenceId": "check-portfolio-d31f47ed0e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Starburst",
+        "evidenceId": "check-name-6268756c43"
+      }
+    ],
+    "examplePages": []
+  }
+}

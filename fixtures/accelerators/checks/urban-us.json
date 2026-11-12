@@ -1,0 +1,82 @@
+{
+  "programId": "urban-us",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://thirdsphere.com/",
+    "https://thirdsphere.com/about/",
+    "https://thirdsphere.com/updates/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-63e2d5818e",
+      "url": "https://thirdsphere.com/about/",
+      "title": "Urban Us — details page checked by scrape.py",
+      "excerpt": "universe of products now go far beyond venture debt and usually make more sense for all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we speed run sales to $1m ARR or $10m in pre-orders. You get",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-268d47f093",
+      "url": "https://thirdsphere.com/about/",
+      "title": "Urban Us — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-375525d2a5",
+      "url": "https://thirdsphere.com/",
+      "title": "Urban Us — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-81921a9a23",
+      "url": "https://thirdsphere.com/updates/",
+      "title": "Urban Us — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://thirdsphere.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-cff54dfc21",
+      "url": "https://thirdsphere.com/",
+      "title": "Urban Us — homepage checked by scrape.py",
+      "excerpt": "Meet the portfolio → https://thirdsphere.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5940da2c70",
+      "url": "https://thirdsphere.com/",
+      "title": "Urban Us — homepage checked by scrape.py",
+      "excerpt": "https://thirdsphere.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://thirdsphere.com/",
+        "evidenceId": "check-route-5940da2c70"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "universe of products now go far beyond venture debt and usually make more sense for all stakeholders. What do we offer seedstrapping founders? We invest $250k to $1m and earmark up to $2m more for your next (and hopefully last) round. Over six months, we speed run sales to $1m ARR or $10m in pre-orders. You get",
+        "evidenceId": "check-deal-63e2d5818e"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://thirdsphere.com/portfolio/",
+        "evidenceId": "check-portfolio-375525d2a5"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

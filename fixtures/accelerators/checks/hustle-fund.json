@@ -1,0 +1,71 @@
+{
+  "programId": "hustle-fund",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.hustlefund.vc/",
+    "https://www.hustlefund.vc/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-4aa89416cd",
+      "url": "https://www.hustlefund.vc/faq",
+      "title": "Hustle Fund — terms page checked by scrape.py",
+      "excerpt": "in the Silicon Valley and with the growth programs that we offer our portfolio companies. Do you lead rounds? What is your check size? Our first check is $150K. We are very comfortable setting terms and being first check into your company! But, because of our small check size, we won't be putting in the bulk of money",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-d30a8d1e9b",
+      "url": "https://www.hustlefund.vc/faq",
+      "title": "Hustle Fund — terms page checked by scrape.py",
+      "excerpt": "going. As a result, there tends to be a lot of SaaS in our portfolio. How big is your fund? Fund I is $11.5M. Fund II is $34M. Fund III is $46M. Fund IV is $39M. What stage do you invest in? Do you invest in Series A rounds? We invest in pre-seed rounds. Not seed. Not post-seed / mango seed. Pre-seed. We may",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-67b2c8162a",
+      "url": "https://www.hustlefund.vc/",
+      "title": "Hustle Fund — homepage checked by scrape.py",
+      "excerpt": "Hustle Fund | Pre-Seed Venture Capital Camp Hustle Asia is an investor",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dc047fc4bd",
+      "url": "https://www.hustlefund.vc/",
+      "title": "Hustle Fund — homepage checked by scrape.py",
+      "excerpt": "https://www.hustlefund.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.hustlefund.vc/",
+        "evidenceId": "check-route-dc047fc4bd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "going. As a result, there tends to be a lot of SaaS in our portfolio. How big is your fund? Fund I is $11.5M. Fund II is $34M. Fund III is $46M. Fund IV is $39M. What stage do you invest in? Do you invest in Series A rounds? We invest in pre-seed rounds. Not seed. Not post-seed / mango seed. Pre-seed. We may",
+        "evidenceId": "check-deal-d30a8d1e9b"
+      },
+      {
+        "value": "in the Silicon Valley and with the growth programs that we offer our portfolio companies. Do you lead rounds? What is your check size? Our first check is $150K. We are very comfortable setting terms and being first check into your company! But, because of our small check size, we won't be putting in the bulk of money",
+        "evidenceId": "check-deal-4aa89416cd"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Hustle Fund",
+        "evidenceId": "check-name-67b2c8162a"
+      }
+    ],
+    "examplePages": []
+  }
+}

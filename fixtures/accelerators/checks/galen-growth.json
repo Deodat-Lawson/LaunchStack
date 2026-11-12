@@ -1,0 +1,108 @@
+{
+  "programId": "galen-growth",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.galengrowth.com/",
+    "https://www.galengrowth.com/about-digital-health/",
+    "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0b6b8280c8",
+      "url": "https://www.galengrowth.com/",
+      "title": "Galen Growth — homepage checked by scrape.py",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3922d83841",
+      "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
+      "title": "Galen Growth — terms page checked by scrape.py",
+      "excerpt": "info@galengrowth.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4dbe71c3cc",
+      "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
+      "title": "Galen Growth — terms page checked by scrape.py",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-55e428ec3e",
+      "url": "https://www.galengrowth.com/about-digital-health/",
+      "title": "Galen Growth — details page checked by scrape.py",
+      "excerpt": "info@galengrowth.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-665c7860b5",
+      "url": "https://www.galengrowth.com/",
+      "title": "Galen Growth — homepage checked by scrape.py",
+      "excerpt": "info@galengrowth.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b08c2deed2",
+      "url": "https://www.galengrowth.com/about-digital-health/",
+      "title": "Galen Growth — details page checked by scrape.py",
+      "excerpt": "market analysis, definitions, and annual publications. info@galengrowth.com Research Research library Digital health funding Insights",
+      "page": "details"
+    },
+    {
+      "id": "check-name-0be5b5bd76",
+      "url": "https://www.galengrowth.com/",
+      "title": "Galen Growth — homepage checked by scrape.py",
+      "excerpt": "Galen Growth Research Archive | Digital Health Intelligence Archive ·",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6cf8c2f97d",
+      "url": "https://www.galengrowth.com/",
+      "title": "Galen Growth — homepage checked by scrape.py",
+      "excerpt": "https://www.galengrowth.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-986c88853e",
+      "url": "https://www.galengrowth.com/",
+      "title": "Galen Growth — homepage checked by scrape.py",
+      "excerpt": "Insights HealthTech 250 Guides & Tools About Definition of Digital Health About Galen Growth Galen Growth ceased operations on 31 October 2026. HealthTech Alpha is no longer available. This archive keeps our published research",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@galengrowth.com",
+        "evidenceId": "check-email-665c7860b5"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.galengrowth.com/",
+        "evidenceId": "check-route-6cf8c2f97d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [
+      {
+        "value": "closed",
+        "evidenceId": "check-status-986c88853e"
+      }
+    ],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Galen Growth",
+        "evidenceId": "check-name-0be5b5bd76"
+      }
+    ],
+    "examplePages": []
+  }
+}

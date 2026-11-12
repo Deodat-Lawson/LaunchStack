@@ -1,0 +1,102 @@
+{
+  "programId": "hkstp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.hkstp.org/",
+    "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-788c3cacfd",
+      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
+      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7f54f37d53",
+      "url": "https://www.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8108540360",
+      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
+      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "excerpt": "enquiry.marketing@hkstp.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b93e1c1140",
+      "url": "https://www.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "excerpt": "us Contact Us 5/F, Building 5E, Hong Kong Science Park enquiry.marketing@hkstp.org +852 2629 1818 Privacy Policy PICS Terms of Use",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e20b0b579a",
+      "url": "https://www.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "excerpt": "site. If you are concerned, please contact us at enquiry.marketing@hkstp.org and/or report to the Police. ACCEPT Disclaimer We use",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-29fbfae1a1",
+      "url": "https://www.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "excerpt": "+852 2629 1818",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-621c92a69f",
+      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
+      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "excerpt": "+852 2629 1818",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c5016841b8",
+      "url": "https://www.hkstp.org/en/about-hkstp/our-impact/why-china/hong-kong-science-park-shenzhen-branch",
+      "title": "Hong Kong Science and Technology Parks — details page checked by scrape.py",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c6b2c8c7fb",
+      "url": "https://www.hkstp.org/",
+      "title": "Hong Kong Science and Technology Parks — homepage checked by scrape.py",
+      "excerpt": "Startups Alumni Association → https://www.hkstp.org/en/programmes/alumni",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "enquiry.marketing@hkstp.org",
+        "evidenceId": "check-email-7f54f37d53"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+852 2629 1818",
+        "evidenceId": "check-phone-29fbfae1a1"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.hkstp.org/en/programmes/alumni",
+        "evidenceId": "check-portfolio-c6b2c8c7fb"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

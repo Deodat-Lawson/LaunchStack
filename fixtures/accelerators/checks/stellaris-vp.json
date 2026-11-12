@@ -1,0 +1,93 @@
+{
+  "programId": "stellaris-vp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.stellarisvp.com/",
+    "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-41879eaab4",
+      "url": "https://www.stellarisvp.com/",
+      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Stellaris Venture Partners Why Lumio Started Premium When Everyone Went Cheap WATCH",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-358a3eb3de",
+      "url": "https://www.stellarisvp.com/",
+      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-96dfca2884",
+      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "title": "Stellaris Venture Partners — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c5af4d68bc",
+      "url": "https://www.stellarisvp.com/",
+      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f59cb4a041",
+      "url": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "title": "Stellaris Venture Partners — application page checked by scrape.py",
+      "excerpt": "portfolio → https://www.stellarisvp.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9de0b9a471",
+      "url": "https://www.stellarisvp.com/",
+      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "excerpt": "https://www.stellarisvp.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d9f293bdcd",
+      "url": "https://www.stellarisvp.com/",
+      "title": "Stellaris Venture Partners — homepage checked by scrape.py",
+      "excerpt": "READ MORE → https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.stellarisvp.com/blog/building-the-next-generation-tricentis-thesis-on-packaged-application-testing",
+        "evidenceId": "check-route-d9f293bdcd"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.stellarisvp.com/",
+        "evidenceId": "check-route-9de0b9a471"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.stellarisvp.com/portfolio",
+        "evidenceId": "check-portfolio-358a3eb3de"
+      }
+    ],
+    "name": [
+      {
+        "value": "Stellaris Venture Partners",
+        "evidenceId": "check-name-41879eaab4"
+      }
+    ],
+    "examplePages": []
+  }
+}

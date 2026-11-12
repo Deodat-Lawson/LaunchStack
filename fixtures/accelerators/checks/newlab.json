@@ -1,0 +1,82 @@
+{
+  "programId": "newlab",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.newlab.com/",
+    "https://www.newlab.com/about",
+    "https://www.newlab.com/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-c9a1cf3de1",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — homepage checked by scrape.py",
+      "excerpt": "Newlab | Venture Platform for Critical Technology About platform",
+      "page": "details"
+    },
+    {
+      "id": "check-route-04e7f767a6",
+      "url": "https://www.newlab.com/about",
+      "title": "Newlab — details page checked by scrape.py",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c03c6a313",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — homepage checked by scrape.py",
+      "excerpt": "JOIN → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7f23f4ad93",
+      "url": "https://www.newlab.com/about",
+      "title": "Newlab — details page checked by scrape.py",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-94d3f8444d",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — homepage checked by scrape.py",
+      "excerpt": "Join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-986c6f3f4f",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — homepage checked by scrape.py",
+      "excerpt": "join newlab → https://www.newlab.com/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.newlab.com/apply",
+        "evidenceId": "check-route-5c03c6a313"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.newlab.com/apply",
+        "evidenceId": "check-route-5c03c6a313"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Newlab",
+        "evidenceId": "check-name-c9a1cf3de1"
+      }
+    ],
+    "examplePages": []
+  }
+}

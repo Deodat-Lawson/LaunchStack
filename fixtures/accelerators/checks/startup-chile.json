@@ -1,0 +1,47 @@
+{
+  "programId": "startup-chile",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startupchile.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-cca05d021b",
+      "url": "https://www.startupchile.org/",
+      "title": "Start-Up Chile — homepage checked by scrape.py",
+      "excerpt": "Start-Up Chile – We SUPport founders beyond businesses ☰ ESP_ ENG_ Back",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a4da788f44",
+      "url": "https://www.startupchile.org/",
+      "title": "Start-Up Chile — homepage checked by scrape.py",
+      "excerpt": "https://www.startupchile.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.startupchile.org/",
+        "evidenceId": "check-route-a4da788f44"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Start-Up Chile",
+        "evidenceId": "check-name-cca05d021b"
+      }
+    ],
+    "examplePages": []
+  }
+}

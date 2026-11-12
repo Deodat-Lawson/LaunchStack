@@ -1,0 +1,54 @@
+{
+  "programId": "capital-innovators",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://capitalinnovators.com/about-ci",
+      "page": "details",
+      "anchor": "About CI",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/acceleratorprogram",
+      "page": "details",
+      "anchor": "Accelerator Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/nga-accelerator-program",
+      "page": "details",
+      "anchor": "NGA Accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://capitalinnovators.com/venturereadymissouri",
+      "page": "details",
+      "anchor": "Learn More about Venture Ready Missouri",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

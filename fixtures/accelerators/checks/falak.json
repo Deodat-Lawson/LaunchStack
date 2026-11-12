@@ -1,0 +1,119 @@
+{
+  "programId": "falak",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://falak.sa/en"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-e9d49b8cf8",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Falak عربي Startups Flagship Program Startups Acceleration",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a601368aa8",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "9200 05610",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1cdb7adb01",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Check out our Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5bf9f43807",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6b57dfd46d",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Browse our startups → https://falak.sa/en/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a240b6a4ad",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Falak Alumni → https://falak.sa/en/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-route-01df2a2e49",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Apply for ClimateTech → https://flagship.falak.sa",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c875e4127",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "https://falak.sa/en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c25ee40aab",
+      "url": "https://falak.sa/en",
+      "title": "Falak — homepage checked by scrape.py",
+      "excerpt": "Apply for Flagship → https://flagship.falak.sa/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "9200 05610",
+        "evidenceId": "check-phone-a601368aa8"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://flagship.falak.sa/",
+        "evidenceId": "check-route-c25ee40aab"
+      },
+      {
+        "value": "https://flagship.falak.sa",
+        "evidenceId": "check-route-01df2a2e49"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://falak.sa/en",
+        "evidenceId": "check-route-5c875e4127"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://falak.sa/en/startups",
+        "evidenceId": "check-portfolio-5bf9f43807"
+      },
+      {
+        "value": "https://falak.sa/en/alumni",
+        "evidenceId": "check-portfolio-a240b6a4ad"
+      }
+    ],
+    "name": [
+      {
+        "value": "Falak",
+        "evidenceId": "check-name-e9d49b8cf8"
+      }
+    ],
+    "examplePages": []
+  }
+}

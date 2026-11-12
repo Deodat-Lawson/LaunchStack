@@ -1,0 +1,118 @@
+{
+  "programId": "index-ventures",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.indexventures.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/revolut/",
+      "page": "portfolio",
+      "anchor": "Revolut",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/wizio/",
+      "page": "portfolio",
+      "anchor": "Wiz",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/fireworks-ai/",
+      "page": "portfolio",
+      "anchor": "Fireworks",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/anthropic/",
+      "page": "portfolio",
+      "anchor": "Anthropic",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/instinct/",
+      "page": "portfolio",
+      "anchor": "Instinct",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/simile/",
+      "page": "portfolio",
+      "anchor": "Simile",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/parallel-web-systems/",
+      "page": "portfolio",
+      "anchor": "Parallel Web Systems",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/flapping-airplanes/",
+      "page": "portfolio",
+      "anchor": "Flapping Airplanes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/mistral/",
+      "page": "portfolio",
+      "anchor": "Mistral",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/chai-discovery/",
+      "page": "portfolio",
+      "anchor": "Chai Discovery",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/granola/",
+      "page": "portfolio",
+      "anchor": "Granola",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/figma/",
+      "page": "portfolio",
+      "anchor": "Figma",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.indexventures.com/companies/decagon/",
+      "page": "portfolio",
+      "anchor": "Decagon",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

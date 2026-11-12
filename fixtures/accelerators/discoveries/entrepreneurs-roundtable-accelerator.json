@@ -1,0 +1,30 @@
+{
+  "programId": "entrepreneurs-roundtable-accelerator",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.eranyc.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eranyc.com/apply/",
+      "page": "application",
+      "anchor": "W'27 Open",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

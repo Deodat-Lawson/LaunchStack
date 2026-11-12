@@ -1,0 +1,66 @@
+{
+  "programId": "apx",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://apx.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-06eaae4755",
+      "url": "https://apx.vc/",
+      "title": "APX — homepage checked by scrape.py",
+      "excerpt": "Toggle Menu APX Portfolio Who we are Send us your pitch hello@apx.vc Send us your pitch Getquin Raphael and Christian develop a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2c40641093",
+      "url": "https://apx.vc/",
+      "title": "APX — homepage checked by scrape.py",
+      "excerpt": "hello@apx.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-name-7909b5d2fb",
+      "url": "https://apx.vc/",
+      "title": "APX — homepage checked by scrape.py",
+      "excerpt": "APX - Earliest-stage startup investor. VC in Berlin. Who we",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cde39ef16c",
+      "url": "https://apx.vc/",
+      "title": "APX — homepage checked by scrape.py",
+      "excerpt": "https://apx.vc",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@apx.vc",
+        "evidenceId": "check-email-2c40641093"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://apx.vc",
+        "evidenceId": "check-route-cde39ef16c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "APX",
+        "evidenceId": "check-name-7909b5d2fb"
+      }
+    ],
+    "examplePages": []
+  }
+}

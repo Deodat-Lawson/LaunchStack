@@ -1,0 +1,35 @@
+{
+  "programId": "usc-startup-garage",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://viterbiinnovation.usc.edu/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-9e7b97e357",
+      "url": "https://viterbiinnovation.usc.edu/",
+      "title": "USC Viterbi Startup Garage — homepage checked by scrape.py",
+      "excerpt": "William W. Wang Technology Innovation and Entrepreneurship Hub → https://viterbiinnovation.usc.edu/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://viterbiinnovation.usc.edu/",
+        "evidenceId": "check-route-9e7b97e357"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

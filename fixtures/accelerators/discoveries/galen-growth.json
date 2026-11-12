@@ -1,0 +1,38 @@
+{
+  "programId": "galen-growth",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.galengrowth.com/about-digital-health/",
+      "page": "details",
+      "anchor": "Definition of Digital Health",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/about/",
+      "page": "details",
+      "anchor": "About Galen Growth",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/blogs/",
+      "page": "portfolio",
+      "anchor": "02 Insights Editorial analysis of the events, companies, and strategic shifts shaping digital health. Read insights",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.galengrowth.com/research-download/digital-health-exits-2026-ma-ipo-market-report/",
+      "page": "terms",
+      "anchor": "Exits Are Back. Easy Exits Aren't. M&A now accounts for 95% of digital health exits as the IPO window stays shut to all but the most evidence-led ventures. Galen Growth's Digital H",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "programId": "unternehmertum",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.unternehmertum.de/en",
+    "https://www.unternehmertum.de/en/about/facts-figures/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-8ff7e5d19b",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "excerpt": "Get in touch (info@unternehmertum.de)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-f05b8d3b8e",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "excerpt": "UnternehmerTUM | Europe’s Leading Center for Innovation and Business",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4119c913a3",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c861927c65",
+      "url": "https://www.unternehmertum.de/en/about/facts-figures/",
+      "title": "UnternehmerTUM — details page checked by scrape.py",
+      "excerpt": "Companies icons / arrow-right icons / arrow-right → https://www.unternehmertum.de/en/offering/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ab3ec6a14f",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — homepage checked by scrape.py",
+      "excerpt": "UnternehmerTUM Logo → https://www.unternehmertum.de/en/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@unternehmertum.de",
+        "evidenceId": "check-email-8ff7e5d19b"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.unternehmertum.de/en/",
+        "evidenceId": "check-route-ab3ec6a14f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.unternehmertum.de/en/offering/companies/",
+        "evidenceId": "check-portfolio-4119c913a3"
+      }
+    ],
+    "name": [
+      {
+        "value": "UnternehmerTUM",
+        "evidenceId": "check-name-f05b8d3b8e"
+      }
+    ],
+    "examplePages": []
+  }
+}

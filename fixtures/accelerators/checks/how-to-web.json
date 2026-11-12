@@ -1,0 +1,119 @@
+{
+  "programId": "how-to-web",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.howtoweb.co/",
+    "https://www.howtoweb.co/dealflow/",
+    "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
+    "https://www.howtoweb.co/apply-for-startup-tickets"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-76e8eacb6e",
+      "url": "https://www.howtoweb.co/",
+      "title": "How to Web — homepage checked by scrape.py",
+      "excerpt": "How to Web Conference | October 5-7, 2027 - How to Web Conference Hey",
+      "page": "details"
+    },
+    {
+      "id": "check-route-075beb5cbd",
+      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
+      "title": "How to Web — details page checked by scrape.py",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3c2093f5c2",
+      "url": "https://www.howtoweb.co/dealflow/",
+      "title": "How to Web — terms page checked by scrape.py",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4ded3489c3",
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "title": "How to Web — application page checked by scrape.py",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application"
+    },
+    {
+      "id": "check-route-51c9e0731c",
+      "url": "https://www.howtoweb.co/",
+      "title": "How to Web — homepage checked by scrape.py",
+      "excerpt": "APPLY NOW → https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6d0ec23674",
+      "url": "https://www.howtoweb.co/",
+      "title": "How to Web — homepage checked by scrape.py",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b89c281f63",
+      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
+      "title": "How to Web — details page checked by scrape.py",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ec2ce1504c",
+      "url": "https://www.howtoweb.co/dealflow/",
+      "title": "How to Web — terms page checked by scrape.py",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ef796eb8b5",
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "title": "How to Web — application page checked by scrape.py",
+      "excerpt": "Apply for speaking → https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ffe4916c17",
+      "url": "https://www.howtoweb.co/",
+      "title": "How to Web — homepage checked by scrape.py",
+      "excerpt": "Apply for Media Pass → https://www.howtoweb.co/apply-for-media-pass",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.howtoweb.co/apply-for-startup-tickets",
+        "evidenceId": "check-route-51c9e0731c"
+      },
+      {
+        "value": "https://www.howtoweb.co/apply-for-speaking/",
+        "evidenceId": "check-route-6d0ec23674"
+      },
+      {
+        "value": "https://www.howtoweb.co/apply-for-media-pass",
+        "evidenceId": "check-route-ffe4916c17"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.howtoweb.co/apply-for-startup-tickets",
+        "evidenceId": "check-route-51c9e0731c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "How to Web",
+        "evidenceId": "check-name-76e8eacb6e"
+      }
+    ],
+    "examplePages": []
+  }
+}

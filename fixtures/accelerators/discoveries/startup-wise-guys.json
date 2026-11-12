@@ -1,0 +1,62 @@
+{
+  "programId": "startup-wise-guys",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://startupwiseguys.com/building/",
+      "page": "details",
+      "anchor": "Building Programs for founders or teams just starting out and looking to validate their MVP.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/growing/",
+      "page": "details",
+      "anchor": "Growing Acceleration programs for teams building products and taking them to the market.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/scaling/",
+      "page": "details",
+      "anchor": "Scaling Programs for scaleups growing with necessity to expand their market.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/all-programs/",
+      "page": "details",
+      "anchor": "All programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupwiseguys.com/news/portfolio-company-ready-player-me-raises-56m-led-by-andreessen-horowitz/",
+      "page": "portfolio",
+      "anchor": "Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

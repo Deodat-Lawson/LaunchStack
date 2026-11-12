@@ -1,0 +1,234 @@
+{
+  "programId": "sosv-ny",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://sosv.com/apply/sosv/",
+    "https://sosv.com/about/",
+    "https://sosv.com/legal-faqs/",
+    "https://sosv.com/apply",
+    "https://sosv.com/subscribe"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-0fa1e401e2",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6bba2c2659",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-71b7b0f4ad",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-88e914d798",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6b3ada9ec",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-997fc30b25",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV New York — details page checked by scrape.py",
+      "excerpt": "Reach SOSV comms (press@sosv.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0946b1838e",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV New York — application page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-163672f373",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV New York — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-24b3eed522",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV New York — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4a595d8a4d",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-74d9c4e46f",
+      "url": "https://sosv.com/apply/sosv/",
+      "title": "SOSV New York — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7d3babbe90",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV New York — batches page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-9ea3867066",
+      "url": "https://sosv.com/apply/sosv/",
+      "title": "SOSV New York — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aeb9193ef1",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV New York — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ce699b0d44",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV New York — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-fef93a10fb",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4bd51fad13",
+      "url": "https://sosv.com/apply/sosv/",
+      "title": "SOSV New York — homepage checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6bb769aca3",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV New York — details page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-af03c26c6c",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV New York — application page checked by scrape.py",
+      "excerpt": "Cutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY → https://sosv.com/apply/sosv/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5cd0cc7c7",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV New York — batches page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cb8a97fb9f",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV New York — application page checked by scrape.py",
+      "excerpt": "HAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX → https://sosv.com/apply/hax/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d630da9b81",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV New York — terms page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "press@sosv.com",
+        "evidenceId": "check-email-997fc30b25"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://sosv.com/apply",
+        "evidenceId": "check-route-4bd51fad13"
+      },
+      {
+        "value": "https://sosv.com/apply/sosv/",
+        "evidenceId": "check-route-af03c26c6c"
+      },
+      {
+        "value": "https://sosv.com/apply/hax/",
+        "evidenceId": "check-route-cb8a97fb9f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://sosv.com/apply",
+        "evidenceId": "check-route-4bd51fad13"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
+        "evidenceId": "check-deal-71b7b0f4ad"
+      },
+      {
+        "value": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
+        "evidenceId": "check-deal-6bba2c2659"
+      },
+      {
+        "value": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
+        "evidenceId": "check-deal-f6b3ada9ec"
+      },
+      {
+        "value": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
+        "evidenceId": "check-deal-88e914d798"
+      },
+      {
+        "value": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
+        "evidenceId": "check-deal-0fa1e401e2"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://sosv.com/portfolio/",
+        "evidenceId": "check-portfolio-74d9c4e46f"
+      },
+      {
+        "value": "https://sosv.com/portfolio",
+        "evidenceId": "check-portfolio-9ea3867066"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

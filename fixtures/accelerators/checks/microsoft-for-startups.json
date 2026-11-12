@@ -1,0 +1,102 @@
+{
+  "programId": "microsoft-for-startups",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.microsoft.com/en-us/startups",
+    "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+    "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-63f5450fb0",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "title": "Microsoft for Startups — terms page checked by scrape.py",
+      "excerpt": "Microsoft Surface gifts Xbox gifts XBOX games deals Small business deals Certified refurbished Gift cards Trade in and save Limited-time offer Get up to $500 cash back with trade-in Get your device's full trade-in value, plus cash back on eligible Surface purchases. 1 Shop qualifying devices Check your device's",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-a682725e7c",
+      "url": "https://www.microsoft.com/en-us/store/b/sale?icid=DSM_TopNavDeals",
+      "title": "Microsoft for Startups — terms page checked by scrape.py",
+      "excerpt": "work with raw power and portability, powered by Snapdragon X2® processors. $ • • • • • • $ • • • • • • Shop now Limited-time offer New Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000⁴ cash back on Surface Laptop Ultra or trade in another eligible device and get up to $500¹ cash back.",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-98b76a6bde",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "title": "Microsoft for Startups — homepage checked by scrape.py",
+      "excerpt": "Microsoft for Startups | Microsoft This is the Trace Id:",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1af841926e",
+      "url": "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/",
+      "title": "Microsoft for Startups — details page checked by scrape.py",
+      "excerpt": "Get started → https://www.microsoft.com/en-us/startups/?wt.mc_id=programupdates_signup_blog_mfsmktg",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1be76180da",
+      "url": "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/",
+      "title": "Microsoft for Startups — details page checked by scrape.py",
+      "excerpt": "Get started today → https://www.microsoft.com/en-us/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d204460a78",
+      "url": "https://www.microsoft.com/en-us/startups/blog/experts-on-ai-a-series-of-fireside-chats-about-llms-and-ai-best-practices/",
+      "title": "Microsoft for Startups — details page checked by scrape.py",
+      "excerpt": "Microsoft for Startups → https://www.microsoft.com/en-us/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fa8b0a8255",
+      "url": "https://www.microsoft.com/en-us/startups",
+      "title": "Microsoft for Startups — homepage checked by scrape.py",
+      "excerpt": "Microsoft for Startups → https://www.microsoft.com/en-us/startups/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.microsoft.com/en-us/startups/",
+        "evidenceId": "check-route-fa8b0a8255"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "work with raw power and portability, powered by Snapdragon X2® processors. $ • • • • • • $ • • • • • • Shop now Limited-time offer New Trade in for up to $1000 cash back Trade in your MacBook Pro and get up to $1,000⁴ cash back on Surface Laptop Ultra or trade in another eligible device and get up to $500¹ cash back.",
+        "evidenceId": "check-deal-a682725e7c"
+      },
+      {
+        "value": "Microsoft Surface gifts Xbox gifts XBOX games deals Small business deals Certified refurbished Gift cards Trade in and save Limited-time offer Get up to $500 cash back with trade-in Get your device's full trade-in value, plus cash back on eligible Surface purchases. 1 Shop qualifying devices Check your device's",
+        "evidenceId": "check-deal-63f5450fb0"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.microsoft.com/en-us/startups/",
+        "evidenceId": "check-portfolio-d204460a78"
+      },
+      {
+        "value": "https://www.microsoft.com/en-us/startups/?wt.mc_id=programupdates_signup_blog_mfsmktg",
+        "evidenceId": "check-portfolio-1af841926e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Microsoft for Startups",
+        "evidenceId": "check-name-98b76a6bde"
+      }
+    ],
+    "examplePages": []
+  }
+}

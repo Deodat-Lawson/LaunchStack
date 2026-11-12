@@ -1,0 +1,75 @@
+{
+  "programId": "icebreaker",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.icebreaker.vc/",
+    "https://www.icebreaker.vc/apply",
+    "https://www.icebreaker.vc/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a5d33f65ca",
+      "url": "https://www.icebreaker.vc/",
+      "title": "Icebreaker — homepage checked by scrape.py",
+      "excerpt": "Icebreaker.vc Portfolio Apply for Funding Team Contact Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-19725100d2",
+      "url": "https://www.icebreaker.vc/about",
+      "title": "Icebreaker — details page checked by scrape.py",
+      "excerpt": "Apply for funding → https://www.icebreaker.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f11623d06",
+      "url": "https://www.icebreaker.vc/",
+      "title": "Icebreaker — homepage checked by scrape.py",
+      "excerpt": "Apply for funding → https://www.icebreaker.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6f3248193b",
+      "url": "https://www.icebreaker.vc/about",
+      "title": "Icebreaker — details page checked by scrape.py",
+      "excerpt": "Apply for Funding → https://www.icebreaker.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-822b71c38a",
+      "url": "https://www.icebreaker.vc/",
+      "title": "Icebreaker — homepage checked by scrape.py",
+      "excerpt": "Apply for Funding → https://www.icebreaker.vc/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.icebreaker.vc/apply",
+        "evidenceId": "check-route-822b71c38a"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.icebreaker.vc/apply",
+        "evidenceId": "check-route-822b71c38a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Icebreaker",
+        "evidenceId": "check-name-a5d33f65ca"
+      }
+    ],
+    "examplePages": []
+  }
+}

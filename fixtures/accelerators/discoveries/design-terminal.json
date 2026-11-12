@@ -1,0 +1,22 @@
+{
+  "programId": "design-terminal",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://civitta.com/hu/nemzeti-tehetseg-kozpont-start-programcsalad/",
+      "page": "details",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://civitta.com/career/partner-development-program/",
+      "page": "details",
+      "anchor": "Public Sector Partner Development Program All Civitta locations Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

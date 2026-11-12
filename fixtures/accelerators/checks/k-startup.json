@@ -1,0 +1,35 @@
+{
+  "programId": "k-startup",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.k-startup.go.kr/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6be96df4e6",
+      "url": "https://www.k-startup.go.kr/",
+      "title": "K-Startup — homepage checked by scrape.py",
+      "excerpt": "창업진흥원, K-Startup 바로가기 모두의 창업 '모두의 창업'에서 더 나은 창업을 위한 정보를 만나보세요. 바로가기 누구에게나",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "K-Startup",
+        "evidenceId": "check-name-6be96df4e6"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "programId": "t-hub",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.t-hub.co/",
+    "https://www.t-hub.co/about-us",
+    "https://www.t-hub.co/social-impact-challenge"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-5edfce8d4d",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page checked by scrape.py",
+      "excerpt": "at T-Hub, Hyderabad ₹10 lakh Prize pool across 3 winners 15 Nov 2026 Applications close. Shortlisting is rolling 2 to 5 Members per team, one",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-9e322dd89a",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page checked by scrape.py",
+      "excerpt": "reviewed as they arrive, and early teams hear back first. Applications close on 15 November 2026. 06 What happens after we are shortlisted? + Shortlisted",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-b9efd7295f",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page checked by scrape.py",
+      "excerpt": "2026. Real Problems Are Waiting. Build What Solves Them. Applications close 15 November 2026. Shortlisting is rolling, so apply early. Register Now",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-dcd242c576",
+      "url": "https://www.t-hub.co/social-impact-challenge",
+      "title": "T-Hub — application page checked by scrape.py",
+      "excerpt": "Rolling Live Screening and shortlisting 15 Nov 2026 Next Applications close 20 Nov 2026 AMA sessions with shortlisted teams 24 Nov 2026 Challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-name-08d254a9a9",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "T-Hub | The World's Largest Home for Startups About About About",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1211f8b7ea",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4924d3cb51",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9c34c2d9fa",
+      "url": "https://www.t-hub.co/about-us",
+      "title": "T-Hub — details page checked by scrape.py",
+      "excerpt": "Startups Startup Growth Enablement → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b4344a713a",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "Read More → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d968408f20",
+      "url": "https://www.t-hub.co/about-us",
+      "title": "T-Hub — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.t-hub.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-afcec532c7",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d294185947",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "https://www.t-hub.co/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fe1be8cbdd",
+      "url": "https://www.t-hub.co/",
+      "title": "T-Hub — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.t-hub.co/social-impact-challenge",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.t-hub.co/social-impact-challenge",
+        "evidenceId": "check-route-fe1be8cbdd"
+      },
+      {
+        "value": "https://www.t-hub.co/mbrdi-climate-tech-incubator-student-launchpad-program-season-2",
+        "evidenceId": "check-route-afcec532c7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.t-hub.co/",
+        "evidenceId": "check-route-d294185947"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2026-11-15",
+        "evidenceId": "check-deadline-5edfce8d4d"
+      },
+      {
+        "value": "2026-11-20",
+        "evidenceId": "check-deadline-dcd242c576"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.t-hub.co/startups",
+        "evidenceId": "check-portfolio-4924d3cb51"
+      }
+    ],
+    "name": [
+      {
+        "value": "T-Hub",
+        "evidenceId": "check-name-08d254a9a9"
+      }
+    ],
+    "examplePages": []
+  }
+}

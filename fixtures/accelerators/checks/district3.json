@@ -1,0 +1,126 @@
+{
+  "programId": "district3",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.district3.co/",
+    "https://www.district3.co/about",
+    "https://www.district3.co/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-7149fb85cd",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage checked by scrape.py",
+      "excerpt": "District 3 | Montreal Startup Incubator for Bio, Health, Tech &",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6b2fa43ee3",
+      "url": "https://www.district3.co/about",
+      "title": "District 3 — details page checked by scrape.py",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8ae90d5960",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage checked by scrape.py",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-93b7d2d39e",
+      "url": "https://www.district3.co/about",
+      "title": "District 3 — details page checked by scrape.py",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b59b9c508d",
+      "url": "https://www.district3.co/apply",
+      "title": "District 3 — application page checked by scrape.py",
+      "excerpt": "Startup portfolio → https://www.district3.co/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c6dfe5c91e",
+      "url": "https://www.district3.co/apply",
+      "title": "District 3 — application page checked by scrape.py",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-dc894012da",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage checked by scrape.py",
+      "excerpt": "startup directory → https://www.district3.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-206c0e165f",
+      "url": "https://www.district3.co/about",
+      "title": "District 3 — details page checked by scrape.py",
+      "excerpt": "apply now → https://www.district3.co/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-310dc3e02e",
+      "url": "https://www.district3.co/apply",
+      "title": "District 3 — application page checked by scrape.py",
+      "excerpt": "FR → https://www.district3.co/fr/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-54b7b25b88",
+      "url": "https://www.district3.co/",
+      "title": "District 3 — homepage checked by scrape.py",
+      "excerpt": "apply → https://www.district3.co/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-db76d8234c",
+      "url": "https://www.district3.co/about",
+      "title": "District 3 — details page checked by scrape.py",
+      "excerpt": "apply → https://www.district3.co/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.district3.co/apply",
+        "evidenceId": "check-route-54b7b25b88"
+      },
+      {
+        "value": "https://www.district3.co/fr/apply",
+        "evidenceId": "check-route-310dc3e02e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.district3.co/apply",
+        "evidenceId": "check-route-54b7b25b88"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.district3.co/startups",
+        "evidenceId": "check-portfolio-dc894012da"
+      }
+    ],
+    "name": [
+      {
+        "value": "District 3",
+        "evidenceId": "check-name-7149fb85cd"
+      }
+    ],
+    "examplePages": []
+  }
+}

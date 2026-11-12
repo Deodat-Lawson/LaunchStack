@@ -1,0 +1,118 @@
+{
+  "programId": "northzone",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://northzone.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/spotify",
+      "page": "portfolio",
+      "anchor": "Early · 2008 Spotify How the world listens",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/klarna",
+      "page": "portfolio",
+      "anchor": "Early · 2015 Klarna Smoother payments",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/black-forest-labs",
+      "page": "portfolio",
+      "anchor": "Early · 2024 Black Forest Labs Building state-of-the-art AI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/genesis-ai",
+      "page": "portfolio",
+      "anchor": "Early · 2025 Genesis AI Teaching machines to act",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/personio",
+      "page": "portfolio",
+      "anchor": "Early · 2017 Personio Intelligent HR platform",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/cuspai",
+      "page": "portfolio",
+      "anchor": "Early · 2024 Cusp AI Designing breakthrough materials",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/spring-health",
+      "page": "portfolio",
+      "anchor": "Early · 2020 Spring Health Precision mental health care",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/blitzy",
+      "page": "portfolio",
+      "anchor": "Growth · 2026 Blitzy Build software in days",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/xbow",
+      "page": "portfolio",
+      "anchor": "Growth · 2026 Xbow Autonomous offensive security",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/tandem-health",
+      "page": "portfolio",
+      "anchor": "Early · 2024 Tandem Health Unshackling doctors from admin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/gc-ai",
+      "page": "portfolio",
+      "anchor": "Growth · 2025 GC AI Empowering in-house lawyers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://northzone.com/portfolio/openfx",
+      "page": "portfolio",
+      "anchor": "Early · 2025 OpenFX Building global money rails",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

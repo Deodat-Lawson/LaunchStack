@@ -1,0 +1,158 @@
+{
+  "programId": "surge",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://surge.peakxv.com/companies",
+      "page": "portfolio",
+      "anchor": "Startups",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/apply",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/reach-out",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/airalo",
+      "page": "portfolio",
+      "anchor": "Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/atlan",
+      "page": "portfolio",
+      "anchor": "Atlan is a modern data collaboration workspace, enabling teams to create a single source of truth for all their data assets, and collaborate across the modern data stack. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/multiplier",
+      "page": "portfolio",
+      "anchor": "Global HR platform for hiring, managing, and paying employees worldwide. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/arintra",
+      "page": "portfolio",
+      "anchor": "Arintra is an autonomous medical coding platform that uses AI to code patient charts accurately, helping healthcare providers reduce denials and get paid faster. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/plum",
+      "page": "portfolio",
+      "anchor": "Plum is transforming the employee healthcare experience by providing comprehensive group health insurance with seamless digital claims experience. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/relevance-ai",
+      "page": "portfolio",
+      "anchor": "Relevance AI is a machine learning startup on a mission to help companies build an AI workforce that automates workflows with no code. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/skillmatics",
+      "page": "portfolio",
+      "anchor": "Skillmatics is a full stack direct-to-consumer brand that develops innovative educational products and games that build core skills in children through systematic play. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/khatabook",
+      "page": "portfolio",
+      "anchor": "Khatabook is a digital ledger service for SMBs that offers them an easy, online bookkeeping solution to manage their business. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/ambak",
+      "page": "portfolio",
+      "anchor": "Ambak is a home loan marketplace that helps buyers compare options across 50+ lenders and secure the right mortgage with less friction. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/the-health-factory",
+      "page": "portfolio",
+      "anchor": "The Health Factory is a direct-to-consumer food brand that makes high-protein, low-carb bread and bakery products for healthier everyday eating. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/truefoundry",
+      "page": "portfolio",
+      "anchor": "TrueFoundry is a cloud-native platform that helps machine learning teams build, deploy, and scale AI applications quickly, securely, and on their own infrastructure. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/horizon-quantum-computing",
+      "page": "portfolio",
+      "anchor": "Horizon Quantum Computing is a Singapore-based company building software-development tools to enable the next revolution in computing. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/ethereal-machines",
+      "page": "portfolio",
+      "anchor": "Ethereal Machines is an advanced manufacturing company that produces precision engineering components through its proprietary multi-axis computer numerical control (CNC) machines. ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/primetrace",
+      "page": "portfolio",
+      "anchor": "Primetrace is a consumer AI company that builds a portfolio of AI-native apps for everyday use, reaching over 300 million users across India. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/companies/justai",
+      "page": "portfolio",
+      "anchor": "JustAI is an agentic marketing platform that uses AI to test and optimize lifecycle content, turning channels like email into an autonomous revenue engine. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://surge.peakxv.com/resource/from-sun-microsystems-to-openai-vinod-khosla-on-bold-bets-building-enduring-companies",
+      "page": "portfolio",
+      "anchor": "CONNECTING THE DOTS Announcement Video Press Case study WATch From Sun Microsystems to OpenAI: Vinod Khosla on Bold Bets & Building Enduring Companies Vinod Khosla Founder, Khosla ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

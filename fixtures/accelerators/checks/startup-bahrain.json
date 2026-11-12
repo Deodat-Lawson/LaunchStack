@@ -1,0 +1,78 @@
+{
+  "programId": "startup-bahrain",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startupbahrain.com/",
+    "https://startupbahrain.com/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0d3af469fe",
+      "url": "https://startupbahrain.com/about",
+      "title": "Startup Bahrain — details page checked by scrape.py",
+      "excerpt": "Contact (contact@startupbahrain.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-6926953ba3",
+      "url": "https://startupbahrain.com/about",
+      "title": "Startup Bahrain — details page checked by scrape.py",
+      "excerpt": "We are excited to have you! Just send us your details on help@startupbahrain.com and we will get back to you! Can StartUp Bahrain promote",
+      "page": "details"
+    },
+    {
+      "id": "check-email-859fa232fb",
+      "url": "https://startupbahrain.com/about",
+      "title": "Startup Bahrain — details page checked by scrape.py",
+      "excerpt": "Apply (contact@startupbahrain.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-2d1cbacfce",
+      "url": "https://startupbahrain.com/",
+      "title": "Startup Bahrain — homepage checked by scrape.py",
+      "excerpt": "StartUp Bahrain Ecosystem Guide Pitch Weekend Blog Perks Resources Bahrain",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8b570f7408",
+      "url": "https://startupbahrain.com/",
+      "title": "Startup Bahrain — homepage checked by scrape.py",
+      "excerpt": "https://startupbahrain.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "contact@startupbahrain.com",
+        "evidenceId": "check-email-0d3af469fe"
+      },
+      {
+        "value": "help@startupbahrain.com",
+        "evidenceId": "check-email-6926953ba3"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://startupbahrain.com/",
+        "evidenceId": "check-route-8b570f7408"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup Bahrain",
+        "evidenceId": "check-name-2d1cbacfce"
+      }
+    ],
+    "examplePages": []
+  }
+}

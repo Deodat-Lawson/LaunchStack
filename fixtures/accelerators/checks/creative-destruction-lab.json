@@ -1,0 +1,167 @@
+{
+  "programId": "creative-destruction-lab",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://creativedestructionlab.com/",
+    "https://creativedestructionlab.com/about/",
+    "https://creativedestructionlab.com/application-triage/",
+    "https://creativedestructionlab.com/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-54b3f80980",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "excerpt": "is unclear, you can always contact us directly at admissions@creativedestructionlab.com . Log in to Community CDL Intro Webinar FAQs Press Job",
+      "page": "application"
+    },
+    {
+      "id": "check-email-99ea5fc58e",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "excerpt": "admissions@creativedestructionlab.com",
+      "page": "application"
+    },
+    {
+      "id": "check-name-b707be27e7",
+      "url": "https://creativedestructionlab.com/",
+      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "excerpt": "Home - Creative Destruction Lab × About Program Streams Locations Staff Putting AI to Work",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-000f92ed05",
+      "url": "https://creativedestructionlab.com/about/",
+      "title": "Creative Destruction Lab — details page checked by scrape.py",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-23843afa97",
+      "url": "https://creativedestructionlab.com/faq/",
+      "title": "Creative Destruction Lab — terms page checked by scrape.py",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4e21d14628",
+      "url": "https://creativedestructionlab.com/",
+      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a2b721b865",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "excerpt": "Companies → https://creativedestructionlab.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-326752b3d4",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "excerpt": "FR → https://creativedestructionlab.com/fr/application-triage/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-46cecd8e1c",
+      "url": "https://creativedestructionlab.com/",
+      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "excerpt": "Program → https://creativedestructionlab.com/program/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a5b49d28d7",
+      "url": "https://creativedestructionlab.com/",
+      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-acce73bc29",
+      "url": "https://creativedestructionlab.com/about/",
+      "title": "Creative Destruction Lab — details page checked by scrape.py",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d4cdd6266e",
+      "url": "https://creativedestructionlab.com/faq/",
+      "title": "Creative Destruction Lab — terms page checked by scrape.py",
+      "excerpt": "Apply → https://creativedestructionlab.com/application-triage/",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-655f04fa23",
+      "url": "https://creativedestructionlab.com/",
+      "title": "Creative Destruction Lab — homepage checked by scrape.py",
+      "excerpt": "will advance research-driven entrepreneurship and strengthen Qatar’s role in the global innovation economy. Applications are now open for the 2026/27 program year Apply × Log in to Community CDL Intro Webinar FAQs Press Job Postings Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-status-dd608d233b",
+      "url": "https://creativedestructionlab.com/application-triage/",
+      "title": "Creative Destruction Lab — application page checked by scrape.py",
+      "excerpt": "companies have graduated from CDL and generated over CAD $60B in equity value. Applications for the 2026/27 program have closed. What You’ll Get Focused mentorship from accomplished entrepreneurs and investors Technical guidance from",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "admissions@creativedestructionlab.com",
+        "evidenceId": "check-email-99ea5fc58e"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://creativedestructionlab.com/application-triage/",
+        "evidenceId": "check-route-a5b49d28d7"
+      },
+      {
+        "value": "https://creativedestructionlab.com/fr/application-triage/",
+        "evidenceId": "check-route-326752b3d4"
+      },
+      {
+        "value": "mailto:admissions@creativedestructionlab.com",
+        "evidenceId": "check-email-99ea5fc58e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://creativedestructionlab.com/program/",
+        "evidenceId": "check-route-46cecd8e1c"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-655f04fa23"
+      }
+    ],
+    "operatingStatus": [
+      {
+        "value": "closed",
+        "evidenceId": "check-status-dd608d233b"
+      }
+    ],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://creativedestructionlab.com/companies/",
+        "evidenceId": "check-portfolio-4e21d14628"
+      }
+    ],
+    "name": [
+      {
+        "value": "Creative Destruction Lab",
+        "evidenceId": "check-name-b707be27e7"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "programId": "company-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.companyventures.com/",
+    "https://www.companyventures.com/programs"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-4f39fe3523",
+      "url": "https://www.companyventures.com/programs",
+      "title": "Company Ventures — details page checked by scrape.py",
+      "excerpt": "it. For founders looking to leverage our embedded incubation studio, Terrarium, to build transformational healthcare companies. Benefits 4 months full-time · $10K/mo stipend Access to 50+ healthcare enterprise partners Co-develop thesis with Terrarium team Co-founder matching via in-house platform Idea bank of 30+",
+      "page": "details"
+    },
+    {
+      "id": "check-name-78b749933c",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "Company Ventures Go Back Team Portfolio Programs News & Insights Apply",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7995a6138b",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7ce539ac28",
+      "url": "https://www.companyventures.com/programs",
+      "title": "Company Ventures — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9190adb3e6",
+      "url": "https://www.companyventures.com/programs",
+      "title": "Company Ventures — details page checked by scrape.py",
+      "excerpt": "https://www.companyventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9e2422dbf0",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "portfolio → https://www.companyventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b361a4dca2",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.companyventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f9eacc603e",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.companyventures.com/portfolio/#companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f3eb72176a",
+      "url": "https://www.companyventures.com/",
+      "title": "Company Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.companyventures.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.companyventures.com/",
+        "evidenceId": "check-route-f3eb72176a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "it. For founders looking to leverage our embedded incubation studio, Terrarium, to build transformational healthcare companies. Benefits 4 months full-time · $10K/mo stipend Access to 50+ healthcare enterprise partners Co-develop thesis with Terrarium team Co-founder matching via in-house platform Idea bank of 30+",
+        "evidenceId": "check-deal-4f39fe3523"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.companyventures.com/portfolio",
+        "evidenceId": "check-portfolio-7995a6138b"
+      },
+      {
+        "value": "https://www.companyventures.com/portfolio/#companies",
+        "evidenceId": "check-portfolio-f9eacc603e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Company Ventures",
+        "evidenceId": "check-name-78b749933c"
+      }
+    ],
+    "examplePages": []
+  }
+}

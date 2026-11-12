@@ -1,0 +1,88 @@
+{
+  "programId": "balderton",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.balderton.com/",
+    "https://www.balderton.com/about-balderton/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-d02f3cfa82",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — homepage checked by scrape.py",
+      "excerpt": "& Performance Platform Our Values Sustainable Future Goals Balderton Launched Our team Companies All companies Founder",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-15dfca78aa",
+      "url": "https://www.balderton.com/about-balderton/",
+      "title": "Balderton — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2fa27aa962",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-592a418385",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — homepage checked by scrape.py",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b057b780d",
+      "url": "https://www.balderton.com/about-balderton/",
+      "title": "Balderton — details page checked by scrape.py",
+      "excerpt": "All companies → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b5293a1b7e",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — homepage checked by scrape.py",
+      "excerpt": "Meet the portfolio → https://www.balderton.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ea03ba77a5",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — homepage checked by scrape.py",
+      "excerpt": "https://www.balderton.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.balderton.com",
+        "evidenceId": "check-route-ea03ba77a5"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.balderton.com/companies/",
+        "evidenceId": "check-portfolio-2fa27aa962"
+      }
+    ],
+    "name": [
+      {
+        "value": "Balderton",
+        "evidenceId": "check-name-d02f3cfa82"
+      }
+    ],
+    "examplePages": []
+  }
+}

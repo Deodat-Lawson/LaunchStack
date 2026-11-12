@@ -1,0 +1,268 @@
+{
+  "programId": "sting",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.sting.co/",
+    "https://www.sting.co/sting-core",
+    "https://www.sting.co/science-to-business",
+    "https://www.sting.co/faq",
+    "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-e744de8397",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "in touch with Sting? Visit sting.co/contact or email us at hello@sting.co. You can also connect with individual team members via",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-d6a9a5ee18",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Sting | Sweden’s Leading Startup Accelerator No items found.",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0892d31e4c",
+      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
+      "title": "STING — batches page checked by scrape.py",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-20753624f3",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2fdf6da342",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page checked by scrape.py",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-443a4c60a4",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4ffd8df0fe",
+      "url": "https://www.sting.co/sting-core",
+      "title": "STING — details page checked by scrape.py",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5e7141bcc5",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-62c335aa13",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page checked by scrape.py",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-76c0dd8d96",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page checked by scrape.py",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-980c8a9958",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a6ca14c131",
+      "url": "https://www.sting.co/sting-core",
+      "title": "STING — details page checked by scrape.py",
+      "excerpt": "Explore portfolio chevron_right → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b8afbdce35",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Explore portfolio chevron_right → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c3dff8341c",
+      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
+      "title": "STING — batches page checked by scrape.py",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c5b565b5d8",
+      "url": "https://www.sting.co/sting-core",
+      "title": "STING — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4be143029",
+      "url": "https://www.sting.co/sting-core",
+      "title": "STING — details page checked by scrape.py",
+      "excerpt": "All Companies → https://www.sting.co/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-df1eb19ff1",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "Sting Companies Startups can save the world. We know, we've helped 400+ of them. → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e79762b089",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page checked by scrape.py",
+      "excerpt": "View all DeepTech companies chevron_right → https://www.sting.co/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f74e29c74a",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-fdb9b97cdf",
+      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
+      "title": "STING — batches page checked by scrape.py",
+      "excerpt": "Companies → https://www.sting.co/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2fba29ecc8",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Apply to Sting → https://www.sting.co/programs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4ed78cc3fd",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "https://www.sting.co/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-50a718cf7c",
+      "url": "https://www.sting.co/newsroom/news/meet-the-21-startups-joining-sting-this-autumn",
+      "title": "STING — batches page checked by scrape.py",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-9cfbbed1e9",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a61d34b226",
+      "url": "https://www.sting.co/science-to-business",
+      "title": "STING — application page checked by scrape.py",
+      "excerpt": "Apply to the Sting Core Program → https://www.sting.co/sting-core",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b9f8280059",
+      "url": "https://www.sting.co/",
+      "title": "STING — homepage checked by scrape.py",
+      "excerpt": "Apply now! → https://www.sting.co/sting-core",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e9724a348e",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-fcba70480b",
+      "url": "https://www.sting.co/sting-core",
+      "title": "STING — details page checked by scrape.py",
+      "excerpt": "Science to Business Through our \"Science to Business\" initiative, we provide exclusive support to turn groundbreaking concepts into startups. Get funding for patent applications and key hires, connect with co-founders, and qualify for up to 500,000 SEK from Propel Capital. → https://www.sting.co/science-to-business",
+      "page": "details"
+    },
+    {
+      "id": "check-status-9f0f8a5ad0",
+      "url": "https://www.sting.co/faq",
+      "title": "STING — terms page checked by scrape.py",
+      "excerpt": "the terms of your next qualified financing round. Read more chevron_right How do I apply to Stings programs? Applications are open several times a year. Simply visit sting.co and select the program you’re interested in. Each application",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@sting.co",
+        "evidenceId": "check-email-e744de8397"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.sting.co/science-to-business",
+        "evidenceId": "check-route-9cfbbed1e9"
+      },
+      {
+        "value": "https://www.sting.co/programs",
+        "evidenceId": "check-route-2fba29ecc8"
+      },
+      {
+        "value": "https://www.sting.co/sting-core",
+        "evidenceId": "check-route-b9f8280059"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.sting.co/",
+        "evidenceId": "check-route-4ed78cc3fd"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-9f0f8a5ad0"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.sting.co/companies",
+        "evidenceId": "check-portfolio-20753624f3"
+      }
+    ],
+    "name": [
+      {
+        "value": "STING",
+        "evidenceId": "check-name-d6a9a5ee18"
+      }
+    ],
+    "examplePages": []
+  }
+}

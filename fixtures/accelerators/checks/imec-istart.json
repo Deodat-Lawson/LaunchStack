@@ -1,0 +1,307 @@
+{
+  "programId": "imec-istart",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.imec-int.com/en/istart",
+    "https://www.imec-int.com/en/applications",
+    "https://www.imec-int.com/en/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-1022dccff6",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Imec.istart | imec Expertise What we offer Applications Your career",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0019944184",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "details"
+    },
+    {
+      "id": "check-route-00c75311c3",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/smarter-consumer-electronics",
+      "page": "application"
+    },
+    {
+      "id": "check-route-04ecad4930",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Contact us → https://www.imec-int.com/en/connect-with-us?origin_url=%2Fen%2Fapplications&contactblock=147204#contact",
+      "page": "application"
+    },
+    {
+      "id": "check-route-078553d1ba",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0fa81b4504",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1b565e9ebe",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1c57cead24",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/agrifood-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2b11489ec1",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/security-and-resilience",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2d2b93057f",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-46dea7b3b7",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-49eb9fe912",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4e6ee685ed",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-52e6e1a91f",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/sustainable-energy-and-power-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5b7957163f",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6cb1e85808",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7112008cf3",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "details"
+    },
+    {
+      "id": "check-route-746d038d32",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "details"
+    },
+    {
+      "id": "check-route-78a7cb8ab6",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7b621dfd9f",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7f4b531ce5",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Advanced semiconductor process technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "details"
+    },
+    {
+      "id": "check-route-816199e2e5",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8de070f332",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9127d778ed",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a2b3dc8bf8",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a3b9426a48",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Life sciences and health solutions → https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a85fd4ef7d",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Automotive technologies → https://www.imec-int.com/en/applications/automotive-technologies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b262c1298e",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Applications → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b9c39cfbe6",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c00ff94116",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Semiconductor technology → https://www.imec-int.com/en/applications/semiconductor-technology",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c38ef5afdf",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c7f9cef385",
+      "url": "https://www.imec-int.com/en/istart",
+      "title": "imec.istart — homepage checked by scrape.py",
+      "excerpt": "More applications → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cca808e3cb",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "Robotics technology for Industry 4.0 → https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d945765d52",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Data and telecommunication → https://www.imec-int.com/en/applications/data-and-telecommunication",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e79249c8a8",
+      "url": "https://www.imec-int.com/en/about-us",
+      "title": "imec.istart — details page checked by scrape.py",
+      "excerpt": "Discover more applications... → https://www.imec-int.com/en/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eefe691948",
+      "url": "https://www.imec-int.com/en/applications",
+      "title": "imec.istart — application page checked by scrape.py",
+      "excerpt": "https://www.imec-int.com/en/applications/home-automation",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.imec-int.com/en/applications",
+        "evidenceId": "check-route-0fa81b4504"
+      },
+      {
+        "value": "https://www.imec-int.com/en/applications/semiconductor-technology",
+        "evidenceId": "check-route-746d038d32"
+      },
+      {
+        "value": "https://www.imec-int.com/en/applications/data-and-telecommunication",
+        "evidenceId": "check-route-8de070f332"
+      },
+      {
+        "value": "https://www.imec-int.com/en/applications/automotive-technologies",
+        "evidenceId": "check-route-2d2b93057f"
+      },
+      {
+        "value": "https://www.imec-int.com/en/applications/robotics-technology-industry-40",
+        "evidenceId": "check-route-0019944184"
+      },
+      {
+        "value": "https://www.imec-int.com/en/applications/life-sciences-and-health-solutions",
+        "evidenceId": "check-route-7112008cf3"
+      }
+    ],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "imec.istart",
+        "evidenceId": "check-name-1022dccff6"
+      }
+    ],
+    "examplePages": []
+  }
+}

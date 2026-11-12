@@ -1,0 +1,62 @@
+{
+  "programId": "climate-launchpad",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://climatelaunchpad.org/competition/",
+      "page": "details",
+      "anchor": "About the competition",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/application-form/",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/about-climatelaunchpad/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/meet-our-trainers/",
+      "page": "application",
+      "anchor": "Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new ski",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/beyond-the-pitch-climatelaunchpads-role-in-shaping-sustainable-startups/",
+      "page": "portfolio",
+      "anchor": "Beyond the pitch: ClimateLaunchpad’s role in shaping sustainable startups Alumni Competition Insights Success Stories 3 min read",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://climatelaunchpad.org/blog/celebrating-the-recent-funding-achievements-of-climatelaunchpad-participants/",
+      "page": "portfolio",
+      "anchor": "Celebrating the recent funding achievements of ClimateLaunchpad Participants Alumni Insights Success Stories 4 min read",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

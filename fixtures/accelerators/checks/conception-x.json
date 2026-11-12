@@ -1,0 +1,79 @@
+{
+  "programId": "conception-x",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.conceptionx.org/",
+    "https://www.conceptionx.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-3ed86fed2b",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage checked by scrape.py",
+      "excerpt": "Applications for our Spring 2027 cohorts are open. Apply by 6 December 2026 or join our next discovery session if you have more",
+      "page": "details"
+    },
+    {
+      "id": "check-name-27590277fa",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage checked by scrape.py",
+      "excerpt": "Where scientists become Venture Scientists | Conception X Apply ↗ Close menu Close menu Pathways Venture Scientist",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b0678b5634",
+      "url": "https://www.conceptionx.org/about",
+      "title": "Conception X — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bc794bba3a",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.conceptionx.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-db43a76a3d",
+      "url": "https://www.conceptionx.org/",
+      "title": "Conception X — homepage checked by scrape.py",
+      "excerpt": "https://www.conceptionx.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.conceptionx.org/",
+        "evidenceId": "check-route-db43a76a3d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2026-12-06",
+        "evidenceId": "check-deadline-3ed86fed2b"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.conceptionx.org/portfolio",
+        "evidenceId": "check-portfolio-bc794bba3a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Conception X",
+        "evidenceId": "check-name-27590277fa"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -4,18 +4,28 @@
   "programs": [
     {
       "programId": "500-global",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "flagship-batch-36"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "720415771e827f88d9c63ee26ff245c0814b92893da5e82aa3b0f051e00fe2d4"
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.residency",
+        "program_type.investor",
+        "stage.early",
+        "geography.bay-area"
+      ],
+      "openReviewIds": [
+        "500-global:stale:flagship",
+        "500-global:stale:homepage",
+        "500-global:stale:official-logo"
+      ],
+      "contentHash": "46347f62894d1a40c0de03095643011250d0c7ce4d8017734aca4069e08469f3"
     },
     {
       "programId": "a16z-speedrun",
-      "checkedAt": "2026-11-09T22:40:59Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "sr008",
         "sr009"
@@ -25,179 +35,272 @@
         "instrument.safe",
         "benefit.partner-credits",
         "stage.very-early",
-        "geography.san-francisco"
+        "geography.san-francisco",
+        "program_type.residency",
+        "program_type.investor",
+        "program_type.community",
+        "business_model.marketplace",
+        "stage.early",
+        "benefit.demo-day"
       ],
       "openReviewIds": [
-        "a16z-speedrun:residencyEnd"
+        "a16z-speedrun:residencyEnd",
+        "a16z-speedrun:stale:sr-apply-window",
+        "a16z-speedrun:stale:sr-faq-incorporation"
       ],
-      "contentHash": "08569d2efb20ceba659e2c2c29bae0f71e4434fdf02b04bdf13892181632e206"
+      "contentHash": "577a8d11b18e40b857babef4ee38de3bda25cfc795ed9a00cc28ddc1a7d66cf1"
     },
     {
       "programId": "abovea-startup-accelerator",
-      "checkedAt": "2026-10-25T09:52:21.494Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-application"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "8793972cceb4b6acd6cadc09a84f8e933cddcdf342275623a2734d421bbe8abb"
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "stage.early",
+        "stage.idea",
+        "stage.growth"
+      ],
+      "openReviewIds": [
+        "abovea-startup-accelerator:stale:abovea-hidden-infrastructure",
+        "abovea-startup-accelerator:stale:abovea-public-form-input-markup"
+      ],
+      "contentHash": "b36a789e1d9fc03429982001255328d0abe890d90af14760b507227f0c0e45a7"
     },
     {
       "programId": "accel-atoms",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "stage.pre-seed"
+      ],
       "openReviewIds": [],
-      "contentHash": "f93d1ab39ebbc970ea6d424b8beebc2b5805f56bf47b54eafbea80c2a9fa15f6"
+      "contentHash": "4f149d0966cdb58153edda1a67df34fcbb5401ce25c7c2d61194eae1e0ebaf05"
     },
     {
       "programId": "accelerace",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "customer_type.enterprise",
+        "stage.pre-seed",
+        "stage.growth",
+        "benefit.mentorship",
+        "geography.europe",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "ad52c831474a0e6e948af3e8cf427fbc372427f337191763bdd67ba623670402"
+      "contentHash": "9d00bc90d1fe0f359d995b09e4d9d929ab16362ec2b5eda8e66b40d4039002e3"
     },
     {
       "programId": "accelerating-asia",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "technology.ai",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "bdef9d65d066fd7c38b0c7b207bba132e648f976df107e120d9123cbfeb1012e"
+      "contentHash": "eaebb031b42461f51e3a16ab26db48db7c82ceeefae33617269efdc4cc3c5bfb"
     },
     {
       "programId": "activate",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "sector.deep-tech"
+      ],
       "openReviewIds": [],
-      "contentHash": "57ea43ee0e0158bdcd17a74a2f602a6ecfc74f516827d5e380fe9fa2c461765d"
+      "contentHash": "3d373d73db904c168b8a703c1a7d9faba01bfe1adc2e3d8ce11f2acea3d8d3c6"
     },
     {
       "programId": "afore-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency"
+      ],
       "openReviewIds": [],
-      "contentHash": "94a9ad2d8732e480f10bc3582aef27a4c64603a2f3217a26b410b8c93f7a857b"
+      "contentHash": "b8448d523f2c10a771b755af76aacc3d557af5dce88985666cdbd837daa5593d"
     },
     {
       "programId": "agoranov",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "0b22fbae291fe05fb68d4fe40b6a6a32622c6a1397ef4c1b6efe837377a9ac71"
+      "tagIds": [
+        "program_type.incubator",
+        "geography.france"
+      ],
+      "openReviewIds": [
+        "agoranov:stale:official-logo"
+      ],
+      "contentHash": "da7284e72a2d8c4c24fe006f110f34ade9ce09b9ee930d54565e4e85312f440d"
     },
     {
       "programId": "alchemist",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "flagship"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "b8f66a588d0fdc6a6019ba5642c1c5b7375fc99039cb9aaed6524ed0443fcc79"
+      "tagIds": [
+        "program_type.accelerator",
+        "business_model.b2b",
+        "benefit.mentorship",
+        "benefit.investor-access",
+        "geography.bay-area"
+      ],
+      "openReviewIds": [
+        "alchemist:stale:flagship",
+        "alchemist:stale:homepage"
+      ],
+      "contentHash": "03e88cb6548f5db01185f2ba842d2939d4b172f7e1623675e38901b0e49a2ee4"
     },
     {
       "programId": "alven",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "15e529b544f8923a340a0d6dce77d95dab254aff43cae8575e2b4b6793db795d"
+      "contentHash": "ea0d001a911f9cfa1dbf0cf3620e851f3d0f6af76458f35c0629abe6d065dbeb"
     },
     {
       "programId": "angelpad",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "seed-cohort"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "stage.seed",
+        "geography.new-york"
+      ],
       "openReviewIds": [],
-      "contentHash": "12d40ab8b0c559ed6a562b1aba28103a9496e465580cd60fb8b7050b8e3ff307"
+      "contentHash": "a572738bc90d6951fbd792215435979333b769251722c417d57c7e8fd874b3d0"
     },
     {
       "programId": "antler",
-      "checkedAt": "2026-10-26T23:19:30.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "published-start-dates"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [
-        "antler:locationCount"
+      "tagIds": [
+        "program_type.residency",
+        "program_type.investor",
+        "program_type.community",
+        "stage.pre-seed",
+        "stage.early",
+        "stage.growth",
+        "geography.new-york",
+        "geography.canada",
+        "geography.nordics",
+        "geography.africa",
+        "geography.east-asia",
+        "geography.oceania"
       ],
-      "contentHash": "cc2721d4fe189335bedfc68490f2e804c9a5917c870e5d2cdf71a538b5bac927"
+      "openReviewIds": [
+        "antler:locationCount",
+        "antler:stale:antler-cohort-dates",
+        "antler:stale:antler-public-form",
+        "antler:stale:official-logo"
+      ],
+      "contentHash": "e2b5e47ec51ecaa9362e69071ea7ddb51023ba12cb93ea7d4e4bafd815735aea"
     },
     {
       "programId": "appworks",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "stage.early",
+        "stage.growth",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "f6b3b8df769123b4b38b2d7027d69c6bb33c07177d97ab635c522ffac0cc00ba"
+      "contentHash": "93f02192547fe8706e64b91a9cccae4f3dbcdde46c96d73d9faab5261cdf1e81"
     },
     {
       "programId": "apx",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.property",
+        "stage.pre-seed",
+        "geography.europe",
+        "geography.germany"
+      ],
       "openReviewIds": [],
-      "contentHash": "d833f67261b30365fe414abaeba768b65b654b34fe28bab44502f71e9754d5b9"
+      "contentHash": "6be06e6e6bf36073a863f941bbd430f00438aabf17592ebdc2df7c25037e0fa1"
     },
     {
       "programId": "arch-grants",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.grant"
+      ],
       "openReviewIds": [],
-      "contentHash": "9fbf09b39ee3a1c8bc5af605756e92f80073eac53ac2ff4eef93ecbf599f1a77"
+      "contentHash": "d610b200c54f204c7aa492d321bd4cc90881ab655648e52be2af8dee9ba87b11"
     },
     {
       "programId": "astrolabs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "aecd5be566a6d75b2907634ef7b063d0d7b504abb3fd80b3703b9b50f065b6df"
+      "contentHash": "c6f401c7a7bcede64d8bcda4d56a10214924765b54bbd08954f21e110da4f2f8"
     },
     {
       "programId": "atomico",
@@ -206,46 +309,70 @@
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "dde5402b7cea9983f25372a58c0c11749645a418878a9a9220587417cd62497f"
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "geography.europe"
+      ],
+      "openReviewIds": [
+        "atomico:inaccessible:homepage"
+      ],
+      "contentHash": "581e1bafd691be2ad4e0cbae7549006f7923803d976aeae8a54dd095498597d1"
     },
     {
       "programId": "aws-activate",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.logistics",
+        "technology.ai",
+        "business_model.marketplace",
+        "customer_type.smb"
+      ],
       "openReviewIds": [],
-      "contentHash": "2772c61c8ea096e9c2cb8517202e7d84059aa998960fdb9a932e599b4a685958"
+      "contentHash": "1958dc6eb7d750842b06ad83319512045813af41139efb64485a21e6a2f0609a"
     },
     {
       "programId": "backstage-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor"
+      ],
       "openReviewIds": [],
-      "contentHash": "54645c21b592a6842d7cfe5e7f1683ef02b150d6a141deeadfe6824189fc5d3f"
+      "contentHash": "a2d9c2fae725afdbdff84cde863e89162e06edf8f35ffc0f4e30f8ea80ad61e9"
     },
     {
       "programId": "balderton",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.climate",
+        "sector.energy",
+        "sector.logistics",
+        "technology.ai",
+        "geography.united-kingdom",
+        "geography.london",
+        "geography.europe",
+        "geography.germany",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "e8fceeb8658d802222d72c62eddfd9b660a6be4fd4a4a47b8223031fce81e858"
+      "contentHash": "0ed5be17152bd42b384f36ddd93d9dec11b0834674e10a508b376e1a9e5f3968"
     },
     {
       "programId": "berkeley-skydeck",
-      "checkedAt": "2026-11-09T22:40:59Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "batch-23",
         "batch-24"
@@ -261,64 +388,91 @@
         "genexgen",
         "fusion-dynamics"
       ],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.university",
+        "benefit.demo-day"
+      ],
       "openReviewIds": [],
-      "contentHash": "00bd5ed4eb5d43c357a99e829bb6234d26b0234889b2b363650bd79bf03d2754"
+      "contentHash": "effdc41f6ed8480dcc47af0478c829a50cf588b6e175b6bf9cc6ed5a865503c8"
     },
     {
       "programId": "bessemer",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.fintech",
+        "sector.health",
+        "sector.life-sciences",
+        "sector.defense",
+        "sector.cybersecurity",
+        "sector.web3",
+        "sector.deep-tech",
+        "technology.ai",
+        "technology.robotics",
+        "business_model.marketplace"
+      ],
       "openReviewIds": [],
-      "contentHash": "daa3e3bb5d40ee821c3bc01e3a4f4817167ed9f7799fabd187a3f3b804dcdf25"
+      "contentHash": "9af71a3e2516f9b8f55aa4e7db8764091bde9d8a7f769e0819e5929d4536c622"
     },
     {
       "programId": "beta-i",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation"
+      ],
       "openReviewIds": [],
-      "contentHash": "445825cc51e72c537a5def3e382df64cfd0c377fdf37e980715e6c1cdc7eb4b4"
+      "contentHash": "df3be53147685fd1b39e02b0da395de503b0e22c27ac259bd8a880f813e9afb1"
     },
     {
       "programId": "betaworks",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "526b5a9a4c3068275b93ecccde49574c0b72b9728a2e62af250d477894757034"
+      "contentHash": "9928b7084505895b024f2a7a1d482225e8b8abc40d80660f9d73ce478eba63d9"
     },
     {
       "programId": "bethnal-green-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "stage.early",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "a625751c70f9c60dcbb88bff36db2d381e688069093e33fbff0eb9fb3fa86c22"
+      "contentHash": "1b10a02b63e6d1ffde54f0e1e05f5cb5c7239c39fc7d9cc07f23d20d7041cc37"
     },
     {
       "programId": "boost-vc",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "winter-fellowship"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "program_type.investor",
+        "sector.deep-tech",
+        "stage.pre-seed"
+      ],
       "openReviewIds": [],
-      "contentHash": "af46398984eb78fcc6d360f1750f099cac5cb554766d89797536532a6749e876"
+      "contentHash": "5425b95391b1a19b7a7257799f57235e283398f4ad53731e2265f818748f7b8b"
     },
     {
       "programId": "bp-ventures",
@@ -327,108 +481,153 @@
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "32f8ec4c9423de6d007009ee220a83407d56683d8535dbc6016c40d4cf7843fb"
+      "tagIds": [
+        "sector.energy"
+      ],
+      "openReviewIds": [
+        "bp-ventures:inaccessible:homepage"
+      ],
+      "contentHash": "890b9affc2b3970b2d5a5f7da32a981ffdc713705f5347e98dc732a6a2204872"
     },
     {
       "programId": "breakthrough-energy",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.energy",
+        "sector.agrifood",
+        "sector.mobility",
+        "sector.manufacturing"
+      ],
       "openReviewIds": [],
-      "contentHash": "4c3f2de383abd8d38d866ef3b0cb72de371ec94b5ccc36daae560eb4a0b88b05"
+      "contentHash": "1c7890e4a0923cf2d187c6a423605d78eefe1c0e60d759fffd8888e1b0827de8"
     },
     {
       "programId": "brightlands",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "516a01791a5d5426ccaa5379e867c8f375af7beadb0378effff49510a3c94340"
+      "contentHash": "18754e2949c46436e11a2f217c021e870b1d4cd1e62e57195bf741850342cae7"
     },
     {
       "programId": "brinc",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "cf2272a6c5e087eeea8cfc3e35d35563f25506cf697618fecfed849f1e1e2812"
+      "contentHash": "c6fd43e513766f11e112b61bd579dc6e59d966ae70605b5944e46a5770801b87"
     },
     {
       "programId": "building-global-innovators",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.venture-studio",
+        "sector.mobility",
+        "geography.iberia"
+      ],
       "openReviewIds": [],
-      "contentHash": "f708e47229189e1ba9b51b79c68ecdd4984dc16a4c718907dfcc232deca46bfc"
+      "contentHash": "8b88bcb013cfb41ac6df45cf85b927019bd7abd89dcb05d7f69eb2cc0fc57012"
     },
     {
       "programId": "capital-factory",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.aerospace",
+        "sector.deep-tech",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "be9bb4efe15de872d4cbc1c600083a0f6b450c6e79b675dcb6a2a66aff7cf3b4"
+      "contentHash": "c5c277a2ed74c4bb23203989f5402d6d150eb75c8facd64509e519e544564207"
     },
     {
       "programId": "capital-innovators",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "customer_type.consumer",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "15d39c5798d91f791d0dca40f980c4d72470f851194812d9a6123f7a868dc6eb"
+      "contentHash": "ded092daf952ae397f7096ce378678e59474a1691153e65d5aefa463c3362475"
     },
     {
       "programId": "carbon13",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "sector.climate"
+      ],
       "openReviewIds": [],
-      "contentHash": "8840c42423cf210317d81a3f76148303e6c5807d6db687a8fd95a26d0f5eae16"
+      "contentHash": "0e71a52e434795ae4b1b15a4356db5948e20931848d83a38e0c24cbb1ad1e655"
     },
     {
       "programId": "catalyst-fund",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.venture-studio",
+        "program_type.investor",
+        "sector.fintech",
+        "sector.climate",
+        "stage.pre-seed",
+        "stage.early",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "d962693ee7375b9ff93b65dcc8cb662c06cb85e8f3f66567b50a8510b2be8900"
+      "contentHash": "2c39ba381e4fb88eb6e0aa9c621c1ff6203eedfad788302f1eca4a7263d9d5c8"
     },
     {
       "programId": "cchub",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "sector.energy",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "f92f877c414096d4c5f1993d46b66061c3f92c313a69d4a7a293e768424c6440"
+      "contentHash": "1ce5f5cd01cba1faa8f59dfc546d4ccf29d927e707eb5d8dae5fe58df2e1f3d8"
     },
     {
       "programId": "chain-reaction",
@@ -437,409 +636,590 @@
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "cdb994362c751319c7d20c0fea2686deb67fa07c5258833359a869a12dc3f5c2"
+      "tagIds": [
+        "program_type.residency"
+      ],
+      "openReviewIds": [
+        "chain-reaction:inaccessible:homepage"
+      ],
+      "contentHash": "fed464f9b9733fb2f2cbe957f9ba6b20c192ca60a57dc825cc73460383b03054"
     },
     {
       "programId": "chalmers-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "sector.social-impact",
+        "sector.deep-tech",
+        "benefit.mentorship",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "e9e81b509cc5e569be85aeed7d395ea52dcb2421af216e19741e3a479560adfc"
+      "contentHash": "1e7512ef5a2d8675149765ac23c33a845fc39e179fe48fd5909463257698e44a"
     },
     {
       "programId": "cic",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.united-states",
+        "geography.new-york",
+        "geography.boston",
+        "geography.europe",
+        "geography.germany",
+        "geography.middle-east",
+        "geography.east-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "d610bec7a2548e01b24081cafb70278a736879ff377e279b6714173a3089c814"
+      "contentHash": "eb37c1116f66b304d7993769bdec1d973cdd3621d2a37be33a9eac8a82a4db16"
     },
     {
       "programId": "clean-energy-trust",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.climate",
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "520ea32c8121027435824d5fef81a3aff8f9e4aa2091027e33599d2a0d3edd47"
+      "contentHash": "ea748aedfb2935226f7f57b5adfa8adeaa772eb40bf4aeb2a7d4a390a20519f1"
     },
     {
       "programId": "climate-kic",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "geography.europe",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "ece9b87fe36e82274de250f3cbdaa2fd497d863ada7ba4a7b88ca3e9008b32ad"
+      "contentHash": "22a8b30348b17c9690ef0c22a2bd5ce75345c9ef52ffee0e116de6df042d7ca7"
     },
     {
       "programId": "climate-kic-accelerator",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "customer_type.enterprise",
+        "customer_type.government",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "acd61bb46ad6dd0912abbeef4f369cf5f61858ad84831ea854a5d201612ba7a0"
+      "contentHash": "c921f01ac1290712e246eeae3dfb5e94a70f37712c357a182a88d1f640486c8e"
     },
     {
       "programId": "climate-launchpad",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "c3af8671b29afc6d9091dd83001ca2d8f16b978498ee86c7931f15dad7fe7e1d"
+      "tagIds": [
+        "sector.climate",
+        "benefit.mentorship"
+      ],
+      "openReviewIds": [
+        "climate-launchpad:applicationsOpen"
+      ],
+      "contentHash": "eeabd036ee5b36bc86ec84c52fa0bfadd440372ed99d1ad36771d5376bac56c4"
     },
     {
       "programId": "communitech",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.defense",
+        "benefit.workspace",
+        "geography.canada"
+      ],
       "openReviewIds": [],
-      "contentHash": "4d5f39062c00142c0175191dbed34072bd302ac1483563ba24371b693c65e9ee"
+      "contentHash": "60f568a9abd94b51290f17870b699b7b132bcd0fc65536b400d7c649c4787a8a"
     },
     {
       "programId": "company-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "program_type.investor",
+        "technology.ai",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "ad3412f7d266854731f4fc98a84755b7bb3563a84ff254823511544bad52d348"
+      "contentHash": "5759caabe7d4729fa3cd5c4130ca4feaa6dc620a6fc9f6be26c54fcb57ab8726"
     },
     {
       "programId": "conception-x",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "sector.life-sciences",
+        "sector.deep-tech",
+        "technology.ai",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "2480f303d7773e1aa002b54e39c3374ff50fe6745cd271e7dbc4d305d1b8c8ab"
+      "contentHash": "9ed88e4be05dd301cf918a882d84e9aa6113ab0245d3cee5e48dc1bbdb277c0a"
     },
     {
       "programId": "congruent-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "722b57c1761fae96711efc4048fa00ef4cbc88e523bf0559782579006f3f2b2d"
+      "contentHash": "1a1443122955a9e4a3bac1cc1c27844d842ba9551f4e6ea45eec6f1c4eeb8bda"
     },
     {
       "programId": "connect-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "stage.pre-seed"
+      ],
       "openReviewIds": [],
-      "contentHash": "c5fb9828735a0cebe89539f225e0a981aa217911e491b61c0f917de9e474c8fd"
+      "contentHash": "802cc645d58d4520abc6912cc7ee46cf3297e533c8e8560896a78c478475aaa8"
     },
     {
       "programId": "contrary",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor"
+      ],
       "openReviewIds": [],
-      "contentHash": "66db7bd7b931fb2e04d302f4178e0ce1d3037f3fb346b9a43fdd637243eafcbf"
+      "contentHash": "2b88c7c737ae41bd74755f70efaacc3775a3ebc090885378903c6589c02886c6"
     },
     {
       "programId": "copenhagen-fintech",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "program_type.community",
+        "sector.fintech",
+        "customer_type.enterprise",
+        "stage.growth",
+        "benefit.mentorship",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "bf75873669bdade8cfcfcae82b1b2db997adbf97e11aab178b9a6919609c13c5"
+      "contentHash": "e6686eaeba5c7093252ba3c020b4957ea7be00a7990a2cdbc3a54bb8d9f457f1"
     },
     {
       "programId": "corfo",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.energy"
+      ],
       "openReviewIds": [],
-      "contentHash": "4a93a57299b596590a01ca2a098c8d99555eb7342933a86da9142bf28eb92fa1"
+      "contentHash": "77773850f9d31e7d66ebf8598663bdb6ab8f469998f267aa672a76ec271b791b"
     },
     {
       "programId": "creative-destruction-lab",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "objectives-program"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "2abdd3602fcd8fa242558b4fb2d9f48acdf4841e056c592cbbcc8600fd0b6d45"
+      "tagIds": [
+        "stage.seed",
+        "stage.early",
+        "benefit.mentorship"
+      ],
+      "openReviewIds": [
+        "creative-destruction-lab:stale:official-logo"
+      ],
+      "contentHash": "75d4b5ba308f99e630bc68fe2e138b128b61ca864e3ad40d61e631be46ad9d3d"
     },
     {
       "programId": "cubo",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "sector.fintech",
+        "sector.climate",
+        "sector.mobility",
+        "sector.media",
+        "sector.logistics",
+        "technology.ai",
+        "customer_type.enterprise",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "3a696343b1b517a802777aabe715b7aae2b42d118a4fde5c77aad14a8c7f10a1"
+      "contentHash": "488bf2875a22b0792a325f9d5d4036ad5adab44367ba248b113f9c305dc493ce"
     },
     {
       "programId": "cyclotron-road",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "08f71ed90e9f82edff875c0ddfc297304cddb4400bf82382b6ac97f92bbf7c4b"
+      "contentHash": "2a7019785dcbea9503c10bb523a6823170ae28b0b5c1843921dc6d163b89287b"
     },
     {
       "programId": "czechinvest",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "sector.manufacturing",
+        "geography.europe",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "76262f9d013524a91783f50d55bdb0d803737b62233f699a6851e4258a2d92f9"
+      "contentHash": "1c6bb2b7e2fd7a5078b17a409209e3bc1087ffaf0f50c9ceb39a4169091fb59a"
     },
     {
       "programId": "darwin-startups",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation"
+      ],
       "openReviewIds": [],
-      "contentHash": "94b6234a2dcc174f6c0e529b5644128956411b2485b45139c693d7556e5db924"
+      "contentHash": "38b7f42ad9e05f8ae5fcccda76fbd580777f8af191a16684b1eaa388b0a7e09f"
     },
     {
       "programId": "dcamp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "f432b6d13e8cb2183b2ea6d4abff815b51176e35f077b2a077630444d64c053d"
+      "contentHash": "c39f86d21f5da6e76c8b206ee9918eb378899f009418b48c558e4ff77e476e59"
     },
     {
       "programId": "design-terminal",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "e5ba3646745fa0c8c3d633ef00e6ca427e0d4c2a7670d718072049b79f9492ac"
+      "contentHash": "86533d93a0d71dbfc0f30fef1794b2a145af580e000e35d3dcda1b3f241b511b"
     },
     {
       "programId": "district3",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "program_type.residency",
+        "sector.health",
+        "sector.life-sciences",
+        "geography.canada"
+      ],
       "openReviewIds": [],
-      "contentHash": "b35375bd315e23b1e3e11bcdce926b5ee0044451d5f9f9d92018e398f4d600b0"
+      "contentHash": "788fbc5e8d8efad94fcca3db1b7386b8d21c66ae25f3384c628b60d8524c7140"
     },
     {
       "programId": "distrito",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "f3c07fbd9db97b01be7a4397a8adedd71e295e4c3fb7b9c72a0bae4daadb1954"
+      "contentHash": "f576232da817df2576a86d09ab6d53567b95f92ad6e11c54fa839ce15835fbd6"
     },
     {
       "programId": "dmz",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "program_type.grant",
+        "sector.education",
+        "customer_type.smb",
+        "benefit.mentorship",
+        "geography.canada"
+      ],
       "openReviewIds": [],
-      "contentHash": "028b4460176de8971a9b4874eb9b264882da5ded153bc89d0eee23e2537a7f03"
+      "contentHash": "6615e3863c260b666fafbf3b3d4e4048c2f0dbb289ca3a6bfd0f99c052bd7888"
     },
     {
       "programId": "dogpatch-labs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "program_type.residency",
+        "program_type.corporate-innovation",
+        "program_type.community",
+        "sector.social-impact",
+        "customer_type.enterprise",
+        "stage.growth",
+        "benefit.mentorship",
+        "geography.ireland",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "1c6e594deb22b3c2667e216fd47b97bdeba1edfb9d820d9c55585ad829bf2ad7"
+      "contentHash": "419d0ebe3ae3e5b96645e0713eb7a5da29fbfb910af015b218acae3e2c7424e5"
     },
     {
       "programId": "dorm-room-fund",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.university",
+        "sector.health",
+        "technology.ai",
+        "technology.robotics",
+        "technology.hardware"
+      ],
       "openReviewIds": [],
-      "contentHash": "198b2010c9eee01839501aa6d4c45bf21271b013d5177bc68b1e6f219ebdd8a4"
+      "contentHash": "30b44db97e52fa6023f40a40ccd8faae4e3cb6223350d01ef54f41f2d51c1cb0"
     },
     {
       "programId": "dreamit",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "pitch"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.cybersecurity",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "abafb6fdaf4b8888dacd1855eb1d7a9d09e18386f057c4e9a77d074ab47dff94"
+      "contentHash": "b1ada63da59c7eca5ef3b6d34d5706bf1847100a9ed877108b7d9fb07d71e675"
     },
     {
       "programId": "eit-digital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.deep-tech",
+        "stage.growth",
+        "geography.europe",
+        "geography.ireland"
+      ],
       "openReviewIds": [],
-      "contentHash": "da8d681a2c4420b04408168dbe1f304d3f0797bef879f38fa78cc38252ba0bbd"
+      "contentHash": "96164cc1f5e4c9f207c3b97902509c08d9d14fbd43b05dca74a88242e3ac6e37"
     },
     {
       "programId": "eit-health",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "sector.health",
+        "sector.deep-tech",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "1b9206a0b393b7857a35c9dad0c6bac6c827d5994840133e1a4d40149839e95f"
+      "contentHash": "909faa2181b3390da48427c042bdbfc36de288c665dabf695b28b4a763a9e978"
     },
     {
       "programId": "eit-innoenergy",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.climate",
+        "sector.energy",
+        "stage.early",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "423a8326933bf27a887c546c70dcd80440b4755e5d77d0406e1630b04c6e9abe"
+      "contentHash": "5988df0b1412799305e38b3257487693642b94e58ac8c923ca3524ab27ff3ae0"
     },
     {
       "programId": "eit-manufacturing",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "sector.climate",
+        "sector.mobility",
+        "sector.manufacturing",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "9d663c910c933398f0e9d8dbb11fc61ea11a004ecc4a9a37eaa74a27c8bc162a"
+      "contentHash": "7fbb316b8341230cdbdf701d90c9f9fd288db71f74042ce62ace96ee2c0bb742"
     },
     {
       "programId": "eit-rawmaterials",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "7bec9f26f5fe29cc013a5f056ea8ad0bf71d51dbe41aee96b956a7c80e4ccc12"
+      "contentHash": "7f351b0d101cef496c8a2c62ef4a2d892e3ade224d6d671cc64eebf11cb52e69"
     },
     {
       "programId": "eit-urban-mobility",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "sector.mobility",
+        "customer_type.smb",
+        "stage.growth",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "459b1386bb0aebe14029ad948f1fac6f7e3f450519fe9943238481aed546a92e"
+      "contentHash": "b3be93db2f864b193d107539056405ca34b2f443be1f58d9e7e8aa45717d2e05"
     },
     {
       "programId": "elemental-impact",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.climate",
+        "sector.agrifood",
+        "sector.mobility"
+      ],
       "openReviewIds": [],
-      "contentHash": "d51f5e2a80b011fdc16aa9c5f1d8139ea7675126c6fc9cdaaab3fcc570ae9945"
+      "contentHash": "fe240a9728d0cbb8a31bcb119ca2a43f3d07857cad535a0908f184f8a4caf13e"
     },
     {
       "programId": "energy-impact-partners",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.cybersecurity",
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "ff0c16a4cc1fa2d7d1776c805acb56397c97a2d2151093ac41fb30a99cb18070"
+      "contentHash": "19c92daa1c7c34890b0d7d215b89c754b83dab77030e40eb7751ca1ecf82befc"
     },
     {
       "programId": "enterprise-ireland",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "customer_type.smb",
+        "stage.early",
+        "geography.ireland"
+      ],
       "openReviewIds": [],
-      "contentHash": "6e65a3ef3b2d677fe145e9ae43ff0e041d61678da75d3cd63ec9af10ccacba76"
+      "contentHash": "6a65e0c9c2170cbd6218faecc76c422af2484a2e659eea3a0b20912dacae6992"
     },
     {
       "programId": "entrepreneurs-first",
-      "checkedAt": "2026-11-09T22:40:59Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "bangalore-winter-2027",
         "bridge-winter-2027"
@@ -898,14 +1278,28 @@
         "instrument.equity-free-grant",
         "benefit.partner-credits",
         "stage.pre-company",
-        "geography.london-bangalore-san-francisco"
+        "geography.london-bangalore-san-francisco",
+        "program_type.residency",
+        "program_type.investor",
+        "instrument.non-dilutive",
+        "benefit.workspace",
+        "benefit.demo-day",
+        "geography.bay-area",
+        "geography.london",
+        "geography.europe",
+        "geography.india"
       ],
-      "openReviewIds": [],
-      "contentHash": "c060781321c5d73199e2a038f69b19233c9f90a3ca0917c7e95cba3f6682bab2"
+      "openReviewIds": [
+        "entrepreneurs-first:stale:ef-apply-hub",
+        "entrepreneurs-first:stale:ef-bangalore-page",
+        "entrepreneurs-first:stale:ef-bridge-page",
+        "entrepreneurs-first:stale:official-logo"
+      ],
+      "contentHash": "7611c9e7c9afbfc1f85035dd6cfbdeb106efb436f6fd0ae2f891b264cf02efe8"
     },
     {
       "programId": "entrepreneurs-roundtable-accelerator",
-      "checkedAt": "2026-11-09T22:40:59Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "winter-2027"
       ],
@@ -1299,29 +1693,39 @@
         "instrument.post-money-safe"
       ],
       "openReviewIds": [],
-      "contentHash": "f19b4f0ff556b8285fd00242868ab90017b8f1c3b731e9b35bf596c42298f000"
+      "contentHash": "295789ae50d2a106ce57a50af1b6a983843fa7b393be9123ee94f88d1e18098d"
     },
     {
       "programId": "epfl-innovation",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.deep-tech",
+        "customer_type.enterprise",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "c96ab8e89f89a802e555a807d14aa022bed0f347e4047c2da03e0b888db2f0d9"
+      "contentHash": "d96538f6dc7068b882878a07d55c8070683acdae0f1866f9e83a7f96b4a4a86b"
     },
     {
       "programId": "eqt-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.aerospace",
+        "technology.ai",
+        "stage.early",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "82f57eaddd3616f65b47bd6d4f330819ccb089c4fb51ef1695c93ad61bf769d5"
+      "contentHash": "ed5691d563e7477400ff45e02e99ee2b145e07b4c21920454478723032c9cbec"
     },
     {
       "programId": "esa-bic",
@@ -1330,306 +1734,420 @@
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "1b2e8f50750e0b0a0d9e7be5c0f49f6c88188ec95a78c5cb892728418bc60421"
+      "tagIds": [
+        "program_type.incubator",
+        "sector.aerospace",
+        "customer_type.smb",
+        "benefit.investor-access",
+        "geography.europe"
+      ],
+      "openReviewIds": [
+        "esa-bic:inaccessible:homepage"
+      ],
+      "contentHash": "4c582dfef442c1bdc09523c2e9800def2201f7c8e7982309b662073087a01967"
     },
     {
       "programId": "esa-space-solutions",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "579e021c19f8b07d34781fa4cdcacbab0acb292e24fb027e7a6919993159c594"
+      "contentHash": "4e83b8997dfd9a96321b5c136c85a7adb3e175c73d1e460a5a2e8527d3c63ed3"
     },
     {
       "programId": "eth-entrepreneurship",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.switzerland"
+      ],
       "openReviewIds": [],
-      "contentHash": "5eb06fa63132495130405bda2846d3e11f1e9e7e8d4d86698f9064b7dd2968c8"
+      "contentHash": "3d373dd7ecf54690451c549c94f5ef8bd048bd962294cf4513b0e7bf7492d99e"
     },
     {
       "programId": "factory-berlin",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "geography.germany"
+      ],
       "openReviewIds": [],
-      "contentHash": "60de922425d63e1f7b53269f16bc365142376df28f3f017ad1f38772b48f7aa8"
+      "contentHash": "63af57665967fdceabe02e029908903dfac0766eef6814508c9248308ec718e2"
     },
     {
       "programId": "falak",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "benefit.workspace"
+      ],
       "openReviewIds": [],
-      "contentHash": "ab668a75c3ecbca1b25c4e8d2310d297d8703e03d30819e251ae2221c88bfd86"
+      "contentHash": "a9c68850758536d1d439160afa1d0bc6eae41adc3c7a5f4907cb7849389d61c7"
     },
     {
       "programId": "first-round",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "a5415c42be6228a0a1bb5edde9decd56f1654470d9304a24c30ffacf5a0c4845"
+      "contentHash": "d209eaa3705703106877444e28e4fa066e7b5c5e482433dbbc44b4b94282990a"
     },
     {
       "programId": "fishburners",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "program_type.community",
+        "benefit.mentorship",
+        "geography.oceania"
+      ],
       "openReviewIds": [],
-      "contentHash": "42f7b836585c3d76589754796e7e65d82095080b076c992dd21d117528351f77"
+      "contentHash": "1674b2cd68f460a049fa026221952557198dd1111c03d1c8689a1b9b25a5e627"
     },
     {
       "programId": "fitt-iitd",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "customer_type.government",
+        "benefit.mentorship",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "5bdb9b60ba273479fa06d2aa56eb35432976b36c03a82394f9f603aee0ead4e0"
+      "contentHash": "f4207f26b2035ccffff0881e00e2e2216497c771a1ab13c68e8abaad76300076"
     },
     {
       "programId": "flat6labs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "sector.property",
+        "customer_type.smb",
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "801a9445c3fce4e36d25241386789e9932d8bd4522f9b43eb428226e4d0a0a4d"
+      "contentHash": "24c90a3ec2522e6cba0b3c05256395e71770a53e81b69379df46818db6fe449c"
     },
     {
       "programId": "flat6labs-bahrain",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "2d46e6cc6bb1e8f98fee54bc2e9d5de5b0d7e983faa61d9f5cb9fd3deb311d4a"
+      "contentHash": "4d91454ed1e5614b6f3207444016b504e260c35956e599ee99345a37153fe058"
     },
     {
       "programId": "fledge",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "ee88812cbfd04da20ef8b043c3e615ab28147e8d014cb20545b2f68f31962a5e"
+      "contentHash": "2ed5a38bd50df925b988ada32650f7d6102d90eefa9a32f8759e7cd4a46a3caa"
     },
     {
       "programId": "floodgate",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "stage.pre-seed"
+      ],
       "openReviewIds": [],
-      "contentHash": "ced4145dd052d4b2734bf4183fc6bbb6417797e84274ec6cd7d033133c0c26f0"
+      "contentHash": "4fda7232136a9bb112235703645518ba56ab221e479d34e3ba979a6f3fe309cd"
     },
     {
       "programId": "founder-institute",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "washington-dc-philadelphia-fall-2026"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "03deea6be0f0256c188c10948e768501f1fe4582aee82ab7c81b6ae423ea79b5"
+      "tagIds": [
+        "geography.united-states"
+      ],
+      "openReviewIds": [
+        "founder-institute:stale:dc-program",
+        "founder-institute:stale:official-logo"
+      ],
+      "contentHash": "3bbabb80cf4d4bc44e2ce35e92e9318f523f2f02b83d3e06012e8dad5987b4f3"
     },
     {
       "programId": "founders-factory",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "accelerator-cohort"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "e2cfc11492e8b0c91527c5b89e8e3c4f029edd58d443e20c3f2d10a38e40407e"
+      "tagIds": [
+        "program_type.investor",
+        "customer_type.enterprise",
+        "stage.pre-seed"
+      ],
+      "openReviewIds": [
+        "founders-factory:stale:official-logo"
+      ],
+      "contentHash": "4212888b941522c120c1d701c577dd46f9b4b6e3a8e35146131b6a14eaa3a324"
     },
     {
       "programId": "free-electrons",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "program_type.competition",
+        "sector.energy"
+      ],
       "openReviewIds": [],
-      "contentHash": "110db397518f80c4e8e9e76b3d84d99f36fbcc28bf2fd9fcc13f1c5e9a6c4f7f"
+      "contentHash": "e134cf2f98b39abb5199b5a5635bdbc542a4593e68faca238d57158d2186f237"
     },
     {
       "programId": "free-electrons-program",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.energy",
+        "technology.ai",
+        "geography.london"
+      ],
       "openReviewIds": [],
-      "contentHash": "cc44527cb19811e4cb067397f310369964d06ee44cffd2f73c9476701fe183c3"
+      "contentHash": "5f679b9ba961db50d97cb1d57248645c442fcd1f577ee8d565939ede7a141af6"
     },
     {
       "programId": "galen-growth",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.health"
+      ],
       "openReviewIds": [],
-      "contentHash": "241f53f409fe768531f9e2adbee543ea7c6e1819c5335c5d1f0c6a4efd1bb4cf"
+      "contentHash": "3630f60c15c5ae3c62dc65a43af0337bf307d7af2207433b89bcdc7cfa97f47e"
     },
     {
       "programId": "gener8tor",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "investment-accelerator"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "f2963c63daf296025220a7bb349f96177cc39f820bde2a0a8e901b93b19b1032"
+      "tagIds": [
+        "program_type.accelerator",
+        "benefit.mentorship"
+      ],
+      "openReviewIds": [
+        "gener8tor:stale:investment",
+        "gener8tor:stale:official-logo"
+      ],
+      "contentHash": "18a7e8087449ad7c7d758d38fa91db3eca1667ce4fb86a0e3955d9ea7e22508e"
     },
     {
       "programId": "general-catalyst",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.health",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "6630290034a60593778e9be1b3bb2ada02b27e84a0e4767312bca486c6d6d735"
+      "contentHash": "ed93b98fd170a8c0b0f779eb8d095c1c067e69e64481e7dd6460c94365e07133"
     },
     {
       "programId": "german-accelerator",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.life-sciences",
+        "geography.europe",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "c1ee5fa31db65e789bb8a7a1b90f4809626fa0568d3f000637f3a07d8ea2a81c"
+      "contentHash": "f020562557157b95119fd4ae2f3635a788f52414d33abddcec29339ef1b23076"
     },
     {
       "programId": "golden-gate-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "stage.early",
+        "geography.middle-east",
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "5e86c8df683454c14e4a2e70a877283b9807fc9c4898e2e90c0bcf32669842ef"
+      "contentHash": "25f697c73a733226adeced901b1fc0e57633f6778e4f2b0429276a9e15e2d27d"
     },
     {
       "programId": "google-for-startups",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "accelerator"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "75506922325686a91dc38e770deb801abaa571531b04fa2f89c358d5b8963ee8"
+      "tagIds": [
+        "program_type.accelerator",
+        "technology.ai",
+        "stage.growth"
+      ],
+      "openReviewIds": [
+        "google-for-startups:stale:programs"
+      ],
+      "contentHash": "16bf4a8202ffde57f033b4427acd3ba5ecd6dbf254f3431a11ca8618c206ab56"
     },
     {
       "programId": "greentown-labs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "sector.energy",
+        "sector.manufacturing",
+        "technology.ai",
+        "benefit.lab-space",
+        "benefit.investor-access"
+      ],
       "openReviewIds": [],
-      "contentHash": "0b26fde72f886865c824d6bf220e2019940320c3c51ce846096bb3ca26fe50e0"
+      "contentHash": "692b6044ca574a6c9d15fe2d6a93b5923688c4f68114688049ac4f3f4be26794"
     },
     {
       "programId": "greentown-labs-houston",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "sector.climate",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "56af6b363b7ec966aeb165158ab47bb7924ab4bb5352e720a0f259fd78d27309"
+      "contentHash": "38b9d882c5c69660938bb4cbf8cdf7af92a4a91a9125b262485f00846463145f"
     },
     {
       "programId": "greylock",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "17d099fa6569acc56f28c2aadb65d706dc03d2c86cb2331527efaf73dd1b44c2"
+      "contentHash": "b993d39b81128474c09d1538bd776f84320fbb4892de3301a9358825ec1f2d8b"
     },
     {
       "programId": "gsf-accelerator",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "8eaa1aff110dc43d3beca97aceefee7ac810fe88955f6fb6f7fd279c78e8d385"
+      "contentHash": "25f56ae2b9f7a7fe5320a76a4770b513cd00e2ccc318fbb05854d0b77600444d"
     },
     {
       "programId": "harvard-innovation-labs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "sector.climate",
+        "sector.social-impact"
+      ],
       "openReviewIds": [],
-      "contentHash": "1e3c2419684587609545e00bca5e916802c352fc3afff593322df21bc93dd2ce"
+      "contentHash": "39e04510b42b7f35d17513d95dc2deed30c195725060c229528cdba4fa319ade"
     },
     {
       "programId": "hax",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "hard-tech-residency"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "ae73547476640a0a3f6020fca2fc6671f69883f84cecba2da6e566f4725e6d22"
+      "tagIds": [
+        "program_type.residency",
+        "sector.deep-tech",
+        "stage.pre-seed"
+      ],
+      "openReviewIds": [
+        "hax:stale:official-logo",
+        "hax:stale:program"
+      ],
+      "contentHash": "f17ed723f5e2ec29ecf58490dd5f730116a63e8257b0b91cf027092919388d83"
     },
     {
       "programId": "hf0",
@@ -1638,845 +2156,1244 @@
         "residency"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "0182708462b603478ce4cfb8139748e12a8e55b17208832f5ecd966d1145b52b"
+      "tagIds": [
+        "program_type.residency",
+        "benefit.demo-day"
+      ],
+      "openReviewIds": [
+        "hf0:inaccessible:apply",
+        "hf0:inaccessible:homepage",
+        "hf0:inaccessible:official-logo"
+      ],
+      "contentHash": "cdc3d49f7abe8b703de9334717d89d2cf311080ddcaf7045cb195c1b68b0135d"
     },
     {
       "programId": "hightechxl",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "sector.deep-tech",
+        "geography.europe",
+        "geography.netherlands"
+      ],
       "openReviewIds": [],
-      "contentHash": "c9641b1a001cf4ab645adcf60adff6f0d43f2266137dde9c23c511a15f269641"
+      "contentHash": "5e45e55834597d7f6e86fb39456d28cd9981e741e30cea3a8d132eb904209a78"
     },
     {
       "programId": "hkstp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.fintech",
+        "sector.manufacturing",
+        "sector.deep-tech",
+        "technology.ai",
+        "geography.bay-area",
+        "geography.east-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "14bc6becb8f4825bb471d45c0526ec7e6990613e854f0e42aaad4303d2169f11"
+      "contentHash": "02a759fdd94e5fc1d9a329655b95b8f2470e8cbc0d7cf54e03dfa8ac9880f3e8"
     },
     {
       "programId": "how-to-web",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "customer_type.government",
+        "geography.europe",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "d4cdf154ea933aeca430d04d79602e1b0f0e6f425e357b584275de6376f1cb25"
+      "contentHash": "c2be417af70434f5b4a6d2538e9474efbf6bacea0fbd8f7b1d80d05cc40511a3"
     },
     {
       "programId": "htgf",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.life-sciences",
+        "sector.deep-tech",
+        "stage.pre-seed",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "f27f61e70a674963e6489fca19d7b3c2a481c55bdeb79c3fe892afc3a83310c2"
+      "contentHash": "7d024c0c9c1666cf7c507f831ac4789443413ecec60167ce8c663df10728cab0"
     },
     {
       "programId": "hub71",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "3cfb16d1c36a7dacc2bef0b5328be68df9982b5196cb216e53d21b6a97bc48c9"
+      "contentHash": "3fcdea03709022ea0ad553e3188a7329b5b8222d9b7f4a1f37c2bf0bc61282e5"
     },
     {
       "programId": "hubraum",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "sector.cybersecurity",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "64a478e706bb4e173d9894ffdf16ca9ac6e70b6664cd151b603b5bb238f6e551"
+      "contentHash": "38ce6f7bc7fddac298bd22c1e7dc470105e6ef55ca5c2abc5bdd5764365ff4de"
     },
     {
       "programId": "hustle-fund",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "stage.pre-seed"
+      ],
       "openReviewIds": [],
-      "contentHash": "98175740c6accf0332ced9501e971b596f076751e225441a73b978d4de960a59"
+      "contentHash": "a4a5b739755ce2c06106a5c02a4800459b1afea2b7577a11ad1598b2bbd61304"
     },
     {
       "programId": "icebreaker",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "geography.nordics",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "2f02cb398d4d87a6dbf14287093fe30d1380859e179c8292b203ff835190fba0"
+      "contentHash": "9df74899aebe41f6ace923acb47858f001a1538728c0ce16deef2499eb6db027"
     },
     {
       "programId": "ideaspace",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community",
+        "benefit.workspace"
+      ],
       "openReviewIds": [],
-      "contentHash": "644d430cf30b8a9b478dae844379f5df8dafcb68ffc13bd0314f34fc02fd463a"
+      "contentHash": "b64cf24cf0aa8ced5e5fb9101a0ae1ba83e682b173e482da32d4bcb2f85f2581"
     },
     {
       "programId": "ihub",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community",
+        "stage.early",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "d1d38cd3ebda96e9bfab4de481e0eb476679ad97456ba1e773a26be26605e934"
+      "contentHash": "674d866e410bd5999310bfe71dae85334b5b3f37b134598f655f5c95d0ddaef4"
     },
     {
       "programId": "illumina-accelerator",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "26a738fb265f5d805ebc03fb897f6155cc558a3f44bfca6567999a5bf1bfba8f"
+      "contentHash": "79b7b68bcfedac0280da25ecf1cd486e42dc294416a6afd75e90fc4668d7ea20"
     },
     {
       "programId": "imec-istart",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.health",
+        "sector.life-sciences",
+        "sector.mobility",
+        "sector.manufacturing",
+        "technology.robotics",
+        "technology.hardware"
+      ],
       "openReviewIds": [],
-      "contentHash": "899a9782076aeabe073305e797c85b9d9793e64c4af37390b27822710a842943"
+      "contentHash": "6d32041d0a679b3e94e89fe37da7f204f99039c97d8f11190896c9534c1b2fa6"
     },
     {
       "programId": "impact-hub",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "customer_type.enterprise",
+        "customer_type.government"
+      ],
       "openReviewIds": [],
-      "contentHash": "a11f1a65bf21e60d9de211a5be2bc2019ce6f3b900a66e9ba9488da87e69c12b"
+      "contentHash": "4767fb806c116874639c558f655d81a3a8b9eb9353d37baf202b29608320ecb1"
     },
     {
       "programId": "imperial-enterprise",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.university",
+        "program_type.community",
+        "program_type.competition",
+        "sector.climate",
+        "instrument.non-dilutive",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "8472dfe0018a7d9c65907153b4532f0022d513ce227ec84507d1de30254dfb69"
+      "contentHash": "3933146391139ddd1493e1bcddea334e061ca7f41f9444745c774b62c4887409"
     },
     {
       "programId": "index-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "technology.hardware"
+      ],
       "openReviewIds": [],
-      "contentHash": "04b5714c2e006a99dd6f354dd9335b64944518b3401ea10380cb987a68d2bceb"
+      "contentHash": "14ca3403bc6afa61d7487712b9597a2d339676c901811a9fd72fcc28407673aa"
     },
     {
       "programId": "industrifonden",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.life-sciences",
+        "technology.ai",
+        "customer_type.enterprise",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "1e25925f9b24ccc62f3e78749701d229de15b1dd3d22890d4c6d5f1689553e7d"
+      "contentHash": "06b716d648eebf9164481f836c46495a71441ab71bdea5f2efffde95e6041671"
     },
     {
       "programId": "injini",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "sector.education",
+        "technology.ai",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "4472c07fd772bc01f54d60b0a055328add4eea89c7a1a38cb12d105f95512061"
+      "contentHash": "87fea2b9378f76ec548318c7cf79b403367f7f53bd71e9c488a58d51f73536b3"
     },
     {
       "programId": "innovation-labs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
       "tagIds": [],
       "openReviewIds": [],
-      "contentHash": "ab7c5c9d126c33e5162670d8020850475d53d2cf598754490d89b60485bfec2e"
+      "contentHash": "ca769a638a6d5f0ac820eb196c1a63fbd454773c76cf14f5558053972595e2e2"
     },
     {
       "programId": "insight-partners",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.fintech",
+        "sector.health",
+        "technology.ai",
+        "business_model.saas",
+        "stage.growth",
+        "geography.new-york",
+        "geography.boston",
+        "geography.ireland",
+        "geography.israel"
+      ],
       "openReviewIds": [],
-      "contentHash": "f7761bf8339494c2ed93c0c8a679d869735b3fca5f924fca145514b5aac1514b"
+      "contentHash": "b15abf4db8df3ce6621e8d0742ec745672cacfee0db5791db56755b524ef0bb9"
     },
     {
       "programId": "iterative",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "benefit.demo-day"
+      ],
       "openReviewIds": [],
-      "contentHash": "e8b3be2465e7da5fdba36c4e2c3fdea5527ffcafcf413774ac538215afa67bf0"
+      "contentHash": "ed297e0dee2be5c25eb5de90a268b32e5716f5aac6dae4ae5672a98d7a2715e6"
     },
     {
       "programId": "k-startup",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.government"
+      ],
       "openReviewIds": [],
-      "contentHash": "ef8c8340b5eb5d0f109fe6ecd8d79dec6679c98077ed7ca69bfaf3fd4707fa1e"
+      "contentHash": "84486f49465e05f645077d6e91d6c2cebb9febdbcfd2cfa1bd7dadbdfe057b2e"
     },
     {
       "programId": "kalaari",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "sector.energy",
+        "sector.agrifood",
+        "sector.defense",
+        "technology.ai",
+        "technology.robotics",
+        "stage.seed",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "1814c027efd86c1a1b9e58fec8d63339a021dfe03891ba6ffd0f7ab0f5a6ecec"
+      "contentHash": "8abbab80c3c9cbeef77377f6d21d916c0ce9b5a7682ff83d8f8176fe6269fe9d"
     },
     {
       "programId": "katapult",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "79c7d6dc16a52372ca57dbd91bdfe9da065fa4438509c6ba5e48ba8d0e201b44"
+      "contentHash": "33d12fe432fa8378be2e513ca5ff48599d244c81c336da664e75fdca3e3f0eeb"
     },
     {
       "programId": "kickstart-innovation",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "sector.commerce",
+        "geography.europe",
+        "geography.switzerland"
+      ],
       "openReviewIds": [],
-      "contentHash": "067e1952928d342981f27296dbeadb3d160369fe5eb009932e2cc3088346a4ab"
+      "contentHash": "03605c38df3b9e58e52c4a3cb7a5af66b51088350708606acb5f3df30b08c4f3"
     },
     {
       "programId": "la-french-tech",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "stage.growth",
+        "geography.france"
+      ],
       "openReviewIds": [],
-      "contentHash": "190a755f478074fdbe4f6b72e1a4ec94b46bf67273394efd84d5f65acbb622fa"
+      "contentHash": "37f42c25906e7cb5b0309d5a375a99f519562dc8c994b51810713aa7ea9d88c9"
     },
     {
       "programId": "launch-africa",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "program_type.investor",
+        "stage.early",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "0043363b9b2fc78cba934f1ab2f631d9979c9334a3bfb4c576640d14308c701b"
+      "contentHash": "3f38bd2f95775644f7ac83f0a54449c959cb28ecaf781b711501c1e5c0be4a8d"
     },
     {
       "programId": "launchvic",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.grant",
+        "stage.growth",
+        "benefit.workspace"
+      ],
       "openReviewIds": [],
-      "contentHash": "d8251abfc422932193fdea3ad8ed45b032b5fb5c3e2bbcbce17ab4dcf1ff9ead"
+      "contentHash": "cd975c6ae64545f1dcb667dac57b3ffe8555f72c98d05b2c0f961f2d812898f7"
     },
     {
       "programId": "lawrence-berkeley",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "sector.energy",
+        "technology.quantum",
+        "business_model.marketplace"
+      ],
       "openReviewIds": [],
-      "contentHash": "12768cd30ad4bbeb497a386da595623783609e092251d4d986ffe72072c0ebb4"
+      "contentHash": "b959e53f01d380a556a483b9938d3ffce0ef8778ecd412041bfc7061fa1e1bfa"
     },
     {
       "programId": "lifeline-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "stage.pre-seed",
+        "stage.seed",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "1d9b4e1c6242c8b3e57ebcb15145e78c18d3ac6a021f036c2c810603fea7b917"
+      "contentHash": "56a8314e71b665864f5a443ce559ce7c5c91eff0bc5a085d57ff16f2f17f65ba"
     },
     {
       "programId": "liga-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation"
+      ],
       "openReviewIds": [],
-      "contentHash": "dbbccd268ba99917cdcfdd7076e8c27b6bb43ad4e110e3ef1e731834bb01f93b"
+      "contentHash": "9488ff9cb46349b1855ef3d69eb6958e44cfba5c25825fdec66930b821fbc456"
     },
     {
       "programId": "lightspeed",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor"
+      ],
       "openReviewIds": [],
-      "contentHash": "2421ee28404f37088f4c6a4b2f6385bcb7eec3b87c8fa027d5a438cf039e4600"
+      "contentHash": "9bf36454f5384b6eca5f63e1499cef161ec32b372fd34511f5c18b5ff0f69182"
     },
     {
       "programId": "lightspeed-india",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.media"
+      ],
       "openReviewIds": [],
-      "contentHash": "cdffce098400b4f7d2fdf18c778a7f326eb0b64e77e1b68db9b30043e79ceb97"
+      "contentHash": "d80bb1b2a7b2fa723f901196b2584d9ef67995452768bec2d3f3e949b6048780"
     },
     {
       "programId": "localglobe",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.energy",
+        "sector.agrifood",
+        "technology.ai",
+        "stage.early",
+        "geography.london",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "45f9622949a31f14cf107078e3d592a0377a97e249732aea57e7288e90ba293a"
+      "contentHash": "ffcc66f115b17d4a9804efed6ca5bf9a3ea83f65c4fe75cbe68bcf35e5c3ce8d"
     },
     {
       "programId": "lventure",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "stage.early",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "8135e1d69f8c7171a064286f7e76fb1651dc60866213b95cd014a8989375c8fd"
+      "contentHash": "4f5cc8651b9e5ea2bb508f57900663cee214af5f84de0a935f2173088b052407"
     },
     {
       "programId": "mars-discovery",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community",
+        "sector.climate",
+        "technology.ai",
+        "customer_type.enterprise",
+        "stage.growth",
+        "geography.canada"
+      ],
       "openReviewIds": [],
-      "contentHash": "c37dfe663ce1e69eb53b821d773248d186cd7c5e2ca07eac821b3a3c78b4f1d5"
+      "contentHash": "c06267542209f2e16c4abf59b0dfcc2ed9918335070b84575aa4a739f1373879"
     },
     {
       "programId": "masschallenge",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "accelerators-listed"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "stage.early",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "59e7ac67c5cad2be05b83f7bf53515cfc6edcd2ede5f6cfadd9ef82f0a5f332c"
+      "contentHash": "4e4776c2bd1a7f43c02d22f040da2096d55cda295a5ed34820f413c8120cd004"
     },
     {
       "programId": "mesh",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "18006321a0a94e3213c347740d740baad684f0e326bbd371f741bb2e2bd67ac4"
+      "contentHash": "a58a98d9bdce1ec3a64f06c425f9254d148ede3accc00d6ee3b2bc1345dc4d32"
     },
     {
       "programId": "mhub",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.residency",
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "program_type.community",
+        "sector.health",
+        "sector.manufacturing",
+        "sector.deep-tech",
+        "benefit.lab-space"
+      ],
       "openReviewIds": [],
-      "contentHash": "9e0ab4188a3eba28d231c809c64c9acc815069c477b79136834914fdcad8ea04"
+      "contentHash": "dfe481bfa16c6d09d57e527e07519f89dc23f6e8974ff0632657ab8f2aeae13a"
     },
     {
       "programId": "microsoft-for-startups",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "e529dbb1559a2a8e41a22df032536308b66fe3c65a1c75ae755bd622f201b7a2"
+      "tagIds": [
+        "program_type.competition",
+        "technology.ai",
+        "business_model.marketplace"
+      ],
+      "openReviewIds": [
+        "microsoft-for-startups:stale:official-logo"
+      ],
+      "contentHash": "c6edab664ab1e7ed84b35cb1e1a6f6e92e85678e08ede44cb0f9ab11d6421922"
     },
     {
       "programId": "mit-delta-v",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "d38eff859ecfe717f8a2576d6eaed3ca4792eb165d917227993a45d073eecc21"
+      "contentHash": "991e105f58984e46c5766e963a2626c79679591eb80d8e28a0c161244ea2b4ce"
     },
     {
       "programId": "murud",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "technology.ai",
+        "technology.robotics",
+        "technology.hardware",
+        "benefit.lab-space",
+        "geography.oceania"
+      ],
       "openReviewIds": [],
-      "contentHash": "4c26a6af6c8901294c1a72e8958ea0f3c9486a38098dfeab105f539a2c1a10bd"
+      "contentHash": "420b8490f299419e55e16128564262cc5546d96e3c1bbec17ea58d6255672ddb"
     },
     {
       "programId": "new-energy-nexus",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "sector.energy",
+        "geography.united-states",
+        "geography.new-york",
+        "geography.africa",
+        "geography.southeast-asia",
+        "geography.east-asia",
+        "geography.oceania"
+      ],
       "openReviewIds": [],
-      "contentHash": "05c9de0ad844c29f7eed6a4e188401142485a2e94d5e41b255af95e615a710a7"
+      "contentHash": "8e0ff3c07a8705025d1e2acfc0f9ecdb63e0eb2b81e313fb9220336e79d1de3e"
     },
     {
       "programId": "new-energy-nexus-usa",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.grant",
+        "sector.energy",
+        "benefit.mentorship",
+        "geography.united-states",
+        "geography.new-york",
+        "geography.middle-east",
+        "geography.africa",
+        "geography.india",
+        "geography.southeast-asia",
+        "geography.east-asia",
+        "geography.oceania"
+      ],
       "openReviewIds": [],
-      "contentHash": "1ec3c15616b136de24d6951cdae8859deeb3145efe67564f165e7af18c15ec23"
+      "contentHash": "ab445644eb30670544c8947a7db335349f2b0a52129e3bed828e8a229d39ea1a"
     },
     {
       "programId": "newlab",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "sector.mobility",
+        "instrument.non-dilutive",
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "07687ff516b7805fd12f4a57339ed2081abf10b9b4ab0499eb3aeb6adcab6fde"
+      "contentHash": "2999955d53fd5ee2835d576ed4ca084f6543e77a0b2b8cfc077be5256820c04e"
     },
     {
       "programId": "next-canada",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "cdfb8acc159f7758723b4781459352dae750513319a801ba0ecf845db205428a"
+      "tagIds": [
+        "program_type.university",
+        "technology.ai",
+        "benefit.mentorship",
+        "geography.canada"
+      ],
+      "openReviewIds": [
+        "next-canada:applicationsOpen"
+      ],
+      "contentHash": "5efae70c9868acc7d4960374c56805f6a553c7f96d93fdb5023efd74fbc6fa32"
     },
     {
       "programId": "nexus-venture-partners",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "stage.pre-seed",
+        "geography.bay-area"
+      ],
       "openReviewIds": [],
-      "contentHash": "5a3a272ac5a52ff67866a5786450a2b8cdc1dfee8d1ffee9819ff44cf966fdce"
+      "contentHash": "b12e7af22e817387dd75222f7fdea15832c2813b87949f1446b1e7705d7e6a1a"
     },
     {
       "programId": "norrsken",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "geography.europe",
+        "geography.netherlands",
+        "geography.nordics",
+        "geography.iberia"
+      ],
       "openReviewIds": [],
-      "contentHash": "7027b370c36516cfb72deac7e438c167f7b710db1ba83ababfc9ee2b7c4f38b6"
+      "contentHash": "fde1f84e61c51018de62e787b4ed98a1a0ec7b94fbf597ab91b68dcbb1d8e1c2"
     },
     {
       "programId": "norrsken22",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "306730bd94969928703c6f1e3654585fed93dc2a0c666d1b0348aa0143265ed5"
+      "contentHash": "bf7befdc2db56d23ea665d61dbd05848d3e6dc0d8ef15bfcf5ddd3c233e37d2a"
     },
     {
       "programId": "northzone",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "geography.new-york",
+        "geography.boston",
+        "geography.london",
+        "geography.germany",
+        "geography.netherlands",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "7aeccf92fae81d7f1dcc2431a43ead8020f9fa46678eb2dfbff146f9a33a1603"
+      "contentHash": "dfdfc6bc02efbc3f970e866d174c06b87f8516d86fc7e7be85d276bf54021f2d"
     },
     {
       "programId": "nsf-icorps",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "program_type.grant",
+        "sector.life-sciences",
+        "technology.quantum",
+        "geography.united-states"
+      ],
       "openReviewIds": [],
-      "contentHash": "01939ec943fa670f3c61a325158d033230bf61bb522e0faaac9e6b4252d13c04"
+      "contentHash": "de593d90cee388bc4ff440e24007bea8f2a0f636a0422ab28df302091d23c93f"
     },
     {
       "programId": "nsrcel",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "sector.mobility"
+      ],
       "openReviewIds": [],
-      "contentHash": "d31242d979cb3cbf225c2baaf4eb233aa808078e97e7d6214045f45c635778be"
+      "contentHash": "146d9a316d9567487348f7583a8bff0be9f8c6348fef3269143a3743c08201e3"
     },
     {
       "programId": "nus-enterprise",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.cybersecurity",
+        "sector.deep-tech"
+      ],
       "openReviewIds": [],
-      "contentHash": "8124245da4133c6fc4ce849db3d13bcf31a2c60dd54efb9a562bc7057868a035"
+      "contentHash": "38ba6f9d5a8d91308dd35133f16e3c70cb4a462d7fe92f95bac56b6ae8f947bf"
     },
     {
       "programId": "nxtp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "business_model.b2b",
+        "stage.early",
+        "geography.united-states",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "a82a13dc0cc1e39d9a6b16b73a222c2f51db502564803b77eff45d784d44526e"
+      "contentHash": "f580aefe12c55256c63583266f0608b1adb137d7f6d8bc04a103ebfe77a80cfe"
     },
     {
       "programId": "on-deck",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "program_type.community",
+        "instrument.non-dilutive"
+      ],
       "openReviewIds": [],
-      "contentHash": "8f7fa9b7550ebd3c911efddfe6c585a2168fdf22425e1c1deb2445c63af30cd0"
+      "contentHash": "8e33975f04aae3934841e9030ea46816b94b7f261fa7b1227429b40ea9226b3c"
     },
     {
       "programId": "one-eight-seven-one",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community",
+        "program_type.competition",
+        "sector.fintech",
+        "sector.health",
+        "sector.climate",
+        "sector.agrifood",
+        "sector.web3",
+        "sector.property",
+        "sector.insurance",
+        "sector.media",
+        "sector.logistics",
+        "technology.ai",
+        "stage.early",
+        "stage.growth"
+      ],
       "openReviewIds": [],
-      "contentHash": "764c8ffa5a1352eb2889fba272d33912e4c47ee5f7258629f3027b057280dd80"
+      "contentHash": "37f380adb524cd6222959f5b26d4352b56c4e54e1c16703e7b3f20bf5c1489f6"
     },
     {
       "programId": "one-eleven",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.canada",
+        "geography.france"
+      ],
       "openReviewIds": [],
-      "contentHash": "5a6273b67826ec90753d71aad14976b6d3f6ac72e078293ce816b1328acd6fb0"
+      "contentHash": "be8dc1a9e71c37a5d7c692756bf9d1b8caaca71d03066ce924b289adf654c152"
     },
     {
       "programId": "one-hundred-x",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "stage.early",
+        "benefit.mentorship",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "5e3c7b679eaec1f8049c8a46907c319244cdf50a22895635110c9f6e3e5c08d1"
+      "contentHash": "3899c11616889a0d6f0372fa5df49db61bedbe39c5b8ca2e231f139bd64278c6"
     },
     {
       "programId": "openspace",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "stage.growth",
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "2fc8bf45bdb424a4b1f7b4b8b61039b4e87603fedc654cfd507d1095b12e13d5"
+      "contentHash": "92f0aea90fd156bb84799993772000adfe1f83eb5a457bc6327b9e1a1dfb4331"
     },
     {
       "programId": "orbit-startups",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "sector.health",
+        "sector.commerce",
+        "technology.ai",
+        "business_model.b2b",
+        "business_model.marketplace",
+        "geography.middle-east",
+        "geography.africa",
+        "geography.india",
+        "geography.southeast-asia",
+        "geography.east-asia",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "80935891c02208ccd5db29e40686ccbeded4aa41a0b2bc91c51904176ee5dff4"
+      "contentHash": "5713dfc7187597e9eeb3eaeb461552e4f915efcf2cc91aaca9a820942a3b3f6f"
     },
     {
       "programId": "parallel18",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "sector.fintech",
+        "sector.health",
+        "sector.life-sciences",
+        "sector.agrifood",
+        "sector.commerce",
+        "sector.media",
+        "business_model.saas",
+        "business_model.marketplace",
+        "customer_type.enterprise",
+        "stage.growth",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "9ae7f97e196bf71ae47551516f6367b2e0da371f5761dac0e271ab3beb0d9b08"
+      "contentHash": "a2350f409eb9e19564f5111eefc021890c4bf7927f276551eed62a32a5f00b15"
     },
     {
       "programId": "partech",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "sector.cybersecurity",
+        "technology.ai",
+        "geography.europe",
+        "geography.france"
+      ],
       "openReviewIds": [],
-      "contentHash": "55c0b6c27cb5ead2539ca8c782ba74d2352bb3a430e051f71bb2984af976c82b"
+      "contentHash": "9eeb9b3bc73966937c5a861e0ab1a0a6162f76201967932ff7ef03206d876a21"
     },
     {
       "programId": "passion-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.fintech",
+        "sector.insurance",
+        "technology.ai",
+        "customer_type.smb",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "c2088a108cd5a51513b3f377367cf806e7919303dff1c561457290ae7f8adb23"
+      "contentHash": "2128b61b12faef8234b6ac1db0ec574e42eeb2109ffa11c0e23b68cede123567"
     },
     {
       "programId": "peak-xv",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "045347cef7f54fd890917f280e590ff4e112aa865480265f249986b26a735b36"
+      "contentHash": "b805f937b26c3fb7c584a5d71e294321e4729ef99b70d3bc7fc0c3797528e1bf"
     },
     {
       "programId": "pear-vc",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "f24ef227630e9934b7318c6b1a1ca6fc9b2787ae6c970af802e9b53782d447b7"
+      "contentHash": "d95146c1c3477f28f455799ff821afe08a9ca8c8c4a890e0b41cd57d75ec51f2"
     },
     {
       "programId": "pioneer",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator"
+      ],
       "openReviewIds": [],
-      "contentHash": "136572f77db716b27922650c7eb57d12cbaa460bc061573e906b33eac8fb651c"
+      "contentHash": "2b16d9f4ec305895442ac5f55286402871c602998169d5394918cd0e90444f6c"
     },
     {
       "programId": "playfair-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "stage.pre-seed",
+        "geography.united-kingdom",
+        "geography.london",
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "68e9655e06430a5ece4f63dc44332115a5761c03cba8babcdfd54783b4a3bfeb"
+      "contentHash": "4f23a88c86a9a46e5d33c76a675bf30f8dd44496b966f980ded1cd9061e2bf71"
     },
     {
       "programId": "porter-shed",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community"
+      ],
       "openReviewIds": [],
-      "contentHash": "d51b752e1428e4f92662187f3af5a31c91708ce1d9500d4698b355ff7a81dc96"
+      "contentHash": "c3dff8107756e23f790420a77b1db126f6ab07f1504545ce50442c725ad8dbb4"
     },
     {
       "programId": "prime-coalition",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "d3b4320595e4a79da84afcf3c305d28dd419ced670cf73f5cd22be08ebc57680"
+      "contentHash": "8d7e9534fbf42b8201e8483ad5ccb0a42f0efa04c20e5a33baa1c43f9f5043f2"
     },
     {
       "programId": "rainmaking",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "71ee52f28a097afb63801c516b63587b3201565370e269717b23a89e03dd249f"
+      "contentHash": "afab787175066c2e8d855e0fbed3400e37e41ad9a9161ebba4f9479cf620ae00"
     },
     {
       "programId": "ref-studio",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "a5abf462b5a57228caf89f1270907a5398a3ee7268535ef46e0961c7f7908b36"
+      "contentHash": "bdc8139f60f85bc9f2e6958bba5373bdc82050a3925eb5a62a58454192d4662a"
     },
     {
       "programId": "rev1-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "program_type.community",
+        "sector.health",
+        "sector.life-sciences",
+        "sector.social-impact",
+        "sector.deep-tech",
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "0122536015c6f531da3a52afdd965051a7c99412140b96663774a76e03334348"
+      "contentHash": "f780e06631db4b1f179f5c08ab9eb75f2e0b2f7f69fec5ad9c8189ce5ba42e6f"
     },
     {
       "programId": "samsung-next",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "sector.health",
+        "sector.logistics",
+        "technology.ai",
+        "technology.robotics",
+        "technology.hardware"
+      ],
       "openReviewIds": [],
-      "contentHash": "1a430193c3922475cdf617fd59700167e9cb48a1e13269512113f73bdefbe846"
+      "contentHash": "aa79beda213779dfa6d05fbc626618c160c8caf9edd7b6664f9b02036e10d6a4"
     },
     {
       "programId": "sebrae",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "4797576ae6ea8576672f5c85aa78619f5d5725afe63ecf825d3fb20acb65b2f3"
+      "tagIds": [
+        "program_type.education"
+      ],
+      "openReviewIds": [
+        "sebrae:stale:official-logo"
+      ],
+      "contentHash": "b0b02488e3eea25ae7af8f8810a9914105e540adcb5f8292d1e98d184201a559"
     },
     {
       "programId": "seedcamp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "geography.europe",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "60ac0e61a16288a106f72a4be901c55c7bc1748d3ddf4f2140772fdd92ac82f4"
+      "contentHash": "1634568d499a7129a01200ed5b73af87abb8b1e236f4b01f6865d26ff97d9de5"
     },
     {
       "programId": "seedstars",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "benefit.mentorship",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "ab59c81e80f859b338e2e456296c9116e184452a39cc3c7f615960db1f5c35f3"
+      "contentHash": "6d334466cd180921ccf75e75026913dba751ff2923f6062a1df6cdd299c77eb1"
     },
     {
       "programId": "sequoia",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai"
+      ],
       "openReviewIds": [],
-      "contentHash": "0935409ca56d0d22247ccd8aa20fc08c17026fcacc9b9c3b6113663fd2545050"
+      "contentHash": "134ab1df5ba2dfae9c315415df1c10734335a77b3e82e40aa691923493bc7fd7"
     },
     {
       "programId": "sequoia-arc",
@@ -2485,662 +3402,1001 @@
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "1fa12a6d5ddb870ecde4713f2332660b8249540302c0fb0b29d305da523fde23"
+      "tagIds": [
+        "stage.pre-seed",
+        "stage.seed",
+        "stage.early",
+        "stage.pre-revenue"
+      ],
+      "openReviewIds": [
+        "sequoia-arc:inaccessible:homepage"
+      ],
+      "contentHash": "1ec8b030f41864da9f3b2b410082b6417f59bb6ff6f3208750c5640799b70b12"
     },
     {
       "programId": "seraphim-space",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.aerospace",
+        "geography.united-states",
+        "geography.united-kingdom"
+      ],
       "openReviewIds": [],
-      "contentHash": "be83022df62ec91c685a12b858927451247dab32ef54007d76ca2c293a3584aa"
+      "contentHash": "4c0b9f58f5a5d4141e9a596b7bb0b56298b8e61bd805d919b51f59156b9b1109"
     },
     {
       "programId": "setsquared",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "program_type.community",
+        "sector.energy",
+        "sector.mobility",
+        "customer_type.enterprise",
+        "stage.growth"
+      ],
       "openReviewIds": [],
-      "contentHash": "5d2e5ccb6e01a4c8b61b532dd36a354f26b2b7c412e4b179752098c97bae78eb"
+      "contentHash": "c201b75521f5b9be0eecb412b7105fe9438c3e09e56c88439379d918d292374c"
     },
     {
       "programId": "sginnovate",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.deep-tech",
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "db7d50abe65fe6d3af13979f27ffb7f87dc48412061d4aedfa550ec41039c8c0"
+      "contentHash": "4e532772256a880ad4a065e65b6dc69d401a144c87488021961539b856a8acf0"
     },
     {
       "programId": "sheraa",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "technology.ai",
+        "customer_type.enterprise",
+        "stage.early",
+        "benefit.mentorship",
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "f4890578e770c32bcf04f4d974ac635e9e65fd5a4c5f5ae9fb17a783d5b350f6"
+      "contentHash": "7c08ddf9b31c6165d906342bb8026a20e5eb01922d6b75c51181ce4244ae244d"
     },
     {
       "programId": "social-alpha",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.health",
+        "sector.energy",
+        "sector.deep-tech"
+      ],
       "openReviewIds": [],
-      "contentHash": "240f0a134d0020a43116c74846bb27dd8f865ac7d39d23aefd800a606d237682"
+      "contentHash": "1c76fd50783e8b71de470e44deefd1b69bd5769214e2f7d1c4980f3d345243f0"
     },
     {
       "programId": "sosv",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "program-picker"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "ff5a8e868b16405d39e9daae21407aeae876d77577df6e86018837523842f3f6"
+      "tagIds": [
+        "program_type.investor",
+        "sector.health",
+        "sector.manufacturing",
+        "sector.deep-tech",
+        "stage.pre-seed",
+        "geography.new-york",
+        "geography.bay-area",
+        "geography.ireland",
+        "geography.india",
+        "geography.east-asia"
+      ],
+      "openReviewIds": [
+        "sosv:stale:about"
+      ],
+      "contentHash": "dc86f7e503dce904a049c2e8b2171583eaac41f9aa1bcf863eda06a1be60f138"
     },
     {
       "programId": "sosv-ny",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.canada",
+        "geography.middle-east",
+        "geography.africa",
+        "geography.east-asia",
+        "geography.oceania",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "bce00b7e0fa5e7352b348e214d601889e34ebe3e69d876129148db2f21e1e44e"
+      "contentHash": "96dc1683e83104b9a272ecee314e067b69c27b51c126d4aa4daccba4774cf38c"
     },
     {
       "programId": "south-park-commons",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "residency"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "83506acae08852817f61e1a1c2609bebcdb446e58a4b5c4ab3e69de352696ff1"
+      "tagIds": [
+        "program_type.community"
+      ],
+      "openReviewIds": [
+        "south-park-commons:applicationsOpen",
+        "south-park-commons:stale:official-logo"
+      ],
+      "contentHash": "1b7e29c0322fccd5ceb4c0df7af5b7f8fc39900760831bde8abd2d88dc6bfbbc"
     },
     {
       "programId": "space-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.aerospace"
+      ],
       "openReviewIds": [],
-      "contentHash": "02c6a7c8056870d0bf8188dd54c2ef3b971c55fcf335e6e8cc35a35f66dec527"
+      "contentHash": "3d34e5296892876a46b421758a279828cdcb0d67e3c45f72f89053c603a8a6a1"
     },
     {
       "programId": "sparklabs",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator"
+      ],
       "openReviewIds": [],
-      "contentHash": "beeb07b22a1c375f076b5edd4dfdda3029b77b4c36a517e2e93dd8c9e8c96e9c"
+      "contentHash": "a3432fd1e42ed1c5d6469c84e331f473cdc4d93baa4370234499a8407b3e12c8"
     },
     {
       "programId": "starburst",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "sector.climate",
+        "sector.mobility",
+        "sector.aerospace",
+        "sector.defense",
+        "sector.deep-tech",
+        "technology.ai",
+        "technology.robotics",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "e59fcaebd4ee91885acaa691deaca5e56d76a4a4501c9300825cdbb23e5f6606"
+      "contentHash": "f9fd59e3701f4dcbe5cc461c41b4acc8c9f9ee1d3370018398123fd987b7a7f2"
     },
     {
       "programId": "startmate",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.education",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "582a93fc3db1b1867205c1ac74674ec319652d254a1b97b8a7b47ddff8448ca9"
+      "contentHash": "a3198c837482538447d61d3ed6fcec4b5a768a61ca9fbc2d1be9c9b93b4de8b2"
     },
     {
       "programId": "startup-autobahn",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "463084ccf9c20997983ab90da862d52a9d9a2fd1f70bf018327963f1d64ca95b"
+      "contentHash": "bc8d0e84f32db005a4e7638457249a12d5ecdfcd8341baef5ae2e67a9aba28f9"
     },
     {
       "programId": "startup-bahrain",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "stage.growth",
+        "geography.middle-east"
+      ],
       "openReviewIds": [],
-      "contentHash": "d0be7e543d1ffc9187e04e0993a6cb9c361465a78a616e6d8313049127dc2869"
+      "contentHash": "e06b7f1f651a26d9433814865b8a4c3c95696223e136c87b4d2cd59266279a4f"
     },
     {
       "programId": "startup-braga",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.university",
+        "program_type.education"
+      ],
       "openReviewIds": [],
-      "contentHash": "fe7a3d826449211ed34faec6959c01edcbf191af507df55a966f660e2b9cee9b"
+      "contentHash": "2d89f59d8b5269668f3014ef54910aa504c2d70bbb301300f8d921735e5ae22f"
     },
     {
       "programId": "startup-chile",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "instrument.non-dilutive",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "796c414a4925415e3641e95685a6be2731a2b77b58af3ef3b124565e16e2c2d4"
+      "contentHash": "6fbe166741905553fc0d2445b034c26f1571923b9858c75bd29ef89fb07835d4"
     },
     {
       "programId": "startup-energy-transition",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.competition",
+        "sector.climate",
+        "sector.energy",
+        "customer_type.enterprise"
+      ],
       "openReviewIds": [],
-      "contentHash": "ba551ec71b7c45782bdbbfc61a6bf8b2dd2a098d8769f75e7804a05aa04d7fa8"
+      "contentHash": "84aa461450f3665aa1c905d60c19807aa63d277d5c9d6ca32e2c27de50939441"
     },
     {
       "programId": "startup-health",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community"
+      ],
       "openReviewIds": [],
-      "contentHash": "666ed974f0fa40bbeca543bd3c6f20c84553b305d9e7c31f2124d09226c4ca83"
+      "contentHash": "37b2ab30d267559cd51f02d1f5bfcb391954e24a9fd3ed21a420bbba73658489"
     },
     {
       "programId": "startup-portugal",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "8bed32ef4b9422b03d31a79d7cd5025e6f781dc6d57dae5ee934ff4cad382227"
+      "tagIds": [
+        "program_type.incubator",
+        "geography.iberia"
+      ],
+      "openReviewIds": [
+        "startup-portugal:stale:official-logo"
+      ],
+      "contentHash": "d96f56af33feb1ccea805d9f24d1ff854b75d146013d4a8926c45043d4787fe5"
     },
     {
       "programId": "startup-wise-guys",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "program_type.community",
+        "sector.fintech",
+        "sector.defense",
+        "sector.cybersecurity",
+        "sector.web3",
+        "sector.property",
+        "business_model.b2b",
+        "business_model.saas",
+        "stage.early",
+        "stage.growth",
+        "benefit.mentorship",
+        "geography.europe",
+        "geography.central-eastern-europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "ba2683efb87f9d382f1e30cdf0694822c8de068b3a72fc60eb2df08011ebd59c"
+      "contentHash": "5f5d3b94e29e7278364537c97ca326345b347edea823563fa8f1c16b79956b09"
     },
     {
       "programId": "startup-yard",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
       "tagIds": [],
       "openReviewIds": [],
-      "contentHash": "6d48888af2cea4464db28fde074178a24ac60a194a59ff2a58df9ab84d961390"
+      "contentHash": "e75b00e166ae22d0b7427434bb4b3682c9f82ff27ee667819c15a7800f5aa59c"
     },
     {
       "programId": "startupbootcamp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.corporate-innovation",
+        "sector.climate",
+        "sector.agrifood",
+        "sector.web3",
+        "sector.deep-tech",
+        "technology.robotics",
+        "customer_type.enterprise",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "8366e01ff69f56b75ba0498f62c4da57c813798a689629d9c3b9bd4f42d740bd"
+      "contentHash": "21147cb845d57e350ee0ba2f58704438a0647e32ac7546dcf1399b0eaef023ab"
     },
     {
       "programId": "startuplab",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "program_type.investor",
+        "stage.early",
+        "benefit.workspace",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "09190a4c9b3c4e6a0e0efa50a60087b34cffea027036f723ba68ccec529fc00d"
+      "contentHash": "1cd392824bef5f6bdbe4e8b87fe5d965b374c28d8d6ef1604a5cfe09318ca181"
     },
     {
       "programId": "startx",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "community"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.residency",
+        "program_type.university",
+        "program_type.community"
+      ],
       "openReviewIds": [],
-      "contentHash": "88edba0c1eb73ffa9588eae43426bbb26dfb8ba0d2273e224bd080386051fc9c"
+      "contentHash": "f684f7d46d5bd01b958636448f7a922a08f3eee5426369cc3f8d1ceefd7ceaa2"
     },
     {
       "programId": "station-f",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "geography.europe"
+      ],
       "openReviewIds": [],
-      "contentHash": "27e77b312e636997831f90b76aeb79c5fb34f0be08d341fbf80c1ede4c193d66"
+      "contentHash": "f1b75b17700a39b0023e4fcc8ea16c1299c1d27f170bde375585330688b5817e"
     },
     {
       "programId": "stellaris-vp",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.fintech",
+        "sector.health",
+        "sector.media",
+        "technology.ai",
+        "business_model.b2c",
+        "customer_type.consumer",
+        "stage.idea",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "18255771b71142c9ef5e206df5ed0796fe2639b5f2efacd73202f85f65c5cc2a"
+      "contentHash": "bd80ef3d40b5acb7264eb04b668978e2d54c5d2d5546bac8e08fbd8d10a4b4da"
     },
     {
       "programId": "sting",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "sector.climate",
+        "stage.early",
+        "geography.nordics"
+      ],
       "openReviewIds": [],
-      "contentHash": "571b402c12514abf7fb35bd773b3d6b6f4686bdac2187d8c8a84d6b021125f04"
+      "contentHash": "e1af463e849239e8f288edd966128a735443e1a9a07a35b93cfd07a864ac636b"
     },
     {
       "programId": "stone-and-chalk",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.community",
+        "sector.climate",
+        "technology.ai",
+        "geography.oceania"
+      ],
       "openReviewIds": [],
-      "contentHash": "a324b98dc9a6961a66a34df916e3693337ca5c518af5205299b8154f4bad56be"
+      "contentHash": "9aaaa3dfd8c16854156900684d513c67aa6d019013f5c1983077a488ce53b280"
     },
     {
       "programId": "surge",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor"
+      ],
       "openReviewIds": [],
-      "contentHash": "d115059c33d4c62554e2c1da7ad46f6fba9b9eec13c7989c60632234ca536585"
+      "contentHash": "671f01e0662e82862113ae1459038df058248f3a892d68c182dfbc9ea192e5c0"
     },
     {
       "programId": "t-hub",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "21c4379ccca559f3ddfb4318b2c544d3bfefdc581f11e2c9b150b263fb7ee535"
+      "tagIds": [
+        "program_type.incubator",
+        "program_type.corporate-innovation",
+        "program_type.community",
+        "sector.defense",
+        "technology.ai",
+        "customer_type.enterprise",
+        "benefit.mentorship",
+        "benefit.workspace",
+        "geography.india"
+      ],
+      "openReviewIds": [
+        "t-hub:stale:official-logo"
+      ],
+      "contentHash": "b62a694b37c20420ac44f44c63d2489b1251ee1e26a8b836e748e43f7c5bbb0e"
     },
     {
       "programId": "tech-nexus",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "program_type.university",
+        "customer_type.enterprise",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "bf49a99b3f2e177761ed750a2f5f771e548ea3c4e491254d4fcacf4360e1b3ed"
+      "contentHash": "2251d70452f67ad2e5474e1992aaa1314110a656323b2619f97439115b44d0e8"
     },
     {
       "programId": "tech-wildcatters",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "210bf0ce1865203a7c518d09f5641acd814e8cdc45594d4c8d18241301185449"
+      "contentHash": "ca817d6e330755a6bb5070a256413912e121d3943a37285b12021809d9916dcd"
     },
     {
       "programId": "techstars",
-      "checkedAt": "2026-10-27T00:25:00.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "network"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "d472b1df8ac9f26a3d9b92a9f38b2359a9f34e06aed5c1a1e5c75282c34b6959"
+      "tagIds": [
+        "program_type.accelerator",
+        "customer_type.enterprise",
+        "stage.early",
+        "benefit.mentorship"
+      ],
+      "openReviewIds": [
+        "techstars:stale:homepage",
+        "techstars:stale:official-logo"
+      ],
+      "contentHash": "826e94a5013983ef73d0f5582d476c5660399e5846d78e55799537318b204482"
     },
     {
       "programId": "techstars-anywhere",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "technology.ai",
+        "technology.robotics"
+      ],
       "openReviewIds": [],
-      "contentHash": "277f33d9e57562c325678b421cb878f1cb9616a70aaa23df4a213c6df3850a53"
+      "contentHash": "6ecfdd3a17a6edc0bcf88d624f69f26031600ca146c1aecfcb866871e374836a"
     },
     {
       "programId": "techstars-chicago",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.investor",
+        "stage.early",
+        "benefit.mentorship",
+        "benefit.workspace",
+        "geography.chicago"
+      ],
       "openReviewIds": [],
-      "contentHash": "97c8a7b2b24d7ed554f07746fee91db06b9c7cb460b40703e36462761869c67f"
+      "contentHash": "4aa5284e317a646f1529a6a88222305f4cf98f30db2923f643637acf119999da"
     },
     {
       "programId": "techstars-london",
-      "checkedAt": "2026-10-25T09:52:21.494Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "london-march-2027"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "a88e1709530b45042ec1cc547441f94638e86c1553262b2ebe5e8fe1661d2d1d"
+      "tagIds": [
+        "program_type.accelerator",
+        "stage.early",
+        "benefit.mentorship",
+        "benefit.demo-day",
+        "geography.london"
+      ],
+      "openReviewIds": [
+        "techstars-london:stale:london-schedule"
+      ],
+      "contentHash": "d1714104eb0da3c0217734189cc34c41275f19aac99ea02fa531daba03d6a865"
     },
     {
       "programId": "techstars-usc",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.university",
+        "sector.health",
+        "sector.deep-tech",
+        "technology.ai",
+        "technology.quantum",
+        "stage.pre-seed",
+        "stage.seed",
+        "benefit.mentorship",
+        "geography.los-angeles"
+      ],
       "openReviewIds": [],
-      "contentHash": "b43eb6878e27b95088c2588bce7ba98120ca91b282c3774bd38f44f154777806"
+      "contentHash": "9a3dda8e4cd2f23eb7ffd0ae88e72076dea138be19ab5a11ce0b5b1f54de4aa7"
     },
     {
       "programId": "tenity",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "sector.fintech",
+        "technology.ai",
+        "customer_type.enterprise",
+        "stage.early",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "8552d79638d655aff33db92b399f70d644a1b7eb03243d1a2dae1287149fb853"
+      "contentHash": "73c5a99b830f8a8fbed782a89ca227991539c4e1449a4f148548f4d8f5861e8f"
     },
     {
       "programId": "the-engine",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.deep-tech"
+      ],
       "openReviewIds": [],
-      "contentHash": "a59c58bbe7a62e7bc0863e10b3e9d6452d426e660713e9ec7d000e42e7a36c6c"
+      "contentHash": "e524e304209ad36908f41c9f507f3354bb0a62587eb8e1ea13bf2757c516ee44"
     },
     {
       "programId": "the-house-fund",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.university"
+      ],
       "openReviewIds": [],
-      "contentHash": "943085bc4f697db2ed4488fad88180cf00741eb011780579b03d2a29bb3d5931"
+      "contentHash": "d4514c4d544facc4bfef68c4548b18b221d8e9c48e7517099873bca2964770f0"
     },
     {
       "programId": "third-derivative",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "customer_type.enterprise",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "842c3214b68358303ec6754c069738ba21cd668172f0c6886d94a647edb1ad12"
+      "contentHash": "a969481e7f935829173195526e39fa98b7cfee38e830b0157b6704d6d52a0684"
     },
     {
       "programId": "third-derivative-rmi",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.climate",
+        "sector.energy",
+        "sector.mobility",
+        "geography.united-states",
+        "geography.africa",
+        "geography.india",
+        "geography.southeast-asia",
+        "geography.east-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "3710df45b35c4e4be8a68f80888003494aaacc2bac396d8fa60d62dc4a309fee"
+      "contentHash": "f6ee9187d3fc729c28e3d0574ca9d94a848996847ec2a30f5ecbca70ed37e4e1"
     },
     {
       "programId": "three-one-four",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "business_model.saas",
+        "stage.early",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "0bd5e6db3277887e017be1b3d45c9eaaf215c37945b78a9defcb78cae8f20a9b"
+      "contentHash": "e420fdfab2f0f61664257a564b5d29875c71505eab1ab70ba6ca86184a4dbc14"
     },
     {
       "programId": "ucl-business",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.university"
+      ],
       "openReviewIds": [],
-      "contentHash": "7ab43e94d6b272c34ac2eac97a21d8add3ea6de3f85d591251c4bd3cf7c5fa83"
+      "contentHash": "2837b5404ce8f7fbf6df17cfb7f8d9aff2e3358201b0e1f6dc826eb5fb7ecd87"
     },
     {
       "programId": "ucla-anderson",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.property"
+      ],
       "openReviewIds": [],
-      "contentHash": "a6c41b2ddd730f5cec4f3a7f53a83ec48f63158c9a7844a16b023e4a221a4412"
+      "contentHash": "496f7e32cd63508f8a942627306bae097d5fab433305ac4fe7f657976ef98bb8"
     },
     {
       "programId": "unternehmertum",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
-      "openReviewIds": [],
-      "contentHash": "d3c6f1ad11aa4aba2fcf9e078e02a990f9855918bb198f40cc7bb11bd16fd81b"
+      "tagIds": [
+        "program_type.accelerator",
+        "sector.health",
+        "sector.agrifood",
+        "sector.mobility",
+        "sector.aerospace",
+        "sector.govtech",
+        "sector.manufacturing",
+        "technology.ai",
+        "technology.robotics",
+        "technology.quantum",
+        "stage.growth",
+        "geography.europe"
+      ],
+      "openReviewIds": [
+        "unternehmertum:stale:official-logo"
+      ],
+      "contentHash": "4fd8240e2a099755320377fc3849a4734de754897a27f4facccb054693d27b88"
     },
     {
       "programId": "urban-us",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "sector.energy",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "480aa6a2cd750ece0dfb315383296ff5ba8674d6b96cd9687e53d33f1f42d1f4"
+      "contentHash": "240ec0321c45374886b428051fcb526c1365837460210b6a9d2c3189da968828"
     },
     {
       "programId": "usc-startup-garage",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.community"
+      ],
       "openReviewIds": [],
-      "contentHash": "118e0a8e41d12a9ce489e5076f432a945bc7aa6dd7289b3d04be7cfff5f12eb5"
+      "contentHash": "f1b6bd00e0ae07e80e054551e13b4068dd4949a8c3e9b7f2d408e68ccce25169"
     },
     {
       "programId": "utrechtinc",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "stage.idea",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "ac48b85920f16cc0a9f6d34fbb0d70571e750087f23a773d91ea8c3dca5111cd"
+      "contentHash": "b51cf429cf844be2d78a979979a908a88ed9ba034af329321341080a7cff0448"
     },
     {
       "programId": "venture-center",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "program_type.residency",
+        "program_type.investor",
+        "program_type.university",
+        "program_type.competition",
+        "program_type.grant",
+        "sector.energy",
+        "benefit.mentorship",
+        "benefit.lab-space",
+        "geography.india"
+      ],
       "openReviewIds": [],
-      "contentHash": "383930dd2d520503b8ffb555e138f11579e80c27a21efa0ca9704b7b1c3ecae7"
+      "contentHash": "5f33b43c541dafc1e303bd63ba5cf8fafd0099cbc878c35114210b6698b4593c"
     },
     {
       "programId": "venturelab",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.corporate-innovation",
+        "program_type.competition",
+        "customer_type.enterprise",
+        "geography.switzerland"
+      ],
       "openReviewIds": [],
-      "contentHash": "2f81234e4e5df778ee6201f47eba9ec4272684238b7aba4d6f022bb0ce69c9d8"
+      "contentHash": "eca8b1c576501410715a1a369cb63064735dc58fc96abc288c93b77c73d4c444"
     },
     {
       "programId": "vertex-ventures",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "business_model.saas",
+        "stage.early",
+        "geography.bay-area"
+      ],
       "openReviewIds": [],
-      "contentHash": "142dc3b67834d0e4a96cde345243b8fcb52499e5618c21863af1056d7db937a8"
+      "contentHash": "43515f39181b04ad20de4a1e938bac6c2805d4d33c8e66757248ef56ac1c0151"
     },
     {
       "programId": "village-capital",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "sector.climate",
+        "sector.mobility"
+      ],
       "openReviewIds": [],
-      "contentHash": "f549062f0bd55b4ad4ed38dd4b5fc3be04516a9e711eb7788e10d4dbbb9eb697"
+      "contentHash": "6e24602c771785b0d5541a06e291155b46121e011aa78b4bf7dc902306cdbc2c"
     },
     {
       "programId": "village-global",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "technology.ai",
+        "technology.quantum",
+        "stage.early"
+      ],
       "openReviewIds": [],
-      "contentHash": "5439fbd61109c900813eb596694188505f863469153015273b6142dccdb6c247"
+      "contentHash": "109efdcff6e0a11881911ec13f2e1a7cfa03e523bd4e268fcb893a1b3b6bec0f"
     },
     {
       "programId": "villgro",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "sector.social-impact"
+      ],
       "openReviewIds": [],
-      "contentHash": "b800ca48c79c4108e9a9785599f32a7a7e2b473109f1e59688dfa70bb2525f6b"
+      "contentHash": "e93cb52b86ebd43944157d6e7f8e0f13fc3b3f9f8287dea21a3dfce9be51c29d"
     },
     {
       "programId": "villgro-africa",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "program_type.investor",
+        "sector.health",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "9e83372ea23a1a2fbd0d86a1e156607059aff26ed195237fcf9ef0677a5a97ce"
+      "contentHash": "30ea8f99e6698f14cb43f203f45558ef2e1fbb41df734049bbf60aa2d062faf6"
     },
     {
       "programId": "wavemaker",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.competition",
+        "sector.deep-tech",
+        "business_model.b2b",
+        "stage.early",
+        "geography.southeast-asia"
+      ],
       "openReviewIds": [],
-      "contentHash": "4bb90dada499151c69dd76be98784339f8fb05b4cc0b7052a2d73a5442d70c7f"
+      "contentHash": "08a8d64ca57805226d3b9f088366e81f2f368354c2b00058128efbb1f7251931"
     },
     {
       "programId": "wayra",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.investor",
+        "program_type.corporate-innovation",
+        "geography.united-kingdom",
+        "geography.germany",
+        "geography.iberia",
+        "geography.latin-america"
+      ],
       "openReviewIds": [],
-      "contentHash": "4955e348c1a6f242abb83d884e0ad5e3406b2d0720192f45ec112214616539a0"
+      "contentHash": "6044b7e19a4cf3585cd57461b9613ff983a5fde3136599439ef2fdb41968336b"
     },
     {
       "programId": "wennovation",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.incubator",
+        "stage.early",
+        "benefit.mentorship",
+        "geography.africa"
+      ],
       "openReviewIds": [],
-      "contentHash": "d78ac68f109e8dc5c61254866f9df70e6022b08144a91bf562eac7704863ef4c"
+      "contentHash": "d17fa34169956e2d193c43dde9440809bcdeb94719179d02769859fe7d4063b8"
     },
     {
       "programId": "y-combinator",
-      "checkedAt": "2026-11-09T22:40:59Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "w2027"
       ],
@@ -3149,65 +4405,94 @@
         "instrument.post-money-safe",
         "instrument.safe",
         "instrument.mfn-safe",
-        "geography.san-francisco"
+        "geography.san-francisco",
+        "program_type.investor",
+        "stage.early",
+        "stage.pre-revenue",
+        "geography.canada",
+        "geography.southeast-asia"
       ],
-      "openReviewIds": [],
-      "contentHash": "59de559486f6ca3b91f3f8de6cb47553d7fa016e0db6b55d2e1d956e8c00155d"
+      "openReviewIds": [
+        "y-combinator:stale:yc-apply-cycle",
+        "y-combinator:inaccessible:yc-portal-login"
+      ],
+      "contentHash": "7137ffdec32ff057a7713cd732b440b91e88ace59d758e5a628ad9d42874bba7"
     },
     {
       "programId": "y-combinator-startup-school",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.education"
+      ],
       "openReviewIds": [],
-      "contentHash": "7ccaeda30d41d79ccac9682bf1b555c8d6a6e8538840e588686c0aaedd9faef1"
+      "contentHash": "221c65210977c144114dc9bf0d1812cc0a9d8e596ad4162c8f799128e7af7b5b"
     },
     {
       "programId": "yes-delft",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.incubator",
+        "sector.deep-tech",
+        "technology.ai",
+        "benefit.mentorship",
+        "geography.bay-area",
+        "geography.netherlands"
+      ],
       "openReviewIds": [],
-      "contentHash": "9c8bdbfa63a5bb9effccf43ce5fe87c91cce66ce2bdebb5f5e865348671c5819"
+      "contentHash": "df1c071c25234bd586144734a1ec64a4722d16f35c8dcaa94175581dd51771b5"
     },
     {
       "programId": "z-fellows",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "benefit.mentorship",
+        "geography.bay-area"
+      ],
       "openReviewIds": [],
-      "contentHash": "5cb6f508227edd382d0bb58ac238bd408de04592ab9a8908e5fb7ea3b7ee127c"
+      "contentHash": "e48ab4750f9b78d277897bad2c780258f5b8bd4e3e618786b892657bf678f925"
     },
     {
       "programId": "zinc",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.venture-studio",
+        "customer_type.government"
+      ],
       "openReviewIds": [],
-      "contentHash": "dd1779ae574cb4c06d0877176670e03d415844a2c15ffba3e8acb6ea8abdf010"
+      "contentHash": "369fd550282ede0565188a54e998c333ab1567df3781bbbd667bda6bd09f50f6"
     },
     {
       "programId": "zone-startups",
-      "checkedAt": "2026-11-03T00:18:31.000Z",
+      "checkedAt": "2026-11-12T00:23:26.000Z",
       "cycleIds": [
         "public-page"
       ],
       "portfolioCompanyIds": [],
-      "tagIds": [],
+      "tagIds": [
+        "program_type.accelerator",
+        "program_type.community",
+        "benefit.mentorship"
+      ],
       "openReviewIds": [],
-      "contentHash": "5093c8bf430b15dcca0d1a0642a646587ebf16333db01e27de645c930ca4120b"
+      "contentHash": "37c683933d8cb69f1b264a19fbce83df9adbf247f4cb3135a5b991d93fca26d1"
     }
   ]
 }

@@ -1,0 +1,46 @@
+{
+  "programId": "clean-energy-trust",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://evergreeninno.org/apply",
+      "page": "application",
+      "anchor": "Apply for Investment",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/about-us/our-impact",
+      "page": "details",
+      "anchor": "Our Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://evergreeninno.org/about-us/supporters",
+      "page": "details",
+      "anchor": "Supporters",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "programId": "berkeley-skydeck",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "page": "application",
+      "anchor": "APPLY",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/portfolio/",
+      "page": "portfolio",
+      "anchor": "COMPANIES",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/our_team/",
+      "page": "details",
+      "anchor": "ABOUT",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/ace",
+      "page": "details",
+      "anchor": "ACE Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://skydeck.berkeley.edu/program/",
+      "page": "details",
+      "anchor": "PROGRAMS",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

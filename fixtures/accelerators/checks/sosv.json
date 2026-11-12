@@ -1,0 +1,253 @@
+{
+  "programId": "sosv",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://sosv.com/",
+    "https://sosv.com/about/",
+    "https://sosv.com/apply/hax",
+    "https://sosv.com/legal-faqs/",
+    "https://sosv.com/subscribe"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-0fa1e401e2",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6bba2c2659",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-71b7b0f4ad",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-88e914d798",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-f6b3ada9ec",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-997fc30b25",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV — details page checked by scrape.py",
+      "excerpt": "Reach SOSV comms (press@sosv.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-05ce4acd96",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "SOSV - Deep Tech for Human and Planetary Health Skip to content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-24b3eed522",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-380c941cab",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4551ccf0ca",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-4a595d8a4d",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7d3babbe90",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV — batches page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-aeb9193ef1",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ce699b0d44",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d009563ede",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e37c14aba9",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://sosv.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fef93a10fb",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://sosv.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1f53a99937",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply/sosv",
+      "page": "details"
+    },
+    {
+      "id": "check-route-66204dacb6",
+      "url": "https://sosv.com/apply/hax",
+      "title": "SOSV — application page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6bb769aca3",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV — details page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7196db4c5d",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply/hax",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e68610e4c",
+      "url": "https://sosv.com/",
+      "title": "SOSV — homepage checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b5cd0cc7c7",
+      "url": "https://sosv.com/subscribe",
+      "title": "SOSV — batches page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d630da9b81",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV — terms page checked by scrape.py",
+      "excerpt": "Apply → https://sosv.com/apply",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "press@sosv.com",
+        "evidenceId": "check-email-997fc30b25"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://sosv.com/apply/hax",
+        "evidenceId": "check-route-7196db4c5d"
+      },
+      {
+        "value": "https://sosv.com/apply/sosv",
+        "evidenceId": "check-route-1f53a99937"
+      },
+      {
+        "value": "https://sosv.com/apply",
+        "evidenceId": "check-route-9e68610e4c"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://sosv.com/apply",
+        "evidenceId": "check-route-9e68610e4c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Percentage SAFE Convert to Equity? Here’s an example of how a post-money fixed percentage SAFE converts to equity (i.e. the SOSV Program SAFE): SOSV invests $250,000 into ABC Inc. on 1st of June 2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and",
+        "evidenceId": "check-deal-71b7b0f4ad"
+      },
+      {
+        "value": "2026 using a post-money SAFE. The SAFE provides that immediately prior to an “Equity Financing” (as defined in the SAFE and explained below in this FAQ) the $275,000 investment will convert to x% of the “Company Capitalisation”. The definition of Company Capitalisation in an SOSV post-money SAFE usually looks something like",
+        "evidenceId": "check-deal-6bba2c2659"
+      },
+      {
+        "value": "a fixed percentage SAFE. Additional Cash SAFE As part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the",
+        "evidenceId": "check-deal-f6b3ada9ec"
+      },
+      {
+        "value": "the Company at the time of conversion. The Discount Rate in the Cash SAFE is typically 80%. For example, if a subsequent investor in an Equity Financing pays $1.00 per share where the Discount Rate in the Cash SAFE is 80%, SOSV (as the SAFE holder) would convert at $0.80 per share. The Valuation Cap The valuation cap in",
+        "evidenceId": "check-deal-88e914d798"
+      },
+      {
+        "value": "is an Additional Cash SAFE? As part of the total SOSV Program investment, your Company may be eligible for a further fixed percentage Cash SAFE investment of $250,000 at a $6m post money cap and 20% Discount. SOSV may offer this additional Cash SAFE to teams at SOSV’s sole discretion, and such offer is contingent on",
+        "evidenceId": "check-deal-0fa1e401e2"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://sosv.com/portfolio/",
+        "evidenceId": "check-portfolio-d009563ede"
+      },
+      {
+        "value": "https://sosv.com/portfolio",
+        "evidenceId": "check-portfolio-380c941cab"
+      }
+    ],
+    "name": [
+      {
+        "value": "SOSV",
+        "evidenceId": "check-name-05ce4acd96"
+      }
+    ],
+    "examplePages": []
+  }
+}

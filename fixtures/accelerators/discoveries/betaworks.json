@@ -1,0 +1,46 @@
+{
+  "programId": "betaworks",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.betaworks.com/camp",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "application",
+      "anchor": "AI Camp: Native Applications",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/camp/application",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "page": "batches",
+      "anchor": "Deadline Extended! Apply to AI Camp",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

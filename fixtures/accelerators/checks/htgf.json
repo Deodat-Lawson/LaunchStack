@@ -1,0 +1,115 @@
+{
+  "programId": "htgf",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.htgf.de/en/venture-capital-investor-2/",
+    "https://www.htgf.de/en/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-a3112cb476",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "we work with many partners: we will find suitable co-investors for you from our national and international network. In growth rounds, we can invest up to €30 million in a startup from our portfolio. We will support you from the beginning all the way to the exit or IPO – on the path to becoming an international market",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-fbf370540a",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "ansehen Unternehmen ansehen Unternehmen ansehen Our investment criteria – Your chance The sweet spot of our initial investments in pre-seed and seed is €800,000+. We invest flexibly – depending on your needs. As a lead investor, we work with many partners: we will find suitable co-investors for you from our national",
+      "page": "details"
+    },
+    {
+      "id": "check-name-2b5a11516b",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "HTGF | Multi-Stage-VC Platform for Tech Startups | High-Tech Gründerfonds Skip to content Portfolio Investors Team News & Events",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-218c806f1d",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "Exits & IPOs → https://www.htgf.de/en/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-458cb4aa26",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "Investments → https://www.htgf.de/en/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6ccfb76151",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf080e939c",
+      "url": "https://www.htgf.de/en/about-us/",
+      "title": "High-Tech Gründerfonds — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.htgf.de/en/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e434ee90c8",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "discover now → https://www.htgf.de/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-54d5e30e92",
+      "url": "https://www.htgf.de/en/venture-capital-investor-2/",
+      "title": "High-Tech Gründerfonds — homepage checked by scrape.py",
+      "excerpt": "English → https://www.htgf.de/en/venture-capital-investor-2/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.htgf.de/en/venture-capital-investor-2/",
+        "evidenceId": "check-route-54d5e30e92"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "ansehen Unternehmen ansehen Unternehmen ansehen Our investment criteria – Your chance The sweet spot of our initial investments in pre-seed and seed is €800,000+. We invest flexibly – depending on your needs. As a lead investor, we work with many partners: we will find suitable co-investors for you from our national",
+        "evidenceId": "check-deal-fbf370540a"
+      },
+      {
+        "value": "we work with many partners: we will find suitable co-investors for you from our national and international network. In growth rounds, we can invest up to €30 million in a startup from our portfolio. We will support you from the beginning all the way to the exit or IPO – on the path to becoming an international market",
+        "evidenceId": "check-deal-a3112cb476"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.htgf.de/en/portfolio/",
+        "evidenceId": "check-portfolio-6ccfb76151"
+      },
+      {
+        "value": "https://www.htgf.de/portfolio",
+        "evidenceId": "check-portfolio-e434ee90c8"
+      }
+    ],
+    "name": [
+      {
+        "value": "High-Tech Gründerfonds",
+        "evidenceId": "check-name-2b5a11516b"
+      }
+    ],
+    "examplePages": []
+  }
+}

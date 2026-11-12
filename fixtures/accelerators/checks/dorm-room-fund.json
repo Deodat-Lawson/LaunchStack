@@ -1,0 +1,82 @@
+{
+  "programId": "dorm-room-fund",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.dormroomfund.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-39bed6b365",
+      "url": "https://www.dormroomfund.com/",
+      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "excerpt": "Dorm Room Fund | First Check for Student Founders Apply Portfolio Team",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0d5ec6c972",
+      "url": "https://www.dormroomfund.com/",
+      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.dormroomfund.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7733fc4298",
+      "url": "https://www.dormroomfund.com/",
+      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "excerpt": "Apply → https://airtable.com/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "details"
+    },
+    {
+      "id": "check-route-78a7618dfb",
+      "url": "https://www.dormroomfund.com/",
+      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "excerpt": "https://www.dormroomfund.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c3419fa374",
+      "url": "https://www.dormroomfund.com/",
+      "title": "Dorm Room Fund — homepage checked by scrape.py",
+      "excerpt": "Apply for funding → https://airtable.com/embed/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+        "evidenceId": "check-route-7733fc4298"
+      },
+      {
+        "value": "https://airtable.com/embed/appP6NRnqNGp9XyEH/shrIkIQTZqkdcS05v",
+        "evidenceId": "check-route-c3419fa374"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.dormroomfund.com/",
+        "evidenceId": "check-route-78a7618dfb"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.dormroomfund.com/portfolio",
+        "evidenceId": "check-portfolio-0d5ec6c972"
+      }
+    ],
+    "name": [
+      {
+        "value": "Dorm Room Fund",
+        "evidenceId": "check-name-39bed6b365"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "programId": "norrsken",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.norrsken.org/about",
+      "page": "details",
+      "anchor": "About video { object-fit: cover; } Your browser doesn't support HTML5 video. Download it",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "programId": "free-electrons",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://freeelectrons.org/",
+    "https://freeelectrons.org/2026-program/",
+    "https://freeelectrons.org/faqs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-4a34cd6ece",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "More Get in touch HURRY! 19 D 03 H 01 M 55 S DAYS LEFT Apply before November 30th, 2026 and get these exclusive perks An exclusive Utility",
+      "page": "details"
+    },
+    {
+      "id": "check-name-99e19e45a7",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "Free Electrons - The Global Energy Startup Program Skip to content HOME",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-357a7315c1",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page checked by scrape.py",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-38cb865429",
+      "url": "https://freeelectrons.org/2026-program/",
+      "title": "Free Electrons — details page checked by scrape.py",
+      "excerpt": "Startups → https://freeelectrons.org/news/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7f8f1fbd95",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "startups → https://freeelectrons.org/our-alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d5c0559758",
+      "url": "https://freeelectrons.org/2026-program/",
+      "title": "Free Electrons — details page checked by scrape.py",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d7947494e6",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "ALUMNI → https://freeelectrons.org/our-alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-08ad63cc7d",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f97fb4bd6",
+      "url": "https://freeelectrons.org/",
+      "title": "Free Electrons — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bd5638f7b7",
+      "url": "https://freeelectrons.org/2026-program/",
+      "title": "Free Electrons — details page checked by scrape.py",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eae27fcbf9",
+      "url": "https://freeelectrons.org/2026-program/",
+      "title": "Free Electrons — details page checked by scrape.py",
+      "excerpt": "Applications → https://freeelectrons.org/news/applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f9308fba3f",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page checked by scrape.py",
+      "excerpt": "Apply now → https://www.f6s.com/free-electrons-2027/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-status-b75bb3c562",
+      "url": "https://freeelectrons.org/faqs/",
+      "title": "Free Electrons — terms page checked by scrape.py",
+      "excerpt": "apply, we encourage you to explore the opportunity and see how your solution could fit within the program. Applications are closed. How can a startup show interest? We’re always interested in hearing from startups. If you’d like to",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.f6s.com/free-electrons-2027/apply",
+        "evidenceId": "check-route-08ad63cc7d"
+      },
+      {
+        "value": "https://freeelectrons.org/news/applications",
+        "evidenceId": "check-route-eae27fcbf9"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.f6s.com/free-electrons-2027/apply",
+        "evidenceId": "check-route-08ad63cc7d"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-b75bb3c562"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2026-11-30",
+        "evidenceId": "check-deadline-4a34cd6ece"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://freeelectrons.org/our-alumni/",
+        "evidenceId": "check-portfolio-d7947494e6"
+      },
+      {
+        "value": "https://freeelectrons.org/news/startups",
+        "evidenceId": "check-portfolio-38cb865429"
+      }
+    ],
+    "name": [
+      {
+        "value": "Free Electrons",
+        "evidenceId": "check-name-99e19e45a7"
+      }
+    ],
+    "examplePages": []
+  }
+}

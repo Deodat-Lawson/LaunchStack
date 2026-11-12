@@ -1,0 +1,94 @@
+{
+  "programId": "on-deck",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://joinodf.com/",
+    "https://admissions.joinodf.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-ecb86bcebe",
+      "url": "https://admissions.joinodf.com/",
+      "title": "On Deck — terms page checked by scrape.py",
+      "excerpt": "continue to have access to a lively online community and IRL events. Contribution: We’re a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community infrastructure. Outcomes & Alumni Wins ODF alumni have collectively raised >$2 B and include breakout",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fa51ebe087",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage checked by scrape.py",
+      "excerpt": "Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma ,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2f90e89c2f",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage checked by scrape.py",
+      "excerpt": "Contact Us (team@joinodf.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-4332162ef1",
+      "url": "https://admissions.joinodf.com/",
+      "title": "On Deck — terms page checked by scrape.py",
+      "excerpt": "📣 Interviews will be held in Q3 2026 📮 Email us at founders@joinodf.com if you have any questions FAQ ‣ International Founders We",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d1857ecac3",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage checked by scrape.py",
+      "excerpt": "Top Companies → https://joinodf.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-65a2041477",
+      "url": "https://joinodf.com/",
+      "title": "On Deck — homepage checked by scrape.py",
+      "excerpt": "https://joinodf.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "team@joinodf.com",
+        "evidenceId": "check-email-2f90e89c2f"
+      },
+      {
+        "value": "founders@joinodf.com",
+        "evidenceId": "check-email-4332162ef1"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://joinodf.com/",
+        "evidenceId": "check-route-65a2041477"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Week in SF Befriend talented people at your stage 80-100 participants >50% technical Fellow community platform Get access to our 3,000+ member platform $800k+ in perks Mercury, AWS, Stripe Atlas, and more Non-dilutive We don't take any equity. Read FAQs -> More than 1,000 startups launched so far Loyal , Luma ,",
+        "evidenceId": "check-deal-fa51ebe087"
+      },
+      {
+        "value": "continue to have access to a lively online community and IRL events. Contribution: We’re a non-dilutive program with a Pay-what-you-can model; we suggest $1000 USD which covers venue, food, and year-round community infrastructure. Outcomes & Alumni Wins ODF alumni have collectively raised >$2 B and include breakout",
+        "evidenceId": "check-deal-ecb86bcebe"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://joinodf.com/companies",
+        "evidenceId": "check-portfolio-d1857ecac3"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

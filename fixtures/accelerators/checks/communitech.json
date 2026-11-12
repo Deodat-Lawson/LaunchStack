@@ -1,0 +1,176 @@
+{
+  "programId": "communitech",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.communitech.ca/",
+    "https://www.communitech.ca/programs/",
+    "https://www.communitech.ca/partners/apply.html",
+    "https://www.communitech.ca/faq.html"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-c114eeb14b",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "Home - Communitech Skip to content Events Programs Membership Pro Squad About",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-3124ae20af",
+      "url": "https://www.communitech.ca/partners/apply.html",
+      "title": "Communitech — application page checked by scrape.py",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-3621ef53c3",
+      "url": "https://www.communitech.ca/faq.html",
+      "title": "Communitech — terms page checked by scrape.py",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-cb722e4b4a",
+      "url": "https://www.communitech.ca/programs/",
+      "title": "Communitech — details page checked by scrape.py",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-ccbca6a1fb",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "+1 (519) 888-9944",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0fcb698b61",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "Find Your Place → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-19aab2e4e6",
+      "url": "https://www.communitech.ca/faq.html",
+      "title": "Communitech — terms page checked by scrape.py",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1c20e65c67",
+      "url": "https://www.communitech.ca/programs/",
+      "title": "Communitech — details page checked by scrape.py",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2e42c8c19c",
+      "url": "https://www.communitech.ca/partners/apply.html",
+      "title": "Communitech — application page checked by scrape.py",
+      "excerpt": "Go to Startup Form → https://www.communitech.ca/founders/apply/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-492f144f0b",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56a3b4376e",
+      "url": "https://www.communitech.ca/programs/",
+      "title": "Communitech — details page checked by scrape.py",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5fde7deeee",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-66b3c97430",
+      "url": "https://www.communitech.ca/programs/",
+      "title": "Communitech — details page checked by scrape.py",
+      "excerpt": "Let's Talk → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7085804f98",
+      "url": "https://www.communitech.ca/faq.html",
+      "title": "Communitech — terms page checked by scrape.py",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9653900809",
+      "url": "https://www.communitech.ca/",
+      "title": "Communitech — homepage checked by scrape.py",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b0d0a63149",
+      "url": "https://www.communitech.ca/programs/",
+      "title": "Communitech — details page checked by scrape.py",
+      "excerpt": "Partner With Us → https://www.communitech.ca/partners/apply.html",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b933476f55",
+      "url": "https://www.communitech.ca/faq.html",
+      "title": "Communitech — terms page checked by scrape.py",
+      "excerpt": "Partner with us → https://www.communitech.ca/partners/apply.html",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f1839451db",
+      "url": "https://www.communitech.ca/partners/apply.html",
+      "title": "Communitech — application page checked by scrape.py",
+      "excerpt": "Join the Community → https://www.communitech.ca/founders/apply/",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+15198889944",
+        "evidenceId": "check-phone-ccbca6a1fb"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.communitech.ca/partners/apply.html",
+        "evidenceId": "check-route-492f144f0b"
+      },
+      {
+        "value": "https://www.communitech.ca/founders/apply/",
+        "evidenceId": "check-route-9653900809"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.communitech.ca/partners/apply.html",
+        "evidenceId": "check-route-492f144f0b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Communitech",
+        "evidenceId": "check-name-c114eeb14b"
+      }
+    ],
+    "examplePages": []
+  }
+}

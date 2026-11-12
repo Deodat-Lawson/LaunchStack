@@ -1,0 +1,62 @@
+{
+  "programId": "lightspeed",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://lsvp.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/companies/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/companies-india/",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://jobs.lsvp.com/jobs",
+      "page": "portfolio",
+      "anchor": "Portfolio Jobs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/company/thoughtspot/",
+      "page": "portfolio",
+      "anchor": "ThoughtSpot Ajeet Singh Founder ThoughtSpot is used by a number of innovative companies...",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/company/alloy/",
+      "page": "portfolio",
+      "anchor": "Alloy Laura Spiekerman Co-Founder & CRO Alloy solves the identity risk problem for companies that...",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://lsvp.com/stories/our-investment-in-fireworks-ai-the-inference-platform-aiming-to-power-every-genai-application/",
+      "page": "application",
+      "anchor": "Our Investment in Fireworks AI: the Inference Platform Aiming to Power Every GenAI Application",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

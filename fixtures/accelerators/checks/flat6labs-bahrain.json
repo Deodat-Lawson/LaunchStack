@@ -1,0 +1,108 @@
+{
+  "programId": "flat6labs-bahrain",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://flat6labs.com/Location/bahrain/",
+    "https://flat6labs.com/programs/",
+    "https://flat6labs.com/apply-now/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-8ac276042a",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "excerpt": "Locations keyboard_arrow_right Bahrain FLAT6LABS Bahrain The Kingdom of Bahrain offers startup founders plenty of",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b558bf554",
+      "url": "https://flat6labs.com/apply-now/",
+      "title": "Flat6Labs Bahrain — application page checked by scrape.py",
+      "excerpt": "العربية → https://flat6labs.com/ar/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6085f3d16b",
+      "url": "https://flat6labs.com/apply-now/",
+      "title": "Flat6Labs Bahrain — application page checked by scrape.py",
+      "excerpt": "Français → https://flat6labs.com/fr/apply-now/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8c5c1b5a30",
+      "url": "https://flat6labs.com/programs/",
+      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://forms.gle/rF21muP8dLm2qWHQ9",
+      "page": "details"
+    },
+    {
+      "id": "check-route-abc3ef4d9f",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b937c3ecec",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "title": "Flat6Labs Bahrain — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c8994b53db",
+      "url": "https://flat6labs.com/programs/",
+      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "excerpt": "apply now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f7feee7457",
+      "url": "https://flat6labs.com/programs/",
+      "title": "Flat6Labs Bahrain — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://flat6labs.com/apply-now/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://flat6labs.com/apply-now/",
+        "evidenceId": "check-route-b937c3ecec"
+      },
+      {
+        "value": "https://forms.gle/rF21muP8dLm2qWHQ9",
+        "evidenceId": "check-route-8c5c1b5a30"
+      },
+      {
+        "value": "https://flat6labs.com/ar/apply-now/",
+        "evidenceId": "check-route-3b558bf554"
+      },
+      {
+        "value": "https://flat6labs.com/fr/apply-now/",
+        "evidenceId": "check-route-6085f3d16b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://flat6labs.com/apply-now/",
+        "evidenceId": "check-route-b937c3ecec"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Flat6Labs Bahrain",
+        "evidenceId": "check-name-8ac276042a"
+      }
+    ],
+    "examplePages": []
+  }
+}

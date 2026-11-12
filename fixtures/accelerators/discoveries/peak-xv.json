@@ -1,0 +1,158 @@
+{
+  "programId": "peak-xv",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.peakxv.com/our-companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/about-us",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/airalo",
+      "page": "portfolio",
+      "anchor": "Airalo is the world’s first eSIM store that solves the pain of high roaming bills by giving you access to eSIMs (digital SIM cards). Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/cred",
+      "page": "portfolio",
+      "anchor": "CRED is a members-only credit card payment app. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/goto",
+      "page": "portfolio",
+      "anchor": "GoTo Group is the largest digital ecosystem in Indonesia, with a mission to “empower progress” by offering technology infrastructure and solutions that help everyone to access and ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/groww",
+      "page": "portfolio",
+      "anchor": "India's largest stock broker. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/hightouch",
+      "page": "portfolio",
+      "anchor": "A data and AI platform for marketing and personalization. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/insider",
+      "page": "portfolio",
+      "anchor": "Insider is a Growth Platform with AI tools that help marketers boost growth and ROI. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/mamaearth",
+      "page": "portfolio",
+      "anchor": "Mamaearth is a brand, by a parent, for the parent, created with the aim of making products which are mum-baby friendly, toxin-free, and meet stringent international standards. Read",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/meesho",
+      "page": "portfolio",
+      "anchor": "Meesho is a social commerce platform that helps resellers and emerging brands build businesses using social media. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/blinkit-formerly-grofers",
+      "page": "portfolio",
+      "anchor": "BlinkIt is an on-demand delivery service that connects consumers with local merchants in the neighbourhood. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/oyo-rooms",
+      "page": "portfolio",
+      "anchor": "OYO Rooms is India's largest branded chain of hotels offering standardised stay experiences at affordable prices. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/pine-labs",
+      "page": "portfolio",
+      "anchor": "Pine Labs simplifies commerce for merchants, financialinstitutions and brands, enabling growth in a fast-changing world. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/posthog",
+      "page": "portfolio",
+      "anchor": "PostHog aims to equip every developer to build successful products. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/razorpay",
+      "page": "portfolio",
+      "anchor": "Razorpay aims to revolutionize money management for online businesses. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/supabase",
+      "page": "portfolio",
+      "anchor": "Supabase is an open‑source backend platform that runs on Postgres. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/tabby",
+      "page": "portfolio",
+      "anchor": "Tabby creates financial freedom in the way people shop, earn and save by reshaping their relationship with money. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/companies/zomato",
+      "page": "portfolio",
+      "anchor": "India’s #1 food delivery app. Read more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.peakxv.com/faqs",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

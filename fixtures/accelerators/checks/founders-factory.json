@@ -1,0 +1,185 @@
+{
+  "programId": "founders-factory",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://foundersfactory.com/",
+    "https://foundersfactory.com/about-us/",
+    "https://foundersfactory.com/aviva/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-ef259c50e5",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
+      "page": "application"
+    },
+    {
+      "id": "check-name-c781b7ce04",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Founders Factory: Venture Studio and Startup Accelerator - Founders Factory",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4cd0820937",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-94e0330d81",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9a973af552",
+      "url": "https://foundersfactory.com/about-us/",
+      "title": "Founders Factory — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c66cff184a",
+      "url": "https://foundersfactory.com/about-us/",
+      "title": "Founders Factory — details page checked by scrape.py",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d8c23ea474",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://foundersfactory.com/portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e834cff7b5",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Our companies → https://foundersfactory.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-281f3db2f8",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2d621ee4cf",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Open Nature WA Government Nature Tech Accelerator Apply → https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-39cc3e420f",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Open Health MSWA MS & Neurological Care Accelerator Apply → https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-414c547108",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "details"
+    },
+    {
+      "id": "check-route-43673c7b61",
+      "url": "https://foundersfactory.com/aviva/",
+      "title": "Founders Factory — application page checked by scrape.py",
+      "excerpt": "Apply now → https://form.typeform.com/to/XdvluIs5",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a8f23a188b",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Open Industrials Rio Tinto Mining Tech Accelerator Apply → https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b62ec7ae7d",
+      "url": "https://foundersfactory.com/about-us/",
+      "title": "Founders Factory — details page checked by scrape.py",
+      "excerpt": "Apply → https://form.typeform.com/to/XdvluIs5",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bb3d52c8c6",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Accelerator → https://foundersfactory.com/accelerator/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ef81173244",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory — homepage checked by scrape.py",
+      "excerpt": "Open Fintech Aviva Fintech Accelerator Apply → https://foundersfactory.com/aviva/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://form.typeform.com/to/XdvluIs5",
+        "evidenceId": "check-route-414c547108"
+      },
+      {
+        "value": "https://foundersfactory.com/aviva/",
+        "evidenceId": "check-route-ef81173244"
+      },
+      {
+        "value": "https://foundersfactory.com/rio-tinto-mining-tech-accelerator/",
+        "evidenceId": "check-route-a8f23a188b"
+      },
+      {
+        "value": "https://foundersfactory.com/western-australia-government-nature-tech-accelerator/",
+        "evidenceId": "check-route-2d621ee4cf"
+      },
+      {
+        "value": "https://foundersfactory.com/mswa-ms-neurological-care-accelerator/",
+        "evidenceId": "check-route-39cc3e420f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://foundersfactory.com/accelerator/",
+        "evidenceId": "check-route-bb3d52c8c6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "to our global network. Join the program GO FURTHER, FASTER Raise capital and grow your startup with the backing of Founders Factory and Aviva Capital Receive £50k cash investment. Our investment team will support your capital raise requirements in-program and in years to come. Operational Support Co-founder level",
+        "evidenceId": "check-deal-ef259c50e5"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://foundersfactory.com/portfolio/",
+        "evidenceId": "check-portfolio-94e0330d81"
+      }
+    ],
+    "name": [
+      {
+        "value": "Founders Factory",
+        "evidenceId": "check-name-c781b7ce04"
+      }
+    ],
+    "examplePages": []
+  }
+}

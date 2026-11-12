@@ -1,0 +1,238 @@
+{
+  "programId": "bessemer",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://www.bvp.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/about",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/canva",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/anthropic",
+      "page": "portfolio",
+      "anchor": "company-anthropic-currentcolor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/waymo",
+      "page": "portfolio",
+      "anchor": "company-waymo-color",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/ramp",
+      "page": "portfolio",
+      "anchor": "company-ramp-currentcolor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/legora",
+      "page": "portfolio",
+      "anchor": "company-legora-currentcolor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/axonius",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/fireworks",
+      "page": "portfolio",
+      "anchor": "Fireworks",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/abridge",
+      "page": "portfolio",
+      "anchor": "company-abridge-currentcolor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/eliseai",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio/kymera-therapeutics",
+      "page": "portfolio",
+      "anchor": "company-kymera-currentcolor",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=vertical",
+      "page": "portfolio",
+      "anchor": "Vertical",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=crypto",
+      "page": "portfolio",
+      "anchor": "Crypto",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=fintech",
+      "page": "portfolio",
+      "anchor": "Fintech",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=deep-tech-and-defense",
+      "page": "portfolio",
+      "anchor": "Deep Tech & Defense",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=enterprise",
+      "page": "portfolio",
+      "anchor": "Enterprise",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=consumer",
+      "page": "portfolio",
+      "anchor": "Consumer",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=biotech",
+      "page": "portfolio",
+      "anchor": "Biotech",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=developer",
+      "page": "portfolio",
+      "anchor": "Developer",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=ai",
+      "page": "portfolio",
+      "anchor": "AI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=infrastructure",
+      "page": "portfolio",
+      "anchor": "Infrastructure",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=marketplaces",
+      "page": "portfolio",
+      "anchor": "Marketplaces",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=physical-ai-and-robotics",
+      "page": "portfolio",
+      "anchor": "Physical AI & Robotics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=healthcare",
+      "page": "portfolio",
+      "anchor": "Healthcare",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=data-and-cloud",
+      "page": "portfolio",
+      "anchor": "Data & Cloud",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/portfolio?sectors=cybersecurity",
+      "page": "portfolio",
+      "anchor": "Cybersecurity",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/news/dreeze-pioneering-application-revival-for-the-agentic-age",
+      "page": "application",
+      "anchor": "News Dreeze: pioneering 'Application Revival' for the agentic age November 10, 2026 Bessemer Venture Partners co-leads Dreeze’s $33M Seed to build cloud-native application recovery",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.bvp.com/beyond-the-capital",
+      "page": "portfolio",
+      "anchor": "Community & events Peer forums, matchmaking, workshops, and events built around the problems you face. 450+ active companies. 2,000+ community members.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "programId": "gsf-accelerator",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://situsbro.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-f302125559",
+      "url": "https://situsbro.com/",
+      "title": "GSF Accelerator — homepage checked by scrape.py",
+      "excerpt": "https://situsbro.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://situsbro.com/",
+        "evidenceId": "check-route-f302125559"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

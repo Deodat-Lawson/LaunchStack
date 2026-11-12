@@ -1,0 +1,84 @@
+{
+  "programId": "darwin-startups",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.darwinstartups.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-df02877976",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-375ac4c450",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "Portfólio → https://www.darwinstartups.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-848a30ac36",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "Confira nosso portfólio completo → https://www.darwinstartups.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8cf910dd5d",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "Para Startups → https://www.darwinstartups.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd46d01052",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "conheça nossos serviços → https://www.darwinstartups.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7745b61438",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — homepage checked by scrape.py",
+      "excerpt": "https://www.darwinstartups.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.darwinstartups.com/",
+        "evidenceId": "check-route-7745b61438"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.darwinstartups.com/startups",
+        "evidenceId": "check-portfolio-8cf910dd5d"
+      },
+      {
+        "value": "https://www.darwinstartups.com/portfolio",
+        "evidenceId": "check-portfolio-375ac4c450"
+      }
+    ],
+    "name": [
+      {
+        "value": "Darwin Startups",
+        "evidenceId": "check-name-df02877976"
+      }
+    ],
+    "examplePages": []
+  }
+}

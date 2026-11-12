@@ -1,0 +1,241 @@
+{
+  "programId": "gener8tor",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.gener8tor.com/",
+    "https://www.gener8tor.com/about-us",
+    "https://www.gener8tor.com/faqs",
+    "https://www.gener8tor.com/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-2b7bc61707",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page checked by scrape.py",
+      "excerpt": "info@gener8tor.com",
+      "page": "application"
+    },
+    {
+      "id": "check-email-427dfd420c",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "info@gener8tor.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ac860ee370",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "info@gener8tor.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e5e5fa8bea",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "info@gener8tor.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-b636f7290d",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "gener8tor | Accelerating the Best & Brightest 0 Skip to Content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2918395d04",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3e337acffc",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page checked by scrape.py",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6a662511d1",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6e731182d5",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "portfolio companies. → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-756067a039",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7bd46f28fa",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-864c0ed78e",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page checked by scrape.py",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-87eeabc32d",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9de5d39dc3",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-db6877a747",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "I am a Startup → https://www.gener8tor.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eb02d0d33f",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "See our Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f5297e1015",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fa0292d649",
+      "url": "https://www.gener8tor.com/apply",
+      "title": "gener8tor — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.gener8tor.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fef792f2c6",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "Startup → https://www.gener8tor.com/startups",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3f564118ec",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "apply for programming → https://www.gener8tor.com/skills",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-473c10123a",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "apply for our programs → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5ebb8fbd01",
+      "url": "https://www.gener8tor.com/faqs",
+      "title": "gener8tor — terms page checked by scrape.py",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8ea6258b11",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c7364c587f",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "Investment Accelerators → https://www.gener8tor.com/investment-accelerators",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cc508ea155",
+      "url": "https://www.gener8tor.com/about-us",
+      "title": "gener8tor — details page checked by scrape.py",
+      "excerpt": "I'm ready to apply → https://www.gener8tor.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d6fed3232e",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.gener8tor.com/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@gener8tor.com",
+        "evidenceId": "check-email-ac860ee370"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.gener8tor.com/apply",
+        "evidenceId": "check-route-d6fed3232e"
+      },
+      {
+        "value": "https://www.gener8tor.com/skills",
+        "evidenceId": "check-route-3f564118ec"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.gener8tor.com/investment-accelerators",
+        "evidenceId": "check-route-c7364c587f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.gener8tor.com/startups",
+        "evidenceId": "check-portfolio-2918395d04"
+      },
+      {
+        "value": "https://www.gener8tor.com/portfolio",
+        "evidenceId": "check-portfolio-6e731182d5"
+      }
+    ],
+    "name": [
+      {
+        "value": "gener8tor",
+        "evidenceId": "check-name-b636f7290d"
+      }
+    ],
+    "examplePages": []
+  }
+}

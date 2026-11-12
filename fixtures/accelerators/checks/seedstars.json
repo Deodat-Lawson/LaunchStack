@@ -1,0 +1,61 @@
+{
+  "programId": "seedstars",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.seedstars.com/",
+    "https://www.seedstars.com/about/",
+    "https://www.seedstars.com/content-hub/newsroom/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-64f8682bc9",
+      "url": "https://www.seedstars.com/",
+      "title": "Seedstars — homepage checked by scrape.py",
+      "excerpt": "Home Seedstars | Home Skip to main content x About ABOUT Our story Our",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3550b9e897",
+      "url": "https://www.seedstars.com/",
+      "title": "Seedstars — homepage checked by scrape.py",
+      "excerpt": "APPLY NOW → https://www.seedstars.com/community/entrepreneurs/programs/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5ae1450820",
+      "url": "https://www.seedstars.com/",
+      "title": "Seedstars — homepage checked by scrape.py",
+      "excerpt": "https://www.seedstars.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.seedstars.com/community/entrepreneurs/programs/",
+        "evidenceId": "check-route-3550b9e897"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.seedstars.com/",
+        "evidenceId": "check-route-5ae1450820"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Seedstars",
+        "evidenceId": "check-name-64f8682bc9"
+      }
+    ],
+    "examplePages": []
+  }
+}

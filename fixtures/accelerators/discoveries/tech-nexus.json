@@ -1,0 +1,46 @@
+{
+  "programId": "tech-nexus",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.technexus.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/forgex/",
+      "page": "portfolio",
+      "anchor": "TechNexus' deep tech collaboration platform — partnering with universities and research institutions to translate breakthrough science into venture-backed companies.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/articles/",
+      "page": "portfolio",
+      "anchor": "More than a newsroom — an active incubation tool that tells portfolio stories, drives collaboration between ventures and corporate partners, and accelerates growth across the ecosy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.technexus.com/introducing-prime-x-technexus-s-ai-enabled-portfolio-intelligence-product/",
+      "page": "portfolio",
+      "anchor": "Learn More",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "programId": "accel-atoms",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://atoms.accel.com/",
+    "https://atoms.accel.com/faqs",
+    "https://apply.accel-atoms.com/",
+    "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-68387f0ac1",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "need-state and your solution. Market: Addressing large opportunities in their categories. Funding How much will Accel invest with Accel Atoms? We invest up to $1M- $2M in startups in the form of equity or a convertible note. Alumni founders & startups have gone on to raise up to $4M in the round Accel Atoms has",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-dcbed055f3",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "raise more, we are offering global capital unlocks from partners such as Prosus. Is the funding provided as a grant or equity investment? We will invest up to $1M in the form of equity. Does acceptance to Accel Atoms X imply a follow on investment from Accel? We constantly evaluate progress of the startups in our",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-ffc21cceaf",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "from founders based in India & Indian-origin founders based anywhere in the world. Funding How much will Accel invest with Accel Atoms X? We will invest up to $1M in companies in the form of equity or convertible note. For companies looking to raise more, we are offering global capital unlocks from partners such as",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-5ade2e38bd",
+      "url": "https://atoms.accel.com/",
+      "title": "Accel Atoms — homepage checked by scrape.py",
+      "excerpt": "Accel Atoms | Catalyst to your 0→1 journey X Philosophy Portfolio News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2465c85bc1",
+      "url": "https://atoms.accel.com/",
+      "title": "Accel Atoms — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4e29c47f8a",
+      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
+      "title": "Accel Atoms — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-ff7a2072fe",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://atoms.accel.com/portfolio-old",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1c9ad655cb",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "APPLY → https://atoms.accel.com/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-99dca9558b",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9dd1b4e2da",
+      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
+      "title": "Accel Atoms — batches page checked by scrape.py",
+      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d0f876b856",
+      "url": "https://atoms.accel.com/news/meet-the-startups-in-ai-cohort-2026",
+      "title": "Accel Atoms — batches page checked by scrape.py",
+      "excerpt": "APPLY → https://atoms.accel.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-e628a7270c",
+      "url": "https://atoms.accel.com/",
+      "title": "Accel Atoms — homepage checked by scrape.py",
+      "excerpt": "Apply Early → https://apply.accel-atoms.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fbdb60cd24",
+      "url": "https://atoms.accel.com/",
+      "title": "Accel Atoms — homepage checked by scrape.py",
+      "excerpt": "APPLY → https://atoms.accel.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-6ce08b4a6a",
+      "url": "https://atoms.accel.com/faqs",
+      "title": "Accel Atoms — terms page checked by scrape.py",
+      "excerpt": "stage. We also invest in ideas early— irrespective of an MVP. Is international participation allowed? Yes, we are accepting applications from founders based in India & Indian-origin founders based anywhere in the world. What is the selection",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.accel-atoms.com/",
+        "evidenceId": "check-route-e628a7270c"
+      },
+      {
+        "value": "https://atoms.accel.com/apply",
+        "evidenceId": "check-route-fbdb60cd24"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.accel-atoms.com/",
+        "evidenceId": "check-route-e628a7270c"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-6ce08b4a6a"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "need-state and your solution. Market: Addressing large opportunities in their categories. Funding How much will Accel invest with Accel Atoms? We invest up to $1M- $2M in startups in the form of equity or a convertible note. Alumni founders & startups have gone on to raise up to $4M in the round Accel Atoms has",
+        "evidenceId": "check-deal-68387f0ac1"
+      },
+      {
+        "value": "from founders based in India & Indian-origin founders based anywhere in the world. Funding How much will Accel invest with Accel Atoms X? We will invest up to $1M in companies in the form of equity or convertible note. For companies looking to raise more, we are offering global capital unlocks from partners such as",
+        "evidenceId": "check-deal-ffc21cceaf"
+      },
+      {
+        "value": "raise more, we are offering global capital unlocks from partners such as Prosus. Is the funding provided as a grant or equity investment? We will invest up to $1M in the form of equity. Does acceptance to Accel Atoms X imply a follow on investment from Accel? We constantly evaluate progress of the startups in our",
+        "evidenceId": "check-deal-dcbed055f3"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://atoms.accel.com/portfolio-old",
+        "evidenceId": "check-portfolio-2465c85bc1"
+      }
+    ],
+    "name": [
+      {
+        "value": "Accel Atoms",
+        "evidenceId": "check-name-5ade2e38bd"
+      }
+    ],
+    "examplePages": []
+  }
+}

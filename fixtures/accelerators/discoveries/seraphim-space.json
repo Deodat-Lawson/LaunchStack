@@ -1,0 +1,46 @@
+{
+  "programId": "seraphim-space",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://seraphim.vc/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/about/team/",
+      "page": "details",
+      "anchor": "Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/news/seraphim-launches-academy/",
+      "page": "portfolio",
+      "anchor": "Seraphim Launches Academy to Back the Next Generation of Global SpaceTech Leaders TL;DR / Executive Summary Seraphim, a global leader in SpaceTech investment, today launched the Se",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://seraphim.vc/news/seraphim-portfolio-launch-on-spacex-bandwagon-5/",
+      "page": "portfolio",
+      "anchor": "Seraphim Portfolio Launch On SpaceX Bandwagon-5 TL;DR / Executive Summary [Credit: SpaceX] Tuesday’s fifth SpaceX Bandwagon mission was a particularly busy one for the Seraphim por",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

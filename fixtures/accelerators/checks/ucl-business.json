@@ -1,0 +1,36 @@
+{
+  "programId": "ucl-business",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.uclventures.com/",
+    "https://www.uclventures.com/who-we-are"
+  ],
+  "evidence": [
+    {
+      "id": "check-route-fced8e7da3",
+      "url": "https://www.uclventures.com/",
+      "title": "UCL Business — homepage checked by scrape.py",
+      "excerpt": "Navigate back to homepage → https://www.uclventures.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.uclventures.com/",
+        "evidenceId": "check-route-fced8e7da3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [],
+    "examplePages": []
+  }
+}

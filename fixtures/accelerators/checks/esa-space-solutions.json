@@ -1,0 +1,192 @@
+{
+  "programId": "esa-space-solutions",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://business.esa.int/",
+    "https://business.esa.int/about-us",
+    "https://business.esa.int/how-to-apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-c0695985de",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "want to hear business ideas that are commercially viable, technically possible and involve either space tech or data. WHAT WE OFFER Zero-equity funding (from €60k to €3M+ per activity). Personalised support from a member of the ESA team. Technical & commercial guidance. Access to our network of partners. Credibility of",
+      "page": "application"
+    },
+    {
+      "id": "check-name-3073af3a09",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "ESA Space Solutions Skip to main content Main navigation Home About us News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1c491de434",
+      "url": "https://business.esa.int/about-us",
+      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c8fff3f04e",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d12305d747",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://business.esa.int/projects",
+      "page": "details"
+    },
+    {
+      "id": "check-route-04c0b04a09",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-163c11103b",
+      "url": "https://business.esa.int/about-us",
+      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "details"
+    },
+    {
+      "id": "check-route-35f9ab7d84",
+      "url": "https://business.esa.int/about-us",
+      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "details"
+    },
+    {
+      "id": "check-route-473c49e134",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4d94da7458",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5e5909fb78",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "Proof-of-concept Studies and Pilot Projects → https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+      "page": "application"
+    },
+    {
+      "id": "check-route-aa4f9552ab",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ac650a6b39",
+      "url": "https://business.esa.int/about-us",
+      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "excerpt": "HOW TO APPLY → https://business.esa.int/how-to-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ae4a952033",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "Proof-of-concept Studies and Pilot Project Open Calls → https://business.esa.int/how-to-apply-to-proof-concept-study-and-pilot-project-open-call-0",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ba21838aeb",
+      "url": "https://business.esa.int/about-us",
+      "title": "ESA Space Solutions — details page checked by scrape.py",
+      "excerpt": "How to apply → https://business.esa.int/how-to-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c519c88b6e",
+      "url": "https://business.esa.int/how-to-apply",
+      "title": "ESA Space Solutions — application page checked by scrape.py",
+      "excerpt": "Kick-start Open Calls → https://business.esa.int/how-to-apply-to-kick-start-open-call",
+      "page": "application"
+    },
+    {
+      "id": "check-route-d6e82dd37e",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "Kick-starts → https://business.esa.int/how-to-apply-to-kick-starts",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f0cc208030",
+      "url": "https://business.esa.int/",
+      "title": "ESA Space Solutions — homepage checked by scrape.py",
+      "excerpt": "how to apply → https://business.esa.int/how-to-apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://business.esa.int/how-to-apply",
+        "evidenceId": "check-route-04c0b04a09"
+      },
+      {
+        "value": "https://business.esa.int/how-to-apply-to-kick-starts",
+        "evidenceId": "check-route-d6e82dd37e"
+      },
+      {
+        "value": "https://business.esa.int/how-to-apply-to-proof-concept-studies-and-pilot-projects",
+        "evidenceId": "check-route-473c49e134"
+      },
+      {
+        "value": "https://business.esa.int/how-to-apply-to-proof-concept-study-and-pilot-project-open-call-0",
+        "evidenceId": "check-route-ae4a952033"
+      },
+      {
+        "value": "https://business.esa.int/how-to-apply-to-kick-start-open-call",
+        "evidenceId": "check-route-c519c88b6e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://business.esa.int/how-to-apply",
+        "evidenceId": "check-route-04c0b04a09"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "want to hear business ideas that are commercially viable, technically possible and involve either space tech or data. WHAT WE OFFER Zero-equity funding (from €60k to €3M+ per activity). Personalised support from a member of the ESA team. Technical & commercial guidance. Access to our network of partners. Credibility of",
+        "evidenceId": "check-deal-c0695985de"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://business.esa.int/projects",
+        "evidenceId": "check-portfolio-d12305d747"
+      }
+    ],
+    "name": [
+      {
+        "value": "ESA Space Solutions",
+        "evidenceId": "check-name-3073af3a09"
+      }
+    ],
+    "examplePages": []
+  }
+}

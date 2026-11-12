@@ -1,0 +1,184 @@
+{
+  "programId": "eit-health",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://eithealth.eu/",
+    "https://eithealth.eu/get-involved/new-call-opportunities/",
+    "https://eithealth.eu/deep-tech-venture-builder-programme-call-2025-faqs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-cc098c9830",
+      "url": "https://eithealth.eu/deep-tech-venture-builder-programme-call-2025-faqs/",
+      "title": "EIT Health — terms page checked by scrape.py",
+      "excerpt": "programme. As such, Swiss entities are not directly eligible to receive EIT funding, when part of a selected project consortia. Entities can receive up to €60,000 in EIT funding within the EIT Health Business Plan 2023-2025 . However, for funding above €60,000 organisations need to refer to the Swiss national",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-fdc08b2167",
+      "url": "https://eithealth.eu/",
+      "title": "EIT Health — homepage checked by scrape.py",
+      "excerpt": "EIT Health | Promoting innovation in health EIT Health Members Hub",
+      "page": "details"
+    },
+    {
+      "id": "check-route-121f5a9858",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Entrepreneurship & Innovation Micro-Credentials Call Closed for applications Access funding to develop a new EIT Label-certified micro-credentials programme in healthcare entrepreneurship and innovation. → https://eithealth.eu/opportunity/innovation-microcredentials-call/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-25bb4ddbbb",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "New Models to Deliver Healthcare Call Closed for applications Access funding for market-ready health solutions to drive real-world adoption and scale value-based healthcare models across health systems. → https://eithealth.eu/opportunity/nmdh-call/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-29ca65f80a",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Innovation Uptake Call Closed for applications Access funding to accelerate market adoption and scale-up of clinically validated digital, data and AI-driven healthcare solutions. → https://eithealth.eu/opportunity/innovation-uptake/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4d56b6e95b",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Biotech Certified Innovation Path Closed for applications Access funding to create a new EIT Label-certified Biotech learning pathway. → https://eithealth.eu/opportunity/biotech-certified-innovation-path/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-6b8de2beb2",
+      "url": "https://eithealth.eu/",
+      "title": "EIT Health — homepage checked by scrape.py",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6e844fd993",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Summer Schools and Certified Innovation Path Residentials Closed for applications Equip the next generation of healthcare innovators with entrepreneurial and innovation skills through our Summer Schools and CIP Residentials → https://eithealth.eu/opportunity/summer-schools-innovation-residentials/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7805c89b5b",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Technology Transfer Offices & Entrepreneurship Support Call Closed for applications Partner with EIT Health to accelerate research commercialisation → https://eithealth.eu/opportunity/tto-entrepreneurhsip/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7e9ef16f7e",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Transformative Healthcare Instrument Closed for applications Access funding to accelerate the development and commercialisation of high-potential biotech, medtech, digital health and AI innovations. → https://eithealth.eu/opportunity/transformative-healthcare-instrument/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-7eccdd5907",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Fostering Opportunity in Regional Growth Across Europe (FORGE) Closed for applications Help equip innovation agencies, universities, TTOs, accelerators, and clusters with the knowledge and tools to drive regional health innovation across Europe. → https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-911491d938",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Healthcare Entrepreneurship Levelling Online Course Closed for applications Develop the next generation of healthcare entrepreneurship education → https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b5702053f1",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "EIT Health RIS Country Representatives Closed for applications Become an EIT Health Country Representative and help shape the future of healthcare innovation in your country. → https://eithealth.eu/opportunity/eit-health-country-representatives/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ba05f0946d",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "Design and Deliver the Next EIT Health Bootcamps Closed for applications Build Healthcare Innovation Bootcamps with EIT Health → https://eithealth.eu/opportunity/bootcamps-providers/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c0adf2547e",
+      "url": "https://eithealth.eu/",
+      "title": "EIT Health — homepage checked by scrape.py",
+      "excerpt": "https://eithealth.eu/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d6f90f5d63",
+      "url": "https://eithealth.eu/get-involved/new-call-opportunities/",
+      "title": "EIT Health — application page checked by scrape.py",
+      "excerpt": "University Incubators & Entrepreneurship Support Call Closed for applications Help Master’s and PhD innovators bring their solutions to the market → https://eithealth.eu/opportunity/university-incubators/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-f0a787311e",
+      "url": "https://eithealth.eu/deep-tech-venture-builder-programme-call-2025-faqs/",
+      "title": "EIT Health — terms page checked by scrape.py",
+      "excerpt": "Apply For Funding → https://eithealth.eu/get-involved/new-call-opportunities/",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://eithealth.eu/get-involved/new-call-opportunities/",
+        "evidenceId": "check-route-6b8de2beb2"
+      },
+      {
+        "value": "https://eithealth.eu/opportunity/healthcare-entrepreneurship-levelling-course/",
+        "evidenceId": "check-route-911491d938"
+      },
+      {
+        "value": "https://eithealth.eu/opportunity/tto-entrepreneurhsip/",
+        "evidenceId": "check-route-7805c89b5b"
+      },
+      {
+        "value": "https://eithealth.eu/opportunity/university-incubators/",
+        "evidenceId": "check-route-d6f90f5d63"
+      },
+      {
+        "value": "https://eithealth.eu/opportunity/fostering-opportunity-in-regional-growth-across-europe/",
+        "evidenceId": "check-route-7eccdd5907"
+      },
+      {
+        "value": "https://eithealth.eu/opportunity/summer-schools-innovation-residentials/",
+        "evidenceId": "check-route-6e844fd993"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://eithealth.eu/",
+        "evidenceId": "check-route-c0adf2547e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "programme. As such, Swiss entities are not directly eligible to receive EIT funding, when part of a selected project consortia. Entities can receive up to €60,000 in EIT funding within the EIT Health Business Plan 2023-2025 . However, for funding above €60,000 organisations need to refer to the Swiss national",
+        "evidenceId": "check-deal-cc098c9830"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "EIT Health",
+        "evidenceId": "check-name-fdc08b2167"
+      }
+    ],
+    "examplePages": []
+  }
+}

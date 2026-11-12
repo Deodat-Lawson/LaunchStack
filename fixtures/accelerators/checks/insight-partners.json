@@ -1,0 +1,67 @@
+{
+  "programId": "insight-partners",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.insightpartners.com/",
+    "https://www.insightpartners.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-5584201d47",
+      "url": "https://www.insightpartners.com/",
+      "title": "Insight Partners — homepage checked by scrape.py",
+      "excerpt": "Insight Partners | We Scale Ambition at Every Stage Go to home page Why",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1f40aab888",
+      "url": "https://www.insightpartners.com/",
+      "title": "Insight Partners — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4a6b41a6e0",
+      "url": "https://www.insightpartners.com/about-us/",
+      "title": "Insight Partners — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.insightpartners.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2c1fdec40e",
+      "url": "https://www.insightpartners.com/",
+      "title": "Insight Partners — homepage checked by scrape.py",
+      "excerpt": "Go to home page main-logo main-logo → https://www.insightpartners.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.insightpartners.com",
+        "evidenceId": "check-route-2c1fdec40e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.insightpartners.com/portfolio/",
+        "evidenceId": "check-portfolio-1f40aab888"
+      }
+    ],
+    "name": [
+      {
+        "value": "Insight Partners",
+        "evidenceId": "check-name-5584201d47"
+      }
+    ],
+    "examplePages": []
+  }
+}

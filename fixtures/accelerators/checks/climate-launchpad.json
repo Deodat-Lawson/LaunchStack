@@ -1,0 +1,206 @@
+{
+  "programId": "climate-launchpad",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://climatelaunchpad.org/",
+    "https://climatelaunchpad.org/competition/",
+    "https://climatelaunchpad.org/application-form/",
+    "https://climatelaunchpad.org/frequently-asked-questions/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-07773267fd",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "you’re unsure whether your idea fits, reach out to us at info@climatelaunchpad.org —we’d love to help! What are the judging criteria? For the",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-0c9db0d150",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "Not a fan of forms? No worries—just send us an email at info@climatelaunchpad.org and tell us why you’d make a great local organiser! In",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-3928f83822",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "have any concerns or questions, feel free to reach out at info@climatelaunchpad.org . How will my application be handled? Your application",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4fd418deba",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "idea. Not sure if you should enter? Drop us an email at info@climatelaunchpad.org . How does the competition work? The ClimateLaunchpad",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5422f1833e",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "If you have any questions, feel free to contact us at info@climatelaunchpad.org . What does it take to win the competition? Winning",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-5665c67ed1",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "to join. If you’re interested, drop us an email at info@climatelaunchpad.org . Why do I have to choose an impact category for my",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-aaaef3a6dd",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "concerns or wish to opt-out, you can do so in writing at info@climatelaunchpad.org . I would like to organise ClimateLaunchpad in my country.",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b501af93e8",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "your idea along the way. Still unsure? Reach out to us at info@climatelaunchpad.org —we’re happy to help! What happens to my idea when I",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-c0ee637c51",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "info@climatelaunchpad.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-61c054b7cc",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "ClimateLaunchpad Facebook – Instagram – LinkedIn – YouTube About the",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3e958b8dd6",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4404e9f02d",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8eaa23c828",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-9d8e828b20",
+      "url": "https://climatelaunchpad.org/frequently-asked-questions/",
+      "title": "ClimateLaunchpad — terms page checked by scrape.py",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-a23a330435",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "https://climatelaunchpad.org",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c410a03877",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "Learn Learn by doing Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new skills directly to grow your idea. Meet the trainers → https://climatelaunchpad.org/meet-our-trainers/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c83b0d66e2",
+      "url": "https://climatelaunchpad.org/competition/",
+      "title": "ClimateLaunchpad — details page checked by scrape.py",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eca06c5ce9",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "Application form → https://climatelaunchpad.org/application-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f0e28d4cce",
+      "url": "https://climatelaunchpad.org/competition/",
+      "title": "ClimateLaunchpad — details page checked by scrape.py",
+      "excerpt": "Apply now → https://climatelaunchpad.org/application-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-12383f291f",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — homepage checked by scrape.py",
+      "excerpt": "idea on bigger stages, gain visibility, meet global partners, and unlock new opportunities. March – May 2026 Applications Now Open To enter the competition submit your idea or innovation with environmental impact. We’ll help you fast track",
+      "page": "details"
+    },
+    {
+      "id": "check-status-12d60f956e",
+      "url": "https://climatelaunchpad.org/application-form/",
+      "title": "ClimateLaunchpad — application page checked by scrape.py",
+      "excerpt": "ClimateLaunchpad – Applications are closed Facebook – Instagram – LinkedIn – YouTube About the competition Back Competition info Apply now Trainers FAQ",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@climatelaunchpad.org",
+        "evidenceId": "check-email-c0ee637c51"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://climatelaunchpad.org/application-form/",
+        "evidenceId": "check-route-3e958b8dd6"
+      },
+      {
+        "value": "https://climatelaunchpad.org/meet-our-trainers/",
+        "evidenceId": "check-route-c410a03877"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://climatelaunchpad.org",
+        "evidenceId": "check-route-a23a330435"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-12383f291f"
+      },
+      {
+        "value": false,
+        "evidenceId": "check-status-12d60f956e"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "ClimateLaunchpad",
+        "evidenceId": "check-name-61c054b7cc"
+      }
+    ],
+    "examplePages": []
+  }
+}

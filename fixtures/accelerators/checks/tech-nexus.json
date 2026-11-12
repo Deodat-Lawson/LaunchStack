@@ -1,0 +1,99 @@
+{
+  "programId": "tech-nexus",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.technexus.com/",
+    "https://www.technexus.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-d94d5213f2",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "TechNexus Venture Collaborative — Corporate Innovation Meets Startup",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-250c4adcbc",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "Explore all companies → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-59ba152455",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "Learn more → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dcbeae5584",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e5d20cb115",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e68c4db52f",
+      "url": "https://www.technexus.com/about/",
+      "title": "TechNexus — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.technexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fea4cce8c7",
+      "url": "https://www.technexus.com/about/",
+      "title": "TechNexus — details page checked by scrape.py",
+      "excerpt": "For Founders → https://www.technexus.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-275bb34e84",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — homepage checked by scrape.py",
+      "excerpt": "https://www.technexus.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.technexus.com/",
+        "evidenceId": "check-route-275bb34e84"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.technexus.com/ventures/",
+        "evidenceId": "check-portfolio-e5d20cb115"
+      },
+      {
+        "value": "https://www.technexus.com/portfolio/",
+        "evidenceId": "check-portfolio-dcbeae5584"
+      }
+    ],
+    "name": [
+      {
+        "value": "TechNexus",
+        "evidenceId": "check-name-d94d5213f2"
+      }
+    ],
+    "examplePages": []
+  }
+}

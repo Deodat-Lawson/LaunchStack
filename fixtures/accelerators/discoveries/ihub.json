@@ -1,0 +1,30 @@
+{
+  "programId": "ihub",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://ihub.co.ke/about-us/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://ihub.co.ke/blog-news-and-updates/",
+      "page": "batches",
+      "anchor": "Blog, News and Updates",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

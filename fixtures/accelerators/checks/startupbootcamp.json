@@ -1,0 +1,467 @@
+{
+  "programId": "startupbootcamp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startupbootcamp.org/",
+    "https://startupbootcamp.org/about/contact",
+    "https://startupbootcamp.org/about/faq",
+    "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-161660eacb",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
+      "page": "details"
+    },
+    {
+      "id": "check-name-7fb87518b1",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Startupbootcamp Accelerators Investors Partners Mentors Events About us",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-026b32e7c6",
+      "url": "https://startupbootcamp.org/about/faq",
+      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-09453cf8fb",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-30d6eb199e",
+      "url": "https://startupbootcamp.org/about/contact",
+      "title": "Startupbootcamp — details page checked by scrape.py",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3537a6afa6",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a5e830b02",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4337a7ab0f",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6bbcbf6b2a",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-7f7a0a3f93",
+      "url": "https://startupbootcamp.org/about/faq",
+      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7fa207dff2",
+      "url": "https://startupbootcamp.org/about/faq",
+      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b42583c04f",
+      "url": "https://startupbootcamp.org/about/faq",
+      "title": "Startupbootcamp — terms page checked by scrape.py",
+      "excerpt": "Portfolio companies Discover our network of portfolio companies → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c8498dbd14",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-c8bbbd8fce",
+      "url": "https://startupbootcamp.org/about/contact",
+      "title": "Startupbootcamp — details page checked by scrape.py",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ca22657f3e",
+      "url": "https://startupbootcamp.org/about/contact",
+      "title": "Startupbootcamp — details page checked by scrape.py",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d6012e4087",
+      "url": "https://startupbootcamp.org/about/contact",
+      "title": "Startupbootcamp — details page checked by scrape.py",
+      "excerpt": "Overview → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f33e500367",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "excerpt": "Relations & Community Check out our community events and ecosystem opportunities. → https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-f87650c719",
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "title": "Startupbootcamp — batches page checked by scrape.py",
+      "excerpt": "Startups → https://startupbootcamp.org/startups/overview",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0de65c6d56",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Energy & Climate III Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. Energy & Climate III Hybrid | Amsterdam 2025 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate-iii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-100d9f7ddb",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "AfriTech Applications Open South Africa An accelerator designed to empower impact & sustainability startups September 8, 2023 AfriTech South Africa February 8, 2024 September 8, 2023 July 10, 2023 8 February 2024 2023 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/afritech",
+      "page": "details"
+    },
+    {
+      "id": "check-route-14458858eb",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "AIvolution Applications Open Italy An accelerator designed to empower AI & Web3 May 8, 2024 AIvolution Italy May 8, 2024 February 21, 2024 2024 AI & Web3 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution",
+      "page": "details"
+    },
+    {
+      "id": "check-route-146853b83c",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Production & Industry Applications Open Hybrid | The Netherlands An accelerator designed to promote sustainable manufacturing practices by empowering startups to develop eco-friendly materials and circular economy solutions. December 2, 2024 Production & Industry Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Production & Industry All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/production-industry",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1d407f3879",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Food & AgriTech Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. August 24, 2024 Food & AgriTech Hybrid | The Netherlands August 24, 2024 May 6, 2024 2024 Food & AgriTech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "details"
+    },
+    {
+      "id": "check-route-20ca1661a8",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Food & AgriTech III Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. Food & AgriTech III Hybrid | The Netherlands 2024 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech-iii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-319b7fa629",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "PropTech & Housing Applications Open Australia An accelerator designed to empower PropTech startups April 30, 2024 PropTech & Housing Australia April 30, 2024 March 1, 2024 2024 PropTech & Housing All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/proptech-housing",
+      "page": "details"
+    },
+    {
+      "id": "check-route-397ebb0311",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Sustainability Applications Open Netherlands An accelerator designed to empower sustainability startups & scaleups May 31, 2023 Sustainability Netherlands November 30, 2023 May 31, 2023 March 1, 2023 30 November 2023 2023 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sustainability",
+      "page": "details"
+    },
+    {
+      "id": "check-route-398de36d46",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "FoodTech Tasmania Applications Open Australia An accelerator designed to empower Food & AgriTech startups June 14, 2024 FoodTech Tasmania Australia June 14, 2024 April 2, 2024 2024 Food All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3baed89095",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "AIvolution III Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. March 7, 2025 AIvolution III Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025 AI & Web3 III All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3d2f37e5b2",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "EnergyInc Applications Open Australia A pre-accelerator designed to fast-track sustainability business ideas towards being a startup. February 22, 2022 EnergyInc Australia November 21, 2023 February 22, 2022 November 21, 2022 21 November 2023 2023 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energyinc",
+      "page": "details"
+    },
+    {
+      "id": "check-route-45285498df",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "AIvolution II Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. August 24, 2024 AIvolution II Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024 AI & Web3 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-475c68aaff",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "WeSportUP Applications Open Italy An accelerator designed to empower SportsTech startups August 15, 2024 WeSportUP Italy August 15, 2024 June 1, 2023 2024 Sports & Events All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/wesportup",
+      "page": "details"
+    },
+    {
+      "id": "check-route-669f3f51c2",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "DeepTech & Robotics Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations. August 24, 2024 DeepTech & Robotics Hybrid | The Netherlands August 24, 2024 June 1, 2024 2024 DeepTech & Robotics All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "details"
+    },
+    {
+      "id": "check-route-70f3262b8f",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Renewable Energy & Net-Zero Applications Open Netherlands An accelerator designed to empower renewable energy & net-zero startups January 31, 2024 Renewable Energy & Net-Zero Netherlands November 30, 2023 January 31, 2024 September 27, 2023 30 November 2023 2023 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/renewable-energy-net-zero",
+      "page": "details"
+    },
+    {
+      "id": "check-route-71730591c5",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "https://startupbootcamp.org/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-744924beba",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "DeepTech & Robotics II Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations. March 7, 2025 DeepTech & Robotics II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2025 DeepTech & Robotics All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-754b6427a7",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "DeepTech & Robotics III Applications Open Hybrid | Amsterdam Looking for bold founders driving scientific breakthroughs and engineering innovations to advance DeepTech and robotics for real-world impact across industries. DeepTech & Robotics III Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8419826e4e",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Sports & EventTech Applications Open Australia An accelerator designed to empower sports & eventtech startups & scaleups April 18, 2022 Sports & EventTech Australia September 1, 2022 April 18, 2022 January 1, 2022 1 September 2022 2022 Sports & Events All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sports-eventtech",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8cbce862cf",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Georgia I Applications Open Georgia & beyond Whether you’re validating your first idea, building a MVP, or ready to launch your product in the market and scale your business, Startupbootcamp Georgia gives you the funding, mentorship, and a global network to grow. Georgia I Georgia & beyond 2025 All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/georgia-i",
+      "page": "details"
+    },
+    {
+      "id": "check-route-97ded023a2",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Styleit Applications Open Italy An accelerator designed to empower FashionTech startups February 28, 2025 Styleit Italy February 28, 2025 December 4, 2024 2024 Fashion All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/styleit",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9842977471",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Decarbonize Applications Open Australia An accelerator designed to empower startups decarbonizing the world, through an ambitious partnership wih Mitsubishi Corporation and NYK Line. August 1, 2023 Decarbonize Australia August 1, 2023 April 1, 2023 1 November 2023 Decarbonize All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a56ee1be90",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Energy & Climate Applications Open Hybrid | The Netherlands An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. December 2, 2024 Energy & Climate Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Energy & Climate All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a57450a2c3",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Sustainable Fintech Applications Open Australia An accelerator designed to empower sustainable fintech startups & scaleups April 17, 2023 Sustainable Fintech Australia August 31, 2023 April 17, 2023 January 23, 2023 31 August 2023 2023 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/sustainable-fintech",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ab835b2f32",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "VentureAus Applications Open Australia A 12-week pre-accelerator program helping people with bold ideas and scalable businesses to launch their venture in Australia. August 15, 2022 VentureAus Australia December 1, 2022 August 15, 2022 July 1, 2022 December 2022 2022 Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/ventureaus",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b39103ffc0",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Mobility & Transportation Applications Open Netherlands An accelerator designed to empower mobility & transportation startups August 14, 2023 Mobility & Transportation Netherlands December 7, 2023 August 14, 2023 March 1, 2023 7 December 2023 2023 Mobility + Bold Action All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/mobility-transportation",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bd03a6d4a6",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Water & Infrastructure Applications Open Hybrid | The Netherlands An accelerator designed to ensure access to clean water and resilient infrastructure while addressing climate-related vulnerabilities through innovative water technologies. December 2, 2024 Water & Infrastructure Hybrid | The Netherlands December 2, 2024 September 2, 2024 2024 Water & Infrastructure All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/water-infrastructure",
+      "page": "details"
+    },
+    {
+      "id": "check-route-be97656109",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Momentum Applications Open Amsterdam Momentum, The Fast Track to Entrepreneurship August 1, 2025 Momentum Amsterdam August 1, 2025 September 30, 2023 2023 Female Entrepreneurship All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/momentum",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cd0834a9be",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "FinTech & Cybersecurity Applications Open Netherlands An accelerator designed to empower fintech startups November 15, 2023 FinTech & Cybersecurity Netherlands June 2, 2022 November 15, 2023 September 1, 2021 2 June 2022 2022 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dc659693c1",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Health & Lifescience I Applications Open Hybrid | Amsterdam Accelerating breakthrough solutions in health and life sciences to improve lives and shape the future of healthcare. Health & Lifescience I Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/health-lifescience-i",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e094348857",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "EnergyNext Applications Open Australia An accelerator designed to empower energy startups & scaleups July 8, 2021 EnergyNext Australia December 1, 2021 July 8, 2021 December 6, 2021 1 December 2022 2022 Energy All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energynext",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e5435dbcd8",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Apply to an accelerator now → https://startupbootcamp.org/startups/accelerators",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ef05e3408e",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Energy & Sustainability Applications Open Dhahran, KSA Empowering startups and visionaries worldwide to tackle critical challenges in energy transition and sustainability August 22, 2024 Energy & Sustainability Dhahran, KSA August 22, 2024 July 18, 2024 2024 Energy & Sustainability All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f00c826518",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Inclusive FinTech & DeFi Applications Open Netherlands An accelerator designed to empower inclusive fintech & defi startups January 31, 2024 Inclusive FinTech & DeFi Netherlands January 31, 2024 September 27, 2023 2023 Fintech + Bold Action All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/inclusive-fintech-defi",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f568b13563",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Energy & Climate II Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innovations on a global scale. Energy & Climate II Hybrid | Amsterdam All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f6ba6ac981",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "FinTech Mexico City Applications Open Mexico An accelerator designed to empower fintech startups December 12, 2023 FinTech Mexico City Mexico December 12, 2023 September 17, 2023 2020 Fintech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f77c84782c",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Food & AgriTech II Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digitalization and sustainability. March 7, 2025 Food & AgriTech II Hybrid | The Netherlands March 7, 2025 December 12, 2024 2024 Food & AgriTech All-accelerators country-all years-all → https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f97abdc36b",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — homepage checked by scrape.py",
+      "excerpt": "Amsterdam’s Startupbootcamp unveils 10 new startups for its Renewable Energy & Net-Zero programme February 3, 2023 According to the startup accelerator, around 20 teams were selected for the Selection Days event from the pool of 2,000 applications. → https://startupbootcamp.org/articles/amsterdams-startupbootcamp-unveils-10-new-startups-for-its-renewable-energy-net-zero-programme",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://startupbootcamp.org/startups/accelerators",
+        "evidenceId": "check-route-e5435dbcd8"
+      },
+      {
+        "value": "https://startupbootcamp.org/accelerator/georgia-i",
+        "evidenceId": "check-route-8cbce862cf"
+      },
+      {
+        "value": "https://startupbootcamp.org/accelerator/energy-climate-iii",
+        "evidenceId": "check-route-0de65c6d56"
+      },
+      {
+        "value": "https://startupbootcamp.org/accelerator/food-agritech-iii",
+        "evidenceId": "check-route-20ca1661a8"
+      },
+      {
+        "value": "https://startupbootcamp.org/accelerator/health-lifescience-i",
+        "evidenceId": "check-route-dc659693c1"
+      },
+      {
+        "value": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+        "evidenceId": "check-route-754b6427a7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://startupbootcamp.org/",
+        "evidenceId": "check-route-71730591c5"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "HealthTech Project in Africa, Supported by Gates Foundation and Run by SBC Afritech July 4, 2022 The pan-African accelerator will provide access to a grant of $50,000, market and government access events across the continent, and a connection to a global ecosystem in the healthcare community. Startupbootcamp Welcomes Ten",
+        "evidenceId": "check-deal-161660eacb"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://startupbootcamp.org/startups/portfolio-companies",
+        "evidenceId": "check-portfolio-3537a6afa6"
+      },
+      {
+        "value": "https://startupbootcamp.org/startups/overview",
+        "evidenceId": "check-portfolio-09453cf8fb"
+      }
+    ],
+    "name": [
+      {
+        "value": "Startupbootcamp",
+        "evidenceId": "check-name-7fb87518b1"
+      }
+    ],
+    "examplePages": []
+  }
+}

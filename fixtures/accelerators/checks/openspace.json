@@ -1,0 +1,66 @@
+{
+  "programId": "openspace",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.openspacecapital.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-2ca97f5ec3",
+      "url": "https://www.openspacecapital.com/",
+      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "excerpt": "3.0 • Jul 6, 2023 Meet the Team: Pareen • Jul 5, 2023 Openspace Ventures Leads USD 5.5M Series B+ Funding Round for Finnomena • Jul",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d8bb422ed4",
+      "url": "https://www.openspacecapital.com/",
+      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.openspacecapital.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dcbdc41be6",
+      "url": "https://www.openspacecapital.com/",
+      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "excerpt": "OUR COMPANIES → https://www.openspacecapital.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3d146cfac8",
+      "url": "https://www.openspacecapital.com/",
+      "title": "Openspace Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.openspacecapital.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.openspacecapital.com/",
+        "evidenceId": "check-route-3d146cfac8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.openspacecapital.com/companies",
+        "evidenceId": "check-portfolio-d8bb422ed4"
+      }
+    ],
+    "name": [
+      {
+        "value": "Openspace Ventures",
+        "evidenceId": "check-name-2ca97f5ec3"
+      }
+    ],
+    "examplePages": []
+  }
+}

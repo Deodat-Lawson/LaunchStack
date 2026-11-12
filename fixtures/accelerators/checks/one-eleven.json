@@ -1,0 +1,73 @@
+{
+  "programId": "one-eleven",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://oneeleven.com/",
+    "https://oneeleven.com/about-2/",
+    "https://oneeleven.com/apply-here/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-3c82921828",
+      "url": "https://oneeleven.com/apply-here/",
+      "title": "OneEleven — application page checked by scrape.py",
+      "excerpt": "info@oneeleven.com",
+      "page": "application"
+    },
+    {
+      "id": "check-name-5e0723b3cc",
+      "url": "https://oneeleven.com/",
+      "title": "OneEleven — homepage checked by scrape.py",
+      "excerpt": "Home – Oneeleven Skip to content Search for: About Members Booking News",
+      "page": "details"
+    },
+    {
+      "id": "check-route-07c4403ba0",
+      "url": "https://oneeleven.com/",
+      "title": "OneEleven — homepage checked by scrape.py",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1dc8501902",
+      "url": "https://oneeleven.com/about-2/",
+      "title": "OneEleven — details page checked by scrape.py",
+      "excerpt": "Apply Here → https://oneeleven.com/apply-here/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@oneeleven.com",
+        "evidenceId": "check-email-3c82921828"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://oneeleven.com/apply-here/",
+        "evidenceId": "check-route-07c4403ba0"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://oneeleven.com/apply-here/",
+        "evidenceId": "check-route-07c4403ba0"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "OneEleven",
+        "evidenceId": "check-name-5e0723b3cc"
+      }
+    ],
+    "examplePages": []
+  }
+}

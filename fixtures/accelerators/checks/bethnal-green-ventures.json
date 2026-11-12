@@ -1,0 +1,157 @@
+{
+  "programId": "bethnal-green-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.bethnalgreenventures.com/",
+    "https://www.bethnalgreenventures.com/apply",
+    "https://www.bethnalgreenventures.com/about-us",
+    "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-7e16a22762",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "excerpt": "a fit with BGV and a fit for you. Talk to BGV Get notified Our renowned programme gives you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage ventures. But the programme is just the beginning of your journey with us. View our full",
+      "page": "application"
+    },
+    {
+      "id": "check-name-03f5e69aed",
+      "url": "https://www.bethnalgreenventures.com/",
+      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "excerpt": "Home - We're Bethnal Green Ventures We’re glad you want to join our family! We have three",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1058131c64",
+      "url": "https://www.bethnalgreenventures.com/about-us",
+      "title": "Bethnal Green Ventures — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-122af96c85",
+      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
+      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4582b3044c",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-70c5638385",
+      "url": "https://www.bethnalgreenventures.com/",
+      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.bethnalgreenventures.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-0211a096fd",
+      "url": "https://www.bethnalgreenventures.com/",
+      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2418886e0f",
+      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
+      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
+      "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-498ff87377",
+      "url": "https://www.bethnalgreenventures.com/about-us",
+      "title": "Bethnal Green Ventures — details page checked by scrape.py",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6f69935e64",
+      "url": "https://www.bethnalgreenventures.com/about-us",
+      "title": "Bethnal Green Ventures — details page checked by scrape.py",
+      "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d3d0c43cd9",
+      "url": "https://www.bethnalgreenventures.com/",
+      "title": "Bethnal Green Ventures — homepage checked by scrape.py",
+      "excerpt": "Apply for our Programme → https://www.bethnalgreenventures.com/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f75d0d7b99",
+      "url": "https://www.bethnalgreenventures.com/blog/meet-the-j-starx-impact-uk-accelerator-cohort",
+      "title": "Bethnal Green Ventures — batches page checked by scrape.py",
+      "excerpt": "Get notified about BGV's next Tech for Good programme Get notified about BGV's next programme → https://www.bethnalgreenventures.com/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-selectivity-b49daac6ae",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "excerpt": "established product or service with paying customers or pilots. On average, over 70% of applicants to our programme have at least a prototype or MVP. ‍ Whatever stage you’re at,",
+      "page": "application"
+    },
+    {
+      "id": "check-selectivity-bc525baf52",
+      "url": "https://www.bethnalgreenventures.com/apply",
+      "title": "Bethnal Green Ventures — application page checked by scrape.py",
+      "excerpt": "we work with, we’re often our portfolio companies’ first investor. On average, roughly 80% of applicants haven’t received funding prior to BGV. But we’re still happy to invest if",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.bethnalgreenventures.com/apply",
+        "evidenceId": "check-route-0211a096fd"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.bethnalgreenventures.com/apply",
+        "evidenceId": "check-route-0211a096fd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [
+      {
+        "value": {
+          "rate": null,
+          "bounded": true
+        },
+        "evidenceId": "check-selectivity-b49daac6ae"
+      }
+    ],
+    "dealText": [
+      {
+        "value": "a fit with BGV and a fit for you. Talk to BGV Get notified Our renowned programme gives you the best start to launching your tech for good venture. We offer £60,000 investment and six weeks of intensive learning for prototype stage ventures. But the programme is just the beginning of your journey with us. View our full",
+        "evidenceId": "check-deal-7e16a22762"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.bethnalgreenventures.com/portfolio",
+        "evidenceId": "check-portfolio-70c5638385"
+      }
+    ],
+    "name": [
+      {
+        "value": "Bethnal Green Ventures",
+        "evidenceId": "check-name-03f5e69aed"
+      }
+    ],
+    "examplePages": []
+  }
+}

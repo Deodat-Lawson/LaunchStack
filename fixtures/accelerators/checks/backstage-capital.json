@@ -1,0 +1,72 @@
+{
+  "programId": "backstage-capital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://backstagecapital.com/",
+    "https://backstagecapital.com/apply-2/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-08141cc593",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — homepage checked by scrape.py",
+      "excerpt": "Backstage Capital Home For Founders For Investors Portfolio Green Room For",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b32c73317e",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fad84a9aad",
+      "url": "https://backstagecapital.com/apply-2/",
+      "title": "Backstage Capital — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://backstagecapital.com/headliners/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b1095909fc",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — homepage checked by scrape.py",
+      "excerpt": "Apply → https://backstagecapital.com/apply-2/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://backstagecapital.com/apply-2/",
+        "evidenceId": "check-route-b1095909fc"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://backstagecapital.com/apply-2/",
+        "evidenceId": "check-route-b1095909fc"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://backstagecapital.com/headliners/",
+        "evidenceId": "check-portfolio-b32c73317e"
+      }
+    ],
+    "name": [
+      {
+        "value": "Backstage Capital",
+        "evidenceId": "check-name-08141cc593"
+      }
+    ],
+    "examplePages": []
+  }
+}

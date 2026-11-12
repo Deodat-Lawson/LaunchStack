@@ -1,0 +1,46 @@
+{
+  "programId": "cic",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://cic.com/catalyst/about/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/catalyst/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/about/",
+      "page": "details",
+      "anchor": "About Learn about the people and offerings that make CIC the global leader in innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/programs/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://cic.com/programs/japan-desk",
+      "page": "details",
+      "anchor": "Japan Desk",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

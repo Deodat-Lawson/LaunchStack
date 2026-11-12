@@ -1,0 +1,94 @@
+{
+  "programId": "connect-ventures",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.connectventures.co/companies",
+      "page": "portfolio",
+      "anchor": "Companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/team-members/sai-tatireddy",
+      "page": "terms",
+      "anchor": "Sai Tatireddy Dealflow Ops Analyst",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/aikido",
+      "page": "portfolio",
+      "anchor": "Aikido ∙ AI ∙ Belgium ∙ ∙ Active Active Software security platform.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/ai-coustics",
+      "page": "portfolio",
+      "anchor": "ai-coustics ∙ Deep Tech ∙ Germany ∙ ∙ Active Active AI-driven speech enhancement.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/mosaico",
+      "page": "portfolio",
+      "anchor": "Mosaico ∙ Robotics ∙ Italy ∙ ∙ Active Active Open-Source Data Infrastructure for Physical AI and Robotics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/dust",
+      "page": "portfolio",
+      "anchor": "Dust ∙ AI ∙ France ∙ ∙ Active Active AI for team productivity.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/molecular-glue-labs",
+      "page": "portfolio",
+      "anchor": "Molecular Glue Labs ∙ Biotech ∙ UK ∙ ∙ Biotechnology and AI software startup focused on discovering and developing molecular glue",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/truelayer",
+      "page": "portfolio",
+      "anchor": "TrueLayer ∙ FinTech ∙ UK ∙ ∙ Active Active The European leader in open banking.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/zellify-2",
+      "page": "portfolio",
+      "anchor": "Zellify ∙ Consumer ∙ Sweden ∙ ∙ Active Active The Web2App growth platform — onboard, convert, and monetize users on the web before they hit the app.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/nexcade-oii7a",
+      "page": "portfolio",
+      "anchor": "Nexcade ∙ AI ∙ UK ∙ ∙ Building AI for Logistics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.connectventures.co/companies/dessn",
+      "page": "portfolio",
+      "anchor": "Dessn ∙ AI ∙ UK ∙ ∙ Active Active An AI-native app enabling designers & product managers to contribute to product building, without coding.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

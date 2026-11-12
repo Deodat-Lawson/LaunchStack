@@ -1,0 +1,87 @@
+{
+  "programId": "rainmaking",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.rainmaking.io/",
+    "https://www.rainmaking.io/about",
+    "https://apply.workable.com/rainmaking-innovation/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-4d9225a720",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — homepage checked by scrape.py",
+      "excerpt": "Rainmaking Capabilities Work Company Contact us Capabilities Work",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-69c3793c92",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — homepage checked by scrape.py",
+      "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9f6fc2483f",
+      "url": "https://www.rainmaking.io/about",
+      "title": "Rainmaking — details page checked by scrape.py",
+      "excerpt": "Venture Portfolio → https://www.rainmaking.io/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e18c945530",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — homepage checked by scrape.py",
+      "excerpt": "View Portfolio → https://www.rainmaking.io/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-715d47fd7d",
+      "url": "https://www.rainmaking.io/about",
+      "title": "Rainmaking — details page checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dad180ee49",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — homepage checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/rainmaking-innovation/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/",
+        "evidenceId": "check-route-dad180ee49"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.workable.com/rainmaking-innovation/",
+        "evidenceId": "check-route-dad180ee49"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.rainmaking.io/portfolio",
+        "evidenceId": "check-portfolio-e18c945530"
+      }
+    ],
+    "name": [
+      {
+        "value": "Rainmaking",
+        "evidenceId": "check-name-4d9225a720"
+      }
+    ],
+    "examplePages": []
+  }
+}

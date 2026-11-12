@@ -1,0 +1,79 @@
+{
+  "programId": "zinc",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.zinc.vc/",
+    "https://www.zinc.vc/programmes/pre-seed-investment/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ec4a2609f6",
+      "url": "https://www.zinc.vc/",
+      "title": "Zinc — homepage checked by scrape.py",
+      "excerpt": "Home | Zinc Our Mission Investment Portfolio Innovation Partners News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-940d0b63b0",
+      "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
+      "title": "Zinc — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f696e40efb",
+      "url": "https://www.zinc.vc/",
+      "title": "Zinc — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.zinc.vc/portfolio-companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-19fe090d07",
+      "url": "https://www.zinc.vc/programmes/pre-seed-investment/",
+      "title": "Zinc — details page checked by scrape.py",
+      "excerpt": "APPLY FOR INVESTMENT → https://airtable.com/appTvgH4eAXwSD2Vs/pagxU4iWkcj9vJrWj/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cdcd2bfb05",
+      "url": "https://www.zinc.vc/",
+      "title": "Zinc — homepage checked by scrape.py",
+      "excerpt": "https://www.zinc.vc",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://airtable.com/appTvgH4eAXwSD2Vs/pagxU4iWkcj9vJrWj/form",
+        "evidenceId": "check-route-19fe090d07"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.zinc.vc",
+        "evidenceId": "check-route-cdcd2bfb05"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.zinc.vc/portfolio-companies/",
+        "evidenceId": "check-portfolio-f696e40efb"
+      }
+    ],
+    "name": [
+      {
+        "value": "Zinc",
+        "evidenceId": "check-name-ec4a2609f6"
+      }
+    ],
+    "examplePages": []
+  }
+}

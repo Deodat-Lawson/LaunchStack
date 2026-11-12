@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -69,7 +71,9 @@ describe("Program intelligence contract", () => {
         expect(antler!.batches.nextDeadline.state).toBe("unavailable");
         expect(antler!.portfolio.companies).toEqual([]);
         expect(antler!.portfolio.state).toBe("unavailable");
-        expect(antler!.identity.operatingStatus.state).toBe("not_checked");
+        expect(antler!.identity.operatingStatus.state).toBe("unavailable");
+        expect(antler!.identity.operatingStatus.value).toBeNull();
+        expect(antler!.identity.operatingStatus.detail).toMatch(/not proof that the Program runs/);
         expect(antler!.identity.applicationsOpen.value).not.toBe(false);
 
         expect(speedrun!.batches.residencyEnd.state).toBe("conflicting");
@@ -123,7 +127,10 @@ describe("Program intelligence contract", () => {
         expect(example.acceptance.state).toBe("verified");
         expect(example.acceptance.evidenceIds).not.toEqual([example.sourceUrl]);
         expect(example.acceptance.detail).toMatch(/successful application/i);
-        expect(byId.get("antler")!.historicalExamples.state).toBe("not_checked");
+        const missing = byId.get("antler")!.historicalExamples;
+        expect(["unavailable", "partial"]).toContain(missing.state);
+        expect(missing.examples).toEqual([]);
+        expect(missing.detail).toMatch(/not (?:link|reviewed)/);
     });
 
     it("attaches several evidence-backed tags and no tag without a quote", () => {
@@ -181,6 +188,84 @@ describe("Program intelligence contract", () => {
         expect(current.deal.formatted.value).toBe(speedrun!.deal.formatted.value);
         expect(current.batches.residencyEnd.state).toBe("conflicting");
         expect(current.batches.residencyEnd.value).toBeNull();
+    });
+
+    it("keeps an unavailable slot unavailable when its only evidence goes stale", () => {
+        const dossier = structuredClone(speedrun!);
+        dossier.selectivity = {
+            state: "unavailable",
+            detail: "The FAQ does not report an acceptance rate.",
+            evidenceIds: ["sr-faq-terms"],
+            claim: null,
+            value: null,
+        };
+        const stale = applySourceRefresh(ProgramIntelligenceSchema.parse(dossier), {
+            evidenceId: "sr-faq-terms",
+            outcome: "stale",
+            checkedAt: "2026-11-09T12:00:00Z",
+            detail: "The terms excerpt is no longer on the page.",
+        });
+        expect(stale.selectivity.state).toBe("unavailable");
+        expect(stale.deal.formatted.state).toBe("stale");
+    });
+
+    it("attempts every enriched group and records what the checked pages did not publish", () => {
+        const enriched = published.dossiers.filter(dossier =>
+            dossier.evidence.some(item => item.id.startsWith("check-"))
+        );
+        expect(enriched.length).toBeGreaterThan(200);
+        for (const dossier of published.dossiers) {
+            const checked = existsSync(join(root, "checks", `${dossier.programId}.json`));
+            if (!checked) continue;
+            for (const slot of [
+                dossier.contact.email,
+                dossier.contact.phone,
+                dossier.contact.routes,
+                dossier.identity.operatingStatus,
+                dossier.identity.applicationsOpen,
+                dossier.batches.nextDeadline,
+                dossier.selectivity,
+            ]) {
+                expect(slot.state).not.toBe("not_checked");
+                if (slot.state === "unavailable") expect(slot.value).toBeNull();
+            }
+            expect(dossier.deal.state).not.toBe("not_checked");
+            if (dossier.deal.state === "partial") {
+                expect(dossier.deal.components).toEqual([]);
+                expect(dossier.deal.comparableDilution).toBe(false);
+            }
+        }
+    });
+
+    it("tags a Program only where one of its quotes contains the tag's wording", () => {
+        const tagged = published.dossiers.filter(dossier => dossier.tagIds.length > 0);
+        expect(tagged.length).toBeGreaterThan(240);
+        const typed = published.dossiers.filter(dossier =>
+            dossier.tags.some(tag => tag.facet === "program_type")
+        );
+        expect(typed.length).toBeGreaterThan(150);
+        for (const dossier of published.dossiers) {
+            expect(dossier.tags.map(tag => tag.id)).toEqual(dossier.tagIds);
+            const evidence = new Set(dossier.evidence.map(item => item.id));
+            for (const tag of dossier.tags) {
+                expect(tag.label.length).toBeGreaterThan(0);
+                expect(tag.evidenceIds.every(id => evidence.has(id))).toBe(true);
+            }
+        }
+        const programs = new Map(
+            published.dossiers.map(dossier => [
+                dossier.programId,
+                new Map(dossier.evidence.map(item => [item.id, item.excerpt.toLowerCase()])),
+            ])
+        );
+        for (const tag of published.taxonomy.tags) {
+            for (const support of tag.evidence) {
+                const quote = programs.get(support.programId)?.get(support.sourceId) ?? "";
+                expect(
+                    [tag.label, ...tag.aliases].some(needle => quote.includes(needle.toLowerCase()))
+                ).toBe(true);
+            }
+        }
     });
 
     it("sends a new conflict to operator review instead of choosing a value", () => {

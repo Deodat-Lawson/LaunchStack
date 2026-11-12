@@ -1,0 +1,122 @@
+{
+  "programId": "hightechxl",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.hightechxl.com/",
+    "https://www.hightechxl.com/faq/",
+    "https://www.hightechxl.com/our-program/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-18c41e8751",
+      "url": "https://www.hightechxl.com/our-program/",
+      "title": "HighTechXL — details page checked by scrape.py",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "details"
+    },
+    {
+      "id": "check-email-2d66b8b544",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage checked by scrape.py",
+      "excerpt": "info@hightechxl.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-3e3f40cead",
+      "url": "https://www.hightechxl.com/faq/",
+      "title": "HighTechXL — terms page checked by scrape.py",
+      "excerpt": "info@hightechxl.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6b72557b7b",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage checked by scrape.py",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8d1e211e81",
+      "url": "https://www.hightechxl.com/faq/",
+      "title": "HighTechXL — terms page checked by scrape.py",
+      "excerpt": "About us Our people Portfolio News & events Get in touch info@hightechxl.com High Tech Campus 27 5656 AE Eindhoven Netherlands © 2026 -",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b1c6fd5701",
+      "url": "https://www.hightechxl.com/our-program/",
+      "title": "HighTechXL — details page checked by scrape.py",
+      "excerpt": "info@hightechxl.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-06f43bd4fe",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage checked by scrape.py",
+      "excerpt": "Deep-Tech Venture Builder in the Netherlands | HighTechXL Skip to content Skip to footer Deep-Tech Venture Builder",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-00d46dbd81",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-31af598b65",
+      "url": "https://www.hightechxl.com/faq/",
+      "title": "HighTechXL — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-a56ba24d3f",
+      "url": "https://www.hightechxl.com/our-program/",
+      "title": "HighTechXL — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.hightechxl.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b9c8ae6b1e",
+      "url": "https://www.hightechxl.com/",
+      "title": "HighTechXL — homepage checked by scrape.py",
+      "excerpt": "https://www.hightechxl.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@hightechxl.com",
+        "evidenceId": "check-email-2d66b8b544"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.hightechxl.com",
+        "evidenceId": "check-route-b9c8ae6b1e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.hightechxl.com/portfolio/",
+        "evidenceId": "check-portfolio-00d46dbd81"
+      }
+    ],
+    "name": [
+      {
+        "value": "HighTechXL",
+        "evidenceId": "check-name-06f43bd4fe"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "programId": "third-derivative",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.third-derivative.org/",
+    "https://www.third-derivative.org/startup-application",
+    "https://www.third-derivative.org/industrial-innovation-cohorts",
+    "https://www.third-derivative.org/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-57091c9926",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "Third Derivative Skip to content Our Portfolio For Entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05c0d9abca",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-33e79bce86",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d37b60ac5",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "portfolio → https://www.third-derivative.org/portfolio?hsLang=en",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4dfb0ebd9c",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5f1674505a",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "18-month founder-friendly accelerator program → https://www.third-derivative.org/startups?hsLang=en",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6f0070c7aa",
+      "url": "https://www.third-derivative.org/startup-application",
+      "title": "Third Derivative — application page checked by scrape.py",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7a38cde247",
+      "url": "https://www.third-derivative.org/about",
+      "title": "Third Derivative — details page checked by scrape.py",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-820ffec16e",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "EXPLORE OUR PROGRAM → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-8cc4d305c4",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "Explore our Portfolio → https://www.third-derivative.org/portfolio?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8f68fc4ba9",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b9b2a960a3",
+      "url": "https://www.third-derivative.org/about",
+      "title": "Third Derivative — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c0c6f09804",
+      "url": "https://www.third-derivative.org/startup-application",
+      "title": "Third Derivative — application page checked by scrape.py",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-de60d69f60",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "https://www.third-derivative.org/startups?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f1cf7fb3c8",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f709571ad6",
+      "url": "https://www.third-derivative.org/startup-application",
+      "title": "Third Derivative — application page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.third-derivative.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-fd533ecca0",
+      "url": "https://www.third-derivative.org/about",
+      "title": "Third Derivative — details page checked by scrape.py",
+      "excerpt": "For Entrepreneurs → https://www.third-derivative.org/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-feabadc7bb",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "Eligibility & Selection → https://www.third-derivative.org/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2ec0e7ad22",
+      "url": "https://www.third-derivative.org/about",
+      "title": "Third Derivative — details page checked by scrape.py",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b1dd4ecc0",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "APPLY TODAY → https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-69e5a07833",
+      "url": "https://www.third-derivative.org/industrial-innovation-cohorts",
+      "title": "Third Derivative — batches page checked by scrape.py",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c2e18bb6c1",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "How to Apply → https://www.third-derivative.org/startup-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c3ede54352",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "https://www.third-derivative.org",
+      "page": "details"
+    },
+    {
+      "id": "check-status-36ad63e98b",
+      "url": "https://www.third-derivative.org/",
+      "title": "Third Derivative — homepage checked by scrape.py",
+      "excerpt": "portfolio startups are decisively tackling challenges across all emissions sectors. Explore our Portfolio NOW ACCEPTING APPLICATIONS Future Industries Partnership Opportunity for Startups The Future Industries Partnership helps climate tech",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.third-derivative.org/startup-application",
+        "evidenceId": "check-route-c2e18bb6c1"
+      },
+      {
+        "value": "https://www.third-derivative.org/future-industries-partnership?hsLang=en",
+        "evidenceId": "check-route-3b1dd4ecc0"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.third-derivative.org",
+        "evidenceId": "check-route-c3ede54352"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-36ad63e98b"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.third-derivative.org/portfolio",
+        "evidenceId": "check-portfolio-f1cf7fb3c8"
+      },
+      {
+        "value": "https://www.third-derivative.org/startups",
+        "evidenceId": "check-portfolio-33e79bce86"
+      },
+      {
+        "value": "https://www.third-derivative.org/portfolio?hsLang=en",
+        "evidenceId": "check-portfolio-8cc4d305c4"
+      },
+      {
+        "value": "https://www.third-derivative.org/startups?hsLang=en",
+        "evidenceId": "check-portfolio-de60d69f60"
+      }
+    ],
+    "name": [
+      {
+        "value": "Third Derivative",
+        "evidenceId": "check-name-57091c9926"
+      }
+    ],
+    "examplePages": []
+  }
+}

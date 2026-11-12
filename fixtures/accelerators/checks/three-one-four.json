@@ -1,0 +1,93 @@
+{
+  "programId": "three-one-four",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.3one4capital.com/",
+    "https://www.3one4capital.com/platform-and-program"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-db2ad5dec1",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "title": "3one4 Capital — details page checked by scrape.py",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fe698bab20",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — homepage checked by scrape.py",
+      "excerpt": "Write To Us (hello@3one4capital.com)",
+      "page": "details"
+    },
+    {
+      "id": "check-name-5b55184a7a",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — homepage checked by scrape.py",
+      "excerpt": "segments across the country. View Portfolio Focus Areas At 3one4 Capital, we focus on select market categories and on the",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-054dd32a66",
+      "url": "https://www.3one4capital.com/platform-and-program",
+      "title": "3one4 Capital — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3a123d8b83",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — homepage checked by scrape.py",
+      "excerpt": "View Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ba68db121a",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.3one4capital.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-071c90e8b3",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — homepage checked by scrape.py",
+      "excerpt": "https://www.3one4capital.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@3one4capital.com",
+        "evidenceId": "check-email-fe698bab20"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.3one4capital.com/",
+        "evidenceId": "check-route-071c90e8b3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.3one4capital.com/portfolio",
+        "evidenceId": "check-portfolio-ba68db121a"
+      }
+    ],
+    "name": [
+      {
+        "value": "3one4 Capital",
+        "evidenceId": "check-name-5b55184a7a"
+      }
+    ],
+    "examplePages": []
+  }
+}

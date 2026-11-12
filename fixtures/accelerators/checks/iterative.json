@@ -1,0 +1,301 @@
+{
+  "programId": "iterative",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.iterative.vc/",
+    "https://www.iterative.vc/frequently-asked-questions",
+    "https://www.iterative.vc/about",
+    "https://www.iterative.vc/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-12ebe7875e",
+      "url": "https://www.iterative.vc/apply",
+      "title": "Iterative — application page checked by scrape.py",
+      "excerpt": "We Hope You’re Excited. Founders only Only founders can come to interviews or attend batch events. Investment and rolling admissions We invest between US $150,000 and US $500,000 for roughly 10-15% of your company. When we invest, we invest the full amount immediately. We don’t wait for the program to start, there are no",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-1a4780b987",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "other investors. 5. What are Iterative’s standard investment terms? We have a standard deal for all companies accepted into the accelerator. We invest up to $500K using a \"post-money\" SAFE (simple agreement for future equity) in return for roughly 10-15% of your company. We don't charge anything in return and are",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-21d5af5825",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "comes to long and productive relationships, so we're upfront with our terms. Read more about our standard investment terms here . 6. How do I qualify for the $500,000 investment? US $500K investments typically look like companies that are farther along. For example, companies that have at least $1M ARR, are already growing",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-35b3c47847",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Startup Academy Investor Directory SEA Checks Find a Co-founder Apply for Summer 2025 Apply for Winter 2027 Founders supporting founders We invest US $150K to $500K each in a batch of startups, twice a year We invest the full amount upon admission. We then work with the founders closely on their idea for 3 months",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-8577bc5b61",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "of solving that problem? Read more about how we think about these two questions here and here . 5. How much does Iterative invest? We invest between US $150,000 and US $500,000 using a \"post-money\" SAFE in return for roughly 10-15% of your company. 6. Do all founders need to join the interview sessions? We prefer all",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-c2213feb2e",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "a larger round of investment. About our program We invest in the world-changing companies of tomorrow See all our companies How we help INVEST Invest USD $150K to $500K This is the least important thing we do. We think of our investment as a show of commitment and to align incentives. There is no program fee. Note:",
+      "page": "details"
+    },
+    {
+      "id": "check-name-d7f2c84c6d",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Iterative — Founders Supporting Founders Investors, our Demo Day",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-318dc08765",
+      "url": "https://www.iterative.vc/about",
+      "title": "Iterative — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.iterative.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b31da7821e",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "See all our companies → https://www.iterative.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-be0bf7197a",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.iterative.vc/companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d9f18e7686",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.iterative.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f76516c2e3",
+      "url": "https://www.iterative.vc/apply",
+      "title": "Iterative — application page checked by scrape.py",
+      "excerpt": "Companies → https://www.iterative.vc/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-route-19cad3f5b3",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Apply page → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1bb6800a5d",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Apply for Winter 2027 → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-328390e750",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-39ab89fa9c",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-425c3918b3",
+      "url": "https://www.iterative.vc/about",
+      "title": "Iterative — details page checked by scrape.py",
+      "excerpt": "Apply for Winter 2027 → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-645aa7b8bb",
+      "url": "https://www.iterative.vc/about",
+      "title": "Iterative — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-76c7c1ad9c",
+      "url": "https://www.iterative.vc/apply",
+      "title": "Iterative — application page checked by scrape.py",
+      "excerpt": "Apply now → https://www.iterative.vc/application-form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-839740785c",
+      "url": "https://www.iterative.vc/about",
+      "title": "Iterative — details page checked by scrape.py",
+      "excerpt": "Apply now → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8baf887ed3",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Apply for Summer 2025 → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8f05244d9f",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "apply online → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-aed0b1ce22",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Apply → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bf979bc573",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Apply for Winter 2027 → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c71583ffe5",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "here → https://www.iterative.vc/post/how-to-apply-to-iterative-successfully",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-d804932b1a",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "apply → https://www.iterative.vc/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e26cc8ca8e",
+      "url": "https://www.iterative.vc/apply",
+      "title": "Iterative — application page checked by scrape.py",
+      "excerpt": "Submit Your Application → https://www.iterative.vc/application-form",
+      "page": "application"
+    },
+    {
+      "id": "check-route-ed89e4052b",
+      "url": "https://www.iterative.vc/about",
+      "title": "Iterative — details page checked by scrape.py",
+      "excerpt": "Apply for Summer 2025 → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ff0f1739de",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — homepage checked by scrape.py",
+      "excerpt": "Apply for Summer 2025 → https://www.iterative.vc/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-status-41ae38fe01",
+      "url": "https://www.iterative.vc/apply",
+      "title": "Iterative — application page checked by scrape.py",
+      "excerpt": "the application deadline. Oops! Something went wrong while submitting the form. Apply to Iterative We’re now accepting applications for Winter 2027 Batch FEBRUARY - MAY 2027 Submit Your Application Not ready to apply yet? Sign up for a",
+      "page": "application"
+    },
+    {
+      "id": "check-status-cab9af28fd",
+      "url": "https://www.iterative.vc/frequently-asked-questions",
+      "title": "Iterative — terms page checked by scrape.py",
+      "excerpt": "Apply for Winter 2027 Frequently Asked Questions Applying 1. What is the application screening process? Our application is open all year round. We review applications on a rolling basis. Upon admission, we transfer the full investment.",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.iterative.vc/apply",
+        "evidenceId": "check-route-ff0f1739de"
+      },
+      {
+        "value": "https://www.iterative.vc/post/how-to-apply-to-iterative-successfully",
+        "evidenceId": "check-route-c71583ffe5"
+      },
+      {
+        "value": "https://www.iterative.vc/application-form",
+        "evidenceId": "check-route-e26cc8ca8e"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.iterative.vc/apply",
+        "evidenceId": "check-route-ff0f1739de"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-cab9af28fd"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Startup Academy Investor Directory SEA Checks Find a Co-founder Apply for Summer 2025 Apply for Winter 2027 Founders supporting founders We invest US $150K to $500K each in a batch of startups, twice a year We invest the full amount upon admission. We then work with the founders closely on their idea for 3 months",
+        "evidenceId": "check-deal-35b3c47847"
+      },
+      {
+        "value": "a larger round of investment. About our program We invest in the world-changing companies of tomorrow See all our companies How we help INVEST Invest USD $150K to $500K This is the least important thing we do. We think of our investment as a show of commitment and to align incentives. There is no program fee. Note:",
+        "evidenceId": "check-deal-c2213feb2e"
+      },
+      {
+        "value": "of solving that problem? Read more about how we think about these two questions here and here . 5. How much does Iterative invest? We invest between US $150,000 and US $500,000 using a \"post-money\" SAFE in return for roughly 10-15% of your company. 6. Do all founders need to join the interview sessions? We prefer all",
+        "evidenceId": "check-deal-8577bc5b61"
+      },
+      {
+        "value": "other investors. 5. What are Iterative’s standard investment terms? We have a standard deal for all companies accepted into the accelerator. We invest up to $500K using a \"post-money\" SAFE (simple agreement for future equity) in return for roughly 10-15% of your company. We don't charge anything in return and are",
+        "evidenceId": "check-deal-1a4780b987"
+      },
+      {
+        "value": "comes to long and productive relationships, so we're upfront with our terms. Read more about our standard investment terms here . 6. How do I qualify for the $500,000 investment? US $500K investments typically look like companies that are farther along. For example, companies that have at least $1M ARR, are already growing",
+        "evidenceId": "check-deal-21d5af5825"
+      },
+      {
+        "value": "We Hope You’re Excited. Founders only Only founders can come to interviews or attend batch events. Investment and rolling admissions We invest between US $150,000 and US $500,000 for roughly 10-15% of your company. When we invest, we invest the full amount immediately. We don’t wait for the program to start, there are no",
+        "evidenceId": "check-deal-12ebe7875e"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.iterative.vc/companies",
+        "evidenceId": "check-portfolio-d9f18e7686"
+      }
+    ],
+    "name": [
+      {
+        "value": "Iterative",
+        "evidenceId": "check-name-d7f2c84c6d"
+      }
+    ],
+    "examplePages": []
+  }
+}

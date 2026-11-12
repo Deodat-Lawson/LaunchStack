@@ -1,0 +1,129 @@
+{
+  "programId": "venture-center",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.venturecenter.co.in/",
+    "https://www.venturecenter.co.in/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-268c8f004b",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "India's top incubator for inventive startups - Venture Center About Careers Contact Programs Support Incubation &",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-c7e23ab13d",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — details page checked by scrape.py",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-e67c4aea6c",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "+91 91 72 23 22 15",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-144b10b77c",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — details page checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3315a44cd5",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "Startup Directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-33a369e605",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-460d2dc1c6",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — details page checked by scrape.py",
+      "excerpt": "Startup directory → https://www.venturecenter.co.in/startups-and-success-stories/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-54d2d9a083",
+      "url": "https://www.venturecenter.co.in/about",
+      "title": "Venture Center — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6ab987141f",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "Our Startups → https://www.venturecenter.co.in/about",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eabdcb4edf",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.venturecenter.co.in/startups-and-success-stories",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7c6df589ee",
+      "url": "https://www.venturecenter.co.in/",
+      "title": "Venture Center — homepage checked by scrape.py",
+      "excerpt": "https://www.venturecenter.co.in/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+919172232215",
+        "evidenceId": "check-phone-e67c4aea6c"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.venturecenter.co.in/",
+        "evidenceId": "check-route-7c6df589ee"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.venturecenter.co.in/startups-and-success-stories",
+        "evidenceId": "check-portfolio-eabdcb4edf"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/startups-and-success-stories/startups",
+        "evidenceId": "check-portfolio-3315a44cd5"
+      },
+      {
+        "value": "https://www.venturecenter.co.in/about",
+        "evidenceId": "check-portfolio-6ab987141f"
+      }
+    ],
+    "name": [
+      {
+        "value": "Venture Center",
+        "evidenceId": "check-name-268c8f004b"
+      }
+    ],
+    "examplePages": []
+  }
+}

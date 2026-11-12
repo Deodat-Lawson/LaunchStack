@@ -1,0 +1,70 @@
+{
+  "programId": "playfair-capital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://playfair.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-90ca6f04c8",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-e18d08a2b1",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — homepage checked by scrape.py",
+      "excerpt": "and energy as you need to succeed 60% of the fund is reserved for follow-on and we will support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to build your company into a global category leader We co-invest in 100% of our new",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-14bfc7c5ef",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://playfair.vc/portfolio.php",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bea2074af3",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — homepage checked by scrape.py",
+      "excerpt": "https://playfair.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://playfair.vc/",
+        "evidenceId": "check-route-bea2074af3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us We play fair by founders Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and",
+        "evidenceId": "check-deal-90ca6f04c8"
+      },
+      {
+        "value": "and energy as you need to succeed 60% of the fund is reserved for follow-on and we will support you through Series A. We have the capacity to invest up to £5m per company Our goal is simple: ensure you have the right support to build your company into a global category leader We co-invest in 100% of our new",
+        "evidenceId": "check-deal-e18d08a2b1"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://playfair.vc/portfolio.php",
+        "evidenceId": "check-portfolio-14bfc7c5ef"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

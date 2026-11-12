@@ -1,0 +1,120 @@
+{
+  "programId": "abovea-startup-accelerator",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://abovea.tech/academy/main/",
+    "https://abovea.tech/faq/",
+    "https://abovea.tech/about-us/",
+    "https://abovea.tech/academy/accelerator-application-form/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-fae47e30c6",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "excerpt": "aboveA Startup Accelerator Skip to content Home Industries Industries we serve",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-36279f2ab2",
+      "url": "https://abovea.tech/faq/",
+      "title": "aboveA Startup Accelerator — terms page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6d3a6c8ec6",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "title": "aboveA Startup Accelerator — application page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-71841778c5",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bd41018fb9",
+      "url": "https://abovea.tech/faq/",
+      "title": "aboveA Startup Accelerator — terms page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c8a9992959",
+      "url": "https://abovea.tech/about-us/",
+      "title": "aboveA Startup Accelerator — details page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cfd0a6ad96",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "title": "aboveA Startup Accelerator — application page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d5ff9d70e5",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-hub/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ec6bedb333",
+      "url": "https://abovea.tech/about-us/",
+      "title": "aboveA Startup Accelerator — details page checked by scrape.py",
+      "excerpt": "Startups → https://abovea.tech/startup-growth-funding-readiness/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-66c6f40d79",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — homepage checked by scrape.py",
+      "excerpt": "Submit application → https://abovea.tech/academy/accelerator-application-form/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://abovea.tech/academy/accelerator-application-form/",
+        "evidenceId": "check-route-66c6f40d79"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://abovea.tech/academy/accelerator-application-form/",
+        "evidenceId": "check-route-66c6f40d79"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://abovea.tech/startup-growth-funding-readiness/",
+        "evidenceId": "check-portfolio-71841778c5"
+      },
+      {
+        "value": "https://abovea.tech/startup-hub/",
+        "evidenceId": "check-portfolio-d5ff9d70e5"
+      }
+    ],
+    "name": [
+      {
+        "value": "aboveA Startup Accelerator",
+        "evidenceId": "check-name-fae47e30c6"
+      }
+    ],
+    "examplePages": []
+  }
+}

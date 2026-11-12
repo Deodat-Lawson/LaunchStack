@@ -1,0 +1,141 @@
+{
+  "programId": "orbit-startups",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://orbitventures.com/",
+    "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+    "https://orbitventures.com/apply/",
+    "https://orbitventures.com/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b0a435c606",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage checked by scrape.py",
+      "excerpt": "Jan 05, 2023 William Bao Bean, Managing General Partner of Orbit Startups, on investing in the GCC region Blog Nov 04, 2026 Data",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-640b5f83ca",
+      "url": "https://orbitventures.com/apply/",
+      "title": "Orbit Startups — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-bd9ad71a8c",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ed7d39c4da",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fd29349ad0",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://orbitventures.com/startups-portfolio/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0d905c2b95",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page checked by scrape.py",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-5efa20b3d2",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage checked by scrape.py",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-64c894e353",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage checked by scrape.py",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9940704ffa",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page checked by scrape.py",
+      "excerpt": "here → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ac107e7a68",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page checked by scrape.py",
+      "excerpt": "Apply to Orbit Ventures → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e6174ad004",
+      "url": "https://orbitventures.com/event/sanabil-accelerator-by-orbit-batch-4-demo-day/",
+      "title": "Orbit Startups — batches page checked by scrape.py",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-ea8f93b4dc",
+      "url": "https://orbitventures.com/faq/",
+      "title": "Orbit Startups — terms page checked by scrape.py",
+      "excerpt": "Apply → https://orbitventures.com/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-ea9e3f8a6f",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — homepage checked by scrape.py",
+      "excerpt": "VideoVerse A universe of video applications, powered by deep learning → https://orbitventures.com/company/videoverse/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://orbitventures.com/apply/",
+        "evidenceId": "check-route-64c894e353"
+      },
+      {
+        "value": "https://orbitventures.com/company/videoverse/",
+        "evidenceId": "check-route-ea9e3f8a6f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://orbitventures.com/apply/",
+        "evidenceId": "check-route-64c894e353"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://orbitventures.com/startups-portfolio/",
+        "evidenceId": "check-portfolio-ed7d39c4da"
+      }
+    ],
+    "name": [
+      {
+        "value": "Orbit Startups",
+        "evidenceId": "check-name-b0a435c606"
+      }
+    ],
+    "examplePages": []
+  }
+}

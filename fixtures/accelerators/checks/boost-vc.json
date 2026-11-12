@@ -1,0 +1,98 @@
+{
+  "programId": "boost-vc",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.boost.vc/",
+    "https://www.boost.vc/faq",
+    "https://www.boost.vc/fellowship"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-0f04799055",
+      "url": "https://www.boost.vc/faq",
+      "title": "Boost VC — terms page checked by scrape.py",
+      "excerpt": "like Bitcoin . Some BIG idea examples include K2Space, Prospera, Radiant Nuclear, Colossal Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first check and the only check. We are also okay following on to rounds, and our checks are flexible",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-8c09660b2b",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC — homepage checked by scrape.py",
+      "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders making aerospace a reality . Reimagining the universe We Lead Pre-Seed Rounds $500k",
+      "page": "details"
+    },
+    {
+      "id": "check-name-aa08883f10",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC — homepage checked by scrape.py",
+      "excerpt": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1326bf9f15",
+      "url": "https://www.boost.vc/faq",
+      "title": "Boost VC — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.boost.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-4c1627636b",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.boost.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b64ae16d2b",
+      "url": "https://www.boost.vc/fellowship",
+      "title": "Boost VC — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.boost.vc/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4b649fa2cf",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC — homepage checked by scrape.py",
+      "excerpt": "Fellowship → https://www.boost.vc/fellowship",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.boost.vc/fellowship",
+        "evidenceId": "check-route-4b649fa2cf"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Boost VC: PreSeed Investors | $500k Rounds Portfolio Fellowship Learn More We invest first – in founders making aerospace a reality . Reimagining the universe We Lead Pre-Seed Rounds $500k",
+        "evidenceId": "check-deal-8c09660b2b"
+      },
+      {
+        "value": "like Bitcoin . Some BIG idea examples include K2Space, Prospera, Radiant Nuclear, Colossal Bio Sciences, and New Limit. How much does Boost invest? We invest $500k to lead or co-lead pre-seed rounds! We are okay being the first check and the only check. We are also okay following on to rounds, and our checks are flexible",
+        "evidenceId": "check-deal-0f04799055"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.boost.vc/portfolio",
+        "evidenceId": "check-portfolio-4c1627636b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Boost VC",
+        "evidenceId": "check-name-aa08883f10"
+      }
+    ],
+    "examplePages": []
+  }
+}

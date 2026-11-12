@@ -1,0 +1,54 @@
+{
+  "programId": "social-alpha",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.socialalpha.org/our-portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/programs-accelerators/",
+      "page": "details",
+      "anchor": "Accelerators",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/nidhi-sss/",
+      "page": "details",
+      "anchor": "DST Seed Support Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/about-us/",
+      "page": "details",
+      "anchor": "About",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/careers-portfolio/",
+      "page": "portfolio",
+      "anchor": "WORK AT A PORTFOLIO COMPANY",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.socialalpha.org/techtonic/",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

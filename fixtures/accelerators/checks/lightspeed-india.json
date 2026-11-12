@@ -1,0 +1,78 @@
+{
+  "programId": "lightspeed-india",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://lsip.com/",
+    "https://lsip.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-508a6ef3a6",
+      "url": "https://lsip.com/",
+      "title": "Lightspeed India — homepage checked by scrape.py",
+      "excerpt": "Lift-Off An energizing two days and a packed house at Lightspeed India's inaugural #liftoff portfolio-investor event in Mumbai.",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2a09a66a9c",
+      "url": "https://lsip.com/",
+      "title": "Lightspeed India — homepage checked by scrape.py",
+      "excerpt": "Meet the founders → https://lsip.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5d8becf3dc",
+      "url": "https://lsip.com/about/",
+      "title": "Lightspeed India — details page checked by scrape.py",
+      "excerpt": "Companies → https://lsip.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6883afb74e",
+      "url": "https://lsip.com/",
+      "title": "Lightspeed India — homepage checked by scrape.py",
+      "excerpt": "Companies → https://lsip.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2f67d80ebb",
+      "url": "https://lsip.com/",
+      "title": "Lightspeed India — homepage checked by scrape.py",
+      "excerpt": "https://lsip.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://lsip.com/",
+        "evidenceId": "check-route-2f67d80ebb"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://lsip.com/companies/",
+        "evidenceId": "check-portfolio-6883afb74e"
+      },
+      {
+        "value": "https://lsip.com/companies",
+        "evidenceId": "check-portfolio-2a09a66a9c"
+      }
+    ],
+    "name": [
+      {
+        "value": "Lightspeed India",
+        "evidenceId": "check-name-508a6ef3a6"
+      }
+    ],
+    "examplePages": []
+  }
+}

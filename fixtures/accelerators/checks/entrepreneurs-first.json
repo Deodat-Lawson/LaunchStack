@@ -1,0 +1,239 @@
+{
+  "programId": "entrepreneurs-first",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.joinef.com/",
+    "https://apply.joinef.com",
+    "https://www.joinef.com/faqs/",
+    "https://www.joinef.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deadline-43092a28ac",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "> Bangalore Program | Winter 2027 Start: February 2027 Apply by: 04 December 2026 Start your journey in Bangalore. After 14 weeks, move to",
+      "page": "application"
+    },
+    {
+      "id": "check-deadline-b5194f85dd",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "of the program. There will be four selection rounds. Apply by 04 December 2026 to be considered for the second selection round. Apply Now",
+      "page": "application"
+    },
+    {
+      "id": "check-name-efe61e3e74",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "Found, don't follow | Entrepreneurs First [START] Apply Insights FAQs [MENU] About us Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0ab71636ce",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.joinef.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-5730e60e15",
+      "url": "https://www.joinef.com/about-us/",
+      "title": "Entrepreneurs First — details page checked by scrape.py",
+      "excerpt": "https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7d0b170c2a",
+      "url": "https://www.joinef.com/about-us/",
+      "title": "Entrepreneurs First — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8e08159abc",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e34b333f07",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "here → https://www.joinef.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-18953af6f5",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First — terms page checked by scrape.py",
+      "excerpt": "Apply now → https://apply.joinef.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2915862b6f",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://apply.joinef.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2918a62e4a",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://apply.joinef.com/app/san-francisco-thebridge-winter/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-312a0fc21d",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://apply.joinef.com/app/bridge-residency-spring-27/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-5b5f6a8ac4",
+      "url": "https://www.joinef.com/about-us/",
+      "title": "Entrepreneurs First — details page checked by scrape.py",
+      "excerpt": "Apply → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-68ea0ea171",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "View Saved → https://apply.joinef.com/retrieve-saved-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-76397360cd",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-867d568b02",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "Apply Now → https://apply.joinef.com/app/bangalore-winter/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9721f4b168",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "APPLY HERE → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e78cae04c",
+      "url": "https://www.joinef.com/about-us/",
+      "title": "Entrepreneurs First — details page checked by scrape.py",
+      "excerpt": "[START] → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c647bc87ea",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "Apply → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e67fd3bacc",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First — homepage checked by scrape.py",
+      "excerpt": "[START] → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f44a8d7154",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First — terms page checked by scrape.py",
+      "excerpt": "[START] → https://apply.joinef.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f74c05f411",
+      "url": "https://apply.joinef.com",
+      "title": "Entrepreneurs First — application page checked by scrape.py",
+      "excerpt": "Apply now → https://www.joinef.com/apply-us-funding-fellowship/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-fb8a64cb00",
+      "url": "https://www.joinef.com/about-us/",
+      "title": "Entrepreneurs First — details page checked by scrape.py",
+      "excerpt": "Apply now → https://apply.joinef.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fdad664d5a",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First — terms page checked by scrape.py",
+      "excerpt": "Apply → https://apply.joinef.com",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.joinef.com",
+        "evidenceId": "check-route-e67fd3bacc"
+      },
+      {
+        "value": "https://apply.joinef.com/retrieve-saved-application/",
+        "evidenceId": "check-route-68ea0ea171"
+      },
+      {
+        "value": "https://apply.joinef.com/app/san-francisco-thebridge-winter/",
+        "evidenceId": "check-route-2918a62e4a"
+      },
+      {
+        "value": "https://apply.joinef.com/app/bridge-residency-spring-27/",
+        "evidenceId": "check-route-312a0fc21d"
+      },
+      {
+        "value": "https://www.joinef.com/apply-us-funding-fellowship/",
+        "evidenceId": "check-route-f74c05f411"
+      },
+      {
+        "value": "https://apply.joinef.com/app/bangalore-winter/",
+        "evidenceId": "check-route-867d568b02"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.joinef.com",
+        "evidenceId": "check-route-e67fd3bacc"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [
+      {
+        "value": "2026-12-04",
+        "evidenceId": "check-deadline-43092a28ac"
+      }
+    ],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.joinef.com/portfolio/",
+        "evidenceId": "check-portfolio-8e08159abc"
+      }
+    ],
+    "name": [
+      {
+        "value": "Entrepreneurs First",
+        "evidenceId": "check-name-efe61e3e74"
+      }
+    ],
+    "examplePages": []
+  }
+}

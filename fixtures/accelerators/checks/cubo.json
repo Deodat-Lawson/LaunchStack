@@ -1,0 +1,237 @@
+{
+  "programId": "cubo",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://cubo.itau/",
+    "https://cubo.itau/events-apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6e005e2831",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Cubo Itaú - O ecossistema de inovação da América Latina",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27c1693230",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-3d55d71554",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-44efab3e78",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Seja uma Startup Cubo → https://cubo.itau/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5a3feda851",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6986d086a8",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-719f62a380",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Benefícios → https://cubo.itau/startups/#beneficios",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b581bfdd0",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8579c9dd63",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Nossos pilares → https://cubo.itau/startups/#nossos-pilares",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-98880a913d",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Processo Seletivo → https://cubo.itau/startups/#processo-seletivo",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9dafc04ead",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Sou startup e quero potencializar meu negócio. → https://cubo.itau/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a85e4d9f2f",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Preços e planos → https://cubo.itau/startups/#precos-e-planos",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a8e72f69b1",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c1571a9011",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Startups → https://cubo.itau/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c7f946db92",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Conheça as startups → https://cubo.itau/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e9c42328cb",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Cubo for Startups → https://cubo.itau/startups",
+      "page": "application"
+    },
+    {
+      "id": "check-route-38a69a285f",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "English → https://cubo.itau/en/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-744482c61a",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Español → https://cubo.itau/es/events-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-75d32add7a",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Seja um patrocinador → https://cubo.itau/events-sponsorship-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-984236eb5a",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Solicite seu evento → https://cubo.itau/events-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-99c343e551",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Seja um patrocinador → https://cubo.itau/events-sponsorship-apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a5f86c705e",
+      "url": "https://cubo.itau/",
+      "title": "Cubo — homepage checked by scrape.py",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-fc3d5469cd",
+      "url": "https://cubo.itau/events-apply",
+      "title": "Cubo — application page checked by scrape.py",
+      "excerpt": "Innovation Day → https://cubo.itau/corporates-apply",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://cubo.itau/events-apply",
+        "evidenceId": "check-route-984236eb5a"
+      },
+      {
+        "value": "https://cubo.itau/corporates-apply",
+        "evidenceId": "check-route-a5f86c705e"
+      },
+      {
+        "value": "https://cubo.itau/events-sponsorship-apply",
+        "evidenceId": "check-route-75d32add7a"
+      },
+      {
+        "value": "https://cubo.itau/en/events-apply",
+        "evidenceId": "check-route-38a69a285f"
+      },
+      {
+        "value": "https://cubo.itau/es/events-apply",
+        "evidenceId": "check-route-744482c61a"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://cubo.itau/events-apply",
+        "evidenceId": "check-route-984236eb5a"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://cubo.itau/startups",
+        "evidenceId": "check-portfolio-5a3feda851"
+      },
+      {
+        "value": "https://cubo.itau/startups/#nossos-pilares",
+        "evidenceId": "check-portfolio-7b581bfdd0"
+      },
+      {
+        "value": "https://cubo.itau/startups/#beneficios",
+        "evidenceId": "check-portfolio-719f62a380"
+      },
+      {
+        "value": "https://cubo.itau/startups/#processo-seletivo",
+        "evidenceId": "check-portfolio-98880a913d"
+      },
+      {
+        "value": "https://cubo.itau/startups/#precos-e-planos",
+        "evidenceId": "check-portfolio-a85e4d9f2f"
+      }
+    ],
+    "name": [
+      {
+        "value": "Cubo",
+        "evidenceId": "check-name-6e005e2831"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "programId": "antler",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.antler.co/",
+    "https://www.antler.co/cohort-start-dates",
+    "https://www.antler.co/about",
+    "https://www.antler.co/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-145beaec77",
+      "url": "https://www.antler.co/",
+      "title": "Antler — homepage checked by scrape.py",
+      "excerpt": "Antler | Where Founders Go Further, Faster Skip to main content",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-427b831a9d",
+      "url": "https://www.antler.co/apply",
+      "title": "Antler — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.antler.co/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-6a4855840c",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler — batches page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.antler.co/portfolio",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-6cd87a44cf",
+      "url": "https://www.antler.co/about",
+      "title": "Antler — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.antler.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-958092cfed",
+      "url": "https://www.antler.co/",
+      "title": "Antler — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.antler.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bb82336c9c",
+      "url": "https://www.antler.co/",
+      "title": "Antler — homepage checked by scrape.py",
+      "excerpt": "https://www.antler.co/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3b1be44183",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler — batches page checked by scrape.py",
+      "excerpt": "Apply now → https://www.antler.co/apply",
+      "page": "batches"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.antler.co/apply",
+        "evidenceId": "check-route-3b1be44183"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.antler.co/apply",
+        "evidenceId": "check-route-3b1be44183"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.antler.co/portfolio",
+        "evidenceId": "check-portfolio-958092cfed"
+      }
+    ],
+    "name": [
+      {
+        "value": "Antler",
+        "evidenceId": "check-name-145beaec77"
+      }
+    ],
+    "examplePages": []
+  }
+}

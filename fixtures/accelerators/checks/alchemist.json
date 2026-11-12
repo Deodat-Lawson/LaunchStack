@@ -1,0 +1,138 @@
+{
+  "programId": "alchemist",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.alchemist.vc/",
+    "https://www.alchemist.vc/founders",
+    "https://www.alchemist.vc/faq",
+    "https://www.alchemist.vc/apply"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-bd5cfd2017",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page checked by scrape.py",
+      "excerpt": "seed. We back founders who are ready to commercialize and get in front of enterprise customers now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What sectors does Alchemist invest in? We are sector agnostic. Our portfolio spans",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-fcbaca0a3d",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist — homepage checked by scrape.py",
+      "excerpt": "and domain experts building the next generation of enterprise infrastructure and technology. Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder experience What you get as an Alchemist founder The day you join, you get a",
+      "page": "details"
+    },
+    {
+      "id": "check-email-80a76d1e28",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page checked by scrape.py",
+      "excerpt": "to get involved. How do I reach Alchemist for press? Email press@alchemist.vc , or reach out through our contact form and choose",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-de0af1e885",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page checked by scrape.py",
+      "excerpt": "press@alchemist.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-253a31558f",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist — homepage checked by scrape.py",
+      "excerpt": "Alchemist | Venture Firm for Deeply Technical Founders How we invest",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1720f7c1ea",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6cf2b13ee4",
+      "url": "https://www.alchemist.vc/faq",
+      "title": "Alchemist — terms page checked by scrape.py",
+      "excerpt": "portfolio page → https://www.alchemist.vc/portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-6d64ca60f8",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist — homepage checked by scrape.py",
+      "excerpt": "See the portfolio → https://www.alchemist.vc/portfolio#all-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8df8ec9f3f",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9609ab39b5",
+      "url": "https://www.alchemist.vc/founders",
+      "title": "Alchemist — details page checked by scrape.py",
+      "excerpt": "See the portfolio → https://www.alchemist.vc/portfolio#all-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-afad12d757",
+      "url": "https://www.alchemist.vc/founders",
+      "title": "Alchemist — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c536a4692d",
+      "url": "https://www.alchemist.vc/apply",
+      "title": "Alchemist — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.alchemist.vc/portfolio",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "press@alchemist.vc",
+        "evidenceId": "check-email-de0af1e885"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "and domain experts building the next generation of enterprise infrastructure and technology. Stage Pre-seed and seed. Sector Sector agnostic. Check size $60,000 to $1 million. Geography Founders from 60+ countries in the portfolio. The founder experience What you get as an Alchemist founder The day you join, you get a",
+        "evidenceId": "check-deal-fcbaca0a3d"
+      },
+      {
+        "value": "seed. We back founders who are ready to commercialize and get in front of enterprise customers now. How much does Alchemist invest? Our check size ranges from $60,000 to $1 million, depending on the company and the program. See how we invest . What sectors does Alchemist invest in? We are sector agnostic. Our portfolio spans",
+        "evidenceId": "check-deal-bd5cfd2017"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.alchemist.vc/portfolio",
+        "evidenceId": "check-portfolio-8df8ec9f3f"
+      },
+      {
+        "value": "https://www.alchemist.vc/portfolio#all-companies",
+        "evidenceId": "check-portfolio-6d64ca60f8"
+      }
+    ],
+    "name": [
+      {
+        "value": "Alchemist",
+        "evidenceId": "check-name-253a31558f"
+      }
+    ],
+    "examplePages": []
+  }
+}

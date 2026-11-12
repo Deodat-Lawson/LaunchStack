@@ -1,0 +1,54 @@
+{
+  "programId": "startmate",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.startmate.com/accelerator",
+      "page": "application",
+      "anchor": "SUMMER '27 ACCELERATOR APPLICATIONS OPEN NOW. APPLY HERE.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/meet-our-winter-26-accelerator-cohort",
+      "page": "batches",
+      "anchor": "Read more Read more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/portfolio",
+      "page": "portfolio",
+      "anchor": "portfolio portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/about-us",
+      "page": "details",
+      "anchor": "Our story Our story",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/faq",
+      "page": "terms",
+      "anchor": "FAQ FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.startmate.com/writing/top-20-startmate-companies",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

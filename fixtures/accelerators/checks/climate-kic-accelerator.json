@@ -1,0 +1,55 @@
+{
+  "programId": "climate-kic-accelerator",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+    "https://www.climate-kic.org/who-we-are/about-climate-kic/"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-94051d370b",
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "title": "Climate-KIC Accelerator — homepage checked by scrape.py",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eed6c5c1d6",
+      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
+      "title": "Climate-KIC Accelerator — details page checked by scrape.py",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c6f344d311",
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "title": "Climate-KIC Accelerator — homepage checked by scrape.py",
+      "excerpt": "Climate entrepreneurship → https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+        "evidenceId": "check-route-c6f344d311"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.climate-kic.org/programmes/our-portfolio/",
+        "evidenceId": "check-portfolio-94051d370b"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

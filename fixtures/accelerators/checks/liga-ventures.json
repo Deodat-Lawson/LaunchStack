@@ -1,0 +1,47 @@
+{
+  "programId": "liga-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://liga.ventures/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6fca082e06",
+      "url": "https://liga.ventures/",
+      "title": "Liga Ventures — homepage checked by scrape.py",
+      "excerpt": "Liga Ventures · Consultoria, dados e ecossistema em uma coisa só Quem",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c1a36c8832",
+      "url": "https://liga.ventures/",
+      "title": "Liga Ventures — homepage checked by scrape.py",
+      "excerpt": "Startups → https://liga.ventures/insights/categoria/startups/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://liga.ventures/insights/categoria/startups/",
+        "evidenceId": "check-portfolio-c1a36c8832"
+      }
+    ],
+    "name": [
+      {
+        "value": "Liga Ventures",
+        "evidenceId": "check-name-6fca082e06"
+      }
+    ],
+    "examplePages": []
+  }
+}

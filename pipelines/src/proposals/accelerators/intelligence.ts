@@ -50,6 +50,7 @@ export const PageKindSchema = z.enum(PAGE_KINDS);
 export type PageKind = z.infer<typeof PageKindSchema>;
 
 export const TAG_FACETS = [
+    "program_type",
     "sector",
     "technology",
     "business_model",
@@ -61,6 +62,17 @@ export const TAG_FACETS = [
 ] as const;
 export const TagFacetSchema = z.enum(TAG_FACETS);
 export type TagFacet = z.infer<typeof TagFacetSchema>;
+
+/** A tag as consumers see it: readable on its own, with the evidence on this Program that supports it. */
+export const ProgramTagSchema = z
+    .object({
+        id: IdSchema,
+        facet: TagFacetSchema,
+        label: z.string().trim().min(1),
+        evidenceIds: z.array(IdSchema).min(1),
+    })
+    .strict();
+export type ProgramTag = z.infer<typeof ProgramTagSchema>;
 
 export const INFORMATION_GROUPS = [
     "identity",
@@ -491,11 +503,22 @@ export const ProgramIntelligenceSchema = z
             })
             .strict(),
         tagIds: z.array(IdSchema),
+        tags: z.array(ProgramTagSchema),
         review: z.array(ReviewItemSchema),
     })
     .strict()
     .superRefine((dossier, ctx) => {
         const evidence = new Map(dossier.evidence.map(item => [item.id, item]));
+        if (
+            dossier.tags.map(tag => tag.id).join() !== dossier.tagIds.join() ||
+            dossier.tags.some(tag => tag.evidenceIds.some(id => !evidence.has(id)))
+        ) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["tags"],
+                message: "Tags must match tagIds and cite evidence on this Program",
+            });
+        }
         if (evidence.size !== dossier.evidence.length) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
@@ -793,14 +816,14 @@ export function applySourceRefresh(
         }
         visitSlots(next, slot => {
             if (!slot.evidenceIds.includes(observation.evidenceId)) return;
-            if (slot.state === "conflicting" || slot.state === "not_checked") return;
+            if (slot.state !== "available" && slot.state !== "partial") return;
             if (observation.outcome === "stale") {
+                if (slot.claim === null) return;
                 slot.state = "stale";
-                slot.detail = observation.detail;
-            } else if (slot.state === "available" || slot.state === "partial") {
+            } else {
                 slot.state = "inaccessible";
-                slot.detail = observation.detail;
             }
+            slot.detail = observation.detail;
         });
     }
     if (evidence.excerpt !== previousExcerpt) {

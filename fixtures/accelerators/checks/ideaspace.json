@@ -1,0 +1,71 @@
+{
+  "programId": "ideaspace",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://ideaspace.cam.ac.uk/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-025c8e72e1",
+      "url": "https://ideaspace.cam.ac.uk/",
+      "title": "ideaSpace — homepage checked by scrape.py",
+      "excerpt": "Babbage Rd, Cambridge CB3 0GT Information provided by: info@ideaspace.cam.ac.uk © 2021 IdeaSpace. All Rights Reserved.",
+      "page": "details"
+    },
+    {
+      "id": "check-name-20bf4b7ea3",
+      "url": "https://ideaspace.cam.ac.uk/",
+      "title": "ideaSpace — homepage checked by scrape.py",
+      "excerpt": "ideaSpace Home Join Members & Alumni Alumni Members at City Members",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b0bf6acb02",
+      "url": "https://ideaspace.cam.ac.uk/",
+      "title": "ideaSpace — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://ideaspace.cam.ac.uk/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dcd025ad61",
+      "url": "https://ideaspace.cam.ac.uk/",
+      "title": "ideaSpace — homepage checked by scrape.py",
+      "excerpt": "https://ideaspace.cam.ac.uk",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@ideaspace.cam.ac.uk",
+        "evidenceId": "check-email-025c8e72e1"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://ideaspace.cam.ac.uk",
+        "evidenceId": "check-route-dcd025ad61"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://ideaspace.cam.ac.uk/alumni/",
+        "evidenceId": "check-portfolio-b0bf6acb02"
+      }
+    ],
+    "name": [
+      {
+        "value": "ideaSpace",
+        "evidenceId": "check-name-20bf4b7ea3"
+      }
+    ],
+    "examplePages": []
+  }
+}

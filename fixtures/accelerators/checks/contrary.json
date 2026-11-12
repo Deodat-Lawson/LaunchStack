@@ -1,0 +1,79 @@
+{
+  "programId": "contrary",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://contrary.com/",
+    "https://applications.contrary.com"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b9380aabc7",
+      "url": "https://contrary.com/",
+      "title": "Contrary — homepage checked by scrape.py",
+      "excerpt": "Home | Contrary Team Companies Research A talent and research-driven",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1ab7f952cc",
+      "url": "https://contrary.com/",
+      "title": "Contrary — homepage checked by scrape.py",
+      "excerpt": "Companies → https://contrary.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d7c08f4af3",
+      "url": "https://contrary.com/",
+      "title": "Contrary — homepage checked by scrape.py",
+      "excerpt": "View Portfolio → https://contrary.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3dd9203f64",
+      "url": "https://contrary.com/",
+      "title": "Contrary — homepage checked by scrape.py",
+      "excerpt": "Applications → https://applications.contrary.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-db49d1bcf0",
+      "url": "https://contrary.com/",
+      "title": "Contrary — homepage checked by scrape.py",
+      "excerpt": "https://contrary.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://applications.contrary.com",
+        "evidenceId": "check-route-3dd9203f64"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://contrary.com/",
+        "evidenceId": "check-route-db49d1bcf0"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://contrary.com/companies",
+        "evidenceId": "check-portfolio-1ab7f952cc"
+      }
+    ],
+    "name": [
+      {
+        "value": "Contrary",
+        "evidenceId": "check-name-b9380aabc7"
+      }
+    ],
+    "examplePages": []
+  }
+}

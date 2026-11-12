@@ -1,0 +1,154 @@
+{
+  "programId": "elemental-impact",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://elementalimpact.com/",
+    "https://elementalimpact.com/mission-and-impact/",
+    "https://elementalimpact.com/funding-opportunities/apply/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1cb9cc0b65",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page checked by scrape.py",
+      "excerpt": "navigating our application process, please email us at apply@elementalimpact.com and include “Funding application help” in the subject",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4ddc1e6805",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page checked by scrape.py",
+      "excerpt": "apply@elementalimpact.com (investment@elementalimpact.com)",
+      "page": "application"
+    },
+    {
+      "id": "check-name-56204a542f",
+      "url": "https://elementalimpact.com/",
+      "title": "Elemental Impact — homepage checked by scrape.py",
+      "excerpt": "Elemental Impact Portfolio About Latest Donate Portfolio Funding",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05bda4ed64",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0cfad7b08c",
+      "url": "https://elementalimpact.com/",
+      "title": "Elemental Impact — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1ce2fb3bd2",
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "title": "Elemental Impact — details page checked by scrape.py",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a2ab8d2da4",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page checked by scrape.py",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-c66ba676ec",
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "title": "Elemental Impact — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cf6a3c2d4c",
+      "url": "https://elementalimpact.com/",
+      "title": "Elemental Impact — homepage checked by scrape.py",
+      "excerpt": "Portfolio Companies → https://elementalimpact.com/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2d0f59aa27",
+      "url": "https://elementalimpact.com/",
+      "title": "Elemental Impact — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c7a57e9d8",
+      "url": "https://elementalimpact.com/mission-and-impact/",
+      "title": "Elemental Impact — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://elementalimpact.com/funding-opportunities/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bfa8c2a88a",
+      "url": "https://elementalimpact.com/",
+      "title": "Elemental Impact — homepage checked by scrape.py",
+      "excerpt": "Apply for funding → We invest in exceptional entrepreneurs who are solving the world’s most pressing environmental challenges. → https://elementalimpact.com/funding-opportunities/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-0230ca1765",
+      "url": "https://elementalimpact.com/funding-opportunities/apply/",
+      "title": "Elemental Impact — application page checked by scrape.py",
+      "excerpt": "Doerr School of Sustainability, Energy Innovation, and Breakthrough Energy Ventures Donate Apply Now We are now accepting applications for funding and support via our Project Track, Strategy Track , and the Data Center Innovation Initiative",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "investment@elementalimpact.com",
+        "evidenceId": "check-email-4ddc1e6805"
+      },
+      {
+        "value": "apply@elementalimpact.com",
+        "evidenceId": "check-email-1cb9cc0b65"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://elementalimpact.com/funding-opportunities/apply/",
+        "evidenceId": "check-route-2d0f59aa27"
+      },
+      {
+        "value": "https://elementalimpact.com/funding-opportunities/",
+        "evidenceId": "check-route-bfa8c2a88a"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://elementalimpact.com/funding-opportunities/apply/",
+        "evidenceId": "check-route-2d0f59aa27"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-0230ca1765"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://elementalimpact.com/companies/",
+        "evidenceId": "check-portfolio-0cfad7b08c"
+      }
+    ],
+    "name": [
+      {
+        "value": "Elemental Impact",
+        "evidenceId": "check-name-56204a542f"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "programId": "hightechxl",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.hightechxl.com/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/our-program/",
+      "page": "details",
+      "anchor": "Our program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/about-us/",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hightechxl.com/founders/",
+      "page": "details",
+      "anchor": "For founders As a founder you join a world-class venture builder. Moreover, where the risks are shared, the path is structured, and we have your back. No idea? No problem Focus Dee",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

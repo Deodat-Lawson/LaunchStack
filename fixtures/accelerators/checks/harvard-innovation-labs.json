@@ -1,0 +1,340 @@
+{
+  "programId": "harvard-innovation-labs",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://innovationlabs.harvard.edu/",
+    "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+    "https://innovationlabs.harvard.edu/about/about-us",
+    "https://innovationlabs.harvard.edu/about/help-center",
+    "https://innovationlabs.harvard.edu/venture/care-hero-2"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a62af181df",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Harvard Innovation Labs Skip to content 2027 Harvard President's Innovation",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-10b4a3a668",
+      "url": "https://innovationlabs.harvard.edu/about/about-us",
+      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1a69a8b9cb",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-21f262c2a5",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-28d140a389",
+      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
+      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2ff6c17881",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-49ef57daa2",
+      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
+      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-4be0de986b",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-61db90d120",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Explore Current Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-669e07ed79",
+      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
+      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-69685a3246",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-aec6209d5d",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b4a7d034fa",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-ca4f26981e",
+      "url": "https://innovationlabs.harvard.edu/about/about-us",
+      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "excerpt": "Our Ventures → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d95556d69c",
+      "url": "https://innovationlabs.harvard.edu/about/about-us",
+      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-de06a99e56",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f6df8fa375",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Select Venture Profiles → https://innovationlabs.harvard.edu/ventures",
+      "page": "details"
+    },
+    {
+      "id": "check-route-04dee8c975",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Resources for Applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-0537552906",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Become a student member. → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-100ca8992b",
+      "url": "https://innovationlabs.harvard.edu/about/about-us",
+      "title": "Harvard Innovation Labs — details page checked by scrape.py",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2036bf1e49",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Tips for Applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-32e62afce3",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Learn more and sign up → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3a76b8e832",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "update your information → https://apply.innovationlabs.harvard.edu/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-4abc732ad5",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5807ef6c1f",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Join as Team Member of Existing Venture → http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-68c2c1a10b",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Wed, Nov 18 Tips + Tricks for Applying to the 2027 President's Innovation Challenge Online 4:30 PM → https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+      "page": "application"
+    },
+    {
+      "id": "check-route-777d59a91b",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Become a Student i-lab Member → https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-80fac9072f",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Apply by Dec. 8 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-85ad2afd8c",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Team Member Form → http://apply.innovationlabs.harvard.edu/prog/team_member_program",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-8e9c92e9e1",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Learn More + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "page": "application"
+    },
+    {
+      "id": "check-route-8f843dc1e6",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Learn more and apply → https://innovationlabs.harvard.edu/funding-opportunities/social-impact",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-99d21e69ed",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "Confirm Eligibility + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a0e0f67780",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "tips for PIC applicants → https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bf0233ee29",
+      "url": "https://innovationlabs.harvard.edu/",
+      "title": "Harvard Innovation Labs — homepage checked by scrape.py",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cfeb3a0698",
+      "url": "https://innovationlabs.harvard.edu/venture/care-hero-2",
+      "title": "Harvard Innovation Labs — batches page checked by scrape.py",
+      "excerpt": "2027 Harvard President's Innovation Challenge Students: Apply for our flagship venture competition by Dec. 08 → https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-dd728e7ff8",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "Confirm Eligibility + Apply → https://innovationlabs.harvard.edu/presidents-innovation-challenge/eligibility",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e419603143",
+      "url": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+      "title": "Harvard Innovation Labs — application page checked by scrape.py",
+      "excerpt": "No Venture Yet? Apply for an Ingenuity Award → https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+      "page": "application"
+    },
+    {
+      "id": "check-route-e495b40d11",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Apply to the Pagliuca Harvard Life Lab. → https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e8d2be196f",
+      "url": "https://innovationlabs.harvard.edu/about/help-center",
+      "title": "Harvard Innovation Labs — terms page checked by scrape.py",
+      "excerpt": "Update Your Membership/Venture Information → https://apply.innovationlabs.harvard.edu/",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge",
+        "evidenceId": "check-route-bf0233ee29"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+        "evidenceId": "check-route-777d59a91b"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/eligibility",
+        "evidenceId": "check-route-dd728e7ff8"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/how-to/put-forth-the-best-pic-application",
+        "evidenceId": "check-route-2036bf1e49"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/events/tips-tricks-for-applying-to-the-presidents-innovation-challenge",
+        "evidenceId": "check-route-68c2c1a10b"
+      },
+      {
+        "value": "https://innovationlabs.harvard.edu/presidents-innovation-challenge/ingenuity-awards",
+        "evidenceId": "check-route-8e9c92e9e1"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply",
+        "evidenceId": "check-route-777d59a91b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://innovationlabs.harvard.edu/ventures",
+        "evidenceId": "check-portfolio-aec6209d5d"
+      }
+    ],
+    "name": [
+      {
+        "value": "Harvard Innovation Labs",
+        "evidenceId": "check-name-a62af181df"
+      }
+    ],
+    "examplePages": []
+  }
+}

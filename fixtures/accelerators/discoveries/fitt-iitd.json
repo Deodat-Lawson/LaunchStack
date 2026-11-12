@@ -1,0 +1,86 @@
+{
+  "programId": "fitt-iitd",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://fitt-iitd.in/web/aboutus",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/programs",
+      "page": "details",
+      "anchor": "Programs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/fitt-program",
+      "page": "details",
+      "anchor": "FITT",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/government-program",
+      "page": "details",
+      "anchor": "Government",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/corporate-program",
+      "page": "details",
+      "anchor": "Corporate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id109",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id110",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/event-overview?id=evt_id106",
+      "page": "details",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fitt-iitd.in/web/sona-comstar-iit-delhi-innovation-program-scidip",
+      "page": "details",
+      "anchor": "Sona Comstar",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://accubate.fitt-iitd.in/ext/form/3403/1/apply",
+      "page": "application",
+      "anchor": "Apply for Incubation",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

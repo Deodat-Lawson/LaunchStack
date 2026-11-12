@@ -1,0 +1,35 @@
+{
+  "programId": "murud",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.telstra.com.au/business-enterprise/muru-d"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b1ad1e9d8d",
+      "url": "https://www.telstra.com.au/business-enterprise/muru-d",
+      "title": "Muru-D — homepage checked by scrape.py",
+      "excerpt": "muru-D - Telstra Enterprise Publisher: Telstra Name: muru-D -",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Muru-D",
+        "evidenceId": "check-name-b1ad1e9d8d"
+      }
+    ],
+    "examplePages": []
+  }
+}

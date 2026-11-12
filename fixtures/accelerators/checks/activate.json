@@ -1,0 +1,202 @@
+{
+  "programId": "activate",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://activate.org/",
+    "https://activate.org/apply",
+    "https://activate.org/faq",
+    "https://activate.org/global-programs",
+    "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-63058a7c26",
+      "url": "https://activate.org/apply",
+      "title": "Activate — application page checked by scrape.py",
+      "excerpt": "Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on",
+      "page": "application"
+    },
+    {
+      "id": "check-deal-f7a54daaa4",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "communities?” question for details.) Does Activate provide access to laboratory space? Activate does not have dedicated laboratory space, but: We provide $100,000 in research funding to each project / company in the fellowship that may be used to access laboratory space as needed In our geographically-connected",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-1bdeede3ea",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "apply@activate.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-2b876258b7",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "Most communications from Activate will come from the apply@activate.org email address. We recommend making sure emails from this",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-4c374bae62",
+      "url": "https://activate.org/apply",
+      "title": "Activate — application page checked by scrape.py",
+      "excerpt": "Contact Our Recruitment Team (apply@activate.org)",
+      "page": "application"
+    },
+    {
+      "id": "check-email-4e4bd45d2f",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "Contact our Recruitment Team (apply@activate.org)",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-722979d059",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "If you want to swap applicants, reach out to us at apply@activate.org for support. What happens if I have a co-founder who is",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-b38496244e",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "when determining if your project fits, and email us at apply@activate.org with specific questions. What life science topics are in",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-f89a506109",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "of your co-founder’s eligibility, reach out to us at apply@activate.org for support. Can a non-cofounder apply? Like a project",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-037c7fc8e8",
+      "url": "https://activate.org/",
+      "title": "Activate — homepage checked by scrape.py",
+      "excerpt": "Activate—Driving Hard Tech for Good Skip to content US Fellowship",
+      "page": "details"
+    },
+    {
+      "id": "check-route-024b6e73f2",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "activate.org/apply → https://www.activate.org/apply/?hsLang=en",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-03199932fb",
+      "url": "https://activate.org/news/activate-welcomes-50-new-fellows-to-cohort-2026?hsLang=en",
+      "title": "Activate — batches page checked by scrape.py",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-0e325a33cf",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — details page checked by scrape.py",
+      "excerpt": "Learn about Activate Global - Singapore Fellowship → https://activate.org/singapore-apply?hsLang=en",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6d0433be47",
+      "url": "https://activate.org/global-programs",
+      "title": "Activate — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c469da54f0",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "selection criteria → https://activate.org/apply/#fellowship-fit",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-c47de7fcbf",
+      "url": "https://activate.org/",
+      "title": "Activate — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d1910dd8e7",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "activate.org/apply → https://activate.org/apply?hsLang=en",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-e247e85fd9",
+      "url": "https://activate.org/faq",
+      "title": "Activate — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://activate.org/apply",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "apply@activate.org",
+        "evidenceId": "check-email-4c374bae62"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://activate.org/apply",
+        "evidenceId": "check-route-c47de7fcbf"
+      },
+      {
+        "value": "mailto:apply@activate.org",
+        "evidenceId": "check-email-4c374bae62"
+      },
+      {
+        "value": "https://www.activate.org/apply/?hsLang=en",
+        "evidenceId": "check-route-024b6e73f2"
+      },
+      {
+        "value": "https://activate.org/apply/#fellowship-fit",
+        "evidenceId": "check-route-c469da54f0"
+      },
+      {
+        "value": "https://activate.org/apply?hsLang=en",
+        "evidenceId": "check-route-d1910dd8e7"
+      },
+      {
+        "value": "https://activate.org/singapore-apply?hsLang=en",
+        "evidenceId": "check-route-0e325a33cf"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://activate.org/apply",
+        "evidenceId": "check-route-c47de7fcbf"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Fellowship Fit Preparing Your Application Activate Fellowship Selection Timeline Fellowship Benefits Financial Support for Personal & Business Expenses $100K living stipend per year $100K in R&D support $12K in travel and professional development funds per year Health insurance stipend Relocation allowance Focus on",
+        "evidenceId": "check-deal-63058a7c26"
+      },
+      {
+        "value": "communities?” question for details.) Does Activate provide access to laboratory space? Activate does not have dedicated laboratory space, but: We provide $100,000 in research funding to each project / company in the fellowship that may be used to access laboratory space as needed In our geographically-connected",
+        "evidenceId": "check-deal-f7a54daaa4"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Activate",
+        "evidenceId": "check-name-037c7fc8e8"
+      }
+    ],
+    "examplePages": []
+  }
+}

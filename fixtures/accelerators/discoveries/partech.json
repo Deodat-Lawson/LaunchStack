@@ -1,0 +1,30 @@
+{
+  "programId": "partech",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://partechpartners.com/companies",
+      "page": "portfolio",
+      "anchor": "( Discover Portfolio )",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://partechpartners.com/news/1317m-for-metycle-two-awards-and-three-rankings",
+      "page": "portfolio",
+      "anchor": "€131.7M FOR METYCLE, TWO AWARDS, AND THREE RANKINGS It’s fair to say our portfolio companies pulled their weight this month, and a great deal of it came in copper and aluminum. Met",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://partechpartners.com/news/two-new-unicorns-a-450m-lift-off-and-3-new-companies",
+      "page": "portfolio",
+      "anchor": "TWO NEW UNICORNS, A $450M LIFT-OFF AND 3 NEW COMPANIES Autumn is here, and while the leaves may be falling, our portfolio is doing quite the opposite! The Exploration Company close",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

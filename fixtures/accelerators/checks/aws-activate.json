@@ -1,0 +1,268 @@
+{
+  "programId": "aws-activate",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://aws.amazon.com/startups/",
+    "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+    "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+    "https://aws.amazon.com/faqs/?nc1=f_dr"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-2145e82c95",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "Focus on shipping, not infrastructure. AWS Startup Advisor helps you scaffold your architecture and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI startups ready to scale. Apply now 3 3. Extend your reach Put your product in front of the",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-bde3cb6aef",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "Insights Migrate Resources Offers Home AWS Startups Build your startup on AWS The majority of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now Play What’s new The latest from AWS for Startups. Everything for Startups at",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-d60f997d6f",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "guidance, business mentorship, and go-to-market resources to help you reach your next milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data services, and AI/ML models. Credits are redeemable on third-party models on Amazon Bedrock. AI",
+      "page": "details"
+    },
+    {
+      "id": "check-name-7f02ebee5f",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0e85577d02",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "title": "AWS Activate — application page checked by scrape.py",
+      "excerpt": "Startup → https://aws.amazon.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-f9762ab845",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "title": "AWS Activate — application page checked by scrape.py",
+      "excerpt": "Home → https://aws.amazon.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-11a45bfa2c",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "Education AWS Skills to Jobs Tech Alliance A global coalition that addresses the skills gap and prepares learners for in-demand tech jobs. Apply now → https://aws.amazon.com/government-education/skills-to-jobs-tech-alliance/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2dadc84068",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is a Web Application? → https://aws.amazon.com/what-is/web-application/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3e3769002c",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "New AWS Startup Advisor Features Migrate vibe-coding apps, plan Azure-to-AWS moves, track costs, apply for credits, and discover discounts all from your IDE. Read the announcement → https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-468885e27d",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "Startups Fuel your startup’s growth with up to $200,000 in AWS Activate Credits Apply today → https://aws.amazon.com/startups/join?destination=/credits/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4a25c2cb48",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "Web Server vs Application Server → https://aws.amazon.com/compare/the-difference-between-web-server-and-application-server/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-51779a5e36",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "title": "AWS Activate — application page checked by scrape.py",
+      "excerpt": "Amazon Bedrock The end-to-end platform for building generative AI applications and agents → https://aws.amazon.com/bedrock/?nc2=h_prod_fs_br",
+      "page": "application"
+    },
+    {
+      "id": "check-route-552eea8eef",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is Application Integration? → https://aws.amazon.com/what-is/application-integration/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-57e83f6411",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "AI for Good Open Data Share any volume of data with as many people as you want. Apply now → https://aws.amazon.com/opendata/?ams%23interactive-card-vertical%23pattern-data--852709612.filter=%257B%2522filters%2522%253A%255B%255D%257D",
+      "page": "details"
+    },
+    {
+      "id": "check-route-64ec518cf6",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "Free app integration services → https://aws.amazon.com/free/application-integration/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-78962d0a15",
+      "url": "https://aws.amazon.com/startups/",
+      "title": "AWS Activate — homepage checked by scrape.py",
+      "excerpt": "Apply now → https://aws.amazon.com/startups/join?destination=/credits/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-81aa0e9057",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is EAI? → https://aws.amazon.com/what-is/enterprise-application-integration/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-895c9a3609",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "Learn more and apply → https://aws.amazon.com/about-aws/our-impact/education-equity-initiative/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-938968237e",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "Learn more and apply → https://aws.amazon.com/about-aws/our-impact/health-impact-initiative/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-afe73d07fa",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "Education AI/ML Scholars Get ready for a career in AI with courses featuring cutting-edge AI tools, designed for learners facing limited access to AI & ML opportunities. Apply now → https://aws.amazon.com/about-aws/our-impact/scholars/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b5eda9b093",
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "title": "AWS Activate — application page checked by scrape.py",
+      "excerpt": "Credits Stretch your runway with credits, expert guidance, and go-to-market support Apply for AWS Activate → https://aws.amazon.com/startups/credits/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b838998591",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is Application Lifecycle Management (ALM)? → https://aws.amazon.com/what-is/application-lifecycle-management/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b8fab323e1",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is Application Performance Monitoring (APM)? → https://aws.amazon.com/what-is/application-performance-monitoring/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bb98af0630",
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "title": "AWS Activate — details page checked by scrape.py",
+      "excerpt": "AI for Good Open Data Sponsorship Program Get the cost of storage covered for publicly available high-value cloud-optimized datasets. Apply now → https://aws.amazon.com/opendata/open-data-sponsorship-program/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ce9be06711",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "AWS Application Discovery Service → https://aws.amazon.com/transform/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f45514dc42",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "What is Application Migration? → https://aws.amazon.com/what-is/application-migration/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f9956e56a9",
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "title": "AWS Activate — terms page checked by scrape.py",
+      "excerpt": "ALB vs NLB vs GLB → https://aws.amazon.com/compare/the-difference-between-the-difference-between-application-network-and-gateway-load-balancing/",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+        "evidenceId": "check-route-3e3769002c"
+      },
+      {
+        "value": "https://aws.amazon.com/startups/join?destination=/credits/apply",
+        "evidenceId": "check-route-78962d0a15"
+      },
+      {
+        "value": "https://aws.amazon.com/about-aws/our-impact/health-impact-initiative/",
+        "evidenceId": "check-route-938968237e"
+      },
+      {
+        "value": "https://aws.amazon.com/about-aws/our-impact/education-equity-initiative/",
+        "evidenceId": "check-route-895c9a3609"
+      },
+      {
+        "value": "https://aws.amazon.com/about-aws/our-impact/scholars/",
+        "evidenceId": "check-route-afe73d07fa"
+      },
+      {
+        "value": "https://aws.amazon.com/opendata/open-data-sponsorship-program/",
+        "evidenceId": "check-route-bb98af0630"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://aws.amazon.com/startups/join?destination=/credits/apply",
+        "evidenceId": "check-route-78962d0a15"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Insights Migrate Resources Offers Home AWS Startups Build your startup on AWS The majority of the top 100 startups globally use AI services on AWS. Get up to $200,000 in AWS Activate Credits and expert support to build what's next. Join now Play What’s new The latest from AWS for Startups. Everything for Startups at",
+        "evidenceId": "check-deal-bde3cb6aef"
+      },
+      {
+        "value": "guidance, business mentorship, and go-to-market resources to help you reach your next milestone. Credits to help you test and build Apply to receive up to $200,000 in AWS Activate Credits to offset costs on infrastructure, data services, and AI/ML models. Credits are redeemable on third-party models on Amazon Bedrock. AI",
+        "evidenceId": "check-deal-d60f997d6f"
+      },
+      {
+        "value": "Focus on shipping, not infrastructure. AWS Startup Advisor helps you scaffold your architecture and deploy local code to AWS, right from your IDE. Get up to $200,000 in AWS Activate Credits, with additional credits available for AI startups ready to scale. Apply now 3 3. Extend your reach Put your product in front of the",
+        "evidenceId": "check-deal-2145e82c95"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://aws.amazon.com/startups/",
+        "evidenceId": "check-portfolio-f9762ab845"
+      }
+    ],
+    "name": [
+      {
+        "value": "AWS Activate",
+        "evidenceId": "check-name-7f02ebee5f"
+      }
+    ],
+    "examplePages": []
+  }
+}

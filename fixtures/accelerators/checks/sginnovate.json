@@ -1,0 +1,82 @@
+{
+  "programId": "sginnovate",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.sginnovate.com/",
+    "https://www.sginnovate.com/faq",
+    "https://www.sginnovate.com/deep-tech-community"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a36c69caa1",
+      "url": "https://www.sginnovate.com/",
+      "title": "SGInnovate — homepage checked by scrape.py",
+      "excerpt": "Home | SGInnovate × About SGInnovate Our Mission Growing Singapore’s Deep",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-5531b72f83",
+      "url": "https://www.sginnovate.com/faq",
+      "title": "SGInnovate — terms page checked by scrape.py",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-7a2534c5c3",
+      "url": "https://www.sginnovate.com/",
+      "title": "SGInnovate — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d9abe63cbd",
+      "url": "https://www.sginnovate.com/deep-tech-community",
+      "title": "SGInnovate — details page checked by scrape.py",
+      "excerpt": "Our Portfolio Explore our portfolio companies → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-feef9878c1",
+      "url": "https://www.sginnovate.com/",
+      "title": "SGInnovate — homepage checked by scrape.py",
+      "excerpt": "Explore our portfolio → https://www.sginnovate.com/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a0425473ae",
+      "url": "https://www.sginnovate.com/",
+      "title": "SGInnovate — homepage checked by scrape.py",
+      "excerpt": "https://www.sginnovate.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.sginnovate.com/",
+        "evidenceId": "check-route-a0425473ae"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.sginnovate.com/our-portfolio",
+        "evidenceId": "check-portfolio-7a2534c5c3"
+      }
+    ],
+    "name": [
+      {
+        "value": "SGInnovate",
+        "evidenceId": "check-name-a36c69caa1"
+      }
+    ],
+    "examplePages": []
+  }
+}

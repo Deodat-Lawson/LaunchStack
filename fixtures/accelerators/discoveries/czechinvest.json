@@ -1,0 +1,198 @@
+{
+  "programId": "czechinvest",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
+      "page": "details",
+      "anchor": "Organizational structure",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Internal-projects",
+      "page": "details",
+      "anchor": "Internal projects",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/CzechInvest-management",
+      "page": "details",
+      "anchor": "CzechInvest management",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Enterprise-Europe-Network",
+      "page": "details",
+      "anchor": "Enterprise Europe Network",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Investment-Project-Statistics",
+      "page": "details",
+      "anchor": "Investment Project Statistics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/History",
+      "page": "details",
+      "anchor": "History",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Partners",
+      "page": "details",
+      "anchor": "Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/General-materials",
+      "page": "details",
+      "anchor": "General materials",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/Logos",
+      "page": "details",
+      "anchor": "Logos",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/Download/Annual-Reports",
+      "page": "details",
+      "anchor": "Annual Reports",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Doing-business-in-Czechia/About-Czechia",
+      "page": "details",
+      "anchor": "About Czechia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Visa-Support/Qualified-Worker-Programme",
+      "page": "details",
+      "anchor": "Qualified Worker Programme",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Investors/Visa-Support/Digital-Nomad-Program",
+      "page": "details",
+      "anchor": "Digital Nomad Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/Structured-Laser-Beam",
+      "page": "details",
+      "anchor": "Structured Laser Beam",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/Ultralight-Cold-Plate",
+      "page": "details",
+      "anchor": "Ultralight Cold Plate",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/Single-Mode-Laser",
+      "page": "details",
+      "anchor": "Single Mode Laser",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/White-Rabbit",
+      "page": "details",
+      "anchor": "White Rabbit",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/CERN-Venture-Connect-program/RUCIO",
+      "page": "details",
+      "anchor": "RUCIO",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/For-Startups/Archive-of-startup-programs/CzechStarter",
+      "page": "details",
+      "anchor": "CzechStarter",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Czechia-data-reports/Basic-Data-about-Czechia",
+      "page": "details",
+      "anchor": "Basic Data about Czechia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/May-2026/Thinking-about-working-in-the-Czech-Republic-CzechInvest-will-show-you-how",
+      "page": "details",
+      "anchor": "more info",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World",
+      "page": "terms",
+      "anchor": "",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/June-2026/Interest-in-Czech-innovations-is-growing-in-Canada-CzechInvest-helps-companies-open-doors-to-new-pa",
+      "page": "portfolio",
+      "anchor": "",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

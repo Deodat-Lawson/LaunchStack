@@ -1,0 +1,48 @@
+{
+  "programId": "hubraum",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.hubraum.com/",
+    "https://www.hubraum.com/initiatives/security-co-creation-program/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-36a752a84d",
+      "url": "https://www.hubraum.com/",
+      "title": "hubraum — homepage checked by scrape.py",
+      "excerpt": "hubraum – Tech Incubator of Deutsche Telekom – Our tech incubator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-db54ebad08",
+      "url": "https://www.hubraum.com/",
+      "title": "hubraum — homepage checked by scrape.py",
+      "excerpt": "https://www.hubraum.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.hubraum.com/",
+        "evidenceId": "check-route-db54ebad08"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "hubraum",
+        "evidenceId": "check-name-36a752a84d"
+      }
+    ],
+    "examplePages": []
+  }
+}

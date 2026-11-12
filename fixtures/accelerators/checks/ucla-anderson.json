@@ -1,0 +1,502 @@
+{
+  "programId": "ucla-anderson",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+    "https://www.anderson.ucla.edu/about",
+    "https://www.anderson.ucla.edu/apply",
+    "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+    "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-0038377f6b",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0b7d4a3a51",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about Entrepreneur Spotlight → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-15404a549a",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Alumni Home → https://www.anderson.ucla.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1aeb1ea28c",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2035c210c9",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Our Companies → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-2457063bc5",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2572d0009d",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2b66436c3c",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2b88ce998d",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about KPOP Offers Taste of Korean Culture → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-2e4a1e8dfe",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about BodySpec Shows What You're Made Of → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-38f352ba88",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Our Companies → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3ff7724cc0",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-43bc4c80f6",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-58a7c1772e",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6f3c9f73fa",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-77c6872df8",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about For Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-82557308c0",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Alumni Home → https://www.anderson.ucla.edu/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9ed66b539b",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a2840d2218",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-a482d5f53c",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about Contemporary Design With A Purpose → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a7b8ce96e9",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Learn More about The Adult Version Of Razor's Awesome Crazy Cart → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ab0af6b2ab",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b1e6da47fc",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-b8b1e7f8d8",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Our Companies → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b99bec8e3c",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c05123b571",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c2e46ff52c",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d0cc47d44b",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Alumni Home → https://www.anderson.ucla.edu/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-d6e58a0d04",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Connect to our Alumni Network → https://www.anderson.ucla.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d899e33611",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Alumni Home → https://www.anderson.ucla.edu/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-d913f1b582",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dc41db0568",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Alumni Home → https://www.anderson.ucla.edu/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd4c1c9656",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Our Companies → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-e1fd34db38",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-e7d5df0bfc",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Our Companies → https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e87a4837a7",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-ee4c8a94cd",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Alumni → https://www.anderson.ucla.edu/degrees/executive-mba/culture/alumni",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-01e8f47cbf",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Apply to the Minor → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-054fa17b3c",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Application Checklist → https://www.anderson.ucla.edu/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-169f452c1c",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "application requirements → https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/requirements",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-1f91ead76a",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.anderson.ucla.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2b83243f05",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Fellowship Application → https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-31450c28cf",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Learn More about Entrepreneurship Minor Program → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-334dba0b67",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://www.anderson.ucla.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4b96194994",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Fellowship Application → https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-56899e45f6",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Apply to the Minor → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-5ee9e0dc26",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Apply to the Minor → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-659fef1276",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "MBA Application Requirements → https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/requirements",
+      "page": "application"
+    },
+    {
+      "id": "check-route-881f8fdce5",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Fellowship Application → https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8b7bff3328",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Fellowship Application → https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9687f621f1",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Fellowship Application → https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-abe7f68a91",
+      "url": "https://www.anderson.ucla.edu/rosenfeld-library/about/faqs",
+      "title": "UCLA Anderson Venture Accelerator — terms page checked by scrape.py",
+      "excerpt": "Application Checklist → https://www.anderson.ucla.edu/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b55db1dbd3",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.anderson.ucla.edu/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-c074e3a19d",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Learn More about Sports Leadership and Management Minor Program → https://www.anderson.ucla.edu/undergraduate-education/sports-leadership-and-management-minor/admissions#apply",
+      "page": "application"
+    },
+    {
+      "id": "check-route-c247bfdafd",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Application Checklist → https://www.anderson.ucla.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cbe14b381f",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.anderson.ucla.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d00386b754",
+      "url": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation",
+      "title": "UCLA Anderson Venture Accelerator — homepage checked by scrape.py",
+      "excerpt": "Application Checklist → https://www.anderson.ucla.edu/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d49dad4c78",
+      "url": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/consortium-candidates",
+      "title": "UCLA Anderson Venture Accelerator — batches page checked by scrape.py",
+      "excerpt": "Apply to the Minor → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-daae64e9dc",
+      "url": "https://www.anderson.ucla.edu/about",
+      "title": "UCLA Anderson Venture Accelerator — details page checked by scrape.py",
+      "excerpt": "Apply to the Minor → https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f40d3ad609",
+      "url": "https://www.anderson.ucla.edu/apply",
+      "title": "UCLA Anderson Venture Accelerator — application page checked by scrape.py",
+      "excerpt": "Learn More about Real Estate Minor Program → https://www.anderson.ucla.edu/undergraduate-education/real-estate-minor/real-estate-minor-admissions#apply",
+      "page": "application"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.anderson.ucla.edu/apply",
+        "evidenceId": "check-route-d00386b754"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/undergraduate-education/undergraduate-minor-in-entrepreneurship/apply",
+        "evidenceId": "check-route-01e8f47cbf"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/news-and-events/signature-events/john-wooden-global-leadership-awards/fellowship-application",
+        "evidenceId": "check-route-881f8fdce5"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/degrees/full-time-mba/admissions/requirements",
+        "evidenceId": "check-route-659fef1276"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/undergraduate-education/real-estate-minor/real-estate-minor-admissions#apply",
+        "evidenceId": "check-route-f40d3ad609"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/undergraduate-education/sports-leadership-and-management-minor/admissions#apply",
+        "evidenceId": "check-route-c074e3a19d"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.anderson.ucla.edu/apply",
+        "evidenceId": "check-route-d00386b754"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.anderson.ucla.edu/alumni",
+        "evidenceId": "check-portfolio-15404a549a"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni",
+        "evidenceId": "check-portfolio-0038377f6b"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/our-companies",
+        "evidenceId": "check-portfolio-e7d5df0bfc"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/alumni#entrepreneurs",
+        "evidenceId": "check-portfolio-0b7d4a3a51"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/about/centers/media-entertainment-and-sports/alumni",
+        "evidenceId": "check-portfolio-c2e46ff52c"
+      },
+      {
+        "value": "https://www.anderson.ucla.edu/degrees/full-time-mba/admit-central/career-services/alumni",
+        "evidenceId": "check-portfolio-43bc4c80f6"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "programId": "climate-kic",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.climate-kic.org/",
+    "https://www.climate-kic.org/who-we-are/about-climate-kic/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-c68c7a8e9f",
+      "url": "https://www.climate-kic.org/",
+      "title": "Climate-KIC — homepage checked by scrape.py",
+      "excerpt": "leading climate innovation agency and community Stichting Climate-KIC International Foundation is an independent, non-profit",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-333f6870ba",
+      "url": "https://www.climate-kic.org/",
+      "title": "Climate-KIC — homepage checked by scrape.py",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eed6c5c1d6",
+      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
+      "title": "Climate-KIC — details page checked by scrape.py",
+      "excerpt": "Our portfolio → https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-87453d28ba",
+      "url": "https://www.climate-kic.org/",
+      "title": "Climate-KIC — homepage checked by scrape.py",
+      "excerpt": "https://www.climate-kic.org",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.climate-kic.org",
+        "evidenceId": "check-route-87453d28ba"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.climate-kic.org/programmes/our-portfolio/",
+        "evidenceId": "check-portfolio-333f6870ba"
+      }
+    ],
+    "name": [
+      {
+        "value": "Climate-KIC",
+        "evidenceId": "check-name-c68c7a8e9f"
+      }
+    ],
+    "examplePages": []
+  }
+}

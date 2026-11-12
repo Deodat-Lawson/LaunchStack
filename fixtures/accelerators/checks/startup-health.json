@@ -1,0 +1,49 @@
+{
+  "programId": "startup-health",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startuphealth.com/",
+    "https://www.startuphealth.com/contact",
+    "https://www.startuphealth.com/home"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-70beb40b9c",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — homepage checked by scrape.py",
+      "excerpt": "StartUp Health 0 Skip to Content Testimonials Events Event Calendar",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6863158358",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — homepage checked by scrape.py",
+      "excerpt": "https://www.startuphealth.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.startuphealth.com/",
+        "evidenceId": "check-route-6863158358"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "StartUp Health",
+        "evidenceId": "check-name-70beb40b9c"
+      }
+    ],
+    "examplePages": []
+  }
+}

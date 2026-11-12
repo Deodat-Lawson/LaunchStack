@@ -1,0 +1,1059 @@
+{
+  "schemaVersion": 1,
+  "note": "Controlled vocabulary for taxonomy.json. scrape.py attaches a tag to a Program only where an alias (not the label) appears as a whole word in one of that Program's stored source quotes. Aliases in caseSensitive must match their exact capitalisation. Tag ids are stable; rename a label, never an id.",
+  "tags": [
+    {
+      "id": "program_type.accelerator",
+      "facet": "program_type",
+      "label": "Accelerator",
+      "aliases": [
+        "accelerator",
+        "accelerators",
+        "accelerator program",
+        "acceleration program",
+        "aceleradora",
+        "aceleradoras",
+        "aceleração",
+        "aceleración",
+        "accélérateur",
+        "acceleratore",
+        "Accelerator-Programm",
+        "액셀러레이터"
+      ]
+    },
+    {
+      "id": "program_type.incubator",
+      "facet": "program_type",
+      "label": "Incubator",
+      "aliases": [
+        "incubator",
+        "incubators",
+        "incubation",
+        "incubadora",
+        "incubação",
+        "incubateur",
+        "incubatore",
+        "Inkubator",
+        "인큐베이터",
+        "인큐베이팅"
+      ]
+    },
+    {
+      "id": "program_type.venture-studio",
+      "facet": "program_type",
+      "label": "Venture studio",
+      "aliases": [
+        "venture studio",
+        "startup studio",
+        "company builder",
+        "venture builder",
+        "venture building"
+      ]
+    },
+    {
+      "id": "program_type.residency",
+      "facet": "program_type",
+      "label": "Residency or fellowship",
+      "aliases": [
+        "residency",
+        "founders-in-residence",
+        "founder in residence",
+        "entrepreneur in residence",
+        "entrepreneurs in residence",
+        "fellowship",
+        "fellowships",
+        "StartX Fellows"
+      ]
+    },
+    {
+      "id": "program_type.investor",
+      "facet": "program_type",
+      "label": "Venture investor",
+      "aliases": [
+        "venture capital",
+        "VC",
+        "venture firm",
+        "investment firm",
+        "seed fund",
+        "venture fund",
+        "seed funding",
+        "pre-seed fund",
+        "we invest",
+        "invests in",
+        "invests at inception"
+      ],
+      "caseSensitive": [
+        "VC"
+      ]
+    },
+    {
+      "id": "program_type.corporate-innovation",
+      "facet": "program_type",
+      "label": "Corporate innovation",
+      "aliases": [
+        "open innovation",
+        "collaborative innovation",
+        "corporate innovation",
+        "corporate venture",
+        "corporate venturing",
+        "Para Corporações",
+        "for corporates",
+        "corporações e startups",
+        "corporations and startups"
+      ]
+    },
+    {
+      "id": "program_type.university",
+      "facet": "program_type",
+      "label": "University program",
+      "aliases": [
+        "university spinouts",
+        "university spin-outs",
+        "spinouts",
+        "spin-outs",
+        "student founders",
+        "student entrepreneurs",
+        "student startups",
+        "faculty",
+        "academic context",
+        "contexto académico",
+        "academics",
+        "Stanford founders"
+      ]
+    },
+    {
+      "id": "program_type.government",
+      "facet": "program_type",
+      "label": "Government program",
+      "aliases": [
+        "government agency",
+        "government program",
+        "government-backed",
+        "government-funded",
+        "public agency",
+        "state agency",
+        "창업지원포털"
+      ]
+    },
+    {
+      "id": "program_type.community",
+      "facet": "program_type",
+      "label": "Founder community",
+      "aliases": [
+        "community of technologists",
+        "founder community",
+        "founder-led community",
+        "community of founders",
+        "startup community",
+        "private global membership",
+        "innovation hub",
+        "startup hub",
+        "innovation centre",
+        "innovation center",
+        "Entrepreneurship Hub"
+      ]
+    },
+    {
+      "id": "program_type.education",
+      "facet": "program_type",
+      "label": "Founder education",
+      "aliases": [
+        "Startup School",
+        "online course",
+        "training program",
+        "training programme",
+        "programa intensivo de formação",
+        "capacitações",
+        "bootcamp",
+        "boot camp"
+      ]
+    },
+    {
+      "id": "program_type.competition",
+      "facet": "program_type",
+      "label": "Competition or award",
+      "aliases": [
+        "pitch competition",
+        "startup competition",
+        "business plan competition",
+        "startup of the year",
+        "award",
+        "awards"
+      ]
+    },
+    {
+      "id": "program_type.grant",
+      "facet": "program_type",
+      "label": "Grant program",
+      "aliases": [
+        "grant program",
+        "grants program",
+        "equity-free grants",
+        "grants"
+      ]
+    },
+    {
+      "id": "sector.fintech",
+      "facet": "sector",
+      "label": "Fintech",
+      "aliases": [
+        "fintech",
+        "financial technology",
+        "financial services"
+      ]
+    },
+    {
+      "id": "sector.health",
+      "facet": "sector",
+      "label": "Health",
+      "aliases": [
+        "healthtech",
+        "health tech",
+        "digital health",
+        "healthcare",
+        "medtech",
+        "medical technology",
+        "medical devices"
+      ]
+    },
+    {
+      "id": "sector.life-sciences",
+      "facet": "sector",
+      "label": "Life sciences",
+      "aliases": [
+        "life sciences",
+        "biotech",
+        "biotechnology",
+        "biopharma",
+        "therapeutics"
+      ]
+    },
+    {
+      "id": "sector.climate",
+      "facet": "sector",
+      "label": "Climate",
+      "aliases": [
+        "climate",
+        "climate tech",
+        "climatetech",
+        "cleantech",
+        "clean tech",
+        "decarbonization",
+        "decarbonisation",
+        "net zero",
+        "net-zero"
+      ]
+    },
+    {
+      "id": "sector.energy",
+      "facet": "sector",
+      "label": "Energy",
+      "aliases": [
+        "renewable energy",
+        "clean energy",
+        "energy transition",
+        "energy storage",
+        "hydrogen",
+        "solar",
+        "oil and gas",
+        "hidrógeno",
+        "Hidrógeno Verde",
+        "energy startup",
+        "energy startups"
+      ]
+    },
+    {
+      "id": "sector.education",
+      "facet": "sector",
+      "label": "Education",
+      "aliases": [
+        "edtech",
+        "education technology",
+        "EdTech"
+      ]
+    },
+    {
+      "id": "sector.agrifood",
+      "facet": "sector",
+      "label": "Agriculture and food",
+      "aliases": [
+        "agtech",
+        "agritech",
+        "agrifood",
+        "agri-food",
+        "foodtech",
+        "food tech",
+        "agriculture"
+      ]
+    },
+    {
+      "id": "sector.mobility",
+      "facet": "sector",
+      "label": "Mobility",
+      "aliases": [
+        "mobility",
+        "transportation",
+        "automotive"
+      ]
+    },
+    {
+      "id": "sector.aerospace",
+      "facet": "sector",
+      "label": "Aerospace and space",
+      "aliases": [
+        "aerospace",
+        "space tech",
+        "spacetech",
+        "space industry",
+        "aviation"
+      ]
+    },
+    {
+      "id": "sector.defense",
+      "facet": "sector",
+      "label": "Defense",
+      "aliases": [
+        "defense",
+        "defence",
+        "dual-use",
+        "national security"
+      ]
+    },
+    {
+      "id": "sector.cybersecurity",
+      "facet": "sector",
+      "label": "Cybersecurity",
+      "aliases": [
+        "cybersecurity",
+        "cyber security"
+      ]
+    },
+    {
+      "id": "sector.web3",
+      "facet": "sector",
+      "label": "Web3 and crypto",
+      "aliases": [
+        "web3",
+        "crypto",
+        "cryptocurrency",
+        "DeFi"
+      ]
+    },
+    {
+      "id": "sector.property",
+      "facet": "sector",
+      "label": "Property and construction",
+      "aliases": [
+        "proptech",
+        "real estate",
+        "construction tech",
+        "contech"
+      ]
+    },
+    {
+      "id": "sector.insurance",
+      "facet": "sector",
+      "label": "Insurance",
+      "aliases": [
+        "insurtech",
+        "insurance"
+      ]
+    },
+    {
+      "id": "sector.govtech",
+      "facet": "sector",
+      "label": "Government technology",
+      "aliases": [
+        "govtech",
+        "civic tech"
+      ]
+    },
+    {
+      "id": "sector.manufacturing",
+      "facet": "sector",
+      "label": "Manufacturing",
+      "aliases": [
+        "manufacturing",
+        "industry 4.0",
+        "advanced manufacturing"
+      ]
+    },
+    {
+      "id": "sector.commerce",
+      "facet": "sector",
+      "label": "Retail and commerce",
+      "aliases": [
+        "e-commerce",
+        "ecommerce",
+        "retail"
+      ]
+    },
+    {
+      "id": "sector.media",
+      "facet": "sector",
+      "label": "Media and gaming",
+      "aliases": [
+        "gaming",
+        "entertainment",
+        "creator economy"
+      ]
+    },
+    {
+      "id": "sector.logistics",
+      "facet": "sector",
+      "label": "Logistics",
+      "aliases": [
+        "logistics",
+        "supply chain"
+      ]
+    },
+    {
+      "id": "sector.social-impact",
+      "facet": "sector",
+      "label": "Social impact",
+      "aliases": [
+        "social impact",
+        "social enterprise",
+        "social enterprises",
+        "impact-driven",
+        "impact startups"
+      ]
+    },
+    {
+      "id": "sector.deep-tech",
+      "facet": "sector",
+      "label": "Deep tech",
+      "aliases": [
+        "deep tech",
+        "deeptech",
+        "deep-tech",
+        "hard tech",
+        "hardtech",
+        "Tough Tech"
+      ]
+    },
+    {
+      "id": "technology.ai",
+      "facet": "technology",
+      "label": "Artificial intelligence",
+      "aliases": [
+        "AI",
+        "artificial intelligence",
+        "generative AI",
+        "GenAI",
+        "machine learning",
+        "LLM",
+        "LLMs",
+        "AI-native",
+        "AI-first"
+      ],
+      "caseSensitive": [
+        "AI",
+        "GenAI",
+        "LLM",
+        "LLMs",
+        "AI-native",
+        "AI-first"
+      ]
+    },
+    {
+      "id": "technology.robotics",
+      "facet": "technology",
+      "label": "Robotics",
+      "aliases": [
+        "robotics",
+        "drones",
+        "autonomous systems"
+      ]
+    },
+    {
+      "id": "technology.hardware",
+      "facet": "technology",
+      "label": "Hardware",
+      "aliases": [
+        "hardware",
+        "IoT",
+        "Internet of Things",
+        "semiconductors",
+        "semiconductor",
+        "electronics"
+      ],
+      "caseSensitive": [
+        "IoT"
+      ]
+    },
+    {
+      "id": "technology.blockchain",
+      "facet": "technology",
+      "label": "Blockchain",
+      "aliases": [
+        "blockchain"
+      ]
+    },
+    {
+      "id": "technology.quantum",
+      "facet": "technology",
+      "label": "Quantum",
+      "aliases": [
+        "quantum"
+      ]
+    },
+    {
+      "id": "technology.xr",
+      "facet": "technology",
+      "label": "Virtual and augmented reality",
+      "aliases": [
+        "virtual reality",
+        "augmented reality",
+        "XR"
+      ],
+      "caseSensitive": [
+        "XR"
+      ]
+    },
+    {
+      "id": "business_model.b2b",
+      "facet": "business_model",
+      "label": "B2B",
+      "aliases": [
+        "B2B",
+        "business-to-business"
+      ],
+      "caseSensitive": [
+        "B2B"
+      ]
+    },
+    {
+      "id": "business_model.b2c",
+      "facet": "business_model",
+      "label": "B2C",
+      "aliases": [
+        "B2C",
+        "D2C",
+        "DTC",
+        "direct-to-consumer",
+        "business-to-consumer"
+      ],
+      "caseSensitive": [
+        "B2C",
+        "D2C",
+        "DTC"
+      ]
+    },
+    {
+      "id": "business_model.saas",
+      "facet": "business_model",
+      "label": "SaaS",
+      "aliases": [
+        "SaaS",
+        "software-as-a-service"
+      ],
+      "caseSensitive": [
+        "SaaS"
+      ]
+    },
+    {
+      "id": "business_model.marketplace",
+      "facet": "business_model",
+      "label": "Marketplace",
+      "aliases": [
+        "marketplace",
+        "marketplaces"
+      ]
+    },
+    {
+      "id": "customer_type.enterprise",
+      "facet": "customer_type",
+      "label": "Enterprise",
+      "aliases": [
+        "enterprise customers",
+        "enterprise software",
+        "corporates",
+        "corporate partners",
+        "Fortune 500"
+      ]
+    },
+    {
+      "id": "customer_type.smb",
+      "facet": "customer_type",
+      "label": "Small businesses",
+      "aliases": [
+        "SMEs",
+        "SMBs",
+        "small businesses",
+        "small and medium-sized"
+      ],
+      "caseSensitive": [
+        "SMEs",
+        "SMBs"
+      ]
+    },
+    {
+      "id": "customer_type.consumer",
+      "facet": "customer_type",
+      "label": "Consumers",
+      "aliases": [
+        "consumer products",
+        "consumer brands",
+        "consumer tech",
+        "consumer startups"
+      ]
+    },
+    {
+      "id": "customer_type.government",
+      "facet": "customer_type",
+      "label": "Government",
+      "aliases": [
+        "government agencies",
+        "public sector",
+        "public-sector"
+      ]
+    },
+    {
+      "id": "stage.pre-seed",
+      "facet": "stage",
+      "label": "Pre-seed",
+      "aliases": [
+        "pre-seed",
+        "pre seed",
+        "preseed"
+      ]
+    },
+    {
+      "id": "stage.seed",
+      "facet": "stage",
+      "label": "Seed",
+      "aliases": [
+        "seed-stage",
+        "seed stage",
+        "seed round"
+      ]
+    },
+    {
+      "id": "stage.early",
+      "facet": "stage",
+      "label": "Early stage",
+      "aliases": [
+        "early-stage",
+        "early stage",
+        "earliest stage"
+      ]
+    },
+    {
+      "id": "stage.idea",
+      "facet": "stage",
+      "label": "Idea stage",
+      "aliases": [
+        "idea stage",
+        "idea-stage",
+        "ideation",
+        "pre-idea"
+      ]
+    },
+    {
+      "id": "stage.growth",
+      "facet": "stage",
+      "label": "Growth stage",
+      "aliases": [
+        "growth-stage",
+        "growth stage",
+        "scaleup",
+        "scale-up",
+        "scaleups",
+        "scale-ups"
+      ]
+    },
+    {
+      "id": "stage.pre-revenue",
+      "facet": "stage",
+      "label": "Pre-revenue",
+      "aliases": [
+        "pre-revenue"
+      ]
+    },
+    {
+      "id": "instrument.convertible-note",
+      "facet": "instrument",
+      "label": "Convertible note",
+      "aliases": [
+        "convertible note",
+        "convertible notes"
+      ]
+    },
+    {
+      "id": "instrument.non-dilutive",
+      "facet": "instrument",
+      "label": "Non-dilutive funding",
+      "aliases": [
+        "non-dilutive",
+        "equity-free",
+        "grant funding"
+      ]
+    },
+    {
+      "id": "benefit.mentorship",
+      "facet": "benefit",
+      "label": "Mentorship",
+      "aliases": [
+        "mentorship",
+        "mentoring",
+        "mentors"
+      ]
+    },
+    {
+      "id": "benefit.workspace",
+      "facet": "benefit",
+      "label": "Workspace",
+      "aliases": [
+        "office space",
+        "co-working",
+        "coworking",
+        "desk space"
+      ]
+    },
+    {
+      "id": "benefit.lab-space",
+      "facet": "benefit",
+      "label": "Lab and prototyping space",
+      "aliases": [
+        "lab space",
+        "wet lab",
+        "laboratory space",
+        "prototyping"
+      ]
+    },
+    {
+      "id": "benefit.demo-day",
+      "facet": "benefit",
+      "label": "Demo Day",
+      "aliases": [
+        "demo day"
+      ]
+    },
+    {
+      "id": "benefit.investor-access",
+      "facet": "benefit",
+      "label": "Investor access",
+      "aliases": [
+        "investor network",
+        "investor access",
+        "access to investors",
+        "investor introductions"
+      ]
+    },
+    {
+      "id": "geography.united-states",
+      "facet": "geography",
+      "label": "United States",
+      "aliases": [
+        "United States",
+        "USA",
+        "Washington DC",
+        "Washington, DC",
+        "Philadelphia"
+      ],
+      "caseSensitive": [
+        "USA"
+      ]
+    },
+    {
+      "id": "geography.new-york",
+      "facet": "geography",
+      "label": "New York",
+      "aliases": [
+        "New York",
+        "NYC"
+      ],
+      "caseSensitive": [
+        "NYC"
+      ]
+    },
+    {
+      "id": "geography.bay-area",
+      "facet": "geography",
+      "label": "San Francisco Bay Area",
+      "aliases": [
+        "Bay Area",
+        "Silicon Valley"
+      ]
+    },
+    {
+      "id": "geography.boston",
+      "facet": "geography",
+      "label": "Boston",
+      "aliases": [
+        "Boston"
+      ]
+    },
+    {
+      "id": "geography.los-angeles",
+      "facet": "geography",
+      "label": "Los Angeles",
+      "aliases": [
+        "Los Angeles"
+      ]
+    },
+    {
+      "id": "geography.chicago",
+      "facet": "geography",
+      "label": "Chicago",
+      "aliases": [
+        "Chicago"
+      ]
+    },
+    {
+      "id": "geography.canada",
+      "facet": "geography",
+      "label": "Canada",
+      "aliases": [
+        "Canada",
+        "Toronto",
+        "Waterloo",
+        "Montreal",
+        "Vancouver"
+      ]
+    },
+    {
+      "id": "geography.united-kingdom",
+      "facet": "geography",
+      "label": "United Kingdom",
+      "aliases": [
+        "United Kingdom",
+        "UK"
+      ],
+      "caseSensitive": [
+        "UK"
+      ]
+    },
+    {
+      "id": "geography.london",
+      "facet": "geography",
+      "label": "London",
+      "aliases": [
+        "London"
+      ]
+    },
+    {
+      "id": "geography.europe",
+      "facet": "geography",
+      "label": "Europe",
+      "aliases": [
+        "Europe",
+        "European"
+      ]
+    },
+    {
+      "id": "geography.france",
+      "facet": "geography",
+      "label": "France",
+      "aliases": [
+        "France",
+        "Paris"
+      ]
+    },
+    {
+      "id": "geography.germany",
+      "facet": "geography",
+      "label": "Germany",
+      "aliases": [
+        "Germany",
+        "Berlin",
+        "Munich"
+      ]
+    },
+    {
+      "id": "geography.netherlands",
+      "facet": "geography",
+      "label": "Netherlands",
+      "aliases": [
+        "Netherlands",
+        "Amsterdam",
+        "Delft"
+      ]
+    },
+    {
+      "id": "geography.ireland",
+      "facet": "geography",
+      "label": "Ireland",
+      "aliases": [
+        "Ireland",
+        "Dublin"
+      ]
+    },
+    {
+      "id": "geography.nordics",
+      "facet": "geography",
+      "label": "Nordics",
+      "aliases": [
+        "Nordic",
+        "Nordics",
+        "Sweden",
+        "Stockholm",
+        "Denmark",
+        "Copenhagen",
+        "Finland",
+        "Helsinki",
+        "Norway",
+        "Oslo"
+      ]
+    },
+    {
+      "id": "geography.iberia",
+      "facet": "geography",
+      "label": "Spain and Portugal",
+      "aliases": [
+        "Spain",
+        "Barcelona",
+        "Madrid",
+        "Portugal",
+        "Lisbon"
+      ]
+    },
+    {
+      "id": "geography.switzerland",
+      "facet": "geography",
+      "label": "Switzerland",
+      "aliases": [
+        "Switzerland",
+        "Zurich",
+        "Geneva",
+        "Lausanne"
+      ]
+    },
+    {
+      "id": "geography.central-eastern-europe",
+      "facet": "geography",
+      "label": "Central and Eastern Europe",
+      "aliases": [
+        "Central and Eastern Europe",
+        "CEE",
+        "Estonia",
+        "Poland",
+        "Hungary",
+        "Budapest",
+        "Czech Republic",
+        "Romania"
+      ],
+      "caseSensitive": [
+        "CEE"
+      ]
+    },
+    {
+      "id": "geography.israel",
+      "facet": "geography",
+      "label": "Israel",
+      "aliases": [
+        "Israel",
+        "Tel Aviv"
+      ]
+    },
+    {
+      "id": "geography.middle-east",
+      "facet": "geography",
+      "label": "Middle East and North Africa",
+      "aliases": [
+        "Middle East",
+        "MENA",
+        "UAE",
+        "Dubai",
+        "Abu Dhabi",
+        "Saudi Arabia",
+        "Riyadh",
+        "Qatar",
+        "Doha",
+        "Egypt",
+        "Cairo",
+        "Bahrain"
+      ],
+      "caseSensitive": [
+        "MENA",
+        "UAE"
+      ]
+    },
+    {
+      "id": "geography.africa",
+      "facet": "geography",
+      "label": "Africa",
+      "aliases": [
+        "Africa",
+        "African",
+        "Nigeria",
+        "Lagos",
+        "Kenya",
+        "Nairobi",
+        "South Africa",
+        "Ghana",
+        "Rwanda"
+      ]
+    },
+    {
+      "id": "geography.india",
+      "facet": "geography",
+      "label": "India",
+      "aliases": [
+        "India",
+        "Bangalore",
+        "Bengaluru",
+        "Hyderabad",
+        "Mumbai",
+        "Delhi"
+      ]
+    },
+    {
+      "id": "geography.southeast-asia",
+      "facet": "geography",
+      "label": "Southeast Asia",
+      "aliases": [
+        "Southeast Asia",
+        "Singapore",
+        "Indonesia",
+        "Vietnam",
+        "Philippines",
+        "Malaysia",
+        "Thailand"
+      ]
+    },
+    {
+      "id": "geography.east-asia",
+      "facet": "geography",
+      "label": "East Asia",
+      "aliases": [
+        "China",
+        "Hong Kong",
+        "Taiwan",
+        "Taipei",
+        "Japan",
+        "Tokyo",
+        "Korea",
+        "Seoul"
+      ]
+    },
+    {
+      "id": "geography.oceania",
+      "facet": "geography",
+      "label": "Australia and New Zealand",
+      "aliases": [
+        "Australia",
+        "Sydney",
+        "Melbourne",
+        "New Zealand"
+      ]
+    },
+    {
+      "id": "geography.latin-america",
+      "facet": "geography",
+      "label": "Latin America",
+      "aliases": [
+        "Latin America",
+        "LatAm",
+        "Brazil",
+        "São Paulo",
+        "Mexico",
+        "Chile",
+        "Colombia",
+        "Argentina",
+        "Puerto Rico"
+      ]
+    }
+  ]
+}

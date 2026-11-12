@@ -1,0 +1,126 @@
+{
+  "programId": "climate-kic",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.climate-kic.org/who-we-are/about-climate-kic/",
+      "page": "details",
+      "anchor": "About Climate KIC",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/our-community/about-our-community/",
+      "page": "details",
+      "anchor": "About our Community",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/our-community/our-alumni/",
+      "page": "portfolio",
+      "anchor": "Our alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/place-based-transformations/",
+      "page": "details",
+      "anchor": "Place-based transformations",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/",
+      "page": "details",
+      "anchor": "Learning by doing",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "page": "details",
+      "anchor": "Climate entrepreneurship",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/",
+      "page": "details",
+      "anchor": "Europe 2030 missions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/inclusive-climate-innovation/",
+      "page": "details",
+      "anchor": "Inclusive climate innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning-by-doing/academy/",
+      "page": "details",
+      "anchor": "Climate KIC Academy",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/our-portfolio/",
+      "page": "portfolio",
+      "anchor": "Our portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/europe-2030-missions/100-european-regions-on-a-transformative-climate-resilience-journey/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/place-based-transformations/adaptation-innovation-cluster-tanzania/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/lac-capacity-building/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/learning/climate-leadership-academy/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.climate-kic.org/programmes/place-based-transformations/circular-slovenia/",
+      "page": "details",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "programId": "startup-wise-guys",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startupwiseguys.com/",
+    "https://startupwiseguys.com/building/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-855bbd6006",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-97a22a55cf",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "excerpt": "to any startup at any stage of their journey. Sign up hello@startupwiseguys.com Home About Partners Careers News Press Foundation Contact",
+      "page": "details"
+    },
+    {
+      "id": "check-email-d500f5871f",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-f645c7bbaa",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "excerpt": "hello@startupwiseguys.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-3f0aa27aa6",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Startup Wise Guys | Investing In The Bold Ones Menu Close For Founders",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29a415d901",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "StepShot → https://startupwiseguys.com/portfolio/#stepshot",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-37087edd9a",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4286b920e8",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "EstateGuru → https://startupwiseguys.com/portfolio/#estateguru",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-614cf2e6c0",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "excerpt": "Startups → https://startupwiseguys.com/news/category/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6abddc27e4",
+      "url": "https://startupwiseguys.com/building/",
+      "title": "Startup Wise Guys — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-769572cbb1",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "VitalFields → https://startupwiseguys.com/portfolio/#vitalfields",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b2337002d",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Fractory → https://startupwiseguys.com/portfolio/#fractory",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a4dbe7c27e",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://startupwiseguys.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a8a90092ca",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "CallPage → https://startupwiseguys.com/portfolio/#callpage",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c9af285771",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "VOCHI → https://startupwiseguys.com/portfolio/#vochi",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fb6f78470f",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Ondato → https://startupwiseguys.com/portfolio/#ondato",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fccc95a412",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "Katana → https://startupwiseguys.com/portfolio/#katana-technologies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3cb7c6ef0c",
+      "url": "https://startupwiseguys.com/",
+      "title": "Startup Wise Guys — homepage checked by scrape.py",
+      "excerpt": "https://startupwiseguys.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@startupwiseguys.com",
+        "evidenceId": "check-email-d500f5871f"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://startupwiseguys.com",
+        "evidenceId": "check-route-3cb7c6ef0c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://startupwiseguys.com/portfolio/",
+        "evidenceId": "check-portfolio-a4dbe7c27e"
+      },
+      {
+        "value": "https://startupwiseguys.com/portfolio/#vitalfields",
+        "evidenceId": "check-portfolio-769572cbb1"
+      },
+      {
+        "value": "https://startupwiseguys.com/portfolio/#stepshot",
+        "evidenceId": "check-portfolio-29a415d901"
+      },
+      {
+        "value": "https://startupwiseguys.com/portfolio/#vochi",
+        "evidenceId": "check-portfolio-c9af285771"
+      },
+      {
+        "value": "https://startupwiseguys.com/portfolio/#estateguru",
+        "evidenceId": "check-portfolio-4286b920e8"
+      },
+      {
+        "value": "https://startupwiseguys.com/portfolio/#callpage",
+        "evidenceId": "check-portfolio-a8a90092ca"
+      }
+    ],
+    "name": [
+      {
+        "value": "Startup Wise Guys",
+        "evidenceId": "check-name-3f0aa27aa6"
+      }
+    ],
+    "examplePages": []
+  }
+}

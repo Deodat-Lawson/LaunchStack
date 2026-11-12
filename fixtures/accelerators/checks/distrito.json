@@ -1,0 +1,47 @@
+{
+  "programId": "distrito",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.distrito.me/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-edf79f0728",
+      "url": "https://www.distrito.me/",
+      "title": "Distrito — homepage checked by scrape.py",
+      "excerpt": "Distrito: Enterprise AI de Ponta a Ponta TRANSFORME SUA EMPRESA",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56496e670c",
+      "url": "https://www.distrito.me/",
+      "title": "Distrito — homepage checked by scrape.py",
+      "excerpt": "https://www.distrito.me/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.distrito.me/",
+        "evidenceId": "check-route-56496e670c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Distrito",
+        "evidenceId": "check-name-edf79f0728"
+      }
+    ],
+    "examplePages": []
+  }
+}

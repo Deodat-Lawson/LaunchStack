@@ -1,0 +1,59 @@
+{
+  "programId": "wennovation",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://wennovationhub.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-803c1d0689",
+      "url": "https://wennovationhub.org/",
+      "title": "Wennovation Hub — homepage checked by scrape.py",
+      "excerpt": "Adeogun street Victoria Island Lagos. +234 912 797 2803 support@wennovationhub.org Mon-Fri: 9AM - 6PM © 2026 WennovationHub. All rights",
+      "page": "details"
+    },
+    {
+      "id": "check-name-34e41edbfd",
+      "url": "https://wennovationhub.org/",
+      "title": "Wennovation Hub — homepage checked by scrape.py",
+      "excerpt": "Home - wennovation hub Home Services Co-working and Training Startups/SMEs",
+      "page": "details"
+    },
+    {
+      "id": "check-route-193cb77863",
+      "url": "https://wennovationhub.org/",
+      "title": "Wennovation Hub — homepage checked by scrape.py",
+      "excerpt": "Home → https://wennovationhub.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "support@wennovationhub.org",
+        "evidenceId": "check-email-803c1d0689"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://wennovationhub.org/",
+        "evidenceId": "check-route-193cb77863"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Wennovation Hub",
+        "evidenceId": "check-name-34e41edbfd"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "programId": "pioneer",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://pioneer.app/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-62fe6e63fb",
+      "url": "https://pioneer.app/",
+      "title": "Pioneer — homepage checked by scrape.py",
+      "excerpt": "Pioneer Pioneer Pioneer is a startup accelerator for ambitious",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Pioneer",
+        "evidenceId": "check-name-62fe6e63fb"
+      }
+    ],
+    "examplePages": []
+  }
+}

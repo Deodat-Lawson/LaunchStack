@@ -1,0 +1,75 @@
+{
+  "programId": "greentown-labs-houston",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://greentown.org/news/all-news",
+    "https://greentown.org/about",
+    "https://greentown.org/apply-now"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-66a6b20ada",
+      "url": "https://greentown.org/apply-now",
+      "title": "Greentown Labs Houston — application page checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-7988407345",
+      "url": "https://greentown.org/about",
+      "title": "Greentown Labs Houston — details page checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dadd2efa0b",
+      "url": "https://greentown.org/news/all-news",
+      "title": "Greentown Labs Houston — homepage checked by scrape.py",
+      "excerpt": "Startups → https://greentown.org/members",
+      "page": "details"
+    },
+    {
+      "id": "check-route-43e2f2ec7d",
+      "url": "https://greentown.org/news/all-news",
+      "title": "Greentown Labs Houston — homepage checked by scrape.py",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "details"
+    },
+    {
+      "id": "check-route-dad641aa64",
+      "url": "https://greentown.org/about",
+      "title": "Greentown Labs Houston — details page checked by scrape.py",
+      "excerpt": "Apply for Membership → https://greentown.org/apply-now",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://greentown.org/apply-now",
+        "evidenceId": "check-route-43e2f2ec7d"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://greentown.org/apply-now",
+        "evidenceId": "check-route-43e2f2ec7d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://greentown.org/members",
+        "evidenceId": "check-portfolio-dadd2efa0b"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

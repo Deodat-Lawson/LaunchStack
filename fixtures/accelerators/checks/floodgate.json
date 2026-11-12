@@ -1,0 +1,59 @@
+{
+  "programId": "floodgate",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.floodgate.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-066dd6b4b8",
+      "url": "https://www.floodgate.com/",
+      "title": "Floodgate — homepage checked by scrape.py",
+      "excerpt": "Floodgate - Your First True Believers BELIEFS Companies Team",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-16b5d44bb0",
+      "url": "https://www.floodgate.com/",
+      "title": "Floodgate — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.floodgate.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e3aac84b8c",
+      "url": "https://www.floodgate.com/",
+      "title": "Floodgate — homepage checked by scrape.py",
+      "excerpt": "https://www.floodgate.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.floodgate.com/",
+        "evidenceId": "check-route-e3aac84b8c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.floodgate.com/companies",
+        "evidenceId": "check-portfolio-16b5d44bb0"
+      }
+    ],
+    "name": [
+      {
+        "value": "Floodgate",
+        "evidenceId": "check-name-066dd6b4b8"
+      }
+    ],
+    "examplePages": []
+  }
+}

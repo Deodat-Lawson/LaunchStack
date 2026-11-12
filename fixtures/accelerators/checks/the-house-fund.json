@@ -1,0 +1,47 @@
+{
+  "programId": "the-house-fund",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://thehouse.fund/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-f27a542bbe",
+      "url": "https://thehouse.fund/",
+      "title": "The House Fund — homepage checked by scrape.py",
+      "excerpt": "The House Fund - We invest in Berkeley alumni, faculty, students The",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9ab872b941",
+      "url": "https://thehouse.fund/",
+      "title": "The House Fund — homepage checked by scrape.py",
+      "excerpt": "The House Fund → https://thehouse.fund/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://thehouse.fund/",
+        "evidenceId": "check-route-9ab872b941"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "The House Fund",
+        "evidenceId": "check-name-f27a542bbe"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "programId": "free-electrons-program",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://freeelectrons.org/2026-program/",
+      "page": "details",
+      "anchor": "PROGRAM",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/2027-program/",
+      "page": "details",
+      "anchor": "2027 Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/faqs/",
+      "page": "terms",
+      "anchor": "FAQS",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/our-alumni/",
+      "page": "portfolio",
+      "anchor": "ALUMNI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/",
+      "page": "details",
+      "anchor": "ABOUT US",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.f6s.com/free-electrons-2027/apply",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": false,
+      "blocked": "robots",
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/applications",
+      "page": "application",
+      "anchor": "Applications",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/program-modules",
+      "page": "details",
+      "anchor": "Program Modules",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/recap-of-the-free-electrons-10th-edition-master-module-in-london/",
+      "page": "details",
+      "anchor": "September 17, 2026 Program Modules Free Electrons 2026 Master Module: Turning Collaboration into Action Against the unmistakable backdrop of London, the Free Electrons 2026 Master ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/recap-of-the-free-electrons-10th-edition-bootcamp-in-lisbon/",
+      "page": "details",
+      "anchor": "June 25, 2026 Program Modules The vibrant city of Lisbon set the scene for a landmark week of energy innovation at the Free Electrons 2026 Bootcamp – the program’s 10th edition, ..",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://freeelectrons.org/news/how-a-10-year-old-programme-helps-a-125-year-old-utility-stay-young/",
+      "page": "details",
+      "anchor": "May 14, 2026 Utilities This year, CLP celebrates our 125th anniversary, while Free Electrons marks its first decade. Pausing to reflect on both milestones made me ask a ... Read mo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

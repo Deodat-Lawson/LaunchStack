@@ -1,0 +1,127 @@
+{
+  "programId": "clean-energy-trust",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://evergreeninno.org/",
+    "https://evergreeninno.org/apply",
+    "https://evergreeninno.org/about-us"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-7411313c52",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Invest Our Portfolio 49 portfolio companies 57 % female / minority founders 5 exits $ 561 M follow-on funding catalyzed 947 jobs $ 54 in follow-on funding per $1 invested Discover our portfolio of startups tackling climate change We provide climate tech startups with more than just early-stage funding. We work to ensure",
+      "page": "details"
+    },
+    {
+      "id": "check-name-0525fbb2c0",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "and compounding impact on the climate emergency. Formerly Clean Energy Trust Evergreen Climate Innovations addresses the capital gap",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0971ead0d7",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://evergreeninno.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6b2ef5c152",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Portfolio Companies → https://evergreeninno.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-73704a604c",
+      "url": "https://evergreeninno.org/apply",
+      "title": "Clean Energy Trust — application page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://evergreeninno.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-9c8b2eaedf",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9df822c1b9",
+      "url": "https://evergreeninno.org/about-us",
+      "title": "Clean Energy Trust — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-fa820475e9",
+      "url": "https://evergreeninno.org/apply",
+      "title": "Clean Energy Trust — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://evergreeninno.org/portfolio",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1cb7ab9ca3",
+      "url": "https://evergreeninno.org/about-us",
+      "title": "Clean Energy Trust — details page checked by scrape.py",
+      "excerpt": "Apply for Investment → https://evergreeninno.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d0e9aee78e",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://evergreeninno.org/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ea5387809f",
+      "url": "https://evergreeninno.org/",
+      "title": "Clean Energy Trust — homepage checked by scrape.py",
+      "excerpt": "Apply for Investment → https://evergreeninno.org/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://evergreeninno.org/apply",
+        "evidenceId": "check-route-ea5387809f"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://evergreeninno.org/apply",
+        "evidenceId": "check-route-ea5387809f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "Invest Our Portfolio 49 portfolio companies 57 % female / minority founders 5 exits $ 561 M follow-on funding catalyzed 947 jobs $ 54 in follow-on funding per $1 invested Discover our portfolio of startups tackling climate change We provide climate tech startups with more than just early-stage funding. We work to ensure",
+        "evidenceId": "check-deal-7411313c52"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://evergreeninno.org/portfolio",
+        "evidenceId": "check-portfolio-9c8b2eaedf"
+      }
+    ],
+    "name": [
+      {
+        "value": "Clean Energy Trust",
+        "evidenceId": "check-name-0525fbb2c0"
+      }
+    ],
+    "examplePages": []
+  }
+}

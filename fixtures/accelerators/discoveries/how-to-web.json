@@ -1,0 +1,78 @@
+{
+  "programId": "how-to-web",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.howtoweb.co/dealflow/",
+      "page": "terms",
+      "anchor": "Dealflow",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/andrii-degeler",
+      "page": "terms",
+      "anchor": "Andrii Degeler Head of News Dealroom",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/mark-palfalvi",
+      "page": "portfolio",
+      "anchor": "Mark Palfalvi Partner PortfoLion Capital Partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/alexandra-dumitrescu",
+      "page": "details",
+      "anchor": "Alexandra Dumitrescu Program Manager – BCR Social Finance Marc Impact Network",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/oana-cosman",
+      "page": "portfolio",
+      "anchor": "Oana Cosman Portfolio & Growth Manager Bravva Angels",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/speaker/werner-sauerwald",
+      "page": "details",
+      "anchor": "Werner Sauerwald Head of Programs and Sales Rheinmetall Automecanica S.R.L.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-startup-tickets",
+      "page": "application",
+      "anchor": "APPLY NOW",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-speaking/",
+      "page": "application",
+      "anchor": "Apply for speaking",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.howtoweb.co/apply-for-media-pass",
+      "page": "application",
+      "anchor": "Apply for Media Pass",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

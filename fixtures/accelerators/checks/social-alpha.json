@@ -1,0 +1,74 @@
+{
+  "programId": "social-alpha",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.socialalpha.org/",
+    "https://www.socialalpha.org/programs-accelerators/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-da4857d98f",
+      "url": "https://www.socialalpha.org/",
+      "title": "Social Alpha — homepage checked by scrape.py",
+      "excerpt": "Social Alpha Toggle Navigation Approach INNOVATION ECOSYSTEM INCUBATION",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-48fdc9f21f",
+      "url": "https://www.socialalpha.org/",
+      "title": "Social Alpha — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-92ee9646fd",
+      "url": "https://www.socialalpha.org/programs-accelerators/",
+      "title": "Social Alpha — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-df82ecfad9",
+      "url": "https://www.socialalpha.org/",
+      "title": "Social Alpha — homepage checked by scrape.py",
+      "excerpt": "SEE ALL PORTFOLIO COMPANIES → https://www.socialalpha.org/our-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-50925ae53d",
+      "url": "https://www.socialalpha.org/",
+      "title": "Social Alpha — homepage checked by scrape.py",
+      "excerpt": "https://www.socialalpha.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.socialalpha.org/",
+        "evidenceId": "check-route-50925ae53d"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.socialalpha.org/our-portfolio/",
+        "evidenceId": "check-portfolio-48fdc9f21f"
+      }
+    ],
+    "name": [
+      {
+        "value": "Social Alpha",
+        "evidenceId": "check-name-da4857d98f"
+      }
+    ],
+    "examplePages": []
+  }
+}

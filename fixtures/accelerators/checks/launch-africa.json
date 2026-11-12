@@ -1,0 +1,119 @@
+{
+  "programId": "launch-africa",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.launchafrica.vc/",
+    "https://www.launchafrica.vc/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-614d31302f",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "details"
+    },
+    {
+      "id": "check-email-767498afdd",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "info@launchafrica.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-86d4b69904",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page checked by scrape.py",
+      "excerpt": "info@launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-d9338c4112",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page checked by scrape.py",
+      "excerpt": "in Africa. Quick Links Home Portfolio Team News Contact info@launchafrica.vc Primary Office c/o Apex Fund & Corporate Services, 6th",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-ae73146bb8",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "Launch Africa 0 Skip to Content Home Portfolio Seed Fund I Portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6c1570b0a1",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-b022cfc0cc",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b2ef808f8a",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "OUR PORTFOLIO → https://www.launchafrica.vc/seed-fund-i-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4b40f36d66",
+      "url": "https://www.launchafrica.vc/faqs",
+      "title": "Launch Africa — terms page checked by scrape.py",
+      "excerpt": "application link → https://v7ssvh9rrnd.typeform.com/to/pjBZX4SM?typeform-source=www.launchafrica.vc",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-559723065c",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — homepage checked by scrape.py",
+      "excerpt": "https://www.launchafrica.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@launchafrica.vc",
+        "evidenceId": "check-email-767498afdd"
+      }
+    ],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://v7ssvh9rrnd.typeform.com/to/pjBZX4SM?typeform-source=www.launchafrica.vc",
+        "evidenceId": "check-route-4b40f36d66"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.launchafrica.vc/",
+        "evidenceId": "check-route-559723065c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.launchafrica.vc/seed-fund-i-portfolio",
+        "evidenceId": "check-portfolio-b2ef808f8a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Launch Africa",
+        "evidenceId": "check-name-ae73146bb8"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "programId": "seraphim-space",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://seraphim.vc/",
+    "https://seraphim.vc/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-e9732e7e20",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "TL;DR / Executive Summary Seraphim, a global leader in SpaceTech investment, today launched the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to 12 months of tailored support to help founders raise capital, secure customers and scale",
+      "page": "details"
+    },
+    {
+      "id": "check-name-38a8797642",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "them the backing to achieve escape velocity Across the Seraphim Space investment funds, Seraphim Academy and Seraphim Space",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-4241bbb5c7",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-783c8701fc",
+      "url": "https://seraphim.vc/about/",
+      "title": "Seraphim Space — details page checked by scrape.py",
+      "excerpt": "\"telephone\": \"02036742805\"",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0a92764daa",
+      "url": "https://seraphim.vc/about/",
+      "title": "Seraphim Space — details page checked by scrape.py",
+      "excerpt": "Discover our portfolio → https://seraphim.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-26fe08eb5b",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "Discover our portfolio → https://seraphim.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a38bdc57ae",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-adb2bd0699",
+      "url": "https://seraphim.vc/about/",
+      "title": "Seraphim Space — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://seraphim.vc/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-217b2bd12e",
+      "url": "https://seraphim.vc/",
+      "title": "Seraphim Space — homepage checked by scrape.py",
+      "excerpt": "https://seraphim.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "02036742805",
+        "evidenceId": "check-phone-4241bbb5c7"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://seraphim.vc/",
+        "evidenceId": "check-route-217b2bd12e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "TL;DR / Executive Summary Seraphim, a global leader in SpaceTech investment, today launched the Seraphim Academy, a selective programme that will invest $150,000 in early-stage companies through two funding stages and provide up to 12 months of tailored support to help founders raise capital, secure customers and scale",
+        "evidenceId": "check-deal-e9732e7e20"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://seraphim.vc/portfolio/",
+        "evidenceId": "check-portfolio-a38bdc57ae"
+      }
+    ],
+    "name": [
+      {
+        "value": "Seraphim Space",
+        "evidenceId": "check-name-38a8797642"
+      }
+    ],
+    "examplePages": []
+  }
+}

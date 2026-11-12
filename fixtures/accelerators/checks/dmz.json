@@ -1,0 +1,209 @@
+{
+  "programId": "dmz",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://dmz.torontomu.ca/",
+    "https://dmz.torontomu.ca/our-programs",
+    "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+    "https://dmz.torontomu.ca/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-bfb91ebdd2",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "World-Leading Tech Incubator & Startup Ecosystem | DMZ Webflow Homepage View dashboard Founders CORE PROGRAMS",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-04673e3f6b",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27b052ef9d",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b710a324da",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Our startups → https://dmz.torontomu.ca/startup-directory",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-091321935f",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2451d6b5d5",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-2b5ed90213",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "details"
+    },
+    {
+      "id": "check-route-37dec491ff",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Apply to our Black Innovation Validator program by Nov. 20 → → https://dmz.torontomu.ca/validator",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-3a490eb3d7",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4b532564a6",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "details"
+    },
+    {
+      "id": "check-route-52b72aa20f",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-65cf6323c8",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7b9f34580d",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-7eaf17ea2d",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Request sponsorship Want DMZ to sponsor your student initiative? Submit a request form. → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-82646bcbc3",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/login",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8e08f6907b",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-aab6f1d3da",
+      "url": "https://dmz.torontomu.ca/faq",
+      "title": "DMZ — terms page checked by scrape.py",
+      "excerpt": "Apply to our CHI Program now! → https://dmz.torontomu.ca/chi",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-b4f8ad7033",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "details"
+    },
+    {
+      "id": "check-route-e33a92c8b6",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Now Closed → https://mydmz.torontomu.ca/portal/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f34e5e44ea",
+      "url": "https://dmz.torontomu.ca/our-programs",
+      "title": "DMZ — details page checked by scrape.py",
+      "excerpt": "Apply → https://mydmz.torontomu.ca/portal/apply",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f539fe3d57",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — homepage checked by scrape.py",
+      "excerpt": "Request sponsorship → https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+        "evidenceId": "check-route-4b532564a6"
+      },
+      {
+        "value": "https://mydmz.torontomu.ca/portal/apply",
+        "evidenceId": "check-route-8e08f6907b"
+      },
+      {
+        "value": "https://dmz.torontomu.ca/validator",
+        "evidenceId": "check-route-2b5ed90213"
+      },
+      {
+        "value": "https://dmz.torontomu.ca/chi",
+        "evidenceId": "check-route-091321935f"
+      },
+      {
+        "value": "https://mydmz.torontomu.ca/portal/login",
+        "evidenceId": "check-route-82646bcbc3"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+        "evidenceId": "check-route-4b532564a6"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://dmz.torontomu.ca/startup-directory",
+        "evidenceId": "check-portfolio-27b052ef9d"
+      }
+    ],
+    "name": [
+      {
+        "value": "DMZ",
+        "evidenceId": "check-name-bfb91ebdd2"
+      }
+    ],
+    "examplePages": []
+  }
+}

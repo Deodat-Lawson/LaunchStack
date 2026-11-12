@@ -1,0 +1,78 @@
+{
+  "programId": "aws-activate",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://aws.amazon.com/about-aws/our-impact/?nc2=h_dsc_aa_imp",
+      "page": "details",
+      "anchor": "Our Impact",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/about-aws/global-infrastructure/?nc2=h_dsc_aa_gi",
+      "page": "details",
+      "anchor": "Global Infrastructure",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/pricing/?nc2=h_pr_hub",
+      "page": "details",
+      "anchor": "AWS Pricing Learn about pricing and plans in one place",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/free/offers/?nc2=h_pr_ofr",
+      "page": "details",
+      "anchor": "AWS Offers Explore different offer programs to gain hands-on experience",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/what-is/?nc2=h_rsc_lrn_ccc",
+      "page": "details",
+      "anchor": "Cloud term glossary Learn more about key cloud computing concepts",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/aws-startups/insights/build-migrate-and-operate-with-control-in-aws-startup-advisor/",
+      "page": "application",
+      "anchor": "New AWS Startup Advisor Features Migrate vibe-coding apps, plan Azure-to-AWS moves, track costs, apply for credits, and discover discounts all from your IDE. Read the announcement",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/startups/join?destination=/credits/apply",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/faqs/?nc1=f_dr",
+      "page": "terms",
+      "anchor": "Product and Technical FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://aws.amazon.com/premiumsupport/?nc1=f_dr",
+      "page": "details",
+      "anchor": "AWS Support Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

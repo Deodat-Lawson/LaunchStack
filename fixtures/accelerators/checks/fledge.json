@@ -1,0 +1,326 @@
+{
+  "programId": "fledge",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.fledge.co/",
+    "https://www.fledge.co/about/",
+    "https://www.fledge.co/apply/",
+    "https://www.fledge.co/about/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-5d8e8a2acb",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "experts in a variety of topics, sourced from our global network of hundreds of mentors , who share their experiences, advice, and connections. MONEY We invest $15,000 – $20,000 (varies by city) into each company invited to participate, using a unique revenue-based structure that aligns our interests with the founders and",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-87009b2304",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using revenue-based equity , which aligns our interests with the",
+      "page": "details"
+    },
+    {
+      "id": "check-name-75403b0c18",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Fledge – Impact accelerators About Startups Trainers Locations",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-06e5200025",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Read → https://www.fledge.co/about/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0bc8bf9141",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/about/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1ae907d886",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Overview for startups → https://www.fledge.co/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-2efc86ad83",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-327fec0705",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/about/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-346fded69a",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "https://www.fledge.co/about/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-48202f3c71",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b11d71cf3e",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c256f7efe8",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Startup Accelerator → https://www.fledge.co/about/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-042342f720",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on Telegram (Opens in new window) Telegram → https://www.fledge.co/apply/?share=telegram",
+      "page": "application"
+    },
+    {
+      "id": "check-route-04d54662de",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-0a81713f84",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on LinkedIn (Opens in new window) LinkedIn → https://www.fledge.co/apply/?share=linkedin",
+      "page": "application"
+    },
+    {
+      "id": "check-route-1bd40b38bb",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "An annotated application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-2daed8407c",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "Apply → https://www.fledge.co/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-2efc86ad83",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-30da17b5df",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "apply → https://www.fledge.co/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-43f42c7f00",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-48202f3c71",
+      "url": "https://www.fledge.co/about/",
+      "title": "Fledge — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-4e47a7b391",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on Pinterest (Opens in new window) Pinterest → https://www.fledge.co/apply/?share=pinterest",
+      "page": "application"
+    },
+    {
+      "id": "check-route-60b47b0894",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9419444a7e",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on X (Opens in new window) X → https://www.fledge.co/apply/?share=twitter",
+      "page": "application"
+    },
+    {
+      "id": "check-route-9f3a17fc98",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Annotated Application → https://www.fledge.co/about/annotated-application/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-a9ad212a51",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on WhatsApp (Opens in new window) WhatsApp → https://www.fledge.co/apply/?share=jetpack-whatsapp",
+      "page": "application"
+    },
+    {
+      "id": "check-route-b11d71cf3e",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.fledge.co/apply/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b6c9823916",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on Reddit (Opens in new window) Reddit → https://www.fledge.co/apply/?share=reddit",
+      "page": "application"
+    },
+    {
+      "id": "check-route-bf20d8ad04",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on Tumblr (Opens in new window) Tumblr → https://www.fledge.co/apply/?share=tumblr",
+      "page": "application"
+    },
+    {
+      "id": "check-route-cf29ee6cac",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "apply today → https://www.fledge.co/apply/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-dc4a01a274",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "fill out an application → https://www.fledge.co/apply",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f599703e91",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "Share on Facebook (Opens in new window) Facebook → https://www.fledge.co/apply/?share=facebook",
+      "page": "application"
+    },
+    {
+      "id": "check-status-21b87ae53c",
+      "url": "https://www.fledge.co/apply/",
+      "title": "Fledge — application page checked by scrape.py",
+      "excerpt": "– Fledge About Startups Trainers Locations Demo Day Blog Contact Us Apply A Open Applications The following applications are open now: Fledge Africa (2026) Co-ops (Boston) Fledge partner programs include: Fledge Peru Fledge Barcelona The",
+      "page": "application"
+    },
+    {
+      "id": "check-status-82f1ffa0ac",
+      "url": "https://www.fledge.co/about/faq/",
+      "title": "Fledge — terms page checked by scrape.py",
+      "excerpt": "us form and tell us a bit about your idea. We’ll tell you whether you should apply. Or, better yet, if applications are open, take the time to fill out an application , and if it’s a good fit, we’ll get back to you with follow-up",
+      "page": "terms"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.fledge.co/apply/",
+        "evidenceId": "check-route-b11d71cf3e"
+      },
+      {
+        "value": "https://www.fledge.co/about/annotated-application/",
+        "evidenceId": "check-route-60b47b0894"
+      },
+      {
+        "value": "https://www.fledge.co/apply/?share=twitter",
+        "evidenceId": "check-route-9419444a7e"
+      },
+      {
+        "value": "https://www.fledge.co/apply/?share=facebook",
+        "evidenceId": "check-route-f599703e91"
+      },
+      {
+        "value": "https://www.fledge.co/apply/?share=linkedin",
+        "evidenceId": "check-route-0a81713f84"
+      },
+      {
+        "value": "https://www.fledge.co/apply/?share=jetpack-whatsapp",
+        "evidenceId": "check-route-a9ad212a51"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.fledge.co/apply/",
+        "evidenceId": "check-route-b11d71cf3e"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-21b87ae53c"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of everyone on the planet. We invest $15,000 (Peru) , €15,000 (Europe) , or $20,000 (U.S.) into each company we invite to participate, using revenue-based equity , which aligns our interests with the",
+        "evidenceId": "check-deal-87009b2304"
+      },
+      {
+        "value": "experts in a variety of topics, sourced from our global network of hundreds of mentors , who share their experiences, advice, and connections. MONEY We invest $15,000 – $20,000 (varies by city) into each company invited to participate, using a unique revenue-based structure that aligns our interests with the founders and",
+        "evidenceId": "check-deal-5d8e8a2acb"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.fledge.co/apply/",
+        "evidenceId": "check-portfolio-b11d71cf3e"
+      },
+      {
+        "value": "https://www.fledge.co/about/startups/",
+        "evidenceId": "check-portfolio-c256f7efe8"
+      },
+      {
+        "value": "https://www.fledge.co/startups/",
+        "evidenceId": "check-portfolio-1ae907d886"
+      }
+    ],
+    "name": [
+      {
+        "value": "Fledge",
+        "evidenceId": "check-name-75403b0c18"
+      }
+    ],
+    "examplePages": []
+  }
+}

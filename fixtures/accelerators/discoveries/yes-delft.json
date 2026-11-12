@@ -1,0 +1,78 @@
+{
+  "programId": "yes-delft",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://yesdelft.com/support/",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/about/",
+      "page": "details",
+      "anchor": "About YES!Delft",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/news/we-are-looking-for-a-program-coordinator/",
+      "page": "details",
+      "anchor": "We are looking for a Program Coordinator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/",
+      "page": "details",
+      "anchor": "Incubator & accelerator",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/validation-program/",
+      "page": "details",
+      "anchor": "Validate Validate your business idea, find your market. Test your assumptions, meet your first customers, and acquire the right skills and connections to run your company.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/accelerator-program/",
+      "page": "details",
+      "anchor": "Accelerate Grow your startup into a successful business. The accelerator strengthens your startup’s foundation and connects you to a large network, without taking equity.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/incubator-programs/vertical-deep-dives/",
+      "page": "details",
+      "anchor": "Deep-dive Validate and accelerate with focus on your sector. Targeted programs to validate or accelerate your path to market with more precision and greater confidence.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/about/work-at-yesdelft/",
+      "page": "details",
+      "anchor": "Work at YES!Delft",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://yesdelft.com/faq/",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

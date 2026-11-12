@@ -1,0 +1,22 @@
+{
+  "programId": "general-catalyst",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.generalcatalyst.com/portfolio",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.generalcatalyst.com/companies/anthropic",
+      "page": "portfolio",
+      "anchor": "Quadrupling DOWN ON ANTHROPIC",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

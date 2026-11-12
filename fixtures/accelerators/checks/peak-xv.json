@@ -1,0 +1,136 @@
+{
+  "programId": "peak-xv",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.peakxv.com/",
+    "https://www.peakxv.com/about-us",
+    "https://www.peakxv.com/faqs"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-0553ca9a27",
+      "url": "https://www.peakxv.com/about-us",
+      "title": "Peak XV — details page checked by scrape.py",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-16a894f126",
+      "url": "https://www.peakxv.com/faqs",
+      "title": "Peak XV — terms page checked by scrape.py",
+      "excerpt": "contactus@peakxv.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-554d3ab1f4",
+      "url": "https://www.peakxv.com/about-us",
+      "title": "Peak XV — details page checked by scrape.py",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-85426d8091",
+      "url": "https://www.peakxv.com/faqs",
+      "title": "Peak XV — terms page checked by scrape.py",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9cfb8ef038",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "email: pr@peakxv.com For general inquiries, please email: contactus@peakxv.com Offices US India Singapore UAE Navigation Team Companies",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fc69b5a4de",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "contactus@peakxv.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-a08f4adf80",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "Peak XV Partners | Global Venture Capital Firm Investing Across",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0a7cfe555e",
+      "url": "https://www.peakxv.com/faqs",
+      "title": "Peak XV — terms page checked by scrape.py",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-23a99b849f",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "See More → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8df2f3c06f",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "View more → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a212c0c0c7",
+      "url": "https://www.peakxv.com/about-us",
+      "title": "Peak XV — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d1071ceb04",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.peakxv.com/our-companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-601d0e0716",
+      "url": "https://www.peakxv.com/",
+      "title": "Peak XV — homepage checked by scrape.py",
+      "excerpt": "https://www.peakxv.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "contactus@peakxv.com",
+        "evidenceId": "check-email-fc69b5a4de"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.peakxv.com/",
+        "evidenceId": "check-route-601d0e0716"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.peakxv.com/our-companies",
+        "evidenceId": "check-portfolio-d1071ceb04"
+      }
+    ],
+    "name": [
+      {
+        "value": "Peak XV",
+        "evidenceId": "check-name-a08f4adf80"
+      }
+    ],
+    "examplePages": []
+  }
+}

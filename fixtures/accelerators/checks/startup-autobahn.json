@@ -1,0 +1,60 @@
+{
+  "programId": "startup-autobahn",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startup-autobahn.com/",
+    "https://startup-autobahn.com/our-program/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-2f50d60a10",
+      "url": "https://startup-autobahn.com/our-program/",
+      "title": "STARTUP AUTOBAHN — details page checked by scrape.py",
+      "excerpt": "The aim is to accelerate delivery to market, build partnerships, attract investment and improve valuation. WHAT WILL WINNERS GAIN? A share of up to £500,000 UK Government grant funding is available to support proof of concepts using CAM Testbed UK facilities. Participants will receive credit at the most appropriate",
+      "page": "details"
+    },
+    {
+      "id": "check-name-462992a063",
+      "url": "https://startup-autobahn.com/",
+      "title": "STARTUP AUTOBAHN — homepage checked by scrape.py",
+      "excerpt": "STARTUP AUTOBAHN powered by Plug and Play – Speed up Innovation! Jobs Press",
+      "page": "details"
+    },
+    {
+      "id": "check-route-efe31f8c12",
+      "url": "https://startup-autobahn.com/",
+      "title": "STARTUP AUTOBAHN — homepage checked by scrape.py",
+      "excerpt": "https://startup-autobahn.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://startup-autobahn.com/",
+        "evidenceId": "check-route-efe31f8c12"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "The aim is to accelerate delivery to market, build partnerships, attract investment and improve valuation. WHAT WILL WINNERS GAIN? A share of up to £500,000 UK Government grant funding is available to support proof of concepts using CAM Testbed UK facilities. Participants will receive credit at the most appropriate",
+        "evidenceId": "check-deal-2f50d60a10"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "STARTUP AUTOBAHN",
+        "evidenceId": "check-name-462992a063"
+      }
+    ],
+    "examplePages": []
+  }
+}

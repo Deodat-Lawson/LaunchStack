@@ -1,0 +1,75 @@
+{
+  "programId": "new-energy-nexus-usa",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.newenergynexus.com/programs/",
+    "https://www.newenergynexus.com/about/",
+    "https://apply.workable.com/newenergynexus/"
+  ],
+  "evidence": [
+    {
+      "id": "check-portfolio-382cab675b",
+      "url": "https://www.newenergynexus.com/programs/",
+      "title": "New Energy Nexus USA — homepage checked by scrape.py",
+      "excerpt": "STARTUP PORTFOLIO → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6096902432",
+      "url": "https://www.newenergynexus.com/programs/",
+      "title": "New Energy Nexus USA — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8e6827efe7",
+      "url": "https://www.newenergynexus.com/about/",
+      "title": "New Energy Nexus USA — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-03c13e4d90",
+      "url": "https://www.newenergynexus.com/programs/",
+      "title": "New Energy Nexus USA — homepage checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7bf4683d04",
+      "url": "https://www.newenergynexus.com/about/",
+      "title": "New Energy Nexus USA — details page checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.workable.com/newenergynexus/",
+        "evidenceId": "check-route-03c13e4d90"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.workable.com/newenergynexus/",
+        "evidenceId": "check-route-03c13e4d90"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.newenergynexus.com/portfolio/",
+        "evidenceId": "check-portfolio-6096902432"
+      }
+    ],
+    "name": [],
+    "examplePages": []
+  }
+}

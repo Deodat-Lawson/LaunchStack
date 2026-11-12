@@ -1,0 +1,54 @@
+{
+  "programId": "norrsken22",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.norrsken22.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-18878ce893",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage checked by scrape.py",
+      "excerpt": "in touch! Follow us Linkedin Twitter Instagram Contact info@norrsken22.com Complaints File complaint here Terms & Conditions Privacy",
+      "page": "details"
+    },
+    {
+      "id": "check-email-20094c55ca",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage checked by scrape.py",
+      "excerpt": "info@norrsken22.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-47e49d86ec",
+      "url": "https://www.norrsken22.com/",
+      "title": "Norrsken22 — homepage checked by scrape.py",
+      "excerpt": "Norrsken22 Yummy cookies! We use them on our website to improve it.",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@norrsken22.com",
+        "evidenceId": "check-email-20094c55ca"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Norrsken22",
+        "evidenceId": "check-name-47e49d86ec"
+      }
+    ],
+    "examplePages": []
+  }
+}

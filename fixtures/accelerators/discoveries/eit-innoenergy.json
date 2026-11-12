@@ -1,0 +1,110 @@
+{
+  "programId": "eit-innoenergy",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://innoenergy.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/about-us/",
+      "page": "details",
+      "anchor": "Learn more about who we are",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/about-us/our-ecosystem/",
+      "page": "details",
+      "anchor": "Our ecosystem",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/hardt/265770",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/verkor/265685",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/corpower-ocean/265713",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/gravithy/265764",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/skeleton/265857",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/ecop-technologies-gmbh/265778",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/portfolio/flexidao/265756",
+      "page": "portfolio",
+      "anchor": "Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/news-resources/eu-innovation-fund-innoenergy-portfolio-companies/",
+      "page": "portfolio",
+      "anchor": "Three InnoEnergy portfolio companies selected for EU Innovation Fund support News Nov 4, 2026",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/about-us/investors-centre/",
+      "page": "details",
+      "anchor": "Shareholders centre",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://innoenergy.com/about-us/join-us/request-for-proposal/",
+      "page": "details",
+      "anchor": "Request for proposals",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

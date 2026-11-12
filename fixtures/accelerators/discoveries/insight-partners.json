@@ -1,0 +1,30 @@
+{
+  "programId": "insight-partners",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.insightpartners.com/portfolio/",
+      "page": "portfolio",
+      "anchor": "Portfolio",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/about-us/",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.insightpartners.com/about-us/media/",
+      "page": "details",
+      "anchor": "Media",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

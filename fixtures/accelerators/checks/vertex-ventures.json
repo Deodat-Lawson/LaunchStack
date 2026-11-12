@@ -1,0 +1,116 @@
+{
+  "programId": "vertex-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://vvus.com/",
+    "https://vvus.com/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-ad9cc58423",
+      "url": "https://vvus.com/faq/",
+      "title": "Vertex Ventures — terms page checked by scrape.py",
+      "excerpt": "\"email\": \"office@vvus.com\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-ed2c624c04",
+      "url": "https://vvus.com/",
+      "title": "Vertex Ventures — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"office@vvus.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-name-d7b1aeaa51",
+      "url": "https://vvus.com/",
+      "title": "Vertex Ventures — homepage checked by scrape.py",
+      "excerpt": "Vertex Ventures US | Vertex Ventures Team Portfolio News Perspectives",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b8bba7f0f5",
+      "url": "https://vvus.com/",
+      "title": "Vertex Ventures — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-bd5e92d876",
+      "url": "https://vvus.com/faq/",
+      "title": "Vertex Ventures — terms page checked by scrape.py",
+      "excerpt": "\"telephone\": \"+1-650-285-5224\"",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-3a4486e3e3",
+      "url": "https://vvus.com/",
+      "title": "Vertex Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://vvus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b08e256e36",
+      "url": "https://vvus.com/faq/",
+      "title": "Vertex Ventures — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://vvus.com/#portfolio",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-c4675bb0b8",
+      "url": "https://vvus.com/faq/",
+      "title": "Vertex Ventures — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://vvus.com/portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-73f4eb4078",
+      "url": "https://vvus.com/",
+      "title": "Vertex Ventures — homepage checked by scrape.py",
+      "excerpt": "https://vvus.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "office@vvus.com",
+        "evidenceId": "check-email-ed2c624c04"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+1-650-285-5224",
+        "evidenceId": "check-phone-b8bba7f0f5"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://vvus.com/",
+        "evidenceId": "check-route-73f4eb4078"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://vvus.com/portfolio/",
+        "evidenceId": "check-portfolio-3a4486e3e3"
+      },
+      {
+        "value": "https://vvus.com/#portfolio",
+        "evidenceId": "check-portfolio-b08e256e36"
+      }
+    ],
+    "name": [
+      {
+        "value": "Vertex Ventures",
+        "evidenceId": "check-name-d7b1aeaa51"
+      }
+    ],
+    "examplePages": []
+  }
+}

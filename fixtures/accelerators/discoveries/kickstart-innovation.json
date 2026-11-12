@@ -1,0 +1,54 @@
+{
+  "programId": "kickstart-innovation",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "http://kickstart-innovation.com/apply",
+      "page": "application",
+      "anchor": "Apply as a startup",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/about-impact",
+      "page": "details",
+      "anchor": "Read more about",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/about",
+      "page": "details",
+      "anchor": "About us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/about-faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/academy-intrapreneurship",
+      "page": "details",
+      "anchor": "Intrapreneurship program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.kickstart-innovation.com/community-startups-alumni",
+      "page": "portfolio",
+      "anchor": "Startups and alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

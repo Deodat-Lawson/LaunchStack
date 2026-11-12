@@ -1,0 +1,169 @@
+{
+  "programId": "next-canada",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.nextcanada.com/",
+    "https://www.nextcanada.com/2026-cohort/",
+    "https://www.nextcanada.com/programs-overview/",
+    "https://my.nextcanada.com/apply/nai"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-211997eb37",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "NEXT Canada - Building a more ambitious and competitive Canada 2026",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0f1c3d3ec0",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "SEE MORE OF OUR ALUMNI → https://www.nextcanada.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-27af0f6d3b",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29133f7bf0",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-84545b2995",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a070567493",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "title": "Next Canada — batches page checked by scrape.py",
+      "excerpt": "Venture Directory → https://www.nextcanada.com/directory/ventures/",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-b6cdf6c409",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-cd147f617a",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "READ MORE ALUMNI STORIES → https://www.nextcanada.com/alumni",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d737f102d4",
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "title": "Next Canada — batches page checked by scrape.py",
+      "excerpt": "Alumni Directory → https://www.nextcanada.com/directory/alumni/",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-2e3204b045",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN → https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+      "page": "details"
+    },
+    {
+      "id": "check-route-addf1cd970",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cf5a2e1200",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — homepage checked by scrape.py",
+      "excerpt": "APPLY TO NEXT AI → https://my.nextcanada.com/apply/nai",
+      "page": "details"
+    },
+    {
+      "id": "check-status-8ebc37b58c",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "on two campuses: Toronto and Montréal. NEXT AI – Montréal is delivered in partnership with HEC Montréal. Applications are open from October 15th – December 9th! DISCOVER NEXT AI APPLY TO NEXT AI For growth stage founders looking to",
+      "page": "details"
+    },
+    {
+      "id": "check-status-b3830bfde9",
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "title": "Next Canada — details page checked by scrape.py",
+      "excerpt": "thanks to access to tactical education, mentorship, and a network of the strongest entrepreneurs in Canada. Applications are closed for the 2027 cohort. DISCOVER NEXT 36 CLICK HERE TO GET NOTIFIED WHEN APPLICATIONS OPEN For entrepreneurs",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://my.nextcanada.com/apply/nai",
+        "evidenceId": "check-route-cf5a2e1200"
+      },
+      {
+        "value": "https://airtable.com/appl9JP8wsxwv4fws/pagTfVON2MbVH6Xp4/form",
+        "evidenceId": "check-route-2e3204b045"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://my.nextcanada.com/apply/nai",
+        "evidenceId": "check-route-cf5a2e1200"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-8ebc37b58c"
+      },
+      {
+        "value": false,
+        "evidenceId": "check-status-b3830bfde9"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.nextcanada.com/directory/alumni/",
+        "evidenceId": "check-portfolio-b6cdf6c409"
+      },
+      {
+        "value": "https://www.nextcanada.com/directory/ventures/",
+        "evidenceId": "check-portfolio-84545b2995"
+      },
+      {
+        "value": "https://www.nextcanada.com/alumni/",
+        "evidenceId": "check-portfolio-0f1c3d3ec0"
+      },
+      {
+        "value": "https://www.nextcanada.com/alumni",
+        "evidenceId": "check-portfolio-cd147f617a"
+      }
+    ],
+    "name": [
+      {
+        "value": "Next Canada",
+        "evidenceId": "check-name-211997eb37"
+      }
+    ],
+    "examplePages": []
+  }
+}

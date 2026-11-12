@@ -1,0 +1,47 @@
+{
+  "programId": "factory-berlin",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.factoryberlin.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-ddae3736dc",
+      "url": "https://www.factoryberlin.com/",
+      "title": "Factory Berlin — homepage checked by scrape.py",
+      "excerpt": "Factory Berlin 2026 Factory Berlin · since 2011 Fifteen years. Nothing",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1c321bbdf3",
+      "url": "https://www.factoryberlin.com/",
+      "title": "Factory Berlin — homepage checked by scrape.py",
+      "excerpt": "https://www.factoryberlin.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.factoryberlin.com/",
+        "evidenceId": "check-route-1c321bbdf3"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Factory Berlin",
+        "evidenceId": "check-name-ddae3736dc"
+      }
+    ],
+    "examplePages": []
+  }
+}

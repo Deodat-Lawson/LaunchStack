@@ -1,0 +1,47 @@
+{
+  "programId": "breakthrough-energy",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.breakthroughenergy.org/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-09d72003d2",
+      "url": "https://www.breakthroughenergy.org/",
+      "title": "Breakthrough Energy — homepage checked by scrape.py",
+      "excerpt": "energy Empowering innovators to build the future of energy Breakthrough Energy is a global platform to accelerate clean energy innovation",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b070e6609f",
+      "url": "https://www.breakthroughenergy.org/",
+      "title": "Breakthrough Energy — homepage checked by scrape.py",
+      "excerpt": "Home → https://www.breakthroughenergy.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.breakthroughenergy.org/",
+        "evidenceId": "check-route-b070e6609f"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Breakthrough Energy",
+        "evidenceId": "check-name-09d72003d2"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "programId": "seedcamp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://seedcamp.com/",
+    "https://seedcamp.com/faqs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-899472787e",
+      "url": "https://seedcamp.com/",
+      "title": "Seedcamp — homepage checked by scrape.py",
+      "excerpt": "Home - Seedcamp By Your Side from Day One × Our Companies Our Team",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-52e9153649",
+      "url": "https://seedcamp.com/",
+      "title": "Seedcamp — homepage checked by scrape.py",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b450820fd4",
+      "url": "https://seedcamp.com/faqs/",
+      "title": "Seedcamp — terms page checked by scrape.py",
+      "excerpt": "Our Companies → https://seedcamp.com/our-companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-226f317c25",
+      "url": "https://seedcamp.com/",
+      "title": "Seedcamp — homepage checked by scrape.py",
+      "excerpt": "https://seedcamp.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://seedcamp.com",
+        "evidenceId": "check-route-226f317c25"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://seedcamp.com/our-companies/",
+        "evidenceId": "check-portfolio-52e9153649"
+      }
+    ],
+    "name": [
+      {
+        "value": "Seedcamp",
+        "evidenceId": "check-name-899472787e"
+      }
+    ],
+    "examplePages": []
+  }
+}

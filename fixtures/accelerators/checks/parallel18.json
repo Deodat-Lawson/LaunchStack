@@ -1,0 +1,105 @@
+{
+  "programId": "parallel18",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://parallel18.com/",
+    "https://parallel18.com/about-us/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-f0a307ea12",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage checked by scrape.py",
+      "excerpt": "Home - Parallel18 Skip to content About us Programs BioLeap P18 Xpand VCAP",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-2d2ee3dbfb",
+      "url": "https://parallel18.com/about-us/",
+      "title": "Parallel18 — details page checked by scrape.py",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-a492cc9362",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage checked by scrape.py",
+      "excerpt": "Call us +1(787)705-9786",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-46e11315e3",
+      "url": "https://parallel18.com/about-us/",
+      "title": "Parallel18 — details page checked by scrape.py",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a04cf73583",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage checked by scrape.py",
+      "excerpt": "Ventures → https://parallel18.com/ventures/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ba7d232398",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage checked by scrape.py",
+      "excerpt": "https://parallel18.com",
+      "page": "details"
+    },
+    {
+      "id": "check-status-31a5293549",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — homepage checked by scrape.py",
+      "excerpt": "Who is going to review my application to parallel18? Parallel18 has a multi-step judging process. After applications are closed, the parallel18 team does an internal screening to understand which companies comply with the program’s",
+      "page": "details"
+    },
+    {
+      "id": "check-status-7d27786224",
+      "url": "https://parallel18.com/about-us/",
+      "title": "Parallel18 — details page checked by scrape.py",
+      "excerpt": "Who is going to review my application to parallel18? Parallel18 has a multi-step judging process. After applications are closed, the parallel18 team does an internal screening to understand which companies comply with the program’s",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+17877059786",
+        "evidenceId": "check-phone-a492cc9362"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://parallel18.com",
+        "evidenceId": "check-route-ba7d232398"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-31a5293549"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://parallel18.com/ventures/",
+        "evidenceId": "check-portfolio-a04cf73583"
+      }
+    ],
+    "name": [
+      {
+        "value": "Parallel18",
+        "evidenceId": "check-name-f0a307ea12"
+      }
+    ],
+    "examplePages": []
+  }
+}

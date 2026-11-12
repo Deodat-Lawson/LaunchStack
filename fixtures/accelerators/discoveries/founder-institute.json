@@ -1,0 +1,102 @@
+{
+  "programId": "founder-institute",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://fi.co/banners/1453/click",
+      "page": "application",
+      "anchor": "NEW - Silicon Valley AI Program. 50 founders. Pitch VCs in San Francisco. APPLY NOW",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/philadelphia",
+      "page": "application",
+      "anchor": "Apply in Philadelphia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/program",
+      "page": "details",
+      "anchor": "Schedule",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/faq",
+      "page": "terms",
+      "anchor": "FAQ",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/about",
+      "page": "details",
+      "anchor": "Our Impact",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/overview",
+      "page": "details",
+      "anchor": "Our Methodology",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join",
+      "page": "application",
+      "anchor": "Apply",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/join/home",
+      "page": "application",
+      "anchor": "Apply now",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/aifounder",
+      "page": "details",
+      "anchor": "See the program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/scale",
+      "page": "portfolio",
+      "anchor": "Alumni Benefits",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/reviews",
+      "page": "details",
+      "anchor": "Program Reviews",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://fi.co/agreements",
+      "page": "details",
+      "anchor": "Program Agreements",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

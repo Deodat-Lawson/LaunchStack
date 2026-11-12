@@ -1,0 +1,54 @@
+{
+  "programId": "next-canada",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.nextcanada.com/2026-cohort/",
+      "page": "batches",
+      "anchor": "2026 Cohort",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nextcanada.com/programs-overview/",
+      "page": "details",
+      "anchor": "Programs Overview",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nextcanada.com/next-alumni/",
+      "page": "portfolio",
+      "anchor": "Next Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nextcanada.com/directory/alumni/",
+      "page": "portfolio",
+      "anchor": "Alumni Directory",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://my.nextcanada.com/apply/nai",
+      "page": "application",
+      "anchor": "APPLY TO NEXT AI",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.nextcanada.com/alumni/",
+      "page": "portfolio",
+      "anchor": "SEE MORE OF OUR ALUMNI",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

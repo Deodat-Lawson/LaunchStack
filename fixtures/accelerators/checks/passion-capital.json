@@ -1,0 +1,137 @@
+{
+  "programId": "passion-capital",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://passioncapital.com/",
+    "https://passioncapital.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-dbaa2ae643",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annual New Investment",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-def82952da",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "founders early, typically as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annually, we support",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1395a83db8",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
+      "page": "details"
+    },
+    {
+      "id": "check-email-44a27d7213",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "info@passioncapital.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-785beb8a24",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "57 Bermondsey Street, London SE1 3XJ, United Kingdom Email info@passioncapital.com Copyright © Passion Capital. Site by MILK Close Menu Home",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8633c55f18",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "info@passioncapital.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-2a56e76401",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "Home - Passion Capital Skip to main content Hit enter to search or ESC to close",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-52443d9806",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7f77b6ae04",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-801362b9d1",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d68c8b4d64",
+      "url": "https://passioncapital.com/about/",
+      "title": "Passion Capital — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://passioncapital.com/fund-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5c6b05a836",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — homepage checked by scrape.py",
+      "excerpt": "https://passioncapital.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@passioncapital.com",
+        "evidenceId": "check-email-8633c55f18"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://passioncapital.com",
+        "evidenceId": "check-route-5c6b05a836"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "founders early, typically as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annually, we support",
+        "evidenceId": "check-deal-def82952da"
+      },
+      {
+        "value": "as their first investor. We invest at the idea stage – before revenue or product exist. Average Ticket Size Average Ticket Size We invest an average of £400k – £500k in new opportunities, with strong capacity to follow-on and support our founders over the long term. Annual New Investment Rate Annual New Investment",
+        "evidenceId": "check-deal-dbaa2ae643"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://passioncapital.com/fund-portfolio/",
+        "evidenceId": "check-portfolio-7f77b6ae04"
+      }
+    ],
+    "name": [
+      {
+        "value": "Passion Capital",
+        "evidenceId": "check-name-2a56e76401"
+      }
+    ],
+    "examplePages": []
+  }
+}

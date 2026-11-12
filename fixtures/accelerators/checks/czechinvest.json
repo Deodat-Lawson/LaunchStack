@@ -1,0 +1,63 @@
+{
+  "programId": "czechinvest",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://czechinvest.gov.cz/",
+    "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
+    "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-fe47bb27e4",
+      "url": "https://czechinvest.gov.cz/",
+      "title": "CzechInvest — homepage checked by scrape.py",
+      "excerpt": "﻿ Investment and Business Development Agency - CzechInvest cz en de Business and Investment Development Agency change",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-26ebeafbb8",
+      "url": "https://czechinvest.gov.cz/en/Homepage/News/July-2026/Czechia-Dealroom-The-Digital-Map-of-Czech-Innovation-Opening-Doors-to-the-World",
+      "title": "CzechInvest — terms page checked by scrape.py",
+      "excerpt": "+420 727 850 330",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-4b6a69c199",
+      "url": "https://czechinvest.gov.cz/",
+      "title": "CzechInvest — homepage checked by scrape.py",
+      "excerpt": "+420 727 850 330",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-fbbce6891c",
+      "url": "https://czechinvest.gov.cz/en/About-CzechInvest/About-Us/Organizational-structure",
+      "title": "CzechInvest — details page checked by scrape.py",
+      "excerpt": "+420 727 850 330",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+420 727 850 330",
+        "evidenceId": "check-phone-4b6a69c199"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "CzechInvest",
+        "evidenceId": "check-name-fe47bb27e4"
+      }
+    ],
+    "examplePages": []
+  }
+}

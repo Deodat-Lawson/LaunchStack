@@ -1,0 +1,250 @@
+{
+  "programId": "mars-discovery",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.marsdd.com/",
+    "https://www.marsdd.com/startups/capital-program/",
+    "https://www.marsdd.com/startup-services/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-458eacf560",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"community@marsdd.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-5d40eb968f",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "\"email\": \"community@marsdd.com\"",
+      "page": "application"
+    },
+    {
+      "id": "check-email-89bd27f53a",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "\"email\": \"community@marsdd.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-name-2ab7fc2035",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "MaRS Discovery District Skip to content. Jump to Page Footer. Startups Membership",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-86ec121047",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "\"telephone\": \"(416) 673-8100\"",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-e8cc2afdb6",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "\"telephone\": \"(416) 673-8100\"",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-f00bf33b11",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "\"telephone\": \"(416) 673-8100\"",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-001cc0cee0",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "Membership → https://www.marsdd.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-0c98a87ce0",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "Startups → https://www.marsdd.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1904f2fb60",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "Core → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-21ae20c76b",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "Core → https://www.marsdd.com/startups/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-29b750a6e1",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-657ace2480",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "targeted programming → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-96d10104a8",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "Jump to Page Footer. → https://www.marsdd.com/startups/#footer",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-a80a4d298a",
+      "url": "https://www.marsdd.com/startup-services/",
+      "title": "MaRS Discovery District — application page checked by scrape.py",
+      "excerpt": "Skip to content. → https://www.marsdd.com/startups/#afterNav",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cfcc50a5ae",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "Learn More → https://www.marsdd.com/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d0873959b4",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "Membership → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d7883ab440",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "Membership → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e9bf9756f5",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "other key sectors → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ec0cf1b15a",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "Core → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f8846fac9b",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.marsdd.com/startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-27400d1cdd",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "https://www.marsdd.com",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7ada6e168b",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.marsdd.com/mars-capital-program-venture-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8125620f40",
+      "url": "https://www.marsdd.com/startups/capital-program/",
+      "title": "MaRS Discovery District — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://www.marsdd.com/mars-capital-program-investor-application/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ed87c6bf13",
+      "url": "https://www.marsdd.com/",
+      "title": "MaRS Discovery District — homepage checked by scrape.py",
+      "excerpt": "Apply to MaRS → https://www.marsdd.com/startup-services/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "community@marsdd.com",
+        "evidenceId": "check-email-458eacf560"
+      }
+    ],
+    "phones": [
+      {
+        "value": "(416) 673-8100",
+        "evidenceId": "check-phone-f00bf33b11"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://www.marsdd.com/startup-services/",
+        "evidenceId": "check-route-ed87c6bf13"
+      },
+      {
+        "value": "https://www.marsdd.com/mars-capital-program-venture-application/",
+        "evidenceId": "check-route-7ada6e168b"
+      },
+      {
+        "value": "https://www.marsdd.com/mars-capital-program-investor-application/",
+        "evidenceId": "check-route-8125620f40"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.marsdd.com",
+        "evidenceId": "check-route-27400d1cdd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.marsdd.com/startups/",
+        "evidenceId": "check-portfolio-29b750a6e1"
+      },
+      {
+        "value": "https://www.marsdd.com/startups",
+        "evidenceId": "check-portfolio-cfcc50a5ae"
+      },
+      {
+        "value": "https://www.marsdd.com/startups/#afterNav",
+        "evidenceId": "check-portfolio-a80a4d298a"
+      },
+      {
+        "value": "https://www.marsdd.com/startups/#footer",
+        "evidenceId": "check-portfolio-96d10104a8"
+      }
+    ],
+    "name": [
+      {
+        "value": "MaRS Discovery District",
+        "evidenceId": "check-name-2ab7fc2035"
+      }
+    ],
+    "examplePages": []
+  }
+}

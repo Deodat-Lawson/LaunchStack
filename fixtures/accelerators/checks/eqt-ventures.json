@@ -1,0 +1,63 @@
+{
+  "programId": "eqt-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://eqtgroup.com/private-capital/eqt-ventures",
+    "https://eqtgroup.com/about/people/alexander-fred-ojala",
+    "https://eqtgroup.com/about/people/gustav-von-sydow"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-3f8275f336",
+      "url": "https://eqtgroup.com/private-capital/eqt-ventures",
+      "title": "EQT Ventures — homepage checked by scrape.py",
+      "excerpt": "we are What we do Shareholders Insights LP Login LP Login EQT Ventures Backing Generation-Defining Founders We are an early-stage",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-6b4260b0ed",
+      "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
+      "title": "EQT Ventures — terms page checked by scrape.py",
+      "excerpt": "+46850655300",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-82cda575a2",
+      "url": "https://eqtgroup.com/private-capital/eqt-ventures",
+      "title": "EQT Ventures — homepage checked by scrape.py",
+      "excerpt": "+46850655300",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-b2b903d861",
+      "url": "https://eqtgroup.com/about/people/alexander-fred-ojala",
+      "title": "EQT Ventures — details page checked by scrape.py",
+      "excerpt": "+46850655300",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [
+      {
+        "value": "+46850655300",
+        "evidenceId": "check-phone-82cda575a2"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "EQT Ventures",
+        "evidenceId": "check-name-3f8275f336"
+      }
+    ],
+    "examplePages": []
+  }
+}

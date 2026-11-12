@@ -1,0 +1,38 @@
+{
+  "programId": "hubraum",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.hubraum.com/initiatives/security-co-creation-program/",
+      "page": "details",
+      "anchor": "Security Co-Creation Program",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/digital-innovation-program/",
+      "page": "details",
+      "anchor": "Digital Innovation Program",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/initiatives/past-programs/",
+      "page": "details",
+      "anchor": "Past Initiatives",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.hubraum.com/why-hubraum",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

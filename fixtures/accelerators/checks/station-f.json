@@ -1,0 +1,116 @@
+{
+  "programId": "station-f",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://stationf.co/",
+    "https://stationf.co/programs",
+    "https://stationf.co/news/fai-newpartners"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-0591cd8fca",
+      "url": "https://stationf.co/",
+      "title": "Station F — homepage checked by scrape.py",
+      "excerpt": "STATION F Startups Programs Events News About Contact Home Startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-42b5002c45",
+      "url": "https://stationf.co/",
+      "title": "Station F — homepage checked by scrape.py",
+      "excerpt": "View more → https://stationf.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-72f2277854",
+      "url": "https://stationf.co/",
+      "title": "Station F — homepage checked by scrape.py",
+      "excerpt": "Startups → https://stationf.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bf996e2c78",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — details page checked by scrape.py",
+      "excerpt": "Startups → https://stationf.co/startups",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e326cc7aaa",
+      "url": "https://stationf.co/news/fai-newpartners",
+      "title": "Station F — batches page checked by scrape.py",
+      "excerpt": "Startups → https://stationf.co/startups",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-46b4d6a3bd",
+      "url": "https://stationf.co/",
+      "title": "Station F — homepage checked by scrape.py",
+      "excerpt": "https://stationf.co/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-9e484c245f",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — details page checked by scrape.py",
+      "excerpt": "Join → https://fai-apply.stationf.co",
+      "page": "details"
+    },
+    {
+      "id": "check-route-bbd5e6e038",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — details page checked by scrape.py",
+      "excerpt": "Join → https://landingzone-apply.stationf.co",
+      "page": "details"
+    },
+    {
+      "id": "check-route-da9970442a",
+      "url": "https://stationf.co/programs",
+      "title": "Station F — details page checked by scrape.py",
+      "excerpt": "Join → https://www.f6s.com/shakeupfactory/apply",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://landingzone-apply.stationf.co",
+        "evidenceId": "check-route-bbd5e6e038"
+      },
+      {
+        "value": "https://fai-apply.stationf.co",
+        "evidenceId": "check-route-9e484c245f"
+      },
+      {
+        "value": "https://www.f6s.com/shakeupfactory/apply",
+        "evidenceId": "check-route-da9970442a"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://stationf.co/",
+        "evidenceId": "check-route-46b4d6a3bd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://stationf.co/startups",
+        "evidenceId": "check-portfolio-72f2277854"
+      }
+    ],
+    "name": [
+      {
+        "value": "Station F",
+        "evidenceId": "check-name-0591cd8fca"
+      }
+    ],
+    "examplePages": []
+  }
+}

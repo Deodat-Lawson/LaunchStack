@@ -1,0 +1,59 @@
+{
+  "programId": "brinc",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://brinc.io/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b7a910295a",
+      "url": "https://brinc.io/",
+      "title": "BRINC — homepage checked by scrape.py",
+      "excerpt": "Brinc | Venture Accelerator & Private Market Innovation",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d9a8d5fb52",
+      "url": "https://brinc.io/",
+      "title": "BRINC — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://brinc.io/our-portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56909522a1",
+      "url": "https://brinc.io/",
+      "title": "BRINC — homepage checked by scrape.py",
+      "excerpt": "https://brinc.io/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://brinc.io/",
+        "evidenceId": "check-route-56909522a1"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://brinc.io/our-portfolio",
+        "evidenceId": "check-portfolio-d9a8d5fb52"
+      }
+    ],
+    "name": [
+      {
+        "value": "BRINC",
+        "evidenceId": "check-name-b7a910295a"
+      }
+    ],
+    "examplePages": []
+  }
+}

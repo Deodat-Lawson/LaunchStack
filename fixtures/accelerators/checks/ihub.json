@@ -1,0 +1,75 @@
+{
+  "programId": "ihub",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://ihub.co.ke/",
+    "https://ihub.co.ke/about-us/",
+    "https://ihub.co.ke/blog-news-and-updates/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-1a68b0d2e4",
+      "url": "https://ihub.co.ke/",
+      "title": "iHub — homepage checked by scrape.py",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-35dee2e8a3",
+      "url": "https://ihub.co.ke/blog-news-and-updates/",
+      "title": "iHub — batches page checked by scrape.py",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "batches"
+    },
+    {
+      "id": "check-email-7fea961a10",
+      "url": "https://ihub.co.ke/about-us/",
+      "title": "iHub — details page checked by scrape.py",
+      "excerpt": "more, every month directly to your email. Email Subscribe info@ihub.co.ke +254798985410 Jahazi Building, 154 James Gichuru Road,",
+      "page": "details"
+    },
+    {
+      "id": "check-name-8a96630315",
+      "url": "https://ihub.co.ke/",
+      "title": "iHub — homepage checked by scrape.py",
+      "excerpt": "Home - iHUB Security Verification Please verify you're human to",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1a701aec31",
+      "url": "https://ihub.co.ke/",
+      "title": "iHub — homepage checked by scrape.py",
+      "excerpt": "https://ihub.co.ke",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@ihub.co.ke",
+        "evidenceId": "check-email-1a68b0d2e4"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://ihub.co.ke",
+        "evidenceId": "check-route-1a701aec31"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "iHub",
+        "evidenceId": "check-name-8a96630315"
+      }
+    ],
+    "examplePages": []
+  }
+}

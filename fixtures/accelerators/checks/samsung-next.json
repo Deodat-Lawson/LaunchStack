@@ -1,0 +1,168 @@
+{
+  "programId": "samsung-next",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.samsungnext.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-e60aed7b59",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "commit decisively, and spend the rest of our time being useful — not collecting board seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No theatre. Decisions made efficiently — no investment committee meetings required to slow",
+      "page": "details"
+    },
+    {
+      "id": "check-name-db410a5573",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Main - New Portfolio Team Blog Pitch us → SAMSUNG NEXT / VENTURES Companies we believe will define what's next .",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-29869fc452",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "02 ↗ Robotics Intelligent Machines Full-stack autonomy, advanced sensing, and human-machine interfaces. 1X · Field AI · Apptronik → https://www.samsungnext.com/portfolio?sector=Robotics",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3dd37b2668",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "04 ↗ Services Stablecoin · Blockchain · Mediatech Decentralized finance infrastructure, on-chain economies, and next-gen media platforms. Bastion · LayerZero · Volley → https://www.samsungnext.com/portfolio?sector=Services",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-46ba389e0f",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Robotics → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-71e7f06d27",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "01 ↗ AI Foundation models, edge deployment, and enterprise-scale implementation. Perplexity · Liquid AI · Black Forest Labs → https://www.samsungnext.com/portfolio?sector=AI",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-779bc53bc2",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7b694f5c25",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Health & MedTech → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9eee67e1cb",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "view the full portfolio → → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9fcbc6bb43",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Deep Tech Software → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-bb963e0af2",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "Advanced Hardware → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-dd15e71575",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "AI → https://www.samsungnext.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eb37e6b0ce",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "05 ↗ Frontier Next-Gen Tech Novel compute, advanced materials, energy systems, and emerging deep-tech platforms. Rain · Base Power · Harmonic → https://www.samsungnext.com/portfolio?sector=Frontier",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-f6a15e7c08",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "03 ↗ Digital Health & MedTech Bio-electronic integration, precision diagnostics, and next-gen wearables. Maven Clinic · Function Health · Signos → https://www.samsungnext.com/portfolio?sector=Health",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d1f77acbb8",
+      "url": "https://www.samsungnext.com/",
+      "title": "Samsung NEXT — homepage checked by scrape.py",
+      "excerpt": "https://www.samsungnext.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.samsungnext.com/",
+        "evidenceId": "check-route-d1f77acbb8"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "commit decisively, and spend the rest of our time being useful — not collecting board seats. 01 Flexible check sizes We invest across all stages, from $50K to $25MM, tailored to your team and stage of growth. 02 No IC. No theatre. Decisions made efficiently — no investment committee meetings required to slow",
+        "evidenceId": "check-deal-e60aed7b59"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.samsungnext.com/portfolio",
+        "evidenceId": "check-portfolio-779bc53bc2"
+      },
+      {
+        "value": "https://www.samsungnext.com/portfolio?sector=AI",
+        "evidenceId": "check-portfolio-71e7f06d27"
+      },
+      {
+        "value": "https://www.samsungnext.com/portfolio?sector=Robotics",
+        "evidenceId": "check-portfolio-29869fc452"
+      },
+      {
+        "value": "https://www.samsungnext.com/portfolio?sector=Health",
+        "evidenceId": "check-portfolio-f6a15e7c08"
+      },
+      {
+        "value": "https://www.samsungnext.com/portfolio?sector=Services",
+        "evidenceId": "check-portfolio-3dd37b2668"
+      },
+      {
+        "value": "https://www.samsungnext.com/portfolio?sector=Frontier",
+        "evidenceId": "check-portfolio-eb37e6b0ce"
+      }
+    ],
+    "name": [
+      {
+        "value": "Samsung NEXT",
+        "evidenceId": "check-name-db410a5573"
+      }
+    ],
+    "examplePages": []
+  }
+}

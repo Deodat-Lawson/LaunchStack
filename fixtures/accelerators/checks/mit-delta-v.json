@@ -1,0 +1,70 @@
+{
+  "programId": "mit-delta-v",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://entrepreneurship.mit.edu/accelerator/program/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-96f460d159",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage checked by scrape.py",
+      "excerpt": "across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale! Critical services you’ll have access to include analytics & business intelligence,",
+      "page": "details"
+    },
+    {
+      "id": "check-deal-b80b42637e",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage checked by scrape.py",
+      "excerpt": "the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator",
+      "page": "details"
+    },
+    {
+      "id": "check-name-7f229f7383",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage checked by scrape.py",
+      "excerpt": "MIT delta v Skip to content Twitter LinkedIn Instagram Facebook Orbit",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1c558a50df",
+      "url": "https://entrepreneurship.mit.edu/accelerator/program/",
+      "title": "MIT delta v — homepage checked by scrape.py",
+      "excerpt": "MIT delta v → https://entrepreneurship.mit.edu/accelerator/program/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://entrepreneurship.mit.edu/accelerator/program/",
+        "evidenceId": "check-route-1c558a50df"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "the webcast Meet Our Teams! $75K equity-free funding MIT’s Flagship Accelerator for Builders Network & Community: High-Value Partners, Mentors, Investors Over $200K in Value Per Team in Perks & Partnerships delta v Inaugural Partner Network Meet Our Partners Our delta v Partners are key components of the accelerator",
+        "evidenceId": "check-deal-b80b42637e"
+      },
+      {
+        "value": "across multiple industries. Each Partner will provide a range of monthly office hours, workshops, and mentorship. delta v Perks & Partnerships We unlock over $200K in value per team in perks & partnerships that help startups scale! Critical services you’ll have access to include analytics & business intelligence,",
+        "evidenceId": "check-deal-96f460d159"
+      }
+    ],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "MIT delta v",
+        "evidenceId": "check-name-7f229f7383"
+      }
+    ],
+    "examplePages": []
+  }
+}

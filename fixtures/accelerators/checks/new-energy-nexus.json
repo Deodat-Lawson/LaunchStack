@@ -1,0 +1,87 @@
+{
+  "programId": "new-energy-nexus",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.newenergynexus.com/",
+    "https://www.newenergynexus.com/about/",
+    "https://apply.workable.com/newenergynexus/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-9019356bde",
+      "url": "https://www.newenergynexus.com/",
+      "title": "New Energy Nexus — homepage checked by scrape.py",
+      "excerpt": "Home - New Energy Nexus Search for: Discover programs & events in your region",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0826997f28",
+      "url": "https://www.newenergynexus.com/",
+      "title": "New Energy Nexus — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-49aed71cc5",
+      "url": "https://www.newenergynexus.com/",
+      "title": "New Energy Nexus — homepage checked by scrape.py",
+      "excerpt": "View our portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8e6827efe7",
+      "url": "https://www.newenergynexus.com/about/",
+      "title": "New Energy Nexus — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.newenergynexus.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-7bf4683d04",
+      "url": "https://www.newenergynexus.com/about/",
+      "title": "New Energy Nexus — details page checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-f99c7e3577",
+      "url": "https://www.newenergynexus.com/",
+      "title": "New Energy Nexus — homepage checked by scrape.py",
+      "excerpt": "Careers → https://apply.workable.com/newenergynexus/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://apply.workable.com/newenergynexus/",
+        "evidenceId": "check-route-f99c7e3577"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://apply.workable.com/newenergynexus/",
+        "evidenceId": "check-route-f99c7e3577"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.newenergynexus.com/portfolio/",
+        "evidenceId": "check-portfolio-0826997f28"
+      }
+    ],
+    "name": [
+      {
+        "value": "New Energy Nexus",
+        "evidenceId": "check-name-9019356bde"
+      }
+    ],
+    "examplePages": []
+  }
+}

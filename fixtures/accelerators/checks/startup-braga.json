@@ -1,0 +1,100 @@
+{
+  "programId": "startup-braga",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startupbraga.com/",
+    "https://www.startupbraga.com/Programs/PreAcceleration"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-03bb7aea2a",
+      "url": "https://www.startupbraga.com/",
+      "title": "Startup Braga — homepage checked by scrape.py",
+      "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
+      "page": "details"
+    },
+    {
+      "id": "check-email-0d48bd8c05",
+      "url": "https://www.startupbraga.com/",
+      "title": "Startup Braga — homepage checked by scrape.py",
+      "excerpt": "info@startupbraga.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-cf702165bd",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "title": "Startup Braga — details page checked by scrape.py",
+      "excerpt": "info@startupbraga.com",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e2279c92c8",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "title": "Startup Braga — details page checked by scrape.py",
+      "excerpt": "(+351) 253 142 200 [call to the national fixed network] info@startupbraga.com Ver Mapa Obter Direções Programas Verticais Sobre Nós A",
+      "page": "details"
+    },
+    {
+      "id": "check-name-24e83c8064",
+      "url": "https://www.startupbraga.com/",
+      "title": "Startup Braga — homepage checked by scrape.py",
+      "excerpt": "Startup Braga Loading… PT Português English Programas Verticais Sobre",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-0559149545",
+      "url": "https://www.startupbraga.com/",
+      "title": "Startup Braga — homepage checked by scrape.py",
+      "excerpt": "(+351) 253 142 200",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-85becd7f7b",
+      "url": "https://www.startupbraga.com/Programs/PreAcceleration",
+      "title": "Startup Braga — details page checked by scrape.py",
+      "excerpt": "(+351) 253 142 200",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d647bed04e",
+      "url": "https://www.startupbraga.com/",
+      "title": "Startup Braga — homepage checked by scrape.py",
+      "excerpt": "https://www.startupbraga.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@startupbraga.com",
+        "evidenceId": "check-email-0d48bd8c05"
+      }
+    ],
+    "phones": [
+      {
+        "value": "+351253142200",
+        "evidenceId": "check-phone-0559149545"
+      }
+    ],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.startupbraga.com/",
+        "evidenceId": "check-route-d647bed04e"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup Braga",
+        "evidenceId": "check-name-24e83c8064"
+      }
+    ],
+    "examplePages": []
+  }
+}

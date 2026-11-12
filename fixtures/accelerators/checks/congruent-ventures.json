@@ -1,0 +1,92 @@
+{
+  "programId": "congruent-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.congruentvc.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-2439dddcca",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com TWITTER",
+      "page": "details"
+    },
+    {
+      "id": "check-email-693f353876",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "650 San Francisco, CA 94105 ‍ GENERAL INQUIRIES + PRESS info@congruentvc.com DEAL SUBMISSIONS investors@congruentvc.com HOME TEAM",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b5e540bac9",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "info@congruentvc.com",
+      "page": "details"
+    },
+    {
+      "id": "check-name-63c83b626f",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "Congruent Ventures Website This Year’s 50 by 2050 List is Live! Meet the 50",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e530b605b5",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.congruentvc.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-ebd03eafc2",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "transformative companies → https://www.congruentvc.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-6ccc3023cd",
+      "url": "https://www.congruentvc.com/",
+      "title": "Congruent Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.congruentvc.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@congruentvc.com",
+        "evidenceId": "check-email-b5e540bac9"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.congruentvc.com/",
+        "evidenceId": "check-route-6ccc3023cd"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.congruentvc.com/portfolio",
+        "evidenceId": "check-portfolio-e530b605b5"
+      }
+    ],
+    "name": [
+      {
+        "value": "Congruent Ventures",
+        "evidenceId": "check-name-63c83b626f"
+      }
+    ],
+    "examplePages": []
+  }
+}

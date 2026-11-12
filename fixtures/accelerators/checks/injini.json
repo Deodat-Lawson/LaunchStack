@@ -1,0 +1,148 @@
+{
+  "programId": "injini",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.injini.africa/",
+    "https://www.injini.africa/edtech-fellowship",
+    "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-08eca76064",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"info@injini.africa\"",
+      "page": "details"
+    },
+    {
+      "id": "check-email-10c55ef3e2",
+      "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
+      "title": "Injini — terms page checked by scrape.py",
+      "excerpt": "info@injini.africa",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-6554491b31",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "title": "Injini — details page checked by scrape.py",
+      "excerpt": "deck reviews, and more. Still have questions? Please email info@injini.africa if you have more questions or need clarification. Read",
+      "page": "details"
+    },
+    {
+      "id": "check-email-79e539cde0",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7ade26fce8",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "title": "Injini — details page checked by scrape.py",
+      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
+      "page": "details"
+    },
+    {
+      "id": "check-email-b1080f8cab",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "info@injini.africa",
+      "page": "details"
+    },
+    {
+      "id": "check-email-e0f6d7748d",
+      "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
+      "title": "Injini — terms page checked by scrape.py",
+      "excerpt": "Portfolio Support Our Impact Careers Contact Us Contact: info@injini.africa Address Innovation City, Darter Studios, Longkloof",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-eeb1e21464",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "title": "Injini — details page checked by scrape.py",
+      "excerpt": "info@injini.africa",
+      "page": "details"
+    },
+    {
+      "id": "check-name-dcaef441dd",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "Injini | Africa's EdTech Accelerator & Think Tank | South Africa",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-05219e63d4",
+      "url": "https://www.injini.africa/post/what-edtech-founders-learn-when-ideal-assumptions-meet-real-world-friction",
+      "title": "Injini — terms page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-38dce03b16",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-eef7210d0c",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "title": "Injini — details page checked by scrape.py",
+      "excerpt": "Our Portfolio → https://www.injini.africa/edtech-catalogue",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c0245b5836",
+      "url": "https://www.injini.africa/",
+      "title": "Injini — homepage checked by scrape.py",
+      "excerpt": "https://www.injini.africa/",
+      "page": "details"
+    },
+    {
+      "id": "check-status-f8ad89233a",
+      "url": "https://www.injini.africa/edtech-fellowship",
+      "title": "Injini — details page checked by scrape.py",
+      "excerpt": "ensuring quality education access across all parts of South Africa, beyond the major urban hubs. The 2026 applications are now closed. Meet the new cohort here . ‍ ‍ Sign up to our newsletter to be notified about program updates. Sign up",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@injini.africa",
+        "evidenceId": "check-email-b1080f8cab"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.injini.africa/",
+        "evidenceId": "check-route-c0245b5836"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": false,
+        "evidenceId": "check-status-f8ad89233a"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.injini.africa/edtech-catalogue",
+        "evidenceId": "check-portfolio-38dce03b16"
+      }
+    ],
+    "name": [
+      {
+        "value": "Injini",
+        "evidenceId": "check-name-dcaef441dd"
+      }
+    ],
+    "examplePages": []
+  }
+}

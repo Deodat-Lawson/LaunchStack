@@ -1,0 +1,550 @@
+{
+  "programId": "startupbootcamp",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pages": [
+    {
+      "url": "https://startupbootcamp.org/about/contact",
+      "page": "details",
+      "anchor": "Contact us",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/startups/accelerators",
+      "page": "details",
+      "anchor": "About our programs Learn more about our accelerators.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/startups/overview",
+      "page": "details",
+      "anchor": "About our Startups Learn more about our STARTUPS.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/startups/portfolio-companies",
+      "page": "portfolio",
+      "anchor": "Portfolio companies Discover our network of portfolio companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/investors",
+      "page": "details",
+      "anchor": "Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/partners",
+      "page": "details",
+      "anchor": "Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/about/startupbootcamp",
+      "page": "details",
+      "anchor": "Overview",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/about/faq",
+      "page": "terms",
+      "anchor": "FAQ Frequently asked questions.",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/georgia-i",
+      "page": "application",
+      "anchor": "Georgia I Applications Open Georgia & beyond Whether you’re validating your first idea, building a MVP, or ready to launch your product in the market and scale your business, Start",
+      "fetched": false,
+      "blocked": "fetch_failed",
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-iii",
+      "page": "application",
+      "anchor": "Energy & Climate III Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive inno",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-iii",
+      "page": "application",
+      "anchor": "Food & AgriTech III Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, di",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/health-lifescience-i",
+      "page": "application",
+      "anchor": "Health & Lifescience I Applications Open Hybrid | Amsterdam Accelerating breakthrough solutions in health and life sciences to improve lives and shape the future of healthcare. Hea",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-iii",
+      "page": "application",
+      "anchor": "DeepTech & Robotics III Applications Open Hybrid | Amsterdam Looking for bold founders driving scientific breakthroughs and engineering innovations to advance DeepTech and robotics",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energy-climate-ii",
+      "page": "application",
+      "anchor": "Energy & Climate II Applications Open Hybrid | Amsterdam An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive innov",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/food-agritech-ii",
+      "page": "application",
+      "anchor": "Food & AgriTech II Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, dig",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics-ii",
+      "page": "application",
+      "anchor": "DeepTech & Robotics II Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovation",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/aivolution-iii",
+      "page": "application",
+      "anchor": "AIvolution III Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. March 7, 202",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/production-industry",
+      "page": "application",
+      "anchor": "Production & Industry Applications Open Hybrid | The Netherlands An accelerator designed to promote sustainable manufacturing practices by empowering startups to develop eco-friend",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energy-climate",
+      "page": "application",
+      "anchor": "Energy & Climate Applications Open Hybrid | The Netherlands An accelerator designed to drive the transition to renewable energy and combat climate change by fostering disruptive in",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/water-infrastructure",
+      "page": "application",
+      "anchor": "Water & Infrastructure Applications Open Hybrid | The Netherlands An accelerator designed to ensure access to clean water and resilient infrastructure while addressing climate-rela",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energy-sustainability",
+      "page": "application",
+      "anchor": "Energy & Sustainability Applications Open Dhahran, KSA Empowering startups and visionaries worldwide to tackle critical challenges in energy transition and sustainability August 22",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/aivolution-ii",
+      "page": "application",
+      "anchor": "AIvolution II Applications Open Hybrid | The Netherlands An accelerator designed to ignite the future of intelligent and decentralized innovation through AI and Web3. August 24, 20",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/deeptech-robotics",
+      "page": "application",
+      "anchor": "DeepTech & Robotics Applications Open Hybrid | The Netherlands An accelerator designed to fuel startups pioneering scientific breakthroughs and disruptive engineering innovations. ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/food-agritech",
+      "page": "application",
+      "anchor": "Food & AgriTech Applications Open Hybrid | The Netherlands An accelerator designed to new technologies along the food value chain to meet the growing demand for food safety, digita",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/proptech-housing",
+      "page": "application",
+      "anchor": "PropTech & Housing Applications Open Australia An accelerator designed to empower PropTech startups April 30, 2024 PropTech & Housing Australia April 30, 2024 March 1, 2024 2024 Pr",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/aivolution",
+      "page": "application",
+      "anchor": "AIvolution Applications Open Italy An accelerator designed to empower AI & Web3 May 8, 2024 AIvolution Italy May 8, 2024 February 21, 2024 2024 AI & Web3 All-accelerators country-a",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/momentum",
+      "page": "application",
+      "anchor": "Momentum Applications Open Amsterdam Momentum, The Fast Track to Entrepreneurship August 1, 2025 Momentum Amsterdam August 1, 2025 September 30, 2023 2023 Female Entrepreneurship A",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/fintech-mexico-city",
+      "page": "application",
+      "anchor": "FinTech Mexico City Applications Open Mexico An accelerator designed to empower fintech startups December 12, 2023 FinTech Mexico City Mexico December 12, 2023 September 17, 2023 2",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/styleit",
+      "page": "application",
+      "anchor": "Styleit Applications Open Italy An accelerator designed to empower FashionTech startups February 28, 2025 Styleit Italy February 28, 2025 December 4, 2024 2024 Fashion All-accelera",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/afritech",
+      "page": "application",
+      "anchor": "AfriTech Applications Open South Africa An accelerator designed to empower impact & sustainability startups September 8, 2023 AfriTech South Africa February 8, 2024 September 8, 20",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/wesportup",
+      "page": "application",
+      "anchor": "WeSportUP Applications Open Italy An accelerator designed to empower SportsTech startups August 15, 2024 WeSportUP Italy August 15, 2024 June 1, 2023 2024 Sports & Events All-accel",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/ventureaus",
+      "page": "application",
+      "anchor": "VentureAus Applications Open Australia A 12-week pre-accelerator program helping people with bold ideas and scalable businesses to launch their venture in Australia. August 15, 202",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energyinc",
+      "page": "application",
+      "anchor": "EnergyInc Applications Open Australia A pre-accelerator designed to fast-track sustainability business ideas towards being a startup. February 22, 2022 EnergyInc Australia November",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/sustainable-fintech",
+      "page": "application",
+      "anchor": "Sustainable Fintech Applications Open Australia An accelerator designed to empower sustainable fintech startups & scaleups April 17, 2023 Sustainable Fintech Australia August 31, 2",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/sports-eventtech",
+      "page": "application",
+      "anchor": "Sports & EventTech Applications Open Australia An accelerator designed to empower sports & eventtech startups & scaleups April 18, 2022 Sports & EventTech Australia September 1, 20",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/sustainability",
+      "page": "application",
+      "anchor": "Sustainability Applications Open Netherlands An accelerator designed to empower sustainability startups & scaleups May 31, 2023 Sustainability Netherlands November 30, 2023 May 31,",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/foodtech-tasmania",
+      "page": "application",
+      "anchor": "FoodTech Tasmania Applications Open Australia An accelerator designed to empower Food & AgriTech startups June 14, 2024 FoodTech Tasmania Australia June 14, 2024 April 2, 2024 2024",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/energynext",
+      "page": "application",
+      "anchor": "EnergyNext Applications Open Australia An accelerator designed to empower energy startups & scaleups July 8, 2021 EnergyNext Australia December 1, 2021 July 8, 2021 December 6, 202",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/mobility-transportation",
+      "page": "application",
+      "anchor": "Mobility & Transportation Applications Open Netherlands An accelerator designed to empower mobility & transportation startups August 14, 2023 Mobility & Transportation Netherlands ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/inclusive-fintech-defi",
+      "page": "application",
+      "anchor": "Inclusive FinTech & DeFi Applications Open Netherlands An accelerator designed to empower inclusive fintech & defi startups January 31, 2024 Inclusive FinTech & DeFi Netherlands Ja",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/decarbonize",
+      "page": "application",
+      "anchor": "Decarbonize Applications Open Australia An accelerator designed to empower startups decarbonizing the world, through an ambitious partnership wih Mitsubishi Corporation and NYK Lin",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/renewable-energy-net-zero",
+      "page": "application",
+      "anchor": "Renewable Energy & Net-Zero Applications Open Netherlands An accelerator designed to empower renewable energy & net-zero startups January 31, 2024 Renewable Energy & Net-Zero Nethe",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/accelerator/fintech-cybersecurity",
+      "page": "application",
+      "anchor": "FinTech & Cybersecurity Applications Open Netherlands An accelerator designed to empower fintech startups November 15, 2023 FinTech & Cybersecurity Netherlands June 2, 2022 Novembe",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-south-korea-kicks-off-the-3rd-cycle-of-global-startup-academy-accelerator-program",
+      "page": "details",
+      "anchor": "Startupbootcamp South Korea kicks off the 3rd cycle of Global Startup Academy Accelerator Program June 27, 2022 Startupbootcamp, kicked-off its third program as part of the Global ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-backed-oinride-secure-eu345k-in-funding-to-advance-mobile-robotics-solutions-in-mining-industry",
+      "page": "portfolio",
+      "anchor": "Startupbootcamp-backed Oinride Secures €345K in Funding to Advance Mobile Robotics Solutions in Mining Industry July 26, 2024 Oinride, SBC '23 alumni, has raised €345K in recent in",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/the-future-of-food-agritech---at-startupbootcamp-selection-days-we-saw-whats-next",
+      "page": "details",
+      "anchor": "The Future of Food & AgriTech – At Startupbootcamp Selection Days, we saw what’s next. April 4, 2025 At Startupbootcamp, Selection Days are not just about identifying high-potentia",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/ground-breaking-food-and-agritech-startups-coming-to-launceston",
+      "page": "portfolio",
+      "anchor": "Ground-Breaking Food and AgriTech Startups Coming to Launceston July 28, 2023 Eleven food innovation companies from around the world will journey to Tasmania for the second iterati",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/top-20-startups-advance-to-final-selection-days-for-the-asip-program-powered-by-sbc-afritech",
+      "page": "details",
+      "anchor": "Top 20 Startups Advance to Final Selection Days for the ASIP Program powered by SBC AfriTech October 17, 2023 Startupbootcamp AfriTech is thrilled to announce the selection of the ",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/amsterdams-startupbootcamp-unveils-10-new-startups-for-its-renewable-energy-net-zero-programme",
+      "page": "application",
+      "anchor": "Amsterdam’s Startupbootcamp unveils 10 new startups for its Renewable Energy & Net-Zero programme February 3, 2023 According to the startup accelerator, around 20 teams were select",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-afritech-adds-dutch-entrepreneurial-development-bank-to-list-of-partners-for-cohort-3-of-the-asip-accelerator-program",
+      "page": "batches",
+      "anchor": "Startupbootcamp AfriTech adds Dutch Entrepreneurial Development Bank to list of partners for Cohort 3 of the ASIP Accelerator Program August 29, 2022 The Dutch Entrepreneurial Deve",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/why-asking-for-budget-on-call-one-kills-southeast-asia-deals-and-the-risk-map-to-use-instead",
+      "page": "terms",
+      "anchor": "Why Asking for Budget on Call One Kills Southeast Asia Deals (And the Risk Map to Use Instead) November 6, 2026 Rethink B2B sales discovery in Singapore, Malaysia and Taiwan. Explo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/from-market-access-to-market-execution-helping-companies-prove-themselves-in-southeast-asia",
+      "page": "portfolio",
+      "anchor": "From market access to market execution: helping companies prove themselves in Southeast Asia September 19, 2026 See how trade, export and innovation agencies can help companies mov",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/women-entrepreneurs-get-kickstarted-with-brand-new-program-momentum",
+      "page": "details",
+      "anchor": "Women entrepreneurs get kickstarted with brand new program Momentum March 10, 2023 The new Momentum program offers female founders tools and skills to start a business.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-alumni-euto-energy-announces-partnership-with-pampus-island-to-power-its-energy-management",
+      "page": "portfolio",
+      "anchor": "Startupbootcamp Alumni Euto Energy Announces Partnership With Pampus Island to Power Its Energy Management August 12, 2024 Euto Energy (SBC ‘22) announces a partnership with Pampus",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/the-future-of-ai-web3---at-startupbootcamp-selection-days-we-saw-whats-next",
+      "page": "details",
+      "anchor": "The Future of AI & Web3 - At Startupbootcamp Selection Days, we saw what’s next. April 1, 2025 At Startupbootcamp, our Selection Days are not just about scouting the next unicorns.",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-welcomes-ten-startups-to-the-aivolution-the-ai-web3-accelerator-program",
+      "page": "details",
+      "anchor": "Startupbootcamp Welcomes Ten Startups to the AIvolution; the AI & Web3 Accelerator Program August 30, 2024 Startupbootcamp has announced the ten startups that will participate in t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-onboards-10-ai-web3-startups-to-its-bold-2-portfolio",
+      "page": "portfolio",
+      "anchor": "Startupbootcamp onboards 10 AI & Web3 startups to its Bold 2 portfolio May 23, 2024",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-alumni-tulyp-raises-eu1-5m-in-seed-funding-to-revolutionize-trade-finance-for-smes",
+      "page": "portfolio",
+      "anchor": "Startupbootcamp Alumni Tulyp Raises €1.5M in Seed Funding to Revolutionize Trade Finance for SMEs May 23, 2024 Startupbootcamp is thrilled to announce that Tulyp, alumni from the F",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-launches-new-accelerator-focused-on-food-agritech-to-foster-sustainable-food-and-agriculture-innovations",
+      "page": "batches",
+      "anchor": "Startupbootcamp Launches New Accelerator Focused on Food & AgriTech to Foster Sustainable Food and Agriculture Innovations August 30, 2024 Startupbootcamp is thrilled to announce t",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/11-new-startups-in-startupbootcamp-mobility-and-transportation-program",
+      "page": "details",
+      "anchor": "11 New Startups in Startupbootcamp Mobility and Transportation Program August 27, 2022 Startupbootcamp announced the 11 teams that will participate in the first cycle of its Mobili",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/alliander-and-startupbootcamp-select-10-startups-to-accelerate-the-energy-system-in-transition",
+      "page": "details",
+      "anchor": "Alliander and Startupbootcamp Select 10 Startups to Accelerate the Energy System in Transition April 23, 2024 Alliander, in partnership with Startupbootcamp, is excited to announce",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/program-launched-to-unlock-grower-solutions-for-australias-biggest-horticulture-challenges",
+      "page": "details",
+      "anchor": "Program launched to unlock grower solutions for Australia’s biggest horticulture challenges March 25, 2025",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/startupbootcamp-raises-2-3-million-euro-in-tokenized-ipo-on-nxchange-fueled-platform",
+      "page": "details",
+      "anchor": "Startupbootcamp raises 2.3 Million Euro in Tokenized IPO on Nxchange-Fueled Platform December 11, 2019 Danish-Dutch founded startup accelerator Startupbootcamp has successfully clo",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/the-future-of-deeptech-robotics---at-startupbootcamp-selection-days-we-saw-whats-next",
+      "page": "details",
+      "anchor": "The Future of DeepTech & Robotics – At Startupbootcamp Selection Days, we saw what’s next. April 2, 2025 At Startupbootcamp, Selection Days are more than just scouting for the next",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/the-hidden-cost-of-resellers-what-your-southeast-asia-partner-margin-actually-buys",
+      "page": "portfolio",
+      "anchor": "The Hidden Cost of Resellers: What Your Southeast Asia Partner Margin Actually Buys October 26, 2026 Discover the hidden costs of reseller partnerships in Southeast Asia. Learn how",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/articles/profit-with-purpose-how-startupbootcamp-is-pioneering-sustainable-business-growth",
+      "page": "details",
+      "anchor": "Profit With Purpose: How Startupbootcamp Is Pioneering Sustainable Business Growth February 3, 2023 Environmental, Social, and Governance (ESG) have become crucial factors for many",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/about/newsletters",
+      "page": "details",
+      "anchor": "join our newsletters",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://startupbootcamp.org/about/careers",
+      "page": "details",
+      "anchor": "Careers",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "programId": "sebrae",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://sebrae.com.br/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-a10460fecc",
+      "url": "https://sebrae.com.br/",
+      "title": "Sebrae — homepage checked by scrape.py",
+      "excerpt": "Sebrae | Abra, Formalize e Faça seu Negócio Crescer Sebrae |",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Sebrae",
+        "evidenceId": "check-name-a10460fecc"
+      }
+    ],
+    "examplePages": []
+  }
+}

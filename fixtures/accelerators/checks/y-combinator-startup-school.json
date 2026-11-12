@@ -1,0 +1,37 @@
+{
+  "programId": "y-combinator-startup-school",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.startupschool.org/",
+    "https://www.startupschool.org/cofounder-matching",
+    "https://www.startupschool.org/faq"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6e2bf33e09",
+      "url": "https://www.startupschool.org/",
+      "title": "Startup School — homepage checked by scrape.py",
+      "excerpt": "Startup School - The Best Resource for Founders Startup School Learn how",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Startup School",
+        "evidenceId": "check-name-6e2bf33e09"
+      }
+    ],
+    "examplePages": []
+  }
+}

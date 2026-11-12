@@ -1,0 +1,93 @@
+{
+  "programId": "dogpatch-labs",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://dogpatchlabs.com/",
+    "https://dogpatchlabs.com/corporate-innovation/",
+    "https://dogpatchlabs.com/faq/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-4d9b12b3de",
+      "url": "https://dogpatchlabs.com/",
+      "title": "Dogpatch Labs — homepage checked by scrape.py",
+      "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
+      "page": "details"
+    },
+    {
+      "id": "check-email-527b29b947",
+      "url": "https://dogpatchlabs.com/corporate-innovation/",
+      "title": "Dogpatch Labs — details page checked by scrape.py",
+      "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
+      "page": "details"
+    },
+    {
+      "id": "check-email-7b114ce9b9",
+      "url": "https://dogpatchlabs.com/faq/",
+      "title": "Dogpatch Labs — terms page checked by scrape.py",
+      "excerpt": "in person or virtually! You can book a tour by emailing community@dogpatchlabs.com Can I share a dedicated desk with someone else? A",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-9ea6bca81d",
+      "url": "https://dogpatchlabs.com/faq/",
+      "title": "Dogpatch Labs — terms page checked by scrape.py",
+      "excerpt": "community@dogpatchlabs.com",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-e5b4996f18",
+      "url": "https://dogpatchlabs.com/faq/",
+      "title": "Dogpatch Labs — terms page checked by scrape.py",
+      "excerpt": "Custom House Quay, Dublin 1, D01 Y6H7 Ireland Email: info@dogpatchlabs.com Sitemap Community Innovation About Careers Resources",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-d0a3a229d3",
+      "url": "https://dogpatchlabs.com/",
+      "title": "Dogpatch Labs — homepage checked by scrape.py",
+      "excerpt": "Dogpatch Labs | Startup Hub Membership Plans & Pricing Hotdesking",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5f058dc63c",
+      "url": "https://dogpatchlabs.com/",
+      "title": "Dogpatch Labs — homepage checked by scrape.py",
+      "excerpt": "https://dogpatchlabs.com",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@dogpatchlabs.com",
+        "evidenceId": "check-email-4d9b12b3de"
+      },
+      {
+        "value": "community@dogpatchlabs.com",
+        "evidenceId": "check-email-9ea6bca81d"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://dogpatchlabs.com",
+        "evidenceId": "check-route-5f058dc63c"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Dogpatch Labs",
+        "evidenceId": "check-name-d0a3a229d3"
+      }
+    ],
+    "examplePages": []
+  }
+}

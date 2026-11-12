@@ -1,0 +1,85 @@
+{
+  "programId": "capital-innovators",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://capitalinnovators.com/",
+    "https://capitalinnovators.com/about-ci"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-804c6722bc",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — homepage checked by scrape.py",
+      "excerpt": "Capital Innovators Home About Startups Corporations Courses Blog Contact Back",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-00de345af4",
+      "url": "https://capitalinnovators.com/about-ci",
+      "title": "Capital Innovators — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-3d67a50e9b",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — homepage checked by scrape.py",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-68a16badf6",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://capitalinnovators.com/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9cd26105e7",
+      "url": "https://capitalinnovators.com/about-ci",
+      "title": "Capital Innovators — details page checked by scrape.py",
+      "excerpt": "Startups → https://capitalinnovators.com/experience",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cfc1aefe36",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — homepage checked by scrape.py",
+      "excerpt": "https://capitalinnovators.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://capitalinnovators.com/",
+        "evidenceId": "check-route-cfc1aefe36"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://capitalinnovators.com/portfolio",
+        "evidenceId": "check-portfolio-68a16badf6"
+      },
+      {
+        "value": "https://capitalinnovators.com/experience",
+        "evidenceId": "check-portfolio-3d67a50e9b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Capital Innovators",
+        "evidenceId": "check-name-804c6722bc"
+      }
+    ],
+    "examplePages": []
+  }
+}

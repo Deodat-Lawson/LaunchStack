@@ -1,0 +1,97 @@
+{
+  "programId": "tenity",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.tenity.com/",
+    "https://www.tenity.com/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-6831953d4f",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — homepage checked by scrape.py",
+      "excerpt": "\"email\": \"info@tenity.com\"",
+      "page": "details"
+    },
+    {
+      "id": "check-name-5b14303d5b",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — homepage checked by scrape.py",
+      "excerpt": "Tenity | Fintech Innovation Platform - Startups, VCs and",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-1446b2b409",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-466755a9eb",
+      "url": "https://www.tenity.com/about/",
+      "title": "Tenity — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.tenity.com/portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-8dbfb53cff",
+      "url": "https://www.tenity.com/about/",
+      "title": "Tenity — details page checked by scrape.py",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d3971c95f2",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — homepage checked by scrape.py",
+      "excerpt": "Startups → https://www.tenity.com/for-startups/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5d4079b1ec",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — homepage checked by scrape.py",
+      "excerpt": "https://www.tenity.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@tenity.com",
+        "evidenceId": "check-email-6831953d4f"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.tenity.com/",
+        "evidenceId": "check-route-5d4079b1ec"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.tenity.com/for-startups/",
+        "evidenceId": "check-portfolio-d3971c95f2"
+      },
+      {
+        "value": "https://www.tenity.com/portfolio/",
+        "evidenceId": "check-portfolio-1446b2b409"
+      }
+    ],
+    "name": [
+      {
+        "value": "Tenity",
+        "evidenceId": "check-name-5b14303d5b"
+      }
+    ],
+    "examplePages": []
+  }
+}

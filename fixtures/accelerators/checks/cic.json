@@ -1,0 +1,48 @@
+{
+  "programId": "cic",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://cic.com/",
+    "https://cic.com/catalyst/about/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-3e594d6752",
+      "url": "https://cic.com/",
+      "title": "Cambridge Innovation Center — homepage checked by scrape.py",
+      "excerpt": "tested, funded, launched, and perfected. Get in Touch Cambridge Innovation Center Contact Company About Press Careers Venture Café CIC",
+      "page": "details"
+    },
+    {
+      "id": "check-route-5a49e42d65",
+      "url": "https://cic.com/",
+      "title": "Cambridge Innovation Center — homepage checked by scrape.py",
+      "excerpt": "https://cic.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://cic.com/",
+        "evidenceId": "check-route-5a49e42d65"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Cambridge Innovation Center",
+        "evidenceId": "check-name-3e594d6752"
+      }
+    ],
+    "examplePages": []
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "programId": "z-fellows",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.zfellows.com/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-6db0185f34",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage checked by scrape.py",
+      "excerpt": "Z Fellows | Get Fast-Tracked into Silicon Valley Z Fellows About",
+      "page": "details"
+    },
+    {
+      "id": "check-route-40fa6d01f9",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform",
+      "page": "details"
+    },
+    {
+      "id": "check-route-8bad5ad610",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform?edit_requested=true",
+      "page": "details"
+    },
+    {
+      "id": "check-route-ed18bcf52b",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — homepage checked by scrape.py",
+      "excerpt": "Z Fellows → https://www.zfellows.com/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform?edit_requested=true",
+        "evidenceId": "check-route-8bad5ad610"
+      },
+      {
+        "value": "https://docs.google.com/forms/u/0/d/1z5HG9Pj0hIxS2oZL_wcJS5QqDZlcVbkhYGHp5Kp_IGM/viewform",
+        "evidenceId": "check-route-40fa6d01f9"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.zfellows.com/",
+        "evidenceId": "check-route-ed18bcf52b"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "Z Fellows",
+        "evidenceId": "check-name-6db0185f34"
+      }
+    ],
+    "examplePages": []
+  }
+}

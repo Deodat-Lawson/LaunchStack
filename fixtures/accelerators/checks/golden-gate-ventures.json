@@ -1,0 +1,107 @@
+{
+  "programId": "golden-gate-ventures",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.goldengate.vc/",
+    "https://www.goldengate.vc/about"
+  ],
+  "evidence": [
+    {
+      "id": "check-email-701a5a7be7",
+      "url": "https://www.goldengate.vc/",
+      "title": "Golden Gate Ventures — homepage checked by scrape.py",
+      "excerpt": "hello@goldengate.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-email-73facbf812",
+      "url": "https://www.goldengate.vc/about",
+      "title": "Golden Gate Ventures — details page checked by scrape.py",
+      "excerpt": "Something went wrong while submitting the form. Email hello@goldengate.vc Vietnam Sonatus Building 15 Le Thanh Ton, D1, HCMC",
+      "page": "details"
+    },
+    {
+      "id": "check-email-aa722e637b",
+      "url": "https://www.goldengate.vc/",
+      "title": "Golden Gate Ventures — homepage checked by scrape.py",
+      "excerpt": "Something went wrong while submitting the form. Email hello@goldengate.vc Vietnam Sonatus Building 15 Le Thanh Ton, D1, HCMC",
+      "page": "details"
+    },
+    {
+      "id": "check-email-bf3d486aec",
+      "url": "https://www.goldengate.vc/about",
+      "title": "Golden Gate Ventures — details page checked by scrape.py",
+      "excerpt": "hello@goldengate.vc",
+      "page": "details"
+    },
+    {
+      "id": "check-name-109e39fa05",
+      "url": "https://www.goldengate.vc/",
+      "title": "Golden Gate Ventures — homepage checked by scrape.py",
+      "excerpt": "Golden Gate Ventures | Venture Capital for Asia and MENA Portfolio Team News",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-269c1bad38",
+      "url": "https://www.goldengate.vc/about",
+      "title": "Golden Gate Ventures — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://www.goldengate.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6cb6b96fa5",
+      "url": "https://www.goldengate.vc/",
+      "title": "Golden Gate Ventures — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://www.goldengate.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9b3cc05465",
+      "url": "https://www.goldengate.vc/about",
+      "title": "Golden Gate Ventures — details page checked by scrape.py",
+      "excerpt": "View our portfolio → https://www.goldengate.vc/portfolio",
+      "page": "details"
+    },
+    {
+      "id": "check-route-568b4087df",
+      "url": "https://www.goldengate.vc/",
+      "title": "Golden Gate Ventures — homepage checked by scrape.py",
+      "excerpt": "https://www.goldengate.vc/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "hello@goldengate.vc",
+        "evidenceId": "check-email-701a5a7be7"
+      }
+    ],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://www.goldengate.vc/",
+        "evidenceId": "check-route-568b4087df"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://www.goldengate.vc/portfolio",
+        "evidenceId": "check-portfolio-6cb6b96fa5"
+      }
+    ],
+    "name": [
+      {
+        "value": "Golden Gate Ventures",
+        "evidenceId": "check-name-109e39fa05"
+      }
+    ],
+    "examplePages": []
+  }
+}

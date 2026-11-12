@@ -1,0 +1,121 @@
+{
+  "programId": "villgro-africa",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://villgroafrica.org/",
+    "https://villgroafrica.org/innovators/innovators-business-incubation-program/",
+    "https://villgroafrica.org/innovators/apply-now/",
+    "https://villgroafrica.org/resources/faqs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-04a4ea9d0e",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "title": "Villgro Africa — terms page checked by scrape.py",
+      "excerpt": "the high-performing entrepreneurs they invest in. What is your typical investment size? Depending on the stage of the company, Villgro Africa invests up to $50,000 in pre-seed or seed investment. What type of capital does Villgro Africa deploy? Villgro Africa provides either grant or equity capital (or both) depending on",
+      "page": "terms"
+    },
+    {
+      "id": "check-name-58f14c5561",
+      "url": "https://villgroafrica.org/",
+      "title": "Villgro Africa — homepage checked by scrape.py",
+      "excerpt": "Villgro Africa | Supporting Emerging Healthcare Businesses Menu",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4b30bea741",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "title": "Villgro Africa — terms page checked by scrape.py",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-72450d1ca7",
+      "url": "https://villgroafrica.org/innovators/innovators-business-incubation-program/",
+      "title": "Villgro Africa — details page checked by scrape.py",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-9eb06e9d1c",
+      "url": "https://villgroafrica.org/",
+      "title": "Villgro Africa — homepage checked by scrape.py",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-d4d1f2fc43",
+      "url": "https://villgroafrica.org/innovators/apply-now/",
+      "title": "Villgro Africa — application page checked by scrape.py",
+      "excerpt": "Portfolio → https://villgroafrica.org/investors/investment-portfolio/",
+      "page": "application"
+    },
+    {
+      "id": "check-route-4c34de684c",
+      "url": "https://villgroafrica.org/innovators/innovators-business-incubation-program/",
+      "title": "Villgro Africa — details page checked by scrape.py",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-56981b1ae7",
+      "url": "https://villgroafrica.org/",
+      "title": "Villgro Africa — homepage checked by scrape.py",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-839d11e069",
+      "url": "https://villgroafrica.org/resources/faqs/",
+      "title": "Villgro Africa — terms page checked by scrape.py",
+      "excerpt": "Apply Now → https://villgroafrica.org/innovators/apply-now/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-994e6adb3e",
+      "url": "https://villgroafrica.org/",
+      "title": "Villgro Africa — homepage checked by scrape.py",
+      "excerpt": "Apply Today → https://villgroafrica.org/innovators/apply-now/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://villgroafrica.org/innovators/apply-now/",
+        "evidenceId": "check-route-56981b1ae7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://villgroafrica.org/innovators/apply-now/",
+        "evidenceId": "check-route-56981b1ae7"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "the high-performing entrepreneurs they invest in. What is your typical investment size? Depending on the stage of the company, Villgro Africa invests up to $50,000 in pre-seed or seed investment. What type of capital does Villgro Africa deploy? Villgro Africa provides either grant or equity capital (or both) depending on",
+        "evidenceId": "check-deal-04a4ea9d0e"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://villgroafrica.org/investors/investment-portfolio/",
+        "evidenceId": "check-portfolio-9eb06e9d1c"
+      }
+    ],
+    "name": [
+      {
+        "value": "Villgro Africa",
+        "evidenceId": "check-name-58f14c5561"
+      }
+    ],
+    "examplePages": []
+  }
+}

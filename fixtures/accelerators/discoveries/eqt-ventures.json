@@ -1,0 +1,270 @@
+{
+  "programId": "eqt-ventures",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2ceqt_ventures_ii%2ceqt_ventures_iii",
+      "page": "portfolio",
+      "anchor": "See all",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/parloa",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio?fund=eqt_ventures_i%2Ceqt_ventures_ii%2Ceqt_ventures_iii",
+      "page": "portfolio",
+      "anchor": "Browse all companies",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/the-exploration-company",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/cleo",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/sana-labs",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/starcloud",
+      "page": "portfolio",
+      "anchor": "See company page",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/alexander-fred-ojala",
+      "page": "details",
+      "anchor": "Alexander Fred-Ojala Head of AI Early Stage Tech Learn more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/anton-ask-astrom",
+      "page": "details",
+      "anchor": "Anton Åström AI Analytics Director Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/bjorn-strom",
+      "page": "details",
+      "anchor": "Björn Ström AI Engineering Director Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/carolina-brochado",
+      "page": "details",
+      "anchor": "Carolina Brochado Head of EQT Ventures & Head of Growth US Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/chloe-paramatti",
+      "page": "details",
+      "anchor": "Chloe Paramatti People Operations Lead Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/conrad-schoo",
+      "page": "details",
+      "anchor": "Conrad Schoo Associate Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/frankie-greenwell",
+      "page": "details",
+      "anchor": "Frankie Greenwell Early Stage Talent Lead Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/gustav-von-sydow",
+      "page": "terms",
+      "anchor": "Gustav von Sydow Deal Partner Learn more",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/kaushik-subramanian",
+      "page": "details",
+      "anchor": "Kaushik Subramanian Partner Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/laurabeth-harvey",
+      "page": "details",
+      "anchor": "Laurabeth Harvey Managing Director - Head of Early Stage Platform Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/marnix-van-der-ploeg",
+      "page": "details",
+      "anchor": "Marnix Van der Ploeg Operating Partner Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/maximilian-samne",
+      "page": "details",
+      "anchor": "Maximilian Samne AI Engineering Associate Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/pierrick-cudonnec",
+      "page": "details",
+      "anchor": "Pierrick Cudonnec Director Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/polly-barnes",
+      "page": "details",
+      "anchor": "Polly Barnes Operating Partner Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/rania-belkahia",
+      "page": "details",
+      "anchor": "Rania Belkahia Partner Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/sofie-grant",
+      "page": "details",
+      "anchor": "Sofie Grant Head of Communications & Operating Partner Communications Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/ted-persson",
+      "page": "details",
+      "anchor": "Ted Persson Partner, Co-Head of Scaleup Europe Fund Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/tom-mendoza",
+      "page": "details",
+      "anchor": "Tom Mendoza Partner Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/victor-englesson",
+      "page": "details",
+      "anchor": "Victor Englesson Partner, Head of Early Stage Tech Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/nitya-hinduja",
+      "page": "details",
+      "anchor": "Nitya Hinduja Associate Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/people/gustav-skarman",
+      "page": "details",
+      "anchor": "Gustav Skarman Analyst Learn more",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-iii",
+      "page": "portfolio",
+      "anchor": "EQT Ventures III Launch 2022 Size 1.1B EUR Status Fully Invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures-ii",
+      "page": "portfolio",
+      "anchor": "EQT Ventures II Launch 2019 Size 660M EUR Status Fully invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/current-portfolio/funds/eqt-ventures",
+      "page": "portfolio",
+      "anchor": "EQT Ventures I Launch 2016 Size 566M EUR Status Fully invested",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/offices",
+      "page": "details",
+      "anchor": "Offices",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://eqtgroup.com/about/careers",
+      "page": "details",
+      "anchor": "Careers at EQT",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

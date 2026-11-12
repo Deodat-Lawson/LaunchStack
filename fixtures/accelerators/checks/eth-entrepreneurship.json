@@ -1,0 +1,47 @@
+{
+  "programId": "eth-entrepreneurship",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://entrepreneurship.ethz.ch/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-b5b908af9b",
+      "url": "https://entrepreneurship.ethz.ch/",
+      "title": "ETH Entrepreneurship — homepage checked by scrape.py",
+      "excerpt": "ETH Entrepreneurship - Spin-offs, Startups & Investment Opportunities – ETH",
+      "page": "details"
+    },
+    {
+      "id": "check-route-a5a78b5a94",
+      "url": "https://entrepreneurship.ethz.ch/",
+      "title": "ETH Entrepreneurship — homepage checked by scrape.py",
+      "excerpt": "Homepage → https://entrepreneurship.ethz.ch/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://entrepreneurship.ethz.ch/",
+        "evidenceId": "check-route-a5a78b5a94"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [],
+    "name": [
+      {
+        "value": "ETH Entrepreneurship",
+        "evidenceId": "check-name-b5b908af9b"
+      }
+    ],
+    "examplePages": []
+  }
+}

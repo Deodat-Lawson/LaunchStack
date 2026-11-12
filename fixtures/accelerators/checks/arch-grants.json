@@ -1,0 +1,301 @@
+{
+  "programId": "arch-grants",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://archgrants.org/",
+    "https://archgrants.org/about-us/",
+    "https://archgrants.org/programs/application-reminder-form/",
+    "https://archgrants.org/programs/faqs/"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-4938898ea4",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "business within St. Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses. How is Arch Grants different from angel investors and venture",
+      "page": "terms"
+    },
+    {
+      "id": "check-deal-6b2b8c24c3",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources, helping early-stage startups grow and scale. Our program is a beacon for entrepreneurs globally,",
+      "page": "details"
+    },
+    {
+      "id": "check-email-1ac8f5e5ac",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page checked by scrape.py",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "application"
+    },
+    {
+      "id": "check-email-2e9c764762",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "to judge or donating . For general questions, please email info@archgrants.org . Competition and Format Questions about the Startup",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-33ab70cfc7",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-43467d09f9",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-8a0123c481",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "info@archgrants.org",
+      "page": "terms"
+    },
+    {
+      "id": "check-email-8daf8f70c7",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-9ba620d50c",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "2315 Locust St. Suite 2B St. Louis, MO 63103 314-272-4857 info@archgrants.org Resources Board Member Login 2024 Impact Report IRS Form",
+      "page": "details"
+    },
+    {
+      "id": "check-email-c9c038e7da",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "info@archgrants.org",
+      "page": "details"
+    },
+    {
+      "id": "check-email-fd2eae8763",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page checked by scrape.py",
+      "excerpt": "info@archgrants.org",
+      "page": "application"
+    },
+    {
+      "id": "check-name-ba5a68878e",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "Home | Arch Grants Skip to content Search for: Search About Team Our Impact",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-44cd17ceb4",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page checked by scrape.py",
+      "excerpt": "314-272-4857",
+      "page": "application"
+    },
+    {
+      "id": "check-phone-c09f1f5dea",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-phone-d2e3545ee3",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "314-272-4857",
+      "page": "terms"
+    },
+    {
+      "id": "check-phone-f8b08a2a26",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "314-272-4857",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-006446d225",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "The Companies → https://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-007154d7a6",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page checked by scrape.py",
+      "excerpt": "The Companies → https://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-1e3139beee",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "The Companies → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-4ea2edd0a1",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "The Startups → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-55fab73160",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "The Startups → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-67e4ee1978",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "The Startups → https://archgrants.org/companies/",
+      "page": "terms"
+    },
+    {
+      "id": "check-portfolio-81566dc920",
+      "url": "https://archgrants.org/programs/application-reminder-form/",
+      "title": "Arch Grants — application page checked by scrape.py",
+      "excerpt": "The Startups → https://archgrants.org/companies/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-8af0699f99",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "Explore All Startups → http://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-aed2247869",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "The Companies → https://archgrants.org/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-1e1d8fa0cc",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "applying to judge → http://archgrants.org/get-involved/become-a-competition-judge/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-1fcd2104ec",
+      "url": "https://archgrants.org/about-us/",
+      "title": "Arch Grants — details page checked by scrape.py",
+      "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-b926cce6f7",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "Apply to the Competition → http://archgrants.org/programs/startup-competition/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-bd68017528",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-dbf865ac57",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "Application Reminder Form → https://archgrants.org/programs/application-reminder-form/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-eb427ecf48",
+      "url": "https://archgrants.org/programs/faqs/",
+      "title": "Arch Grants — terms page checked by scrape.py",
+      "excerpt": "application reminder form → https://archgrants.org/programs/application-reminder-form/",
+      "page": "terms"
+    },
+    {
+      "id": "check-route-f5a3460b46",
+      "url": "https://archgrants.org/",
+      "title": "Arch Grants — homepage checked by scrape.py",
+      "excerpt": "https://archgrants.org/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [
+      {
+        "value": "info@archgrants.org",
+        "evidenceId": "check-email-c9c038e7da"
+      }
+    ],
+    "phones": [
+      {
+        "value": "3142724857",
+        "evidenceId": "check-phone-f8b08a2a26"
+      }
+    ],
+    "routes": [
+      {
+        "value": "https://archgrants.org/programs/application-reminder-form/",
+        "evidenceId": "check-route-dbf865ac57"
+      },
+      {
+        "value": "http://archgrants.org/get-involved/become-a-competition-judge/",
+        "evidenceId": "check-route-1e1d8fa0cc"
+      },
+      {
+        "value": "http://archgrants.org/programs/startup-competition/",
+        "evidenceId": "check-route-b926cce6f7"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://archgrants.org/",
+        "evidenceId": "check-route-f5a3460b46"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "the world – by attracting and retaining extraordinary entrepreneurs. Through our unique and groundbreaking annual Startup Competition model, we provide up to $100,000 in equity-free grants and access to an ecosystem of resources, helping early-stage startups grow and scale. Our program is a beacon for entrepreneurs globally,",
+        "evidenceId": "check-deal-6b2b8c24c3"
+      },
+      {
+        "value": "business within St. Louis’ expanding entrepreneurial hub surrounded by a community of mentors, collaborators, and resources. Arch Grants Companies receive $75,000 and access to an ecosystem of resources and support to help grow and scale their businesses. How is Arch Grants different from angel investors and venture",
+        "evidenceId": "check-deal-4938898ea4"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://archgrants.org/companies/",
+        "evidenceId": "check-portfolio-4ea2edd0a1"
+      },
+      {
+        "value": "http://archgrants.org/companies/",
+        "evidenceId": "check-portfolio-8af0699f99"
+      }
+    ],
+    "name": [
+      {
+        "value": "Arch Grants",
+        "evidenceId": "check-name-ba5a68878e"
+      }
+    ],
+    "examplePages": []
+  }
+}

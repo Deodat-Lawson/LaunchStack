@@ -1,0 +1,70 @@
+{
+  "programId": "pear-vc",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://pear.vc/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-4f5c1a772a",
+      "url": "https://pear.vc/",
+      "title": "Pear VC — homepage checked by scrape.py",
+      "excerpt": "Pear VC How We Invest Companies Team Founder Services News &",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-549f3c6a2b",
+      "url": "https://pear.vc/",
+      "title": "Pear VC — homepage checked by scrape.py",
+      "excerpt": "Companies → https://pear.vc/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-a746887537",
+      "url": "https://pear.vc/",
+      "title": "Pear VC — homepage checked by scrape.py",
+      "excerpt": "Companies → https://pear.vc/companies/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-496f6b1ba9",
+      "url": "https://pear.vc/",
+      "title": "Pear VC — homepage checked by scrape.py",
+      "excerpt": "https://pear.vc",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://pear.vc",
+        "evidenceId": "check-route-496f6b1ba9"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://pear.vc/companies/",
+        "evidenceId": "check-portfolio-a746887537"
+      },
+      {
+        "value": "https://pear.vc/companies",
+        "evidenceId": "check-portfolio-549f3c6a2b"
+      }
+    ],
+    "name": [
+      {
+        "value": "Pear VC",
+        "evidenceId": "check-name-4f5c1a772a"
+      }
+    ],
+    "examplePages": []
+  }
+}

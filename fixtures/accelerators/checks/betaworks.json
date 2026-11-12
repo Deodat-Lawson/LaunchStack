@@ -1,0 +1,190 @@
+{
+  "programId": "betaworks",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://www.betaworks.com/",
+    "https://www.betaworks.com/camp",
+    "https://www.betaworks.com/camp/ai-camp-native-applications",
+    "https://www.betaworks.com/writing/camp-agent-systems-spring-2026"
+  ],
+  "evidence": [
+    {
+      "id": "check-deal-ea497710a8",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page checked by scrape.py",
+      "excerpt": "A capstone Demo Day in front of a room of the best investors in NYC and beyond Deal specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5% common stock stake in the business. Our syndicate",
+      "page": "batches"
+    },
+    {
+      "id": "check-name-58cf2c7b15",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "Home | Betaworks Camp About Previous Camps AI Camp: Agent Systems AI Camp:",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-0714835894",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "Investing → https://www.betaworks.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-88d6b9df3b",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — details page checked by scrape.py",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-b185e4d59e",
+      "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
+      "title": "Betaworks — application page checked by scrape.py",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-dcea8e313e",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page checked by scrape.py",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "batches"
+    },
+    {
+      "id": "check-portfolio-e80a2c5ac2",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "Companies → https://www.betaworks.com/companies",
+      "page": "details"
+    },
+    {
+      "id": "check-route-116682e36c",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-118c6ee24f",
+      "url": "https://www.betaworks.com/camp/ai-camp-native-applications",
+      "title": "Betaworks — application page checked by scrape.py",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "application"
+    },
+    {
+      "id": "check-route-3517611629",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "https://www.betaworks.com/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-3627e8abda",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — details page checked by scrape.py",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "details"
+    },
+    {
+      "id": "check-route-918470e7bf",
+      "url": "https://www.betaworks.com/",
+      "title": "Betaworks — homepage checked by scrape.py",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-c66a0da5aa",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page checked by scrape.py",
+      "excerpt": "Apply → https://www.betaworks.com/camp/application",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-cc230bc319",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — details page checked by scrape.py",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-cfce05d604",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — details page checked by scrape.py",
+      "excerpt": "Learn more → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "details"
+    },
+    {
+      "id": "check-route-d590757a7d",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page checked by scrape.py",
+      "excerpt": "AI Camp: Native Applications → https://www.betaworks.com/camp/ai-camp-native-applications",
+      "page": "batches"
+    },
+    {
+      "id": "check-route-d96bdd292b",
+      "url": "https://www.betaworks.com/writing/camp-agent-systems-spring-2026",
+      "title": "Betaworks — batches page checked by scrape.py",
+      "excerpt": "Apply to Betaworks' Fall '26 AI Camp: The New Agentic Economy → https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+      "page": "batches"
+    },
+    {
+      "id": "check-status-d20b3e222a",
+      "url": "https://www.betaworks.com/camp",
+      "title": "Betaworks — details page checked by scrape.py",
+      "excerpt": "Native Applications Apply Companies Team Events Writing News Connect Deadline Extended! Apply to AI Camp Application now open for AI Camp: The New Agent Economy. Apply Now . The next Camp application will open soon, submit your",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [
+      {
+        "value": "https://www.betaworks.com/camp/ai-camp-native-applications",
+        "evidenceId": "check-route-918470e7bf"
+      },
+      {
+        "value": "https://www.betaworks.com/camp/application",
+        "evidenceId": "check-route-116682e36c"
+      },
+      {
+        "value": "https://www.betaworks.com/writing/camp-the-new-agentic-economy",
+        "evidenceId": "check-route-d96bdd292b"
+      }
+    ],
+    "applicationUrl": [
+      {
+        "value": "https://www.betaworks.com/",
+        "evidenceId": "check-route-3517611629"
+      }
+    ],
+    "applicationsOpen": [
+      {
+        "value": true,
+        "evidenceId": "check-status-d20b3e222a"
+      }
+    ],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [
+      {
+        "value": "A capstone Demo Day in front of a room of the best investors in NYC and beyond Deal specifics: Each participating company will receive investment up to $500k. Betaworks Ventures will invest up to $250k on an uncapped SAFE note with a 25% discount, and receive a 5% common stock stake in the business. Our syndicate",
+        "evidenceId": "check-deal-ea497710a8"
+      }
+    ],
+    "portfolioPages": [
+      {
+        "value": "https://www.betaworks.com/companies",
+        "evidenceId": "check-portfolio-e80a2c5ac2"
+      }
+    ],
+    "name": [
+      {
+        "value": "Betaworks",
+        "evidenceId": "check-name-58cf2c7b15"
+      }
+    ],
+    "examplePages": []
+  }
+}

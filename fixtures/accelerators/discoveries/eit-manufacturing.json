@@ -1,0 +1,190 @@
+{
+  "programId": "eit-manufacturing",
+  "checkedAt": "2026-11-10T03:12:20.000Z",
+  "pages": [
+    {
+      "url": "https://www.eit.europa.eu/global-challenges/about-our-knowledge-and-innovation-communities",
+      "page": "details",
+      "anchor": "About our communities",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/our-activities/call-for-eit-communities/2021/faq",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": true,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/opportunities/about-eu-public-procurement",
+      "page": "details",
+      "anchor": "Procurement",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us",
+      "page": "details",
+      "anchor": "About Us",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-glance",
+      "page": "details",
+      "anchor": "EIT at a glance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-governance",
+      "page": "details",
+      "anchor": "EIT Governance",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/eit-governing-board",
+      "page": "details",
+      "anchor": "EIT Governing Board",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/eit-management-team",
+      "page": "details",
+      "anchor": "EIT Management Team",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-governance/public-meetings-record",
+      "page": "details",
+      "anchor": "Public meetings record",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/our-communities/eit-alumni",
+      "page": "portfolio",
+      "anchor": "EIT Alumni",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-alumni/activities",
+      "page": "portfolio",
+      "anchor": "Activities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/our-stakeholders-and-partners",
+      "page": "details",
+      "anchor": "Stakeholders and partners",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/stakeholders-and-partners/eu-institutions-agencies-bodies",
+      "page": "details",
+      "anchor": "EU institutions",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/stakeholders-and-partners/national-authorities",
+      "page": "details",
+      "anchor": "National authorities",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/stakeholders-and-partners/member-state-representatives-group",
+      "page": "details",
+      "anchor": "Member State representatives group",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/stakeholders-and-partners/member-state-representatives-group/representatives-and",
+      "page": "details",
+      "anchor": "Representatives and substitutes",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/stakeholders-and-partners/member-state-representatives-group/documents",
+      "page": "details",
+      "anchor": "Documents",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/eit-legal-framework",
+      "page": "details",
+      "anchor": "Legal framework",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/data-protection",
+      "page": "details",
+      "anchor": "Data protection",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/conflicts-interest",
+      "page": "details",
+      "anchor": "Conflicts of Interest",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/legal-framework/complaints",
+      "page": "details",
+      "anchor": "Complaints",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/about-us/contact-us",
+      "page": "details",
+      "anchor": "Get in touch",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    },
+    {
+      "url": "https://www.eit.europa.eu/who-we-are/faq",
+      "page": "terms",
+      "anchor": "FAQs",
+      "fetched": false,
+      "blocked": null,
+      "origin": "official"
+    }
+  ]
+}

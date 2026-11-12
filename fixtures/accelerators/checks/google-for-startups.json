@@ -1,0 +1,124 @@
+{
+  "programId": "google-for-startups",
+  "checkedAt": "2026-11-12T00:23:26.000Z",
+  "pagesRead": [
+    "https://startup.google.com/",
+    "https://startup.google.com/programs/",
+    "https://startup.google.com/programs/accelerator/"
+  ],
+  "evidence": [
+    {
+      "id": "check-name-dc24b822cf",
+      "url": "https://startup.google.com/",
+      "title": "Google for Startups — homepage checked by scrape.py",
+      "excerpt": "grow: Tools, resources and support programs for startups - Google for Startups for Startups Jump to content for Startups Programs Cloud",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-57694a0d09",
+      "url": "https://startup.google.com/",
+      "title": "Google for Startups — homepage checked by scrape.py",
+      "excerpt": "About → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-6f7b792c4c",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups — details page checked by scrape.py",
+      "excerpt": "About → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-7237d71fc6",
+      "url": "https://startup.google.com/programs/accelerator/",
+      "title": "Google for Startups — application page checked by scrape.py",
+      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-793def6400",
+      "url": "https://startup.google.com/",
+      "title": "Google for Startups — homepage checked by scrape.py",
+      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-99a65adcaa",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups — details page checked by scrape.py",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-c49ef684da",
+      "url": "https://startup.google.com/programs/accelerator/",
+      "title": "Google for Startups — application page checked by scrape.py",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-cf660985da",
+      "url": "https://startup.google.com/programs/accelerator/",
+      "title": "Google for Startups — application page checked by scrape.py",
+      "excerpt": "About → https://startup.google.com/alumni/",
+      "page": "application"
+    },
+    {
+      "id": "check-portfolio-d2c4b165b7",
+      "url": "https://startup.google.com/",
+      "title": "Google for Startups — homepage checked by scrape.py",
+      "excerpt": "Learn about our alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-df928e1ac2",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups — details page checked by scrape.py",
+      "excerpt": "About Discover what it means to be a part of the Google for Startups alumni community → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-portfolio-e3ec0542c5",
+      "url": "https://startup.google.com/",
+      "title": "Google for Startups — homepage checked by scrape.py",
+      "excerpt": "Alumni → https://startup.google.com/alumni/",
+      "page": "details"
+    },
+    {
+      "id": "check-route-39c2604a37",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups — details page checked by scrape.py",
+      "excerpt": "Find out more → https://startup.google.com/programs/accelerator/",
+      "page": "details"
+    }
+  ],
+  "findings": {
+    "emails": [],
+    "phones": [],
+    "routes": [],
+    "applicationUrl": [
+      {
+        "value": "https://startup.google.com/programs/accelerator/",
+        "evidenceId": "check-route-39c2604a37"
+      }
+    ],
+    "applicationsOpen": [],
+    "operatingStatus": [],
+    "deadlines": [],
+    "selectivity": [],
+    "dealText": [],
+    "portfolioPages": [
+      {
+        "value": "https://startup.google.com/alumni/",
+        "evidenceId": "check-portfolio-57694a0d09"
+      }
+    ],
+    "name": [
+      {
+        "value": "Google for Startups",
+        "evidenceId": "check-name-dc24b822cf"
+      }
+    ],
+    "examplePages": []
+  }
+}

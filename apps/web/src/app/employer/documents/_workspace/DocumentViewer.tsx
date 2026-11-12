@@ -35,6 +35,7 @@ import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
 import { canEditFileHere } from "./fileEditing";
+import { hasUnsavedEdits } from "./unsavedEdits";
 import { canChangeSource, canDeleteSource } from "./sourceContextMenu";
 import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
@@ -340,6 +341,7 @@ export function DocumentViewer({
     const tSourceMenu = useTranslations("sources.contextMenu");
     const tMindmapErrors = useTranslations("mindmap.errors");
     const tDrive = useTranslations("sources.googleDriveBanner");
+    const tEditor = useTranslations("viewers.fileEditor");
     const tOutside = useTranslations("sources.externalLink");
     const driveLinkSummary = useDriveLinkSummary();
     /** A new map's starter text, read by the fetch without making it re-run. */
@@ -806,9 +808,20 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
+    /**
+     * Leaving for the full-page viewer takes an open file editor with it,
+     * and a client-side move never fires beforeunload: with unsaved edits it
+     * stops and asks first.
+     */
+    const [leavingFor, setLeavingFor] = useState<string | null>(null);
+    const leaveFor = (href: string) => {
+        if (hasUnsavedEdits(source.documentId)) setLeavingFor(href);
+        else router.push(href);
+    };
+
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
-        router.push(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
+        leaveFor(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
     };
 
     const refreshVersions = useCallback(async () => {
@@ -1000,7 +1013,7 @@ export function DocumentViewer({
             return;
         }
         if (!source.documentId) return;
-        router.push(`/employer/documents/viewer?docId=${source.documentId}`);
+        leaveFor(`/employer/documents/viewer?docId=${source.documentId}`);
     };
 
     const notesAvailable = !isMindmap || Boolean(source.documentId);
@@ -2090,6 +2103,25 @@ export function DocumentViewer({
                 </aside>
             </div>
 
+            <ConfirmDialog
+                open={leavingFor !== null}
+                onOpenChange={next => {
+                    if (next) return;
+                    setLeavingFor(null);
+                    // Staying to edit: the rail goes back to the version the
+                    // editor holds, not the one that was clicked.
+                    void refreshVersions();
+                }}
+                layerClassName="z-[90]"
+                title={tEditor("discardTitle")}
+                description={tEditor("discardBody")}
+                confirmLabel={tEditor("discardConfirm")}
+                onConfirm={() => {
+                    const href = leavingFor;
+                    setLeavingFor(null);
+                    if (href) router.push(href);
+                }}
+            />
             <ConfirmDialog
                 open={confirming !== null}
                 onOpenChange={next => {

@@ -20,6 +20,7 @@
     "invalidTitleOrFolder": "无法使用该标题或文件夹。",
     "folderDenied": "你没有此文件夹的编辑权限。",
     "createFailed": "无法创建文件。请再试一次。",
-    "markdownRawHtmlNotice": "此文件包含编辑器无法显示的原始 HTML（例如注释或可折叠区块）。保存后这些内容会被删除；之前的版本仍保留在历史记录中。"
+    "markdownRawHtmlNotice": "此文件包含编辑器无法显示的原始 HTML（例如注释或可折叠区块）。保存后这些内容会被删除；之前的版本仍保留在历史记录中。",
+    "openFailed": "无法打开此文件进行编辑。请重试，或在 LaunchStack 之外打开它。"
   }
 }

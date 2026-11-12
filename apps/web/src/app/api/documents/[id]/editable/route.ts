@@ -107,12 +107,20 @@ async function authorize(
     };
 }
 
-function failure(err: unknown, t: Translator, where: string): NextResponse {
+function failure(
+    err: unknown,
+    t: Translator,
+    where: string,
+    action: "open" | "save"
+): NextResponse {
     if (err instanceof FileEditError) {
         return refuse(t, err.status, err.code, err.key, err.values);
     }
     console.error(`[editable] ${where} failed:`, err);
-    return refuse(t, 500, "save_failed", "saveFailed");
+    // Say what failed: a file that could not be opened is not a failed save.
+    return action === "open"
+        ? refuse(t, 500, "open_failed", "openFailed")
+        : refuse(t, 500, "save_failed", "saveFailed");
 }
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
@@ -128,7 +136,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
                 notice: noticeKey ? t(`server.${noticeKey}`) : null,
             });
         } catch (err) {
-            return failure(err, t, `GET doc=${auth.doc.id}`);
+            return failure(err, t, `GET doc=${auth.doc.id}`, "open");
         }
     });
 }
@@ -174,7 +182,7 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             });
             return NextResponse.json({ success: true, ...result });
         } catch (err) {
-            return failure(err, t, `PUT doc=${auth.doc.id}`);
+            return failure(err, t, `PUT doc=${auth.doc.id}`, "save");
         }
     });
 }

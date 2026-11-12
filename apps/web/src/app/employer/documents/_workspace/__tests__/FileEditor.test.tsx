@@ -16,6 +16,8 @@ import { hasUnsavedEdits } from "../unsavedEdits";
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
+const mockPush = jest.fn();
+jest.mock("next/navigation", () => ({ useRouter: () => ({ push: mockPush }) }));
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { toast } = require("sonner") as { toast: { success: jest.Mock; error: jest.Mock } };
 
@@ -316,6 +318,33 @@ describe("FileEditor", () => {
         await waitFor(() =>
             expect(screen.queryByRole("button", { name: "Add row below" })).not.toBeInTheDocument()
         );
+    });
+
+    it("stops an in-app link that would leave the page, and asks first", async () => {
+        fetchMock.mockImplementation(() => json(editable()));
+        const user = userEvent.setup();
+        render(
+            <>
+                <a href="/employer/settings">Settings</a>
+                <a href={`${window.location.pathname}?source=d9`}>Another file</a>
+                <FileEditor documentId={7} onExit={jest.fn()} />
+            </>
+        );
+        await loaded();
+        await edit(user);
+        mockPush.mockClear();
+
+        // Another source on the same page keeps the editor mounted: no question.
+        const sameDialogs = screen.queryAllByRole("alertdialog").length;
+        await user.click(screen.getByRole("link", { name: "Another file" }));
+        expect(screen.queryAllByRole("alertdialog")).toHaveLength(sameDialogs);
+
+        await user.click(screen.getByRole("link", { name: "Settings" }));
+        expect(await screen.findByText("Discard unsaved changes?")).toBeInTheDocument();
+        expect(mockPush).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole("button", { name: "Discard" }));
+        await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/employer/settings"));
     });
 
     it("asks before Done throws away unsaved edits", async () => {

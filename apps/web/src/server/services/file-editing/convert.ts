@@ -18,6 +18,7 @@ import { Marked } from "marked";
 import mammoth from "mammoth";
 import HTMLtoDOCX from "@turbodocx/html-to-docx";
 import JSZip from "jszip";
+import sharp from "sharp";
 
 /** Tags whose content is dangerous or meaningless in a document: dropped whole. */
 const DROP_TAGS = new Set([
@@ -107,7 +108,21 @@ const ALIGN_STYLE = /text-align\s*:\s*(left|center|right|justify)/i;
 const ALIGNABLE = new Set(["p", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td"]);
 
 const SAFE_HREF = /^(https?:|mailto:|tel:|#)/i;
-const DATA_IMAGE = /^data:image\/(png|jpe?g|gif|webp|bmp);base64,[a-z0-9+/=\s]+$/i;
+const DATA_IMAGE_PREFIX = /^data:image\/(png|jpe?g|gif|webp|bmp);base64,/i;
+/** Anything that is not base64. A negated class scans once; no backtracking. */
+const NOT_BASE64 = /[^a-z0-9+/=\s]/i;
+
+/**
+ * An inline picture. Checked in two steps: a single pattern over the whole
+ * URI backtracked through a photo's megabytes and blew the stack, so a Word
+ * file with one ordinary photo could not be opened.
+ */
+function isDataImage(src: string): boolean {
+    const prefix = DATA_IMAGE_PREFIX.exec(src);
+    if (!prefix) return false;
+    const payload = src.slice(prefix[0].length);
+    return payload.length > 0 && !NOT_BASE64.test(payload);
+}
 const REMOTE_IMAGE = /^https?:\/\//i;
 
 export interface SanitizeOptions {
@@ -179,7 +194,7 @@ export function sanitizeEditorHtml(html: string, options: SanitizeOptions): stri
             if (tag === "img") {
                 const src = (node.attribs.src ?? "").trim();
                 const keep =
-                    DATA_IMAGE.test(src) || (options.allowRemoteImages && REMOTE_IMAGE.test(src));
+                    isDataImage(src) || (options.allowRemoteImages && REMOTE_IMAGE.test(src));
                 if (!keep) $(node).remove();
             }
         }
@@ -197,7 +212,9 @@ export function sanitizeEditorHtml(html: string, options: SanitizeOptions): stri
 // ---------------------------------------------------------------------------
 
 /** YAML (`---`) or TOML (`+++`) front matter at the very top of a Markdown file. */
-const FRONT_MATTER = /^(---|\+\+\+)[ \t]*\r?\n[\s\S]*?\r?\n(?:\1|\.\.\.)[ \t]*(?:\r?\n|$)/;
+const FRONT_MATTER = /^(---|\+\+\+)[ \t]*\r?\n([\s\S]*?)\r?\n(?:\1|\.\.\.)[ \t]*(?:\r?\n|$)/;
+/** A front-matter field: `key: value` (YAML) or `key = value` (TOML). */
+const FRONT_MATTER_FIELD = /^[ \t]*["']?[A-Za-z0-9_][\w .-]*["']?[ \t]*[:=]/m;
 
 /**
  * A Markdown file's front matter, kept apart from its body. The editor never
@@ -207,7 +224,9 @@ const FRONT_MATTER = /^(---|\+\+\+)[ \t]*\r?\n[\s\S]*?\r?\n(?:\1|\.\.\.)[ \t]*(?
 export function splitFrontMatter(markdown: string): { frontMatter: string; body: string } {
     const text = markdown.replace(/^\uFEFF/, "");
     const match = FRONT_MATTER.exec(text);
-    if (!match) return { frontMatter: "", body: text };
+    // Two horizontal rules around ordinary text are not front matter: the
+    // block has to hold at least one field.
+    if (!match || !FRONT_MATTER_FIELD.test(match[2] ?? "")) return { frontMatter: "", body: text };
     const frontMatter = match[0].endsWith("\n") ? match[0] : `${match[0]}\n`;
     return { frontMatter, body: text.slice(match[0].length) };
 }
@@ -242,6 +261,9 @@ function escapeText(value: string): string {
 
 const markdown = new Marked({
     gfm: true,
+    // A single newline is a line break, as Obsidian and most note apps show
+    // it; a save writes it back as a Markdown hard break, so the lines stay.
+    breaks: true,
     async: false,
     renderer: {
         html({ text }) {
@@ -270,7 +292,8 @@ export function markdownToHtml(source: string): string {
     const { body } = splitFrontMatter(source);
     // A footnote definition ("[^1]: text") would read as a link definition
     // and vanish; escaped, it stays text and a save writes it back as it was.
-    const prepared = body.replace(/^( {0,3})\[\^([^\]\s]+)\]:/gm, "$1\\[^$2]:");
+    // Each definition its own paragraph, or consecutive ones run together.
+    const prepared = body.replace(/^( {0,3})\[\^([^\]\s]+)\]:/gm, "\n$1\\[^$2]:");
     const html = markdown.parse(prepared) as string;
     // Task-list boxes become their literal markers, which the editor can hold
     // and a save turns back into "- [ ]" / "- [x]".
@@ -449,6 +472,83 @@ const SYMBOL_FONT = /<w:rFonts w:ascii="Symbol" w:hAnsi="Symbol"[^>]*\/>/g;
  * no Symbol font, so LaunchStack's own Word preview showed an empty box for
  * every bullet of every file saved from the editor.
  */
+/**
+ * Pictures at least this large (in base64 characters) go through the Word
+ * converter as stand-ins. Its data-URL pattern, `(.+)$`, keeps a backtrack
+ * entry per character: an ordinary phone photo ran it out of regexp stack and
+ * every save of a Word file with one failed.
+ */
+const STAND_IN_FROM_CHARS = 256 * 1024;
+
+interface HeldPicture {
+    /** What the converter was given: the same size and format, one solid colour. */
+    standIn: Buffer;
+    /** What goes back into the .docx in its place. */
+    original: Buffer;
+}
+
+/**
+ * Swap each large inline picture for a stand-in of the same pixel size and
+ * format, so the converter lays it out exactly as the original. Each stand-in
+ * is a colour of its own, so its bytes find it again in the finished file.
+ */
+async function holdBackLargePictures(html: string): Promise<{ html: string; held: HeldPicture[] }> {
+    const $ = cheerio.load(html, {}, false);
+    const held: HeldPicture[] = [];
+    for (const img of $("img").toArray()) {
+        const src = $(img).attr("src") ?? "";
+        const prefix = DATA_IMAGE_PREFIX.exec(src);
+        if (!prefix || src.length - prefix[0].length < STAND_IN_FROM_CHARS) continue;
+        const format = prefix[1]!.toLowerCase();
+        if (format === "bmp") continue; // sharp cannot write one; left to the converter
+        const original = Buffer.from(src.slice(prefix[0].length), "base64");
+        let width: number | undefined;
+        let height: number | undefined;
+        try {
+            ({ width, height } = await sharp(original).metadata());
+        } catch {
+            continue; // not a picture sharp can read; the converter decides
+        }
+        if (!width || !height) continue;
+        const n = held.length + 1;
+        const canvas = sharp({
+            create: {
+                width,
+                height,
+                channels: 3,
+                background: { r: n & 255, g: (n >> 8) & 255, b: 101 },
+            },
+        });
+        const standIn = await (
+            format === "png"
+                ? canvas.png()
+                : format === "gif"
+                  ? canvas.gif()
+                  : format === "webp"
+                    ? canvas.webp()
+                    : canvas.jpeg()
+        ).toBuffer();
+        held.push({ standIn, original });
+        $(img).attr("src", `data:image/${prefix[1]};base64,${standIn.toString("base64")}`);
+    }
+    return { html: held.length ? ($.root().html() ?? html) : html, held };
+}
+
+/** Put the real pictures back where their stand-ins landed. */
+async function restorePictures(docx: Buffer, held: HeldPicture[]): Promise<Buffer> {
+    if (!held.length) return docx;
+    const zip = await JSZip.loadAsync(docx);
+    const media = Object.values(zip.files).filter(
+        file => !file.dir && file.name.startsWith("word/media/")
+    );
+    for (const file of media) {
+        const bytes = await file.async("nodebuffer");
+        const picture = held.find(item => item.standIn.equals(bytes));
+        if (picture) zip.file(file.name, picture.original);
+    }
+    return zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
+}
+
 async function plainBullets(docx: Buffer): Promise<Buffer> {
     const zip = await JSZip.loadAsync(docx);
     const numbering = zip.file("word/numbering.xml");
@@ -467,7 +567,8 @@ async function plainBullets(docx: Buffer): Promise<Buffer> {
  */
 export async function htmlToDocx(html: string, title: string): Promise<Buffer> {
     const clean = sanitizeEditorHtml(html, { allowRemoteImages: false });
-    const output = await HTMLtoDOCX(clean || "<p></p>", null, {
+    const { html: light, held } = await holdBackLargePictures(clean);
+    const output = await HTMLtoDOCX(light || "<p></p>", null, {
         title,
         font: "Calibri",
         fontSize: 22,
@@ -478,7 +579,7 @@ export async function htmlToDocx(html: string, title: string): Promise<Buffer> {
     if (Buffer.isBuffer(output)) bytes = output;
     else if (output instanceof ArrayBuffer) bytes = Buffer.from(output);
     else bytes = Buffer.from(await output.arrayBuffer());
-    bytes = await plainBullets(bytes);
+    bytes = await plainBullets(await restorePictures(bytes, held));
     try {
         await mammoth.convertToHtml({ buffer: bytes });
     } catch (err) {

@@ -5,6 +5,7 @@
  * that stands between the editor and the converters.
  */
 import JSZip from "jszip";
+import sharp from "sharp";
 import mammoth from "mammoth";
 
 import {
@@ -77,6 +78,51 @@ describe("sanitizeEditorHtml", () => {
             { allowRemoteImages: false }
         );
         expect(out).toBe("<p>Body</p>");
+    });
+});
+
+describe("pictures inline in the editor", () => {
+    it("keeps a multi-megabyte photo without exhausting the stack", () => {
+        // ~5.5 MB of base64, the size of one ordinary phone photo in a Word file.
+        const photo = `data:image/jpeg;base64,${"/9j/4AAQSkZJRgABAQ".repeat(300_000)}`;
+        const html = sanitizeEditorHtml(`<p>Site visit</p><p><img src="${photo}"></p>`, {
+            allowRemoteImages: false,
+        });
+        expect(html).toContain('<img src="data:image/jpeg;base64,/9j/');
+        expect(html.length).toBeGreaterThan(5_000_000);
+    });
+
+    it("writes a Word file around a phone-sized photo, keeping the photo's own bytes", async () => {
+        // Random pixels barely compress: ~3.5 MB of JPEG, the size that used to
+        // run the converter out of regexp stack.
+        const width = 2400;
+        const height = 1800;
+        const noise = Buffer.alloc(width * height * 3);
+        for (let i = 0; i < noise.length; i++) noise[i] = (i * 2654435761) >>> 24;
+        const photo = await sharp(noise, { raw: { width, height, channels: 3 } })
+            .jpeg({ quality: 90 })
+            .toBuffer();
+        expect(photo.length).toBeGreaterThan(2_000_000);
+
+        const bytes = await htmlToDocx(
+            `<h1>Site visit</h1><p><img src="data:image/jpeg;base64,${photo.toString("base64")}"></p>`,
+            "Report"
+        );
+        const zip = await JSZip.loadAsync(bytes);
+        const media = Object.values(zip.files).filter(
+            f => !f.dir && f.name.startsWith("word/media/")
+        );
+        expect(media).toHaveLength(1);
+        expect((await media[0]!.async("nodebuffer")).equals(photo)).toBe(true);
+        expect(await docxToHtml(bytes)).toContain("<h1>Site visit</h1>");
+    }, 60_000);
+
+    it("still drops a data URI that is not a picture's base64", () => {
+        const html = sanitizeEditorHtml(
+            `<p><img src="data:image/png;base64,abc<script>"></p><p><img src="data:text/html;base64,PHNjcmlwdD4="></p>`,
+            { allowRemoteImages: false }
+        );
+        expect(html).not.toContain("<img");
     });
 });
 
@@ -193,6 +239,28 @@ describe("Markdown that must survive an open and a save", () => {
         expect(roundTrip(saved)).toBe(saved);
         // Not raw HTML, so no warning for it.
         expect(markdownHasRawHtml(file)).toBe(false);
+    });
+
+    it("keeps consecutive footnote definitions apart", () => {
+        const saved = roundTrip("Two claims.[^1][^2]\n\n[^1]: One.\n[^2]: Two.\n");
+        expect(saved).toMatch(/^\[\^1\]: One\.$/m);
+        expect(saved).toMatch(/^\[\^2\]: Two\.$/m);
+        expect(roundTrip(saved)).toBe(saved);
+    });
+
+    it("keeps a note's lines as lines", () => {
+        const saved = roundTrip("Line A\nLine B\n");
+        // A Markdown hard break: every reader shows two lines.
+        expect(saved).toBe("Line A  \nLine B\n");
+        expect(markdownToHtml(saved)).toMatch(/Line A<br\s*\/?>\s*Line B/);
+        expect(roundTrip(saved)).toBe(saved);
+    });
+
+    it("takes only a block of fields for front matter, not two rules around text", () => {
+        expect(splitFrontMatter("---\n\nSome text\n\n---\n\nMore\n").frontMatter).toBe("");
+        expect(splitFrontMatter('+++\ntitle = "Plan"\n+++\nBody\n').frontMatter).toBe(
+            '+++\ntitle = "Plan"\n+++\n'
+        );
     });
 
     it("finds raw HTML the editor will drop, but not a <br>", () => {

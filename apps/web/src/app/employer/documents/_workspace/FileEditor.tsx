@@ -12,6 +12,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -103,7 +104,12 @@ export function FileEditor({ documentId, onExit, onSaved, onNewerVersion }: File
     const [saving, setSaving] = useState(false);
     /** The server's sentence when a save was refused for a newer copy. */
     const [conflict, setConflict] = useState<string | null>(null);
-    const [confirm, setConfirm] = useState<null | "discard" | "reload">(null);
+    const [confirm, setConfirm] = useState<null | "discard" | "reload" | "leave">(null);
+    /** Where an in-app link was taking someone when it stopped to ask. */
+    const [leavingFor, setLeavingFor] = useState<string | null>(null);
+    const router = useRouter();
+    /** This editor's own entry in the unsaved-edits register. */
+    const [registerToken] = useState(() => Symbol("file-editor"));
     /** Bumped on every edit, so a save only clears "unsaved" if nothing changed meanwhile. */
     const editCount = useRef(0);
     const markDirty = useCallback(() => {
@@ -171,9 +177,39 @@ export function FileEditor({ documentId, onExit, onSaved, onNewerVersion }: File
 
     // The shell asks before closing this file's tab while edits are unsaved.
     useEffect(() => {
-        setUnsavedEdits(documentId, dirty);
-    }, [documentId, dirty]);
-    useEffect(() => () => setUnsavedEdits(documentId, false), [documentId]);
+        setUnsavedEdits(documentId, registerToken, dirty);
+    }, [documentId, registerToken, dirty]);
+    useEffect(
+        () => () => setUnsavedEdits(documentId, registerToken, false),
+        [documentId, registerToken]
+    );
+
+    // An in-app link that leaves this page (Settings, another app) would take
+    // the editor with it, and a client-side move never fires beforeunload: it
+    // stops and asks. Links that stay on the page — another source, a tab —
+    // keep the editor mounted, so they go ahead.
+    useEffect(() => {
+        if (!dirty) return;
+        const onClick = (event: MouseEvent) => {
+            if (event.defaultPrevented || event.button !== 0) return;
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            const target = event.target instanceof Element ? event.target : null;
+            const anchor = target?.closest("a[href]");
+            if (!(anchor instanceof HTMLAnchorElement)) return;
+            if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+            const url = new URL(anchor.href, window.location.href);
+            if (url.origin !== window.location.origin) return; // leaving the app: beforeunload asks
+            // A file or API address is a full browser load, which beforeunload covers.
+            if (url.pathname.startsWith("/api/")) return;
+            if (url.pathname === window.location.pathname) return;
+            event.preventDefault();
+            event.stopPropagation();
+            setLeavingFor(`${url.pathname}${url.search}${url.hash}`);
+            setConfirm("leave");
+        };
+        document.addEventListener("click", onClick, true);
+        return () => document.removeEventListener("click", onClick, true);
+    }, [dirty]);
 
     // Leaving the page with unsaved edits asks first.
     useEffect(() => {
@@ -380,9 +416,13 @@ export function FileEditor({ documentId, onExit, onSaved, onNewerVersion }: File
                         reload();
                         return;
                     }
+                    const destination = confirm === "leave" ? leavingFor : null;
                     setConfirm(null);
+                    setLeavingFor(null);
                     setDirty(false);
-                    onExit();
+                    setUnsavedEdits(documentId, registerToken, false);
+                    if (destination) router.push(destination);
+                    else onExit();
                 }}
             />
         </div>

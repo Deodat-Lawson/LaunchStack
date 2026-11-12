@@ -20,6 +20,7 @@
     "invalidTitleOrFolder": "That title or folder can't be used.",
     "folderDenied": "You do not have edit access to this folder.",
     "createFailed": "The file couldn't be created. Try again.",
-    "markdownRawHtmlNotice": "This file contains raw HTML (such as comments or collapsible sections) that the editor can't show. Saving removes it; the previous version stays in History."
+    "markdownRawHtmlNotice": "This file contains raw HTML (such as comments or collapsible sections) that the editor can't show. Saving removes it; the previous version stays in History.",
+    "openFailed": "This file couldn't be opened for editing. Try again, or open it outside LaunchStack."
   }
 }

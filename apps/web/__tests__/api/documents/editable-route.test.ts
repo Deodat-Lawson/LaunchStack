@@ -200,6 +200,19 @@ describe("GET /api/documents/[id]/editable", () => {
             message: expect.stringContaining("Markdown, plain text and Word files can."),
         });
     });
+
+    it("words an unexpected failure as a failed open, not a failed save", async () => {
+        const error = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        mockLoad.mockRejectedValue(new RangeError("Maximum call stack size exceeded"));
+        const res = await GET(get(), ctx());
+        expect(res.status).toBe(500);
+        expect(await res.json()).toEqual({
+            error: "open_failed",
+            message:
+                "This file couldn't be opened for editing. Try again, or open it outside LaunchStack.",
+        });
+        error.mockRestore();
+    });
 });
 
 describe("PUT /api/documents/[id]/editable", () => {

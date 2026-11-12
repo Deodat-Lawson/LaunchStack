@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getSessionFromHeaders } from "~/server/auth";
+import { isAddAccountMode } from "~/lib/auth/device-accounts";
 
 // Same matching semantics as the Clerk helper this file used to import:
 // a literal path, or a "(.*)"-suffixed prefix (which, like path-to-regexp,
@@ -225,6 +226,20 @@ export default async function middleware(req: NextRequest) {
             const signin = new URL("/signin", req.url);
             signin.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
             return NextResponse.redirect(signin);
+        }
+
+        // "Add another account": a signed-in person signs in (or up) as
+        // someone else and stays signed in as themselves (see
+        // ~/server/auth/device-sessions). Without the flag the routing below
+        // sends them back to their workspace, which is right for a plain
+        // /signin; with it they need the form. Checked before the membership
+        // lookup so a person with no active workspace can add one too.
+        if (
+            userId &&
+            (pathname === "/signin" || pathname === "/signup") &&
+            isAddAccountMode(req.nextUrl.searchParams)
+        ) {
+            return;
         }
 
         // Route authenticated users based on their DB role + status

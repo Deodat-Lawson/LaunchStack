@@ -189,6 +189,11 @@ export function WorkspaceSelectClient({
     const [dismissedPendingIds, setDismissedPendingIds] = useState(() => new Set<string>());
     const [acceptingId, setAcceptingId] = useState<string | null>(null);
     const [decliningId, setDecliningId] = useState<string | null>(null);
+    // Invitations the server says are no longer open (used, withdrawn,
+    // expired, or not this account's). The refreshed list leaves them out;
+    // they stay on screen with the reason under them and no buttons until the
+    // page is next loaded, so the reason isn't gone before it can be read.
+    const [closedInvites, setClosedInvites] = useState<Record<string, PendingInvite>>({});
 
     const noteRow = (key: string, note: RowNote | null) =>
         setRowNotes(notes => {
@@ -402,12 +407,12 @@ export function WorkspaceSelectClient({
                 redirectTo?: string;
             };
             if (!res.ok) {
-                noteRow(key, {
-                    tone: "error",
-                    text:
-                        data.error ??
-                        (res.status === 410 ? t("errors.inviteExpired") : t("errors.acceptFailed")),
-                });
+                const text =
+                    data.error ??
+                    (res.status === 410 ? t("errors.inviteExpired") : t("errors.acceptFailed"));
+                const inv = pendingInvites.find(p => p.id === id);
+                if (inv && (res.status === 410 || res.status === 404)) closeInvite(inv, text);
+                else noteRow(key, { tone: "error", text });
                 setAcceptingId(null);
                 return;
             }
@@ -419,6 +424,13 @@ export function WorkspaceSelectClient({
             noteRow(key, { tone: "error", text: t("errors.acceptFailed") });
             setAcceptingId(null);
         }
+    }
+
+    /** The invitation can't be acted on any more: say why under it, then refresh. */
+    function closeInvite(inv: PendingInvite, text: string) {
+        setClosedInvites(closed => ({ ...closed, [inv.id]: inv }));
+        noteRow(`inv:${inv.id}`, { tone: "error", text });
+        router.refresh();
     }
 
     /** Declines for good (the server records it), then drops the row. */
@@ -433,10 +445,18 @@ export function WorkspaceSelectClient({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ invitationId: Number(inv.id) }),
             });
-            const data = (await res.json().catch(() => ({}))) as { error?: string };
-            // 410: it was already accepted, withdrawn or expired — gone from
-            // this list either way, which is what declining asked for.
-            if (!res.ok && res.status !== 410) {
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+                reason?: string;
+            };
+            // Only a decline, or one that had already happened, is a decline.
+            // Used, withdrawn or expired (410) or not this account's (404):
+            // say which, under the row.
+            if (res.status === 410 || res.status === 404) {
+                closeInvite(inv, data.error ?? t("errors.declineFailed"));
+                return;
+            }
+            if (!res.ok) {
                 noteRow(key, { tone: "error", text: data.error ?? t("errors.declineFailed") });
                 return;
             }
@@ -451,7 +471,10 @@ export function WorkspaceSelectClient({
         }
     }
 
-    const visibleInvites = pendingInvites.filter(p => !dismissedPendingIds.has(p.id));
+    const visibleInvites = [
+        ...pendingInvites,
+        ...Object.values(closedInvites).filter(c => !pendingInvites.some(p => p.id === c.id)),
+    ].filter(p => !dismissedPendingIds.has(p.id));
 
     const noteId = (key: string) => (rowNotes[key] ? `note-${key.replace(":", "-")}` : undefined);
 
@@ -753,31 +776,34 @@ export function WorkspaceSelectClient({
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div
-                                                className={styles.inviteActions}
-                                                aria-describedby={noteId(rowKey)}
-                                            >
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
-                                                    onClick={() => void declineInvite(inv)}
-                                                    disabled={rowBusy}
+                                            {/* No buttons on an invitation that has closed. */}
+                                            {closedInvites[inv.id] ? null : (
+                                                <div
+                                                    className={styles.inviteActions}
+                                                    aria-describedby={noteId(rowKey)}
                                                 >
-                                                    {decliningId === inv.id
-                                                        ? t("declining")
-                                                        : t("decline")}
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
-                                                    onClick={() => void acceptInvite(inv.id)}
-                                                    disabled={rowBusy}
-                                                >
-                                                    {acceptingId === inv.id
-                                                        ? t("joining")
-                                                        : t("acceptOpen")}
-                                                </button>
-                                            </div>
+                                                    <button
+                                                        type="button"
+                                                        className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
+                                                        onClick={() => void declineInvite(inv)}
+                                                        disabled={rowBusy}
+                                                    >
+                                                        {decliningId === inv.id
+                                                            ? t("declining")
+                                                            : t("decline")}
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
+                                                        onClick={() => void acceptInvite(inv.id)}
+                                                        disabled={rowBusy}
+                                                    >
+                                                        {acceptingId === inv.id
+                                                            ? t("joining")
+                                                            : t("acceptOpen")}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                         {renderNote(rowKey)}
                                     </Fragment>

@@ -543,30 +543,45 @@ export async function acceptInvitation(
 }
 
 /**
+ * Why a decline didn't happen, for the screen to say the right thing: the
+ * invitation was already used, withdrawn, past its date, or isn't this
+ * person's to decline (the same answer as an id that doesn't exist).
+ */
+export type DeclineRefusal = "accepted" | "revoked" | "expired" | "not_found";
+
+/**
  * The invited person turns an invitation down. Only the address it was sent
  * to may do this, and only while it is open; anyone else learns nothing about
  * it (404, the same answer as an id that doesn't exist). It stays declined —
  * off their workspace list, and refused by the accept link — until an admin
- * resends it.
+ * resends it. Declining twice is a success (`alreadyDeclined`); every refusal
+ * carries a `reason` (DeclineRefusal).
  */
 export async function declineInvitation(
     user: SessionUser,
     invitationId: number
-): Promise<{ success: true }> {
+): Promise<{ success: true; alreadyDeclined: boolean }> {
     const [row] = await db
         .select()
         .from(workspaceInvitations)
         .where(eq(workspaceInvitations.id, invitationId))
         .limit(1);
+    const refuse = (reason: DeclineRefusal) => ({ reason });
     if (!row || !user.email || row.email.trim().toLowerCase() !== user.email) {
-        throw notFound(copy("team.server.errors.invitationDoesNotExist"));
+        throw notFound(copy("team.server.errors.invitationDoesNotExist"), refuse("not_found"));
     }
 
     const status = invitationStatus(row);
-    if (status === "declined") return { success: true };
-    if (status === "accepted") throw gone(copy("team.server.errors.invitationUsed"));
-    if (status === "revoked") throw gone(copy("team.server.errors.invitationRevoked"));
-    if (status === "expired") throw gone(copy("team.server.errors.invitationExpired"));
+    if (status === "declined") return { success: true, alreadyDeclined: true };
+    if (status === "accepted") {
+        throw gone(copy("team.server.errors.invitationUsed"), refuse("accepted"));
+    }
+    if (status === "revoked") {
+        throw gone(copy("team.server.errors.invitationRevoked"), refuse("revoked"));
+    }
+    if (status === "expired") {
+        throw gone(copy("team.server.errors.invitationExpired"), refuse("expired"));
+    }
 
     await db.transaction(async tx => {
         await tx
@@ -588,5 +603,5 @@ export async function declineInvitation(
             detail: { email: row.email },
         });
     });
-    return { success: true };
+    return { success: true, alreadyDeclined: false };
 }

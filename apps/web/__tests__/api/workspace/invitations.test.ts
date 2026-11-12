@@ -376,6 +376,7 @@ describe("declined invitations", () => {
         const res = await decline({ invitationId: 41 });
 
         expect(res.status).toBe(404);
+        expect(((await res.json()) as { reason: string }).reason).toBe("not_found");
         expect(fakeDb.updates).toHaveLength(0);
         expect(fakeDb.insertedInto(workspaceAuditEvents)).toHaveLength(0);
     });
@@ -402,11 +403,18 @@ describe("declined invitations", () => {
             [invitationRow({ expiresAt: PAST })]
         );
 
-        const statuses = [];
+        const answers = [];
         for (let attempt = 0; attempt < 3; attempt++) {
-            statuses.push((await decline({ invitationId: 41 })).status);
+            const res = await decline({ invitationId: 41 });
+            const body = (await res.json()) as { reason: string; error: string };
+            answers.push([res.status, body.reason]);
         }
-        expect(statuses).toEqual([410, 410, 410]);
+        // A reason the screen can act on: "already used" is not "declined".
+        expect(answers).toEqual([
+            [410, "accepted"],
+            [410, "revoked"],
+            [410, "expired"],
+        ]);
         expect(fakeDb.updates).toHaveLength(0);
     });
 
@@ -419,7 +427,7 @@ describe("declined invitations", () => {
         const res = await decline({ invitationId: 41 });
 
         expect(res.status).toBe(200);
-        await expect(res.json()).resolves.toEqual({ success: true });
+        await expect(res.json()).resolves.toEqual({ success: true, alreadyDeclined: false });
         expect(fakeDb.updatesOf(workspaceInvitations)).toEqual([{ declinedAt: expect.any(Date) }]);
         expect(fakeDb.insertedInto(workspaceAuditEvents)).toEqual([
             expect.objectContaining({
@@ -440,6 +448,7 @@ describe("declined invitations", () => {
         const res = await decline({ invitationId: 41 });
 
         expect(res.status).toBe(200);
+        await expect(res.json()).resolves.toEqual({ success: true, alreadyDeclined: true });
         expect(fakeDb.updates).toHaveLength(0);
     });
 

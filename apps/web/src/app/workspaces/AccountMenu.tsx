@@ -71,6 +71,10 @@ export function AccountMenu({
     const activeUserId = session?.user.id;
 
     const [accounts, setAccounts] = useState<DeviceAccount[] | null>(null);
+    // Each account's own profile photo, the one the chip shows for the
+    // active account: Better Auth's `user.image` is the sign-in provider's
+    // picture, which would give one person two faces in one menu.
+    const [photos, setPhotos] = useState<Record<string, string | null>>({});
     const [busy, setBusy] = useState(false);
 
     const refresh = useCallback(async () => {
@@ -80,6 +84,15 @@ export function AccountMenu({
         } catch {
             // The menu still works for the active account alone.
             setAccounts(current => current ?? []);
+        }
+        try {
+            const res = await fetch("/api/profile/device-photos");
+            if (res.ok) {
+                const body = (await res.json()) as { photos?: Record<string, string | null> };
+                setPhotos(body.photos ?? {});
+            }
+        } catch {
+            // Initials, then.
         }
     }, [activeToken]);
 
@@ -227,7 +240,7 @@ export function AccountMenu({
                                     <ProfileAvatar
                                         name={other.name}
                                         email={other.email}
-                                        src={other.image}
+                                        src={photos[other.userId] ?? null}
                                         className="size-7"
                                         fallbackClassName="text-xs"
                                     />

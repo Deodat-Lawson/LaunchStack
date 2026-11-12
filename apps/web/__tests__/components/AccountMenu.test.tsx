@@ -36,7 +36,8 @@ const GRACE: Account = {
     userId: "u-grace",
     name: "Grace Hopper",
     email: "grace@example.com",
-    image: null,
+    // The sign-in provider's picture: the menu must not use it.
+    image: "https://provider.example/grace.png",
 };
 
 let mockAccounts: Account[] = [];
@@ -61,6 +62,13 @@ const mockReload = jest.fn<void, [string]>();
 jest.mock("~/app/workspaces/reload-as", () => ({
     reloadAs: (href: string) => mockReload(href),
 }));
+// The avatar as data: which photo each account is drawn with.
+jest.mock("~/components/ProfileAvatar", () => ({
+    ProfileAvatar: ({ name, src }: { name: string; src: string | null }) => (
+        <span data-testid="avatar" data-name={name} data-src={src ?? ""} />
+    ),
+}));
+const mockFetch = jest.fn();
 jest.mock("sonner", () => ({
     toast: { error: jest.fn(), loading: jest.fn(), dismiss: jest.fn(), success: jest.fn() },
 }));
@@ -81,6 +89,19 @@ beforeEach(() => {
         fn.mockReset().mockResolvedValue(undefined);
     }
     mockReload.mockReset();
+    mockFetch.mockReset().mockImplementation((url: string) =>
+        Promise.resolve({
+            ok: url === "/api/profile/device-photos",
+            json: () =>
+                Promise.resolve({
+                    photos: {
+                        "u-ada": "/api/profile-images/ada",
+                        "u-grace": "/api/profile-images/grace",
+                    },
+                }),
+        })
+    );
+    globalThis.fetch = mockFetch as unknown as typeof fetch;
 });
 
 async function openMenu() {
@@ -115,6 +136,19 @@ describe("AccountMenu", () => {
         expect(others).toHaveLength(1);
         expect(others[0]).toHaveTextContent("Grace Hopper");
         expect(others[0]).toHaveAttribute("role", "menuitem");
+    });
+
+    it("draws every account with its own profile photo, not the sign-in provider's", async () => {
+        await openMenu();
+        const others = await screen.findAllByTestId("account-other");
+
+        await waitFor(() =>
+            expect(others[0]!.querySelector("[data-testid=avatar]")).toHaveAttribute(
+                "data-src",
+                "/api/profile-images/grace"
+            )
+        );
+        expect(mockFetch).toHaveBeenCalledWith("/api/profile/device-photos");
     });
 
     it("switches with one click and reloads the picker as that account", async () => {

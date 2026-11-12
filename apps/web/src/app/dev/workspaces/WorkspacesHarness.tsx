@@ -76,7 +76,8 @@ export function WorkspacesHarness() {
             id: "user-grace",
             name: "Grace Hopper",
             email: "grace@northwind.test",
-            image: grace,
+            // The menu shows the profile photo (device-photos), not this.
+            image: null,
         });
         window.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
             const raw =
@@ -86,6 +87,9 @@ export function WorkspacesHarness() {
             if (url.startsWith("/api/auth/get-session")) return json(ada);
             if (url.startsWith("/api/auth/multi-session/list-device-sessions")) {
                 return json([ada, graceSession]);
+            }
+            if (url.startsWith("/api/profile/device-photos")) {
+                return json({ photos: { "user-ada": me, "user-grace": grace } });
             }
             if (url.startsWith("/api/auth/device-sessions/remember")) {
                 return json({ remembered: true });

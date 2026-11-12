@@ -295,6 +295,16 @@ export const auth: Auth = new Proxy({} as Auth, {
     },
 });
 
+/**
+ * The auth user ids of every account signed in on the browser that sent
+ * `headers`, from its signed multi-session cookies (verified here, never
+ * taken from the client). Empty when there are none.
+ */
+export async function deviceAccountUserIds(headers: Headers): Promise<string[]> {
+    const sessions = await getAuth().api.listDeviceSessions({ headers });
+    return sessions.map(s => s.user.id);
+}
+
 /** Session read for middleware, which already holds the request's headers. */
 export async function getSessionFromHeaders(headers: Headers) {
     return getAuth().api.getSession({ headers });

@@ -402,10 +402,11 @@ describe("declined invitations", () => {
             [invitationRow({ expiresAt: PAST })]
         );
 
-        for (const _ of [1, 2, 3]) {
-            const res = await decline({ invitationId: 41 });
-            expect(res.status).toBe(410);
+        const statuses = [];
+        for (let attempt = 0; attempt < 3; attempt++) {
+            statuses.push((await decline({ invitationId: 41 })).status);
         }
+        expect(statuses).toEqual([410, 410, 410]);
         expect(fakeDb.updates).toHaveLength(0);
     });
 

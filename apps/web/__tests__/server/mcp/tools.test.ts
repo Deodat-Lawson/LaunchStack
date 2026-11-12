@@ -163,16 +163,18 @@ describe("the tool registry", () => {
         return body.result.tools;
     }
 
-    it("offers search, fetch, list_sources and save_conversation", () => {
+    it("offers the read tools, save_conversation, add_document and start_upload", () => {
         expect(MCP_TOOLS.map(tool => tool.name)).toEqual([
             "search",
             "fetch",
             "list_sources",
             "save_conversation",
+            "add_document",
+            "start_upload",
         ]);
     });
 
-    it("lists the read tools to a read-only key and all four to a read-write key of a member", async () => {
+    it("lists the read tools to a read-only key and every tool to a read-write key of a member", async () => {
         expect(
             (await listed(principal({ scopes: ["launchstack:read"] }))).map(t => t.name)
         ).toEqual(["search", "fetch", "list_sources"]);
@@ -181,10 +183,12 @@ describe("the tool registry", () => {
             "fetch",
             "list_sources",
             "save_conversation",
+            "add_document",
+            "start_upload",
         ]);
     });
 
-    it("keeps save_conversation from a read-write key whose person cannot upload", async () => {
+    it("keeps the write tools from a read-write key whose person cannot upload", async () => {
         expect((await listed(principal({ role: "viewer" }))).map(t => t.name)).toEqual([
             "search",
             "fetch",
@@ -210,7 +214,9 @@ describe("the tool registry", () => {
             const annotations = tool.annotations as Record<string, boolean>;
             expect(annotations.destructiveHint).toBe(false);
             expect(annotations.openWorldHint).toBe(false);
-            expect(annotations.readOnlyHint).toBe(tool.name !== "save_conversation");
+            expect(annotations.readOnlyHint).toBe(
+                !["save_conversation", "add_document", "start_upload"].includes(tool.name as string)
+            );
         }
     });
 });

@@ -38,6 +38,7 @@ import { canChangeSource, canDeleteSource } from "./sourceContextMenu";
 import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
+import { isFromClaude } from "~/lib/artifact-document";
 import {
     buildDocumentMenuItems,
     buildVersionMenuItems,
@@ -1258,7 +1259,13 @@ export function DocumentViewer({
                 }
                 meta={
                     <>
-                        <span>{sourceTypeLabel(tSourceTypes, sourceType)}</span>
+                        <span>
+                            {sourceType === "artifact" &&
+                            fullDoc &&
+                            !isFromClaude(fullDoc.ocrMetadata)
+                                ? tSourceTypes("sandboxedPage")
+                                : sourceTypeLabel(tSourceTypes, sourceType)}
+                        </span>
                         <span>·</span>
                         {addedLine ? (
                             <span className="truncate" data-testid="viewer-added-by">

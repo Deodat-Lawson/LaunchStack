@@ -444,12 +444,12 @@
     },
     "access": {
       "read": "搜索和阅读",
-      "readWrite": "搜索、阅读并保存对话"
+      "readWrite": "搜索、阅读、保存对话并添加文档"
     },
     "copy": "复制{label}",
     "copyFailed": "无法复制。请选中文本后手动复制。",
     "badge": {
-      "write": "读取和保存",
+      "write": "读取、保存和添加",
       "read": "只读"
     },
     "tabs": {
@@ -507,8 +507,8 @@
       "whatItCan": "可执行的操作",
       "whatKeyCan": "密钥可执行的操作",
       "readDetail": "搜索工作区，并打开你能查看的文档。",
-      "writeDetail": "还可以将助手的对话作为文档保存到工作区。",
-      "noSave": "保存对话需要添加文档的权限，而你的角色不包含该权限。",
+      "writeDetail": "还可以保存助手的对话，并向你可编辑的文件夹添加文档。",
+      "noSave": "保存对话和添加文档都需要添加文档的权限，而你的角色不包含该权限。",
       "submit": "创建密钥"
     },
     "creating": "正在创建…",
@@ -518,14 +518,14 @@
     "disconnectedAssistant": "已断开 {name}",
     "section": {
       "title": "助手（MCP）",
-      "description": "让 Claude、ChatGPT 和 Gemini 搜索此工作区并将对话保存进来。每个连接都以你的身份运行，仅限此工作区，且只能看到你能看到的内容。"
+      "description": "让 Claude、ChatGPT 和 Gemini 搜索此工作区、将对话保存进来，并向你可编辑的文件夹添加文档。每个连接都以你的身份运行，仅限此工作区，且只能看到你能看到的内容。"
     },
     "serverUrl": "服务器 URL",
     "pasteIt": "将它粘贴到助手中。助手会带你来这里登录，并询问要使用哪个工作区。",
     "connectTitle": "连接助手",
     "connected": {
       "title": "已连接的助手",
-      "description": "你已登录到此工作区的助手。撤销后，它会在下一次请求时被切断；它已保存的内容会保留。",
+      "description": "你已登录到此工作区的助手。撤销后，它会在下一次请求时被切断；它已保存或添加的内容会保留。",
       "none": "还没有连接任何助手。",
       "connectedAt": "连接于 {when}",
       "connected": "已连接",
@@ -546,7 +546,7 @@
       "disconnect": "断开 {name}？",
       "thisAssistant": "此助手",
       "keyBody": "所有使用此密钥的程序都会在下一次请求时停止工作。此操作无法撤销。",
-      "connectionBody": "它会在下一次请求时失去对此工作区的访问权限。它已保存的对话会保留。你可以随时重新连接。",
+      "connectionBody": "它会在下一次请求时失去对此工作区的访问权限。它已保存的对话和添加的文档会保留。你可以随时重新连接。",
       "revokeKeyLabel": "撤销密钥"
     }
   },

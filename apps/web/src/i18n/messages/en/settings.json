@@ -444,12 +444,12 @@
     },
     "access": {
       "read": "Search and read",
-      "readWrite": "Search, read and save conversations"
+      "readWrite": "Search, read, save conversations and add documents"
     },
     "copy": "Copy {label}",
     "copyFailed": "Couldn't copy. Select the text and copy it yourself.",
     "badge": {
-      "write": "Read and save",
+      "write": "Read, save and add",
       "read": "Read only"
     },
     "tabs": {
@@ -507,8 +507,8 @@
       "whatItCan": "What it can do",
       "whatKeyCan": "What the key can do",
       "readDetail": "Search the workspace and open the documents you can see.",
-      "writeDetail": "Also save an assistant's conversation into the workspace as a document.",
-      "noSave": "Saving conversations needs permission to add documents, which your role doesn't include.",
+      "writeDetail": "Also save an assistant's conversations, and add documents to folders you can edit.",
+      "noSave": "Saving conversations and adding documents need permission to add documents, which your role doesn't include.",
       "submit": "Create key"
     },
     "creating": "Creating…",
@@ -518,14 +518,14 @@
     "disconnectedAssistant": "Disconnected {name}",
     "section": {
       "title": "Assistants (MCP)",
-      "description": "Let Claude, ChatGPT and Gemini search this workspace and save conversations into it. Each connection acts as you, in this workspace only, and sees only what you can."
+      "description": "Let Claude, ChatGPT and Gemini search this workspace, save conversations into it and add documents to folders you can edit. Each connection acts as you, in this workspace only, and sees only what you can."
     },
     "serverUrl": "Server URL",
     "pasteIt": "Paste it into the assistant. It sends you here to sign in and asks which workspace to use.",
     "connectTitle": "Connect an assistant",
     "connected": {
       "title": "Connected assistants",
-      "description": "Assistants you have signed in to this workspace. Revoking one cuts it off at its next request; what it already saved stays.",
+      "description": "Assistants you have signed in to this workspace. Revoking one cuts it off at its next request; what it already saved or added stays.",
       "none": "No assistants connected yet.",
       "connectedAt": "Connected {when}",
       "connected": "Connected",
@@ -546,7 +546,7 @@
       "disconnect": "Disconnect {name}?",
       "thisAssistant": "this assistant",
       "keyBody": "Anything using this key stops working at its next request. This can't be undone.",
-      "connectionBody": "It loses access to this workspace at its next request. Conversations it already saved stay. You can connect it again any time.",
+      "connectionBody": "It loses access to this workspace at its next request. Conversations it saved and documents it added stay. You can connect it again any time.",
       "revokeKeyLabel": "Revoke key"
     }
   },

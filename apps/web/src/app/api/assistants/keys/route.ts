@@ -2,9 +2,10 @@
  * Create an access key for the MCP server.
  *
  * POST `{ name, access }` — any active member, for themselves, in the active
- * workspace. `read-write` (search, read and save conversations) needs
- * `documents.upload`, the same permission saving a conversation needs, so a
- * Viewer can never mint a key that saves. Returns the secret once; only its
+ * workspace. `read-write` (search, read, save conversations and add
+ * documents) needs `documents.upload`, the same permission saving a
+ * conversation and adding a document need, so a Viewer can never mint a key
+ * that writes. Returns the secret once; only its
  * hash is kept.
  */
 

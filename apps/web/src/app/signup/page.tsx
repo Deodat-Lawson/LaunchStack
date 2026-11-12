@@ -4,7 +4,9 @@ import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useAuth, useUser } from "~/lib/auth-client";
+import { rememberActiveSession, useAuth, useUser } from "~/lib/auth-client";
+import { isAddAccountMode, withAddAccount } from "~/lib/auth/device-accounts";
+import { AddAccountNotice } from "~/components/auth/AddAccountNotice";
 import { SignUpForm } from "~/app/_components/CredentialsForm";
 import { AlertCircle, ArrowRight, Rocket, Ticket, Users } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
@@ -27,6 +29,10 @@ import { inviteDestination } from "~/lib/invite-link";
  *   2. I have an invite — paste the link (or its code) and go to the join
  *      page, which handles joining for everyone, signed in or not.
  *   3. Team setup — a form with the workspace's name and staff count.
+ *
+ * `?add=1` (from "Add another account"): a signed-in person gets the sign-up
+ * form instead, and stays signed in as themselves; the new account then
+ * picks a path like any other (~/server/auth/device-sessions).
  *
  * New workspaces index on the deployment's default embedding index. The
  * picker and the embedding keys that were under "Advanced" are gone from
@@ -54,6 +60,24 @@ const SignupPage: React.FC = () => {
     // the account exists they go straight back — the invitation already
     // decided which workspace and role, so there is no path to pick.
     const next = safeNextPath(searchParams.get("next"), "");
+    const addAccount = isAddAccountMode(searchParams);
+    const ta = useTranslations("auth.addAccount");
+
+    // Adding an account: whoever was signed in on arrival keeps the form until
+    // the new account exists (its session then replaces theirs as the active
+    // one). `undefined` until the session has loaded.
+    const [arrival, setArrival] = useState<{ userId: string | null; email: string } | undefined>(
+        undefined
+    );
+    useEffect(() => {
+        if (!isAuthLoaded || arrival !== undefined) return;
+        setArrival({ userId: userId ?? null, email: user?.email ?? "" });
+        // Before this form can replace the session: a session from before
+        // multi-session must be remembered or it is lost.
+        if (addAccount && userId) void rememberActiveSession();
+    }, [isAuthLoaded, arrival, userId, user, addAccount]);
+    const keepingAccount =
+        addAccount && Boolean(userId) && arrival !== undefined && userId === arrival.userId;
 
     const [mode, setMode] = useState<Mode>("solo");
 
@@ -107,9 +131,9 @@ const SignupPage: React.FC = () => {
 
     // ── Hand an invited person back to the invitation once signed in ──
     useEffect(() => {
-        if (!isAuthLoaded || !userId || !next) return;
+        if (!isAuthLoaded || !userId || !next || keepingAccount) return;
         router.replace(next);
-    }, [isAuthLoaded, userId, next, router]);
+    }, [isAuthLoaded, userId, next, router, keepingAccount]);
 
     // ── Solo: one-click workspace creation ──
     const startSolo = async () => {
@@ -215,19 +239,23 @@ const SignupPage: React.FC = () => {
     const soloFirstWord = (user?.name ?? "").trim().split(/\s+/)[0];
     const soloName = soloFirstWord?.length ? soloFirstWord : null;
 
-    // ── Not yet authenticated: show the sign-up form ──
-    if (isAuthLoaded && !userId) {
+    // ── Not yet authenticated (or adding another account): the sign-up form ──
+    if (isAuthLoaded && (!userId || keepingAccount)) {
+        const signInHref = keepingAccount
+            ? withAddAccount(withNext("/signin", next))
+            : withNext("/signin", next);
         return (
             <Shell>
                 <div style={formPanelStyle}>
                     <div style={{ width: "100%", maxWidth: 440 }}>
-                        <Headline>{t("title")}</Headline>
+                        <Headline>{keepingAccount ? ta("signUpTitle") : t("title")}</Headline>
                         <SubHeadline>{t("subtitle")}</SubHeadline>
-                        <SignUpForm signInHref={withNext("/signin", next)} />
+                        {keepingAccount ? <AddAccountNotice email={arrival?.email ?? ""} /> : null}
+                        <SignUpForm signInHref={signInHref} />
                         <div style={bottomLinkStyle}>
                             {t.rich("haveAccount", {
                                 link: chunks => (
-                                    <Link href={withNext("/signin", next)} style={linkStyle}>
+                                    <Link href={signInHref} style={linkStyle}>
                                         {chunks}
                                     </Link>
                                 ),
@@ -241,7 +269,7 @@ const SignupPage: React.FC = () => {
     }
 
     // ── Loading state (also while handing an invited person back to `next`) ──
-    if (!isAuthLoaded || Boolean(userId && next)) {
+    if (!isAuthLoaded || Boolean(userId && next && !keepingAccount)) {
         return (
             <Shell>
                 <div style={formPanelStyle}>

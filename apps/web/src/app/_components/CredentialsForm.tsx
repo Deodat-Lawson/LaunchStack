@@ -233,6 +233,11 @@ export function SignInForm({
      * registers them; a join page passes itself, since joining registers too.
      */
     newUserRedirectTo,
+    /**
+     * The sign-in page a failed Google or GitHub sign-in returns to, with the
+     * error added. `/signin?add=1` keeps an add-account attempt in its mode.
+     */
+    signInPath = "/signin",
     /** Runs as a sign-in starts, before any navigation (the join intent). */
     onAuthStart,
 }: {
@@ -241,6 +246,7 @@ export function SignInForm({
     initialView?: "signin" | "forgot";
     defaultEmail?: string;
     newUserRedirectTo?: string;
+    signInPath?: string;
     onAuthStart?: () => void;
 } = {}) {
     const t = useTranslations("auth.form");
@@ -368,7 +374,10 @@ export function SignInForm({
             // A first-time social sign-in has an account but no workspace
             // yet; registration lives on /signup unless the caller joins.
             newUserCallbackURL: newUserRedirectTo ?? withNext("/signup", next),
-            errorCallbackURL: withNext(`/signin?provider=${provider}`, next),
+            errorCallbackURL: withNext(
+                `${signInPath}${signInPath.includes("?") ? "&" : "?"}provider=${provider}`,
+                next
+            ),
         });
         // On success better-auth sends the window to the provider; leave
         // the button spinning until it goes.

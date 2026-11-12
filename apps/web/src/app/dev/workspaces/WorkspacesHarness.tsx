@@ -3,12 +3,20 @@
 import { useEffect, useState } from "react";
 
 import { WorkspaceSelectClient } from "~/app/workspaces/WorkspaceSelectClient";
+import { authClient } from "~/lib/auth-client";
 
 /**
- * Local harness for the workspace picker's avatar pile: real teammates, you
- * as each workspace sees you, a guest workspace with no teammates, and a
- * large team that collapses to "+N". Photos are drawn on a canvas so the page
- * needs no backend; `/api/profile` is stubbed for the top-bar chip.
+ * Local harness for the workspace picker, no sign-in needed: the avatar pile
+ * (real teammates, you as each workspace sees you, a guest workspace with no
+ * teammates, a large team that collapses to "+N"), a membership waiting for
+ * approval, one pending invite, and the account menu with two accounts
+ * signed in on this browser. Photos are drawn on a canvas.
+ *
+ * Stubbed: `/api/profile` (the chip's photo), Better Auth's `get-session`
+ * and `multi-session/list-device-sessions` (the menu). Anything that would
+ * change something — switching account or workspace, signing out, accepting
+ * or declining — answers with an error, so the page shows its in-place error
+ * states instead of navigating away from the preview.
  */
 
 type Props = Parameters<typeof WorkspaceSelectClient>[0];
@@ -33,10 +41,63 @@ export function WorkspacesHarness() {
 
     useEffect(() => {
         const me = face(260, "A");
+        const grace = face(150, "G");
         const original = window.fetch.bind(window);
+        const json = (body: unknown, status = 200) =>
+            new Response(JSON.stringify(body), {
+                status,
+                headers: { "Content-Type": "application/json" },
+            });
+        const now = new Date();
+        const later = new Date(Date.now() + 7 * 86_400_000);
+        const deviceSession = (token: string, user: Record<string, unknown>) => ({
+            session: {
+                id: `s-${token}`,
+                token,
+                userId: user.id,
+                expiresAt: later.toISOString(),
+                createdAt: now.toISOString(),
+                updatedAt: now.toISOString(),
+            },
+            user: {
+                emailVerified: true,
+                createdAt: now.toISOString(),
+                updatedAt: now.toISOString(),
+                ...user,
+            },
+        });
+        const ada = deviceSession("tok-ada", {
+            id: "user-ada",
+            name: "Ada Lovelace",
+            email: "ada@launchstack.test",
+            image: null,
+        });
+        const graceSession = deviceSession("tok-grace", {
+            id: "user-grace",
+            name: "Grace Hopper",
+            email: "grace@northwind.test",
+            image: grace,
+        });
         window.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
-            const url =
+            const raw =
                 typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+            // Better Auth calls with absolute URLs; the app with paths.
+            const url = raw.startsWith("http") ? new URL(raw).pathname : raw;
+            if (url.startsWith("/api/auth/get-session")) return json(ada);
+            if (url.startsWith("/api/auth/multi-session/list-device-sessions")) {
+                return json([ada, graceSession]);
+            }
+            if (url.startsWith("/api/auth/device-sessions/remember")) {
+                return json({ remembered: true });
+            }
+            if (
+                url.startsWith("/api/auth/multi-session/") ||
+                url.startsWith("/api/auth/sign-out") ||
+                url.startsWith("/api/workspace/invitations/") ||
+                /^\/api\/workspaces\/[^/]+\/switch/.test(url)
+            ) {
+                return json({ error: "This is a preview: nothing changes here." }, 503);
+            }
             if (url.startsWith("/api/profile")) {
                 const profile = {
                     name: "Ada Lovelace",
@@ -66,9 +127,23 @@ export function WorkspacesHarness() {
             lastOpenedAt: new Date(Date.now() - 3_600_000).toISOString(),
             isActive: false,
         };
+        // The session may have been read before the stub was in place.
+        authClient.$store.notify("$sessionSignal");
+
         setProps({
             account: { name: "Ada Lovelace", email: "ada@launchstack.test" },
             fromSignup: false,
+            pendingInvites: [
+                {
+                    id: "71",
+                    companyName: "Northwind Labs",
+                    slug: "northwind",
+                    swatch: 2,
+                    invitedBy: "Grace Hopper",
+                    invitedAt: new Date(Date.now() - 2 * 86_400_000).toISOString(),
+                    role: "member",
+                },
+            ],
             workspaces: [
                 {
                     ...base,
@@ -108,6 +183,19 @@ export function WorkspacesHarness() {
                     memberCount: 2,
                     me: null,
                     teammates: [{ name: "Eve Zhou", avatarUrl: null }],
+                },
+                {
+                    ...base,
+                    id: "4",
+                    name: "Waiting Room Inc",
+                    slug: "waiting",
+                    swatch: 6,
+                    role: "member",
+                    // Asked to join by link; no admin has approved it yet.
+                    status: "pending",
+                    memberCount: 5,
+                    me: null,
+                    teammates: [],
                 },
             ],
         });

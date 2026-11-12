@@ -131,7 +131,6 @@ export function RolesTab({ can }: RolesTabProps) {
         <div className="flex flex-col gap-6">
             <TabIntro
                 title={t("intro.title")}
-                description={t("intro.description")}
                 actions={
                     canManage ? (
                         <Button size="sm" onClick={() => setEditing("new")}>

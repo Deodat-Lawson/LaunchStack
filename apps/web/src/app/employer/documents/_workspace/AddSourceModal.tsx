@@ -11,12 +11,7 @@ import React, {
 import { useFormatter, useTranslations } from "next-intl";
 import { folderLeafName, isUnfiledFolder } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
-import {
-    Zap as IconBolt,
-    Check as IconCheck,
-    Folder as IconFolder,
-    X as IconX,
-} from "lucide-react";
+import { Check as IconCheck, Folder as IconFolder, X as IconX } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -1131,24 +1126,6 @@ function FilesPanel({ kind, userId, category, onUploaded, onSynced }: FilesPanel
                     onChange={e => addFiles(e.target.files)}
                 />
             </div>
-            {kind === "files" && (
-                <div
-                    style={{
-                        marginTop: 16,
-                        padding: "12px 14px",
-                        background: "var(--line-2)",
-                        borderRadius: 8,
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                    }}
-                >
-                    <IconBolt size={14} />
-                    <span>{t("ocrNote")}</span>
-                </div>
-            )}
 
             {staged.length > 0 && (
                 <div style={{ marginTop: 16 }}>

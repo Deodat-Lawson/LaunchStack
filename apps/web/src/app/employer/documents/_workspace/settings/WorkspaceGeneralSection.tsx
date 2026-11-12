@@ -372,11 +372,7 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                     />
                 </FieldRow>
 
-                <FieldRow
-                    id="workspace-industry"
-                    label={t("industry.label")}
-                    description={t("industry.description")}
-                >
+                <FieldRow id="workspace-industry" label={t("industry.label")}>
                     <Input
                         id="workspace-industry"
                         value={draft.industry}
@@ -388,11 +384,7 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                     />
                 </FieldRow>
 
-                <FieldRow
-                    id="workspace-team-size"
-                    label={t("teamSize.label")}
-                    description={t("teamSize.description")}
-                >
+                <FieldRow id="workspace-team-size" label={t("teamSize.label")}>
                     <Select
                         value={draft.teamSize}
                         onValueChange={value => set("teamSize")(value)}
@@ -459,7 +451,7 @@ function FieldRow({
 }: {
     id: string;
     label: string;
-    description: string;
+    description?: string;
     children: React.ReactNode;
 }) {
     return (
@@ -469,9 +461,11 @@ function FieldRow({
                     <Label htmlFor={id} className="text-ink text-[13px] font-semibold">
                         {label}
                     </Label>
-                    <p className="text-ink-3 m-0 mt-1 max-w-[560px] text-[12.5px] leading-normal">
-                        {description}
-                    </p>
+                    {description && (
+                        <p className="text-ink-3 m-0 mt-1 max-w-[560px] text-[12.5px] leading-normal">
+                            {description}
+                        </p>
+                    )}
                 </div>
                 <div className="min-w-0 max-w-[380px] flex-[999_1_280px]">{children}</div>
             </div>

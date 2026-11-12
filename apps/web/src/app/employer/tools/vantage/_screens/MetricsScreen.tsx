@@ -283,7 +283,7 @@ export function MetricsScreen() {
             </section>
 
             <section>
-                <SectionHeading title={t("recorded")} aside={t("recordedAside")} />
+                <SectionHeading title={t("recorded")} />
                 {metrics.loading ? (
                     <SkeletonRows rows={5} height={40} />
                 ) : observations.length === 0 ? (
@@ -449,10 +449,9 @@ function DefineMetricDialog({
     };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[520px]">
+            <DialogContent className="sm:max-w-[520px]" aria-describedby={undefined}>
                 <DialogHeader>
                     <DialogTitle>{initial ? t("editDefinition") : t("defineMetric")}</DialogTitle>
-                    <DialogDescription>{t("defineDescription")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
                     <div className="grid gap-3.5 sm:grid-cols-[minmax(0,1fr)_140px]">
@@ -630,7 +629,7 @@ function RecordDialog({
                             />
                         </Field>
                     </div>
-                    <Field label={t("table.source")} htmlFor="o-source" hint={t("sourceHint")}>
+                    <Field label={t("table.source")} htmlFor="o-source">
                         <Input
                             id="o-source"
                             value={source}

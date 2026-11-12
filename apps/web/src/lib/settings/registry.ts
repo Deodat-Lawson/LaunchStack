@@ -42,8 +42,11 @@ export interface SettingDefinition<T = unknown> {
     workspaceSection?: SettingsSectionId;
     /** Row label. Short. */
     label: string;
-    /** What it does, one sentence. */
-    description: string;
+    /**
+     * What it does, one sentence, when the label and the control don't say it
+     * already. Left out, the row draws no description line.
+     */
+    description?: string;
     /** What changing it costs — shown above the control, not in a toast afterwards. */
     consequence?: string;
     /** What people call it. Matched by search alongside the label and description. */
@@ -116,7 +119,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
         key: "appearance.theme",
         section: "appearance",
         label: "Theme",
-        description: "Light, dark, or whatever your system is using.",
         aliases: ["dark mode", "light mode", "colour", "color", "night"],
         scopes: ["member"],
         permission: null,
@@ -127,7 +129,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         control: {
             kind: "radio",
             options: [
-                { value: "system", label: "System", description: "Follows your OS setting." },
+                { value: "system", label: "System" },
                 { value: "light", label: "Light" },
                 { value: "dark", label: "Dark" },
             ],
@@ -137,7 +139,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         key: "appearance.density",
         section: "appearance",
         label: "Density",
-        description: "How much fits on screen. Compact tightens spacing and type in lists.",
+        description: "Compact tightens spacing and type in lists.",
         aliases: ["compact", "spacing", "font size", "text size", "zoom"],
         scopes: ["member"],
         permission: null,
@@ -155,7 +157,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
         key: "appearance.reducedMotion",
         section: "appearance",
         label: "Motion",
-        description: "Animations and transitions across the app.",
         aliases: ["animation", "reduce motion", "transitions", "accessibility"],
         scopes: ["member"],
         permission: null,
@@ -164,11 +165,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         control: {
             kind: "select",
             options: [
-                {
-                    value: "system",
-                    label: "Follow system",
-                    description: "Honours your OS reduce-motion setting.",
-                },
+                { value: "system", label: "Follow system" },
                 { value: "reduce", label: "Reduce", description: "Turns animations off." },
                 { value: "allow", label: "Allow" },
             ],
@@ -250,7 +247,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         section: "privacy",
         label: "Product analytics",
         description:
-            "Whether page views from your browser count toward the hosted product's usage analytics. Off the hosted service nothing is sent regardless.",
+            "Whether page views from your browser count toward the hosted product's usage analytics.",
         aliases: ["telemetry", "tracking", "vercel analytics", "opt out"],
         scopes: ["member"],
         permission: null,
@@ -266,7 +263,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
         key: "workspace.auditRetentionDays",
         section: "people",
         label: "Keep audit events for",
-        description: "How long the audit log is kept.",
         consequence: "Older events are deleted. Export a CSV first if you need a permanent copy.",
         aliases: ["audit retention", "audit log", "retention", "history"],
         scopes: ["workspace"],
@@ -381,8 +377,8 @@ export const SETTINGS: readonly SettingDefinition[] = [
         key: "labs.predictiveGaps",
         section: "labs",
         label: "Predictive gaps",
-        description:
-            "Lists missing exhibits, schedules and compliance gaps across your documents. The analysis exists; the screen that shows it does not yet, so this only surfaces the entry in the palette.",
+        // The ⌘K row it shows (`DEMOTED_FEATURES` "audit") has no pane behind it.
+        description: "Adds a Predictive gaps entry to ⌘K. Picking it opens nothing yet.",
         aliases: ["audit", "gaps", "compliance", "predictive analysis", "experimental"],
         scopes: ["workspace"],
         permission: "settings.manage",
@@ -414,7 +410,7 @@ export function settingsForSection(section: SettingsSectionId): SettingDefinitio
  */
 export interface SettingSearchCopy {
     label: string;
-    description: string;
+    description?: string;
 }
 
 /**
@@ -447,10 +443,10 @@ export function searchSettings(
     for (const definition of SETTINGS) {
         const shown = copy?.(definition);
         const labels = [definition.label.toLowerCase()];
-        const descriptions = [definition.description.toLowerCase()];
+        const descriptions = definition.description ? [definition.description.toLowerCase()] : [];
         if (shown) {
             labels.push(shown.label.toLowerCase());
-            descriptions.push(shown.description.toLowerCase());
+            if (shown.description) descriptions.push(shown.description.toLowerCase());
         }
         const key = definition.key.toLowerCase();
         let score = 0;

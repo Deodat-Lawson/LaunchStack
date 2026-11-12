@@ -155,9 +155,11 @@ export function SettingRow({
                     >
                         {copy.label}
                     </Label>
-                    <p className="text-ink-3 m-0 mt-1 max-w-[560px] text-[12.5px] leading-normal">
-                        {copy.description}
-                    </p>
+                    {copy.description && (
+                        <p className="text-ink-3 m-0 mt-1 max-w-[560px] text-[12.5px] leading-normal">
+                            {copy.description}
+                        </p>
+                    )}
                     {copy.consequence && (
                         <p className="text-ink-2 m-0 mt-1.5 flex max-w-[560px] items-start gap-1.5 text-[12px] leading-normal">
                             <span

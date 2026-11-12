@@ -25,7 +25,7 @@ import { buildInternalFileUrl } from "@launchstack/store/crypto";
 import { document } from "@launchstack/store/schema";
 
 import type { ArtifactType } from "~/lib/artifact-content";
-import { artifactDocumentMarker } from "~/lib/artifact-document";
+import { ARTIFACT_DOCUMENT_KIND, artifactDocumentMarker } from "~/lib/artifact-document";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import {
     UNFILED_FOLDER,
@@ -38,7 +38,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import type { McpStagedFile } from "~/server/db/schema";
 import { getEngine } from "~/server/engine";
-import { FolderError, listFolders, listVisibleFolders } from "~/server/folders";
+import { FolderError, listVisibleFolders } from "~/server/folders";
 import { claimStagedFile, recordStagedDocument, releaseStagedFile } from "~/server/mcp/staging";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import {
@@ -166,7 +166,12 @@ export async function resolveDestination(ctx: Ctx, rawFolder: string): Promise<D
             `"${rawFolder}" is not a usable folder path (${describeFolderIssue(issue)}). Use a path like "Research" or "Finance/Q3".`
         );
     }
-    const exists = (await listFolders(ctx.companyId)).some(folder => folder.path === asked);
+    // Only folders this person can see count as existing: a restricted folder
+    // they cannot open is answered like any unknown name, so the tool never
+    // reveals that it exists.
+    const [scope, subject] = await Promise.all([ctx.documentScope(), accessSubject(ctx)]);
+    const visible = await listVisibleFolders(ctx.companyId, scope, subject);
+    const exists = visible.some(folder => folder.path === asked);
     if (exists) {
         if (!(await canEditFolder(ctx, asked))) {
             throw new AssistantDocumentError("forbidden", FOLDER_EDIT_DENIED);
@@ -200,6 +205,8 @@ export async function whoCanSeeFolder(ctx: Ctx, path: string): Promise<string> {
 export interface SameTitleDocument {
     id: number;
     title: string;
+    /** It is an artifact (rendered sandboxed), not a document. */
+    isArtifact: boolean;
 }
 
 /** Documents this person can open in `folder` whose title matches `title`, ignoring case. */
@@ -209,7 +216,11 @@ export async function findSameTitle(
     title: string
 ): Promise<SameTitleDocument[]> {
     const rows = await db
-        .select({ id: document.id, title: document.title })
+        .select({
+            id: document.id,
+            title: document.title,
+            kind: sql<string | null>`${document.ocrMetadata}->>'kind'`,
+        })
         .from(document)
         .where(
             and(
@@ -219,7 +230,11 @@ export async function findSameTitle(
             )
         )
         .limit(3);
-    return rows.map(row => ({ id: Number(row.id), title: row.title }));
+    return rows.map(row => ({
+        id: Number(row.id),
+        title: row.title,
+        isArtifact: row.kind === ARTIFACT_DOCUMENT_KIND,
+    }));
 }
 
 export interface FileStagedInput {
@@ -233,6 +248,8 @@ export interface FileStagedInput {
     fromLabel: string;
     /** Add a new version of this document instead of a new one. */
     documentId?: number;
+    /** On a version: take `title` as the document's new name (a given title, not a suggested one). */
+    renameOnVersion?: boolean;
     /** Extra marker fields for `ocrMetadata` (origin, client). */
     metadata: Record<string, unknown>;
 }
@@ -286,13 +303,13 @@ async function addVersion(
     origin: string,
     input: FileStagedInput,
     documentId: number
-): Promise<{ folder: string }> {
+): Promise<{ folder: string; title: string }> {
     const notFound = new AssistantDocumentError(
         "not_found",
         `No document ${documentId} that you can open exists in this workspace. Use an id from search or list_sources, or leave documentId out to add a new document.`
     );
     const [doc] = await db
-        .select({ id: document.id, category: document.category })
+        .select({ id: document.id, category: document.category, title: document.title })
         .from(document)
         .where(
             and(
@@ -306,6 +323,7 @@ async function addVersion(
         throw new AssistantDocumentError("forbidden", DOCUMENT_EDIT_DENIED);
     }
     const { staged } = input;
+    const title = input.renameOnVersion ? input.title : doc.title;
     // Same cold-start ordering as processDocumentUpload: configure the engine
     // before reading provider config or authorising file refs.
     getEngine();
@@ -322,7 +340,7 @@ async function addVersion(
         documentId,
         companyId: ctx.companyId,
         userId: ctx.authUserId,
-        title: input.title,
+        title,
         category: doc.category,
         url: staged.storageUrl!,
         processingUrl,
@@ -333,12 +351,17 @@ async function addVersion(
         originalFilename: staged.filename,
     });
     // The document row is where the viewer reads the title and the artifact
-    // marker; a version carries neither.
+    // marker; a version carries neither. The marker follows the newest version:
+    // set for an artifact, cleared for a document, so a Markdown version of an
+    // HTML artifact is shown as Markdown (and the reverse is sandboxed).
+    const withoutArtifact = sql`CASE WHEN ${document.ocrMetadata}->>'kind' = ${ARTIFACT_DOCUMENT_KIND}
+        THEN ${document.ocrMetadata} - 'kind' - 'artifactType' - 'sourceUrl' - 'importedAt'
+        ELSE COALESCE(${document.ocrMetadata}, '{}'::jsonb) END`;
     await db
         .update(document)
         .set({
-            title: input.title,
-            ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify({
+            title,
+            ocrMetadata: sql`(${withoutArtifact}) || ${JSON.stringify({
                 ...input.metadata,
                 ...(input.artifact
                     ? artifactDocumentMarker({
@@ -349,7 +372,7 @@ async function addVersion(
             })}::jsonb`,
         })
         .where(and(eq(document.id, documentId), eq(document.companyId, ctx.companyId)));
-    return { folder: doc.category };
+    return { folder: doc.category, title };
 }
 
 /**
@@ -366,11 +389,11 @@ export async function fileStagedDocument(
     }
     try {
         if (input.documentId !== undefined) {
-            const { folder } = await addVersion(ctx, origin, input, input.documentId);
+            const { folder, title } = await addVersion(ctx, origin, input, input.documentId);
             await recordStagedDocument(input.staged.id, input.documentId);
             return {
                 documentId: input.documentId,
-                title: input.title,
+                title,
                 folder,
                 status: "version_added",
                 url: documentLink(origin, input.documentId),

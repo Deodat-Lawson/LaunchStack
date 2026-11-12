@@ -14,11 +14,20 @@
 import { NextResponse } from "next/server";
 
 import { withRateLimit } from "~/lib/rate-limit-middleware";
-import { RateLimitPresets } from "~/lib/rate-limiter";
+import type { RateLimitConfig } from "~/lib/rate-limiter";
 import { isMcpEnabled } from "~/server/mcp/config";
 import { MAX_STAGED_BYTES, StagingError, receiveUpload } from "~/server/mcp/staging";
 
 export const runtime = "nodejs";
+
+/**
+ * Per IP (the CLI's shell has no session). Above start_upload's own 30 per
+ * 15 minutes per person, so a CLI filing many files never hits this first.
+ */
+const UPLOAD_LIMIT: Pick<RateLimitConfig, "maxRequests" | "windowMs"> = {
+    maxRequests: 60,
+    windowMs: 15 * 60 * 1000,
+};
 export const dynamic = "force-dynamic";
 
 const STATUS_BY_CODE: Record<StagingError["code"], number> = {
@@ -45,7 +54,7 @@ async function handle(request: Request, params: Promise<{ token: string }>) {
     if (!/^[A-Za-z0-9_-]{20,100}$/.test(token)) {
         return NextResponse.json({ error: "This upload link is not valid." }, { status: 404 });
     }
-    return withRateLimit(request, RateLimitPresets.strict, async () => {
+    return withRateLimit(request, UPLOAD_LIMIT, async () => {
         try {
             const received = await receiveUpload(token, request.body, declaredLength(request));
             return NextResponse.json(

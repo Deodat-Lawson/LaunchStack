@@ -265,7 +265,7 @@ describe("asking in words (any client)", () => {
     });
 
     it("asks about a same-title document, and adds it as new only when told to", async () => {
-        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan" }]);
+        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan", isArtifact: false }]);
         const asked = await call({ draftId: DRAFT, folder: "Research" });
         expect(documents.fileStagedDocument).not.toHaveBeenCalled();
         expect(structured(asked)).toMatchObject({
@@ -332,6 +332,68 @@ describe("asking in words (any client)", () => {
             expect(textOf(outcome)).toMatch(/^Invalid arguments for add_document: /);
         }
         expect(staging.stageDraft).not.toHaveBeenCalled();
+    });
+});
+
+describe("QA round 1 fixes", () => {
+    it("refuses content that is only whitespace", async () => {
+        const outcome = await call({ content: "   \n\t ", folder: "Research" });
+        expect(textOf(outcome)).toMatch(
+            /^Invalid arguments for add_document: content: must not be empty/
+        );
+        expect(staging.stageDraft).not.toHaveBeenCalled();
+    });
+
+    it("keeps a document's name on a version unless a title was given", async () => {
+        await call({ draftId: DRAFT, documentId: "12" });
+        expect(documents.fileStagedDocument).toHaveBeenLastCalledWith(
+            expect.anything(),
+            ORIGIN,
+            expect.objectContaining({ documentId: 12, renameOnVersion: false })
+        );
+        await call({ draftId: DRAFT, documentId: "12", title: "Plan, revised" });
+        expect(documents.fileStagedDocument).toHaveBeenLastCalledWith(
+            expect.anything(),
+            ORIGIN,
+            expect.objectContaining({ title: "Plan, revised", renameOnVersion: true })
+        );
+    });
+
+    it("suggests a separate document when the same-title one is a different kind", async () => {
+        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan", isArtifact: true }]);
+        const words = await call({ draftId: DRAFT, folder: "Research" });
+        expect(structured(words)).toMatchObject({
+            question: "duplicate",
+            suggestedAnswer: "separate",
+        });
+        expect(textOf(words)).toContain("a separate document is the likelier answer");
+
+        const form = await call(
+            { content: "# Plan", format: "markdown", folder: "Research" },
+            FORMS
+        );
+        if (!isInputRequired(form)) throw new Error("expected a form");
+        const schema = form.inputRequired.inputRequests.duplicate!.params.requestedSchema as {
+            properties: { choice: { default: string; oneOf: { title: string }[] } };
+        };
+        expect(schema.properties.choice.default).toBe("new");
+        expect(schema.properties.choice.oneOf[0]!.title).toContain("interactive page");
+    });
+
+    it("suggests a version when the same-title one is the same kind", async () => {
+        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan", isArtifact: false }]);
+        const words = await call({ draftId: DRAFT, folder: "Research" });
+        expect(structured(words).suggestedAnswer).toBe("version");
+    });
+
+    it("tells the truth about a new folder's audience in both ways of asking", async () => {
+        const words = await call({ content: "# Plan" });
+        expect(textOf(words)).toContain("inside another folder it follows that folder's sharing");
+        const form = await call({ content: "# Plan" }, FORMS);
+        if (!isInputRequired(form)) throw new Error("expected a form");
+        expect(JSON.stringify(form.inputRequired.inputRequests)).toContain(
+            "inside another folder it follows that folder's sharing"
+        );
     });
 });
 
@@ -497,7 +559,7 @@ describe("asking with a form (2026-07-28 clients that declared elicitation)", ()
     });
 
     it("asks about a same-title document with a second form, then adds a version on the answer", async () => {
-        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan" }]);
+        documents.findSameTitle!.mockResolvedValue([{ id: 12, title: "Plan", isArtifact: false }]);
         const second = await call(first, FORMS, {
             inputResponses: { destination: { action: "accept", content: { folder: "Research" } } },
             requestState: stateFor(first, { stagedId: DRAFT, stage: "destination" }),

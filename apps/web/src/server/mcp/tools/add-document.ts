@@ -69,7 +69,11 @@ const chatGptFile = z.object({
 const args = z
     .object({
         title: z.string().trim().min(1).max(200).optional(),
-        content: z.string().min(1).max(MAX_CONTENT_CHARS).optional(),
+        content: z
+            .string()
+            .max(MAX_CONTENT_CHARS)
+            .refine(value => value.trim().length > 0, "must not be empty")
+            .optional(),
         format: z.enum(CONTENT_FORMATS).optional(),
         origin: z.enum(CONTENT_ORIGINS).optional(),
         sourceUrl: z.string().trim().url().max(2048).optional(),
@@ -288,7 +292,7 @@ async function askDestination(
                             type: "string",
                             title: "Or a new folder",
                             description:
-                                "Creates a folder only you can see. Leave empty to use the one above.",
+                                "A new folder name. At the top level only you can see it; inside another folder it follows that folder's sharing. Leave empty to use the folder above.",
                             maxLength: 256,
                         },
                         title: {
@@ -318,7 +322,7 @@ async function askDestination(
         text:
             `Nothing was added yet. Before filing "${title}", ask the person which folder it should go in; the folder decides who can see it:\n` +
             `${folderLines(choices)}\n` +
-            `They can also name a new folder (only they will see it). Confirm the title "${title}" with them too.\n` +
+            `They can also name a new folder: at the top level only they will see it; inside another folder it follows that folder's sharing. Confirm the title "${title}" with them too.\n` +
             `Then call add_document again with ${arg} "${staged.id}", folder and title. Do not send the content again; this ${arg === "uploadId" ? "upload" : "draft"} is kept for an hour.`,
         structured: {
             status: "needs_input",
@@ -331,6 +335,11 @@ async function askDestination(
     };
 }
 
+/** "an HTML page" / "a document": what a version would replace, in words. */
+function kindWords(isArtifact: boolean): string {
+    return isArtifact ? "an interactive page (artifact)" : "a document";
+}
+
 async function askDuplicate(
     context: McpToolContext,
     staged: McpStagedFile,
@@ -338,6 +347,10 @@ async function askDuplicate(
     folder: string,
     same: SameTitleDocument[]
 ): Promise<McpToolOutcome> {
+    const stagedIsArtifact = detailsOf(staged).artifactType !== null;
+    const first = same[0]!;
+    // A version of a different kind of file is rarely what the person means.
+    const versionFirst = first.isArtifact === stagedIsArtifact;
     if (canAskWithForm(context)) {
         const request: McpInputRequest = {
             method: "elicitation/create",
@@ -353,11 +366,14 @@ async function askDuplicate(
                             oneOf: [
                                 ...same.map(doc => ({
                                     const: `version:${doc.id}`,
-                                    title: `A new version of "${doc.title}"`,
+                                    title:
+                                        doc.isArtifact === stagedIsArtifact
+                                            ? `A new version of "${doc.title}"`
+                                            : `A new version of "${doc.title}" (it is ${kindWords(doc.isArtifact)}; this is ${kindWords(stagedIsArtifact)})`,
                                 })),
                                 { const: "new", title: "A separate document" },
                             ],
-                            default: `version:${same[0]!.id}`,
+                            default: versionFirst ? `version:${first.id}` : "new",
                         },
                     },
                     required: ["choice"],
@@ -378,10 +394,13 @@ async function askDuplicate(
     }
     const arg = handleArg(staged);
     const list = same.map(doc => `"${doc.title}" (documentId ${doc.id})`).join(", ");
+    const kindNote = versionFirst
+        ? ""
+        : ` Note: that one is ${kindWords(first.isArtifact)} and this is ${kindWords(stagedIsArtifact)}, so a separate document is the likelier answer.`;
     return {
         ok: true,
         text:
-            `Nothing was added yet. ${folder} already has ${list}. Ask the person whether this is a new version of it or a separate document.\n` +
+            `Nothing was added yet. ${folder} already has ${list}. Ask the person whether this is a new version of it or a separate document.${kindNote}\n` +
             `New version: call add_document again with ${arg} "${staged.id}" and documentId ${same[0]!.id}. ` +
             `Separate document: call again with ${arg} "${staged.id}", folder "${folder}", title "${title}" and addAsNew: true.`,
         structured: {
@@ -391,6 +410,7 @@ async function askDuplicate(
             folder,
             suggestedTitle: title,
             sameTitle: same.map(doc => ({ documentId: doc.id, title: doc.title })),
+            suggestedAnswer: versionFirst ? "version" : "separate",
             expiresAt: staged.expiresAt.toISOString(),
         },
     };
@@ -459,7 +479,10 @@ async function run(a: Args, context: McpToolContext): Promise<McpToolOutcome> {
             : await stageFromArguments(a, owner);
         const details = detailsOf(staged);
 
-        const title = text(answers.title) ?? resume?.title ?? a.title ?? details.suggestedTitle;
+        // A title the person or the model gave, as opposed to one suggested from
+        // the content: only a given title renames a document a version is added to.
+        const givenTitle = text(answers.title) ?? resume?.title ?? a.title;
+        const title = givenTitle ?? details.suggestedTitle;
         const folderAnswer = text(answers.newFolder) ?? text(answers.folder);
         const folderAsked = folderAnswer ?? resume?.folder ?? a.folder;
         const choice = text(answers.choice);
@@ -504,6 +527,7 @@ async function run(a: Args, context: McpToolContext): Promise<McpToolOutcome> {
             artifact: artifactType ? { type: artifactType, sourceUrl: details.sourceUrl } : null,
             fromLabel: principal.label,
             documentId,
+            renameOnVersion: givenTitle !== undefined,
             metadata: {
                 addedFrom: {
                     assistant: principal.family,
@@ -649,6 +673,7 @@ export const addDocumentTool = defineTool({
                     properties: { documentId: { type: "integer" }, title: { type: "string" } },
                 },
             },
+            suggestedAnswer: { type: "string", enum: ["version", "separate"] },
             expiresAt: { type: "string" },
         },
         required: ["status"],

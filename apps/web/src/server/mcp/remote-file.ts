@@ -4,9 +4,9 @@
  * argument the tool names in `_meta["openai/fileParams"]`; the URL is
  * temporary (how long is not documented), so it is fetched at once.
  *
- * The URL comes from the request body, so it is untrusted: HTTPS only,
- * through the SSRF guard on every redirect hop, with a size cap and a
- * timeout.
+ * The URL comes from the request body, so it is untrusted: HTTPS only on
+ * every hop, through the SSRF guard on every redirect hop, with a size cap
+ * and a timeout.
  */
 import { UrlGuardError, fetchPublicUrl } from "~/server/security/url-guard";
 
@@ -41,9 +41,12 @@ export async function downloadAssistantFile(
     }
     let response: Response;
     try {
-        response = await fetchPublicUrl(url.href, {
-            signal: AbortSignal.timeout(REMOTE_FILE_TIMEOUT_MS),
-        });
+        // https on every hop: a redirect must not downgrade the download.
+        response = await fetchPublicUrl(
+            url.href,
+            { signal: AbortSignal.timeout(REMOTE_FILE_TIMEOUT_MS) },
+            { httpsOnly: true }
+        );
     } catch (error) {
         if (error instanceof UrlGuardError) {
             throw new RemoteFileError(

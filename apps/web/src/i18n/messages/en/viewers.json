@@ -38,6 +38,7 @@
   },
   "artifact": {
     "claudeArtifact": "· Claude artifact",
+    "sandboxedPage": "· Runs in a sandbox",
     "viewToggle": "Show the artifact or its source",
     "source": "Source",
     "original": "Original",

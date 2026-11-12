@@ -38,6 +38,7 @@
   },
   "artifact": {
     "claudeArtifact": "· Claude Artifact",
+    "sandboxedPage": "· 在沙盒中运行",
     "viewToggle": "显示 Artifact 或其源代码",
     "source": "源代码",
     "original": "原始页面",

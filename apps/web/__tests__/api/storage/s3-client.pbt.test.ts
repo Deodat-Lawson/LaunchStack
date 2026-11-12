@@ -124,7 +124,7 @@ describe("Feature: local-s3-migration, Property 3: Presigned URL structure", () 
 // Validates: Requirement 3.4
 //
 // We mock S3Client.send to throw a controlled error, then verify the
-// error-wrapping logic in putObject / deleteObject includes the endpoint URL.
+// error-wrapping logic in putObject includes the endpoint URL.
 
 describe("Feature: local-s3-migration, Property 4: S3 client connection error descriptiveness", () => {
     it("putObject error includes the configured endpoint URL", async () => {
@@ -151,36 +151,6 @@ describe("Feature: local-s3-migration, Property 4: S3 client connection error de
                         // Must include the original error message
                         expect(msg).toContain(errorMsg);
                         // Must include the key for diagnostics
-                        expect(msg).toContain(key);
-                    }
-                }
-            ),
-            { numRuns: 100 }
-        );
-
-        client.send = originalSend;
-    });
-
-    it("deleteObject error includes the configured endpoint URL", async () => {
-        const { deleteObject, getS3Client } = await import("~/server/storage/s3-client");
-        const client = getS3Client();
-        const originalSend = client.send.bind(client);
-
-        await fc.assert(
-            fc.asyncProperty(
-                fc.string({ minLength: 1, maxLength: 100 }),
-                s3KeyArb,
-                async (errorMsg, key) => {
-                    client.send = jest.fn().mockRejectedValue(new Error(errorMsg));
-
-                    try {
-                        await deleteObject(key);
-                        expect(true).toBe(false);
-                    } catch (err) {
-                        expect(err).toBeInstanceOf(Error);
-                        const msg = (err as Error).message;
-                        expect(msg).toContain(TEST_ENDPOINT);
-                        expect(msg).toContain(errorMsg);
                         expect(msg).toContain(key);
                     }
                 }

@@ -94,7 +94,6 @@ function serveBytes(bytes: Uint8Array): void {
     configureStorage({
         provider: "test",
         upload: vi.fn(),
-        delete: vi.fn(),
         download: vi.fn(async () => new Response(new Uint8Array(bytes), { status: 200 })),
     });
 }
@@ -126,7 +125,6 @@ beforeEach(() => {
     configureStorage({
         provider: "test",
         upload: vi.fn(),
-        delete: vi.fn(),
         download: vi.fn(async () => new Response(new Uint8Array(pdfBytes), { status: 200 })),
     });
     vi.spyOn(console, "log").mockImplementation(() => undefined);
@@ -276,7 +274,6 @@ describe("normalizeDocument", () => {
         configureStorage({
             provider: "test",
             upload: vi.fn(),
-            delete: vi.fn(),
             download: vi.fn(async () => new Response("gone", { status: 404 })),
         });
 
@@ -307,7 +304,6 @@ describe("normalizeDocument", () => {
             configureStorage({
                 provider: "test",
                 upload: vi.fn(),
-                delete: vi.fn(),
                 download: vi.fn(
                     async () => new Response(new Uint8Array(blankPdf), { status: 200 })
                 ),

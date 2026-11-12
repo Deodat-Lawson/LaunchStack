@@ -134,6 +134,11 @@ function storeEverything() {
             pathname: filename,
             contentType: "text/html",
             provider: "s3",
+            ref: {
+                adapter: "s3",
+                storageLocationId: "s3:https://storage.example@files",
+                key: filename,
+            },
         })
     );
     let nextDocumentId = 200;
@@ -195,6 +200,11 @@ describe("crawlWebsite page lifecycle failures", () => {
                 pathname: filename,
                 contentType: "text/html",
                 provider: "s3",
+                ref: {
+                    adapter: "s3",
+                    storageLocationId: "s3:https://storage.example@files",
+                    key: filename,
+                },
             })
         );
         mockProcessDocumentUpload.mockImplementation(

@@ -127,9 +127,6 @@ export function WorkspacesHarness() {
             lastOpenedAt: new Date(Date.now() - 3_600_000).toISOString(),
             isActive: false,
         };
-        // The session may have been read before the stub was in place.
-        authClient.$store.notify("$sessionSignal");
-
         setProps({
             account: { name: "Ada Lovelace", email: "ada@launchstack.test" },
             fromSignup: false,
@@ -203,6 +200,12 @@ export function WorkspacesHarness() {
             window.fetch = original;
         };
     }, []);
+
+    // The session was read before the stub was in place; read it again once
+    // the account menu is mounted and listening, so it sees the stubbed one.
+    useEffect(() => {
+        if (props) authClient.$store.notify("$sessionSignal");
+    }, [props]);
 
     return props ? <WorkspaceSelectClient {...props} /> : null;
 }

@@ -10,6 +10,12 @@ import { lastLoginMethodClient, multiSessionClient } from "better-auth/client/pl
 import { oauthProviderClient } from "@better-auth/oauth-provider/client";
 
 export const authClient = createAuthClient({
+    fetchOptions: {
+        // Looked up on each request rather than captured when this module
+        // loads, so the /dev/* harnesses can stand in for the server by
+        // replacing window.fetch (/dev/workspaces shows the account menu).
+        customFetchImpl: (input, init) => globalThis.fetch(input, init),
+    },
     plugins: [
         // Reads the cookie the server's lastLoginMethod plugin sets, for the
         // sign-in page's "Last used" marker.

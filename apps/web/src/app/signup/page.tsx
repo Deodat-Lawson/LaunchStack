@@ -78,6 +78,14 @@ const SignupPage: React.FC = () => {
     }, [isAuthLoaded, arrival, userId, user, addAccount]);
     const keepingAccount =
         addAccount && Boolean(userId) && arrival !== undefined && userId === arrival.userId;
+    // The new account exists and is now the active one: start this page over
+    // as that account, so nothing loaded for the one before (its photo in
+    // the top bar, say) carries over to the registration step.
+    const replacedAccount =
+        addAccount && Boolean(arrival?.userId) && Boolean(userId) && userId !== arrival?.userId;
+    useEffect(() => {
+        if (replacedAccount) window.location.replace("/signup");
+    }, [replacedAccount]);
 
     const [mode, setMode] = useState<Mode>("solo");
 
@@ -269,7 +277,7 @@ const SignupPage: React.FC = () => {
     }
 
     // ── Loading state (also while handing an invited person back to `next`) ──
-    if (!isAuthLoaded || Boolean(userId && next && !keepingAccount)) {
+    if (!isAuthLoaded || replacedAccount || Boolean(userId && next && !keepingAccount)) {
         return (
             <Shell>
                 <div style={formPanelStyle}>

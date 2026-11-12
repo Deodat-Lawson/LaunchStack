@@ -386,6 +386,7 @@ export async function processVideoUrlUpload({
     const textBlob = await putFile({
         filename: `${documentName}-transcription.txt`,
         data: Buffer.from(transcriptionResult.text, "utf-8"),
+        companyId: user.companyId,
         contentType: "text/plain",
     });
 

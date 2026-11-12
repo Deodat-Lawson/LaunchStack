@@ -9,6 +9,8 @@ import {
 } from "@launchstack/store/crypto";
 
 import { env } from "~/env";
+import { discardUnrecordedObject } from "~/server/storage/compensate";
+import { recordStoredObject, removeStoredObject } from "~/server/storage/ledger";
 import { currentStorageLocationId } from "~/server/storage/location";
 import type { ObjectRef } from "~/server/storage/object-ref";
 
@@ -122,15 +124,38 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
         const body = toBuffer(input.data);
 
         await ensureBucketExists();
-        await putObject(key, body, input.contentType);
-
-        return {
-            url: getObjectUrl(key),
-            pathname: key,
+        const ref: ObjectRef = { adapter: "s3", storageLocationId, key };
+        const url = getObjectUrl(key);
+        // Commit inventory before writing bytes: a crash may leave an empty ledger
+        // entry, never an object invisible to orphan cleanup.
+        // Defer engine loading: its static storage/port import re-enters this module.
+        const { getEngine } = await import("~/server/engine");
+        const db = getEngine().db;
+        await recordStoredObject(db, {
+            ref,
+            url,
+            companyId: input.companyId ?? null,
+            source: "upload-file",
             contentType: input.contentType,
-            provider: "s3",
-            ref: { adapter: "s3", storageLocationId, key },
-        };
+            sizeBytes: body.length,
+        });
+        try {
+            await putObject(key, body, input.contentType);
+        } catch (error) {
+            // A failed request can still have reached S3. Remove the inventory
+            // only once deletion is confirmed; otherwise retain it for audit.
+            if (await discardUnrecordedObject(ref, "uploadFile S3 put failed")) {
+                await removeStoredObject(db, ref).catch((cleanupError: unknown) => {
+                    console.warn("Failed to remove unused storage ledger row", {
+                        ref,
+                        cleanupError,
+                    });
+                });
+            }
+            throw error;
+        }
+
+        return { url, pathname: key, contentType: input.contentType, provider: "s3", ref };
     } catch (err) {
         if (err instanceof StorageError) throw err;
         throw new StorageError(
@@ -155,36 +180,39 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
         const safeName = sanitizeFilename(input.filename);
         const pathname = `documents/${randomUUID()}-${safeName || "upload"}`;
 
-        const [row] = await db
-            .insert(fileUploads)
-            .values({
-                userId: input.userId,
-                companyId: input.companyId ?? null,
-                filename: input.filename,
-                mimeType: input.contentType ?? "application/octet-stream",
-                fileData: body.toString("base64"),
-                fileSize: body.length,
-                storageProvider: "database",
-                storageUrl: null,
-                storagePathname: pathname,
-            })
-            .returning({ id: fileUploads.id });
+        return await db.transaction(async tx => {
+            const [row] = await tx
+                .insert(fileUploads)
+                .values({
+                    userId: input.userId,
+                    companyId: input.companyId ?? null,
+                    filename: input.filename,
+                    mimeType: input.contentType ?? "application/octet-stream",
+                    fileData: body.toString("base64"),
+                    fileSize: body.length,
+                    storageProvider: "database",
+                    storageUrl: null,
+                    storagePathname: pathname,
+                })
+                .returning({ id: fileUploads.id });
 
-        if (!row) {
-            throw new Error("Insert into fileUploads returned no row");
-        }
-
-        return {
-            url: `/api/files/${row.id}`,
-            pathname,
-            contentType: input.contentType,
-            provider: "database",
-            ref: {
+            if (!row) throw new Error("Insert into fileUploads returned no row");
+            const ref: ObjectRef = {
                 adapter: "database",
                 storageLocationId: currentStorageLocationId("database")!,
                 key: String(row.id),
-            },
-        };
+            };
+            const url = `/api/files/${row.id}`;
+            await recordStoredObject(tx, {
+                ref,
+                url,
+                companyId: input.companyId ?? null,
+                source: "upload-file",
+                contentType: input.contentType,
+                sizeBytes: body.length,
+            });
+            return { url, pathname, contentType: input.contentType, provider: "database", ref };
+        });
     } catch (err) {
         if (err instanceof StorageError) throw err;
         throw new StorageError(

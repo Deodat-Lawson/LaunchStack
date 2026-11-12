@@ -117,6 +117,7 @@ export async function POST(request: Request) {
             const blob = await putFile({
                 filename,
                 data: zipBuffer,
+                companyId: ctx.data.companyId,
                 contentType: "application/zip",
             });
 

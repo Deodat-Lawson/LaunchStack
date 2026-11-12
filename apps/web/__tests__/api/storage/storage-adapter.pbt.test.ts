@@ -4,6 +4,7 @@
  */
 
 import * as fc from "fast-check";
+import type * as S3StorageClient from "~/server/storage/s3-client";
 
 // ─── Shared test constants ───────────────────────────────────────────────────
 
@@ -15,11 +16,12 @@ const TEST_BUCKET = "pdr-documents";
 const mockEnvData = {
     server: {
         NEXT_PUBLIC_STORAGE_PROVIDER: "s3" as "s3" | "database" | undefined,
-        NEXT_PUBLIC_S3_ENDPOINT: TEST_ENDPOINT as string | undefined,
+        NEXT_PUBLIC_S3_ENDPOINT: `${TEST_ENDPOINT}/` as string | undefined,
         S3_REGION: "us-east-1",
         S3_ACCESS_KEY: "test-key",
         S3_SECRET_KEY: "test-secret",
         S3_BUCKET_NAME: TEST_BUCKET,
+        S3_PUBLIC_ENDPOINT: "https://files.example/storage/",
         BLOB_READ_WRITE_TOKEN: "fake-blob-token",
     },
     client: {
@@ -30,7 +32,8 @@ const mockEnvData = {
 
 function setProvider(provider: "s3" | "database") {
     mockEnvData.server.NEXT_PUBLIC_STORAGE_PROVIDER = provider;
-    mockEnvData.server.NEXT_PUBLIC_S3_ENDPOINT = provider === "s3" ? TEST_ENDPOINT : undefined;
+    mockEnvData.server.NEXT_PUBLIC_S3_ENDPOINT =
+        provider === "s3" ? `${TEST_ENDPOINT}/` : undefined;
     mockEnvData.client.NEXT_PUBLIC_STORAGE_PROVIDER = provider;
     mockEnvData.client.NEXT_PUBLIC_S3_ENDPOINT = provider === "s3" ? TEST_ENDPOINT : undefined;
 }
@@ -44,7 +47,9 @@ jest.mock("~/env", () => ({
 // ─── Mock S3 client ──────────────────────────────────────────────────────────
 
 const mockPutObject = jest.fn().mockResolvedValue(undefined);
-const mockGetObjectUrl = jest.fn((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
+const mockGetObjectUrl = jest.fn((key: string) =>
+    jest.requireActual<typeof S3StorageClient>("~/server/storage/s3-client").getObjectUrl(key)
+);
 const mockEnsureBucketExists = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("~/server/storage/s3-client", () => ({
@@ -63,6 +68,9 @@ const mockDb = {
             returning: mockInsertReturning,
         })),
     })),
+    transaction: jest.fn(
+        async (run: (tx: unknown) => Promise<unknown>): Promise<unknown> => run(mockDb)
+    ),
 };
 
 jest.mock("~/server/db", () => ({ db: mockDb }));
@@ -78,6 +86,17 @@ jest.mock("~/server/engine", () => ({
 
 jest.mock("@launchstack/store/schema", () => ({
     fileUploads: { id: "id" },
+}));
+
+const mockRecordStoredObject = jest.fn().mockResolvedValue(undefined);
+const mockRemoveStoredObject = jest.fn().mockResolvedValue(undefined);
+const mockDiscardUnrecordedObject = jest.fn().mockResolvedValue(true);
+jest.mock("~/server/storage/ledger", () => ({
+    recordStoredObject: (...args: unknown[]) => mockRecordStoredObject(...args),
+    removeStoredObject: (...args: unknown[]) => mockRemoveStoredObject(...args),
+}));
+jest.mock("~/server/storage/compensate", () => ({
+    discardUnrecordedObject: (...args: unknown[]) => mockDiscardUnrecordedObject(...args),
 }));
 
 jest.mock("drizzle-orm", () => ({
@@ -121,10 +140,17 @@ beforeEach(() => {
     mockPutObject.mockClear().mockResolvedValue(undefined);
     mockGetObjectUrl
         .mockClear()
-        .mockImplementation((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
+        .mockImplementation((key: string) =>
+            jest
+                .requireActual<typeof S3StorageClient>("~/server/storage/s3-client")
+                .getObjectUrl(key)
+        );
     mockEnsureBucketExists.mockClear().mockResolvedValue(undefined);
     mockInsertReturning.mockClear().mockImplementation(() => Promise.resolve([{ id: 42 }]));
     mockFetchBlob.mockClear().mockResolvedValue(new Response("blob-content"));
+    mockRecordStoredObject.mockReset().mockResolvedValue(undefined);
+    mockRemoveStoredObject.mockReset().mockResolvedValue(undefined);
+    mockDiscardUnrecordedObject.mockReset().mockResolvedValue(true);
     setProvider("s3");
 });
 
@@ -135,6 +161,7 @@ import {
     resolveStorageBackend,
     isS3Storage,
 } from "~/lib/storage";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
 
 // ─── Property 5: Upload result shape and persistence consistency ─────────────
 
@@ -163,6 +190,17 @@ describe("Feature: storage unification, Property 5: Upload result shape consiste
                         storageLocationId: `s3:${TEST_ENDPOINT}@${TEST_BUCKET}`,
                         key: result.pathname,
                     });
+                    const recorded = mockRecordStoredObject.mock.calls.at(-1)![1];
+                    expect(recorded.ref).toEqual(result.ref);
+                    expect(refFromStoredUrl(result.url)).toEqual({ ok: true, ref: recorded.ref });
+                    expect(
+                        refFromStoredUrl(
+                            `https://files.example/storage/${TEST_BUCKET}/${result.pathname}`
+                        )
+                    ).toEqual({ ok: true, ref: recorded.ref });
+                    expect(mockRecordStoredObject.mock.invocationCallOrder.at(-1)).toBeLessThan(
+                        mockPutObject.mock.invocationCallOrder.at(-1)!
+                    );
                 }
             ),
             { numRuns: 50 }
@@ -171,6 +209,7 @@ describe("Feature: storage unification, Property 5: Upload result shape consiste
 
     it("database mode: uploadFile returns /api/files/<id> and provider='database'", async () => {
         setProvider("database");
+        mockEnvData.server.NEXT_PUBLIC_S3_ENDPOINT = `${TEST_ENDPOINT}/`;
 
         await fc.assert(
             fc.asyncProperty(
@@ -189,6 +228,9 @@ describe("Feature: storage unification, Property 5: Upload result shape consiste
                         storageLocationId: "database:file_uploads",
                         key: "42",
                     });
+                    const recorded = mockRecordStoredObject.mock.calls.at(-1)![1];
+                    expect(recorded.ref).toEqual(result.ref);
+                    expect(refFromStoredUrl(result.url)).toEqual({ ok: true, ref: recorded.ref });
                 }
             ),
             { numRuns: 50 }
@@ -259,6 +301,46 @@ describe("Feature: storage unification, Property 6: Upload error propagation", (
             ),
             { numRuns: 50 }
         );
+    });
+
+    it("never writes S3 bytes when the write-ahead ledger insert fails", async () => {
+        const error = new Error("ledger unavailable");
+        mockRecordStoredObject.mockRejectedValueOnce(error);
+        await expect(
+            uploadFile({
+                filename: "fail.pdf",
+                data: Buffer.from("bytes"),
+                userId: "user",
+            })
+        ).rejects.toMatchObject({ name: "StorageError", provider: "s3", cause: error });
+        expect(mockPutObject).not.toHaveBeenCalled();
+        expect(mockDiscardUnrecordedObject).not.toHaveBeenCalled();
+    });
+
+    it("compensates a failed S3 put and removes its ledger row after confirmed deletion", async () => {
+        const error = new Error("put unavailable");
+        mockPutObject.mockRejectedValueOnce(error);
+        await expect(
+            uploadFile({
+                filename: "fail.pdf",
+                data: Buffer.from("bytes"),
+                userId: "user",
+                companyId: 7n,
+            })
+        ).rejects.toMatchObject({ name: "StorageError", provider: "s3", cause: error });
+        const recorded = mockRecordStoredObject.mock.calls[0]![1];
+        expect(recorded).toMatchObject({ companyId: 7n, source: "upload-file", sizeBytes: 5 });
+        expect(mockDiscardUnrecordedObject).toHaveBeenCalledWith(recorded.ref, expect.any(String));
+        expect(mockRemoveStoredObject).toHaveBeenCalledWith(mockDb, recorded.ref);
+    });
+
+    it("retains the ledger when S3 compensation is unconfirmed", async () => {
+        mockPutObject.mockRejectedValueOnce(new Error("put failed"));
+        mockDiscardUnrecordedObject.mockResolvedValueOnce(false);
+        await expect(
+            uploadFile({ filename: "fail.pdf", data: Buffer.from("bytes"), userId: "user" })
+        ).rejects.toThrow("put failed");
+        expect(mockRemoveStoredObject).not.toHaveBeenCalled();
     });
 });
 

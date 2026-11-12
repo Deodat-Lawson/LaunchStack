@@ -44,6 +44,16 @@ import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/editing";
 
+beforeEach(() => {
+    (db.select as jest.Mock).mockReturnValue({
+        from: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+                limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+            }),
+        }),
+    });
+});
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -263,6 +273,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         expect(putFile).toHaveBeenCalledWith(
             expect.objectContaining({
                 filename: expect.stringContaining("modified-42"),
+                companyId: BigInt(7),
                 contentType:
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             })

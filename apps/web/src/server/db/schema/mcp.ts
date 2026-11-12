@@ -14,6 +14,11 @@
  * `assistant_conversations` records each conversation an assistant saved: the
  * document it became, who saved it from which assistant, and the follow-up
  * note LaunchStack wrote about it.
+ *
+ * `mcp_staged_files` holds what an assistant handed over but has not filed
+ * yet: a draft waiting for the person to say which folder it goes in, or an
+ * upload slot a CLI sends a file's bytes to. Each row belongs to one person in
+ * one workspace, is used at most once, and expires within the hour.
  */
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
@@ -22,6 +27,7 @@ import {
     bigserial,
     index,
     integer,
+    jsonb,
     primaryKey,
     text,
     timestamp,
@@ -139,3 +145,60 @@ export const assistantConversations = pgTable(
 );
 
 export type AssistantConversation = InferSelectModel<typeof assistantConversations>;
+
+/** A draft waits for its folder; an upload waits for its bytes, then its folder. */
+export const MCP_STAGED_KINDS = ["draft", "upload"] as const;
+export type McpStagedKind = (typeof MCP_STAGED_KINDS)[number];
+
+/** `awaiting_bytes` (upload slot not used yet) → `ready` → `used` (filed). */
+export const MCP_STAGED_STATUSES = ["awaiting_bytes", "ready", "used"] as const;
+export type McpStagedStatus = (typeof MCP_STAGED_STATUSES)[number];
+
+export const mcpStagedFiles = pgTable(
+    "mcp_staged_files",
+    {
+        /** The handle the assistant passes back (`draftId` / `uploadId`). */
+        id: varchar("id", { length: 40 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        /** The person who staged it; nobody else can file or see it. */
+        userId: bigint("user_id", { mode: "bigint" })
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        kind: varchar("kind", { length: 16 }).$type<McpStagedKind>().notNull(),
+        status: varchar("status", { length: 16 }).$type<McpStagedStatus>().notNull(),
+        /** Hex SHA-256 of an upload slot's one-time URL token; null for drafts. */
+        uploadTokenHash: varchar("upload_token_hash", { length: 64 }),
+        /** The upload slot's URL stops accepting bytes at this time. */
+        uploadExpiresAt: timestamp("upload_expires_at", { withTimezone: true }),
+        filename: varchar("filename", { length: 256 }).notNull(),
+        mimeType: varchar("mime_type", { length: 128 }).notNull(),
+        sizeBytes: integer("size_bytes"),
+        /** Where the bytes are stored once they arrived (`uploadFile`'s url). */
+        storageUrl: text("storage_url"),
+        storageProvider: varchar("storage_provider", { length: 16 }),
+        /** What the assistant said about it: title, format, origin, source link. */
+        details: jsonb("details").$type<Record<string, unknown>>(),
+        /** Filing it must happen before this; afterwards the row and file are swept. */
+        expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+        usedAt: timestamp("used_at", { withTimezone: true }),
+        /** The source it became. */
+        documentId: bigint("document_id", { mode: "number" }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        uploadTokenUnique: uniqueIndex("mcp_staged_files_upload_token_unique").on(
+            table.uploadTokenHash
+        ),
+        companyUserIdx: index("mcp_staged_files_company_user_idx").on(
+            table.companyId,
+            table.userId
+        ),
+        expiresIdx: index("mcp_staged_files_expires_idx").on(table.expiresAt),
+    })
+);
+
+export type McpStagedFile = InferSelectModel<typeof mcpStagedFiles>;

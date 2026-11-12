@@ -22,7 +22,9 @@ import { factLabelText, failureText } from "~/components/company-profile/words";
 import { companyProfileApi } from "~/lib/company-profile/api";
 import type { CompanyProfileDto, ProfileSourceDto } from "~/lib/company-profile/dto";
 import { normalizeWebsite } from "~/lib/company-profile/website";
+import { BETA_APPS_SETTING } from "~/lib/settings/registry";
 import { workspaceHref } from "~/lib/settings/surfaces";
+import { useSettingValue } from "~/lib/settings/useSettings";
 import { cn } from "~/lib/utils";
 import {
     registerDocument,
@@ -732,6 +734,9 @@ function UnderstoodStep({
     const t = useTranslations("onboarding.flow");
     const tc = useTranslations("common");
     const ts = useTranslations("companyProfile.server");
+    // Finding buyers is Growth, a beta app: no tile for it while the
+    // workspace's beta switch is off (which it is in a new workspace).
+    const betaApps = useSettingValue<boolean>(BETA_APPS_SETTING) === true;
     const [profile, setProfile] = useState<CompanyProfileDto | null>(null);
     const started = useRef(Date.now());
 
@@ -915,7 +920,12 @@ function UnderstoodStep({
 
                 <div className="flex flex-col gap-2">
                     <h2 className="text-ink text-sm font-medium">{t("understood.then")}</h2>
-                    <div className="grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+                    <div
+                        className={cn(
+                            "grid gap-3 max-sm:grid-cols-1",
+                            betaApps ? "grid-cols-3" : "grid-cols-2"
+                        )}
+                    >
                         <NextTile
                             href="/employer/documents?feature=chat"
                             Icon={MessageSquare}
@@ -928,12 +938,14 @@ function UnderstoodStep({
                             title={t("understood.tiles.proposal.title")}
                             text={t("understood.tiles.proposal.text")}
                         />
-                        <NextTile
-                            href="/employer/documents?feature=growth&at=%2Fprospects"
-                            Icon={Search}
-                            title={t("understood.tiles.buyers.title")}
-                            text={t("understood.tiles.buyers.text")}
-                        />
+                        {betaApps && (
+                            <NextTile
+                                href="/employer/documents?feature=growth&at=%2Fprospects"
+                                Icon={Search}
+                                title={t("understood.tiles.buyers.title")}
+                                text={t("understood.tiles.buyers.text")}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

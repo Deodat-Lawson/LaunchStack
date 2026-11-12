@@ -608,6 +608,13 @@ export interface StudioFeature {
      * Unset, nothing is said.
      */
     deniedNote?: string;
+    /**
+     * Still being built. Shown only while the workspace's beta switch
+     * (`labs.betaApps`, Workspace › Labs) is on, and drawn with a Beta badge
+     * then; its APIs refuse while it is off (`~/server/beta-apps`). Checked
+     * with the permission through `useStudioAccess().canOpen`.
+     */
+    beta?: boolean;
 }
 
 export interface StudioGroup {
@@ -677,6 +684,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
                 href: "/employer/documents?feature=growth",
+                beta: true,
             },
             {
                 // A writing app: the proposal is the unit of work, and every
@@ -706,6 +714,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconVantage,
                 desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
                 href: "/employer/documents?feature=vantage",
+                beta: true,
             },
             {
                 // A simulated social network: people built from the

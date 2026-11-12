@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { ProgramInputSchema } from "@launchstack/pipelines/distribution/types";
 import { createProgram, listPrograms } from "@launchstack/pipelines/distribution/db";
 import { requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 
@@ -13,7 +13,7 @@ const api = (request: Request) => requestTranslator(request, "errors.api");
 
 export async function GET(request: NextRequest) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const programs = await listPrograms(ctx.data.companyId);
         return json({ programs });
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const parsed = ProgramInputSchema.safeParse(await readJsonBody(request));
         if (!parsed.success)

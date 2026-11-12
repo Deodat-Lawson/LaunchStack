@@ -4,7 +4,7 @@ import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { localeOfRequest, requestTranslator } from "~/i18n/server";
@@ -53,7 +53,7 @@ function composeEvalContext(
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
 
         const aiUse = { feature: "marketing", userId: ctx.data.authUserId } as const;

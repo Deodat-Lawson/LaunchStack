@@ -58,6 +58,12 @@ function historyWords(locale: Locale | undefined) {
 
 export interface HistoryLoader {
     kind: HistoryEntry["kind"];
+    /**
+     * The rows belong to a beta app (Vantage, Growth's Prospects), so they
+     * are left out while the workspace's beta switch is off, like the app
+     * (`~/server/beta-apps`).
+     */
+    beta?: boolean;
     load(ctx: HistoryLoaderContext): Promise<HistoryEntry[]>;
     /**
      * Remove one row, scoped to the workspace. Returns false when nothing
@@ -235,6 +241,8 @@ const repoExplainerLoader: HistoryLoader = {
 
 const distributionLoader: HistoryLoader = {
     kind: "distribution",
+    // Prospects' older runs; the link lands in Growth › Prospects.
+    beta: true,
     async load({ companyId, limit, locale }) {
         const t = historyWords(locale);
         const rows = await db
@@ -367,6 +375,7 @@ const weeklyReviewLoader: HistoryLoader = {
 
 const vantageLoader: HistoryLoader = {
     kind: "vantage",
+    beta: true,
     async load({ companyId, limit, locale }) {
         const t = historyWords(locale);
         const rows = await db

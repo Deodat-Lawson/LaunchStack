@@ -2,7 +2,7 @@ import { z } from "zod";
 import { refineContent } from "@launchstack/pipelines/marketing";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { localeOfRequest, requestTranslator } from "~/i18n/server";
@@ -20,7 +20,7 @@ const RefineInputSchema = z.object({
 
 export async function POST(request: Request) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
 
         const aiUse = { feature: "marketing", userId: ctx.data.authUserId } as const;

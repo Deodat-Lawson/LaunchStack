@@ -18,8 +18,11 @@ import { BUILTIN_ROLE_PERMISSIONS, type Permission } from "~/lib/authz/permissio
 import type * as Registry from "~/lib/settings/registry";
 
 jest.mock("next/navigation", () => ({ useRouter: () => ({ push: jest.fn() }) }));
+let mockBetaApps = false;
 jest.mock("~/lib/settings/useSettings", () => ({
     useSettingValue: () => false,
+    // The workspace's beta switch (`labs.betaApps`), read by `useStudioAccess`.
+    useSetting: () => ({ value: mockBetaApps, loaded: true, error: null }),
     // The real registry search, in English: what a Member may find is what is under test.
     useSettingsSearch: () => (query: string, limit?: number) => {
         const registry: typeof Registry = jest.requireActual("~/lib/settings/registry");
@@ -65,7 +68,34 @@ function search(text: string, onPickFeature = jest.fn(), onPickSetting = jest.fn
     return onPickFeature;
 }
 
+beforeEach(() => {
+    mockBetaApps = false;
+});
+
 describe("CommandPalette permissions", () => {
+    it("offers Growth, its Brand and Prospects, and Vantage only while beta apps are on", () => {
+        mockPerms = new Set(ADMIN);
+        for (const query of ["growth", "brand", "prospects", "vantage"]) {
+            search(query);
+            for (const name of ["Growth", "Brand", "Prospects", "Vantage"]) {
+                expect(screen.queryByText(name)).not.toBeInTheDocument();
+            }
+            cleanup();
+        }
+        // What an admin finds instead: the switch itself, in Workspace › Labs.
+        search("growth");
+        expect(screen.getByText("Beta apps")).toBeInTheDocument();
+        cleanup();
+
+        mockBetaApps = true;
+        const onPickFeature = search("brand");
+        fireEvent.click(screen.getByText("Brand"));
+        expect(onPickFeature).toHaveBeenCalledWith("brand");
+        cleanup();
+        search("vantage");
+        expect(screen.getByText("Vantage")).toBeInTheDocument();
+    });
+
     it("offers Team to someone who can see the members, and opens it", () => {
         mockPerms = new Set<Permission>(["members.view"]);
         const onPickFeature = search("team");

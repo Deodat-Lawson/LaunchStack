@@ -248,6 +248,11 @@
       }
     },
     "labs": {
+      "betaApps": {
+        "label": "Beta apps",
+        "description": "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
+        "consequence": "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out."
+      },
       "predictiveGaps": {
         "label": "Predictive gaps",
         "description": "Lists missing exhibits, schedules and compliance gaps across your documents. The analysis exists; the screen that shows it does not yet, so this only surfaces the entry in the palette."
@@ -1822,6 +1827,7 @@
   "server": {
     "errors": {
       "unknownSetting": "Unknown setting \"{key}\"",
+      "betaAppsOff": "This app is still being built, and beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
       "folderScopeNeedsPath": "A folder scope needs a folder path",
       "scopeNotAllowed": "\"{key}\" cannot be set at the {scope} scope",
       "settingNeedsPermission": "Changing \"{label}\" needs {permission}",

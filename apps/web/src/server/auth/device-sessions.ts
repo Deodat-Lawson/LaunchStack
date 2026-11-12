@@ -16,15 +16,47 @@
  * sign-out the person never asked for. `/device-sessions/remember` writes the
  * missing cookie for the session in hand; the account menu and the
  * add-account pages call it before anything else can replace the session.
+ *
+ * Every change of account also forgets the active workspace
+ * (`pdr_active_company`, ~/lib/active-workspace). That cookie is per browser,
+ * not per account, so without this the next account would open the
+ * workspace the previous one had open.
  */
 
 import type { BetterAuthPlugin } from "better-auth";
-import { createAuthEndpoint, sessionMiddleware } from "better-auth/api";
+import { createAuthEndpoint, createAuthMiddleware, sessionMiddleware } from "better-auth/api";
 import { multiSession } from "better-auth/plugins";
 
 import { MAX_DEVICE_ACCOUNTS } from "~/lib/auth/device-accounts";
 
 const MULTI_MARKER = "_multi-";
+
+/**
+ * `ACTIVE_WORKSPACE_COOKIE` from ~/lib/active-workspace, spelled out: that
+ * module reads the database, and this one is in the middleware bundle. A
+ * test keeps the two equal.
+ */
+export const ACTIVE_WORKSPACE_COOKIE_NAME = "pdr_active_company";
+
+/** Endpoints after which a different account may be the active one. */
+function changesAccount(path: string | undefined, startedSession: boolean): boolean {
+    if (!path) return false;
+    if (
+        path === "/multi-session/set-active" ||
+        path === "/multi-session/revoke" ||
+        path === "/sign-out"
+    ) {
+        return true;
+    }
+    // A fresh sign-in (email, sign-up, Google/GitHub/Microsoft, OIDC). Only
+    // these: a session refresh also "starts" a session but changes nobody.
+    const signIn =
+        path === "/sign-in/email" ||
+        path === "/sign-up/email" ||
+        path.startsWith("/callback/") ||
+        path.startsWith("/oauth2/callback/");
+    return signIn && startedSession;
+}
 
 function cookieNames(header: string | null | undefined): string[] {
     if (!header) return [];
@@ -58,6 +90,24 @@ export function rememberDeviceSession(maximumSessions: number) {
                     return ctx.json({ remembered: true });
                 }
             ),
+        },
+        hooks: {
+            after: [
+                {
+                    matcher: () => true,
+                    handler: createAuthMiddleware(async ctx => {
+                        if (!changesAccount(ctx.path, Boolean(ctx.context.newSession))) return;
+                        // The next account opens its own last workspace.
+                        ctx.setCookie(ACTIVE_WORKSPACE_COOKIE_NAME, "", {
+                            path: "/",
+                            maxAge: 0,
+                            httpOnly: true,
+                            sameSite: "lax",
+                            secure: process.env.NODE_ENV === "production",
+                        });
+                    }),
+                },
+            ],
         },
     } satisfies BetterAuthPlugin;
 }

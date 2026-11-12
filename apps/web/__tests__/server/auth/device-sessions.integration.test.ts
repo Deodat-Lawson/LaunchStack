@@ -13,6 +13,8 @@ import { eq } from "drizzle-orm";
 import { authSession } from "~/server/db/schema";
 import type { auth as Auth } from "~/server/auth";
 import { isAtAccountLimit, MAX_DEVICE_ACCOUNTS } from "~/lib/auth/device-accounts";
+import { ACTIVE_WORKSPACE_COOKIE } from "~/lib/active-workspace";
+import { ACTIVE_WORKSPACE_COOKIE_NAME } from "~/server/auth/device-sessions";
 
 import {
     createFounderWeeklyReviewTestDatabase,
@@ -158,6 +160,40 @@ describeIfDatabase("several accounts in one browser", () => {
 
         // Switching only changes which one is active.
         expect((await browser.accounts()).map(a => a.email)).toEqual([ann, bob].sort());
+    });
+
+    it("forgets the active workspace on every change of account", async () => {
+        const ann = await newAccount();
+        const bob = await newAccount();
+        const browser = new Browser(auth);
+        await browser.signIn(ann);
+        await browser.signIn(bob);
+        const workspaceCookie = () => browser.jar.get(ACTIVE_WORKSPACE_COOKIE);
+        const annToken = (await browser.accounts()).find(a => a.email === ann)!.token;
+
+        // Switching: Ann must not open the workspace Bob had open.
+        browser.jar.set(ACTIVE_WORKSPACE_COOKIE, "62");
+        await browser.send("/multi-session/set-active", { body: { sessionToken: annToken } });
+        expect(workspaceCookie()).toBeUndefined();
+
+        // Signing out of one: the account left behind opens its own.
+        browser.jar.set(ACTIVE_WORKSPACE_COOKIE, "62");
+        await browser.send("/multi-session/revoke", { body: { sessionToken: annToken } });
+        expect(workspaceCookie()).toBeUndefined();
+
+        // Adding an account (a fresh sign-in) too.
+        browser.jar.set(ACTIVE_WORKSPACE_COOKIE, "62");
+        await browser.signIn(ann);
+        expect(workspaceCookie()).toBeUndefined();
+
+        // A plain session read leaves it alone.
+        browser.jar.set(ACTIVE_WORKSPACE_COOKIE, "62");
+        await browser.who();
+        expect(workspaceCookie()).toBe("62");
+    });
+
+    it("spells the workspace cookie the way ~/lib/active-workspace does", () => {
+        expect(ACTIVE_WORKSPACE_COOKIE_NAME).toBe(ACTIVE_WORKSPACE_COOKIE);
     });
 
     it("refuses to switch to a session this browser doesn't hold", async () => {

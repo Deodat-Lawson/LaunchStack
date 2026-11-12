@@ -14,7 +14,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
+import { EditorContent, Extension, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
@@ -73,6 +73,31 @@ import "./file-editor.css";
 
 type EditorT = ReturnType<typeof useTranslations<"viewers.fileEditor">>;
 
+/**
+ * A line break the Markdown file had as a plain newline carries
+ * `data-soft`, so a save writes it back as that newline rather than a hard
+ * break: a hard-wrapped paragraph nobody touched comes back unchanged. A break
+ * typed here (Shift+Enter) has no mark and saves as a hard break.
+ */
+const SoftBreaks = Extension.create({
+    name: "softBreaks",
+    addGlobalAttributes() {
+        return [
+            {
+                types: ["hardBreak"],
+                attributes: {
+                    soft: {
+                        default: null,
+                        parseHTML: element => (element.hasAttribute("data-soft") ? "" : null),
+                        renderHTML: attributes =>
+                            attributes.soft === null ? {} : { "data-soft": "" },
+                    },
+                },
+            },
+        ];
+    },
+});
+
 type BlockType = "paragraph" | "h1" | "h2" | "h3";
 
 export interface FileEditorProps {
@@ -124,6 +149,7 @@ export function FileEditor({ documentId, onExit, onSaved, onNewerVersion }: File
                 link: { openOnClick: false, autolink: true, defaultProtocol: "https" },
             }),
             Placeholder.configure({ placeholder: t("placeholder") }),
+            SoftBreaks,
             TableKit.configure({ table: { resizable: false } }),
             // A Word file's pictures arrive as data URIs: dropping them here
             // would delete them from the file on the next save.

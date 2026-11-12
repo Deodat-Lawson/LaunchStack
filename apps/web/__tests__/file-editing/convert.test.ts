@@ -248,12 +248,18 @@ describe("Markdown that must survive an open and a save", () => {
         expect(roundTrip(saved)).toBe(saved);
     });
 
-    it("keeps a note's lines as lines", () => {
-        const saved = roundTrip("Line A\nLine B\n");
-        // A Markdown hard break: every reader shows two lines.
-        expect(saved).toBe("Line A  \nLine B\n");
-        expect(markdownToHtml(saved)).toMatch(/Line A<br\s*\/?>\s*Line B/);
-        expect(roundTrip(saved)).toBe(saved);
+    it("shows a note's lines as lines, and saves them back exactly as written", () => {
+        // A plain newline shows as a line break in the editor...
+        expect(markdownToHtml("Line A\nLine B\n")).toContain('Line A<br data-soft="">Line B');
+        // ...and comes back as the newline it was: a hard-wrapped paragraph
+        // nobody touched is unchanged by a save.
+        const wrapped =
+            "LaunchStack keeps every file a team writes in one place, so a\n" +
+            "question asked later finds the answer where it was left.\n";
+        expect(roundTrip(wrapped)).toBe(wrapped);
+        // Hard breaks in the file stay hard; one typed in the editor is hard.
+        expect(roundTrip("Line A  \nLine B\n")).toBe("Line A  \nLine B\n");
+        expect(htmlToMarkdown("<p>Typed<br>break</p>")).toBe("Typed  \nbreak\n");
     });
 
     it("takes only a block of fields for front matter, not two rules around text", () => {

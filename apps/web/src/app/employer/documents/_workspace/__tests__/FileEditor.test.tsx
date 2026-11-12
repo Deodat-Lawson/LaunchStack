@@ -347,6 +347,26 @@ describe("FileEditor", () => {
         await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/employer/settings"));
     });
 
+    it("keeps a file's plain newlines marked soft through an edit, so a save writes them back as they were", async () => {
+        fetchMock.mockImplementation((_url: string, init?: RequestInit) =>
+            init?.method === "PUT"
+                ? json({ success: true, versionId: 9, versionNumber: 2, base: "v:2" })
+                : json(
+                      editable({
+                          html: '<h1>Plan</h1><p>First line</p><p>wrapped at<br data-soft="">eighty columns</p>',
+                      })
+                  )
+        );
+        const user = userEvent.setup();
+        render(<FileEditor documentId={7} onExit={jest.fn()} />);
+        await loaded();
+        await edit(user);
+        await user.click(screen.getByTestId("file-editor-save"));
+
+        await waitFor(() => expect(puts()).toHaveLength(1));
+        expect(String(puts()[0]!.html)).toContain('wrapped at<br data-soft="">eighty columns');
+    });
+
     it("asks before Done throws away unsaved edits", async () => {
         fetchMock.mockImplementation(() =>
             json(editable({ kind: "text", mode: "plain", html: "", text: "a" }))

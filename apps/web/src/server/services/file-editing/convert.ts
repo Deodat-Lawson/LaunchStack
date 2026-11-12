@@ -95,6 +95,8 @@ const KEEP_TAGS = new Set([
 
 const ALLOWED_ATTRS: Record<string, ReadonlySet<string>> = {
     a: new Set(["href", "title"]),
+    // A line break the file had as a plain newline (see the Markdown below).
+    br: new Set(["data-soft"]),
     img: new Set(["src", "alt", "title", "width", "height"]),
     th: new Set(["colspan", "rowspan"]),
     td: new Set(["colspan", "rowspan"]),
@@ -261,13 +263,20 @@ function escapeText(value: string): string {
 
 const markdown = new Marked({
     gfm: true,
-    // A single newline is a line break, as Obsidian and most note apps show
-    // it; a save writes it back as a Markdown hard break, so the lines stay.
+    // A single newline shows as a line break, as Obsidian and most note
+    // apps show it (and the br renderer below keeps it a newline on save).
     breaks: true,
     async: false,
     renderer: {
         html({ text }) {
             return isWordsInBrackets(text) ? escapeText(text) : text;
+        },
+        // A plain newline is shown as a line break but marked soft, so a save
+        // writes it back as the newline it was. Only a break someone typed
+        // (or the file wrote as two spaces / a backslash) becomes a hard one,
+        // so a hard-wrapped paragraph nobody touched comes back unchanged.
+        br({ raw }) {
+            return /^( {2,}|\\)\n/.test(raw) ? "<br>" : '<br data-soft="">';
         },
     },
 });
@@ -324,6 +333,10 @@ function createTurndown(): TurndownService {
     // Turndown pads list markers to four columns ("-   item"); a single
     // space reads like Markdown people write, and nested content indents by
     // the marker's own width so CommonMark still nests it.
+    service.addRule("softBreak", {
+        filter: node => node.nodeName === "BR" && node.hasAttribute("data-soft"),
+        replacement: () => "\n",
+    });
     service.addRule("compactListItem", {
         filter: "li",
         replacement(content, node) {

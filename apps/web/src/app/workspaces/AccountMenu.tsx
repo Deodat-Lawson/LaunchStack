@@ -48,6 +48,12 @@ export interface AccountMenuProps {
     triggerClassName?: string;
     emailClassName?: string;
     chevronClassName?: string;
+    /**
+     * From the server's read of the cookies: the browser holds the most
+     * accounts it keeps. It counts what the list leaves out (a session that
+     * has ended but still holds a slot), so it wins over the list's length.
+     */
+    limitReached?: boolean;
 }
 
 export function AccountMenu({
@@ -56,8 +62,10 @@ export function AccountMenu({
     triggerClassName,
     emailClassName,
     chevronClassName,
+    limitReached = false,
 }: AccountMenuProps) {
     const t = useTranslations("auth.workspaces.accountMenu");
+    const tAdd = useTranslations("auth.addAccount");
     const { data: session } = authClient.useSession();
     const activeToken = session?.session.token;
     const activeUserId = session?.user.id;
@@ -83,7 +91,7 @@ export function AccountMenu({
         () => (accounts ?? []).filter(a => a.userId !== activeUserId),
         [accounts, activeUserId]
     );
-    const atLimit = (accounts?.length ?? 1) >= MAX_DEVICE_ACCOUNTS;
+    const atLimit = limitReached || (accounts?.length ?? 1) >= MAX_DEVICE_ACCOUNTS;
 
     const run = async (work: () => Promise<void>, failure: string) => {
         if (busy) return;
@@ -159,7 +167,7 @@ export function AccountMenu({
                         email={account.email}
                         src={photo}
                         className="size-[22px]"
-                        fallbackClassName="text-[10px]"
+                        fallbackClassName="text-xs"
                     />
                     <span>{account.name}</span>
                     {account.email ? (
@@ -175,7 +183,7 @@ export function AccountMenu({
                 collisionPadding={12}
                 className="border-line w-[min(21rem,calc(100vw-2rem))] p-1.5"
             >
-                <DropdownMenuLabel className="text-ink-3 px-2 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.04em]">
+                <DropdownMenuLabel className="text-ink-3 px-2 pb-1 pt-1.5 text-xs font-medium">
                     {t("signedInAs")}
                 </DropdownMenuLabel>
                 <div
@@ -187,7 +195,7 @@ export function AccountMenu({
                         email={account.email}
                         src={photo}
                         className="size-7"
-                        fallbackClassName="text-[11px]"
+                        fallbackClassName="text-xs"
                     />
                     <AccountText name={account.name} email={account.email} />
                     <Check className="text-brand size-4 shrink-0" aria-hidden />
@@ -197,7 +205,7 @@ export function AccountMenu({
                 {others.length > 0 ? (
                     <>
                         <DropdownMenuSeparator />
-                        <DropdownMenuLabel className="text-ink-3 px-2 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.04em]">
+                        <DropdownMenuLabel className="text-ink-3 px-2 pb-1 pt-1.5 text-xs font-medium">
                             {t("switchTo")}
                         </DropdownMenuLabel>
                         <DropdownMenuGroup>
@@ -214,7 +222,7 @@ export function AccountMenu({
                                         email={other.email}
                                         src={other.image}
                                         className="size-7"
-                                        fallbackClassName="text-[11px]"
+                                        fallbackClassName="text-xs"
                                     />
                                     <AccountText name={other.name} email={other.email} />
                                 </DropdownMenuItem>
@@ -230,7 +238,7 @@ export function AccountMenu({
                 </DropdownMenuItem>
                 {atLimit ? (
                     <p className="text-ink-3 m-0 px-2 pb-1.5 text-xs leading-snug">
-                        {t("limit", { max: MAX_DEVICE_ACCOUNTS })}
+                        {tAdd("limit", { max: MAX_DEVICE_ACCOUNTS })}
                     </p>
                 ) : null}
 

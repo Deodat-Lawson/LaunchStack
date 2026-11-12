@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { and, count, desc, eq, gt, isNull, sql } from "drizzle-orm";
@@ -9,6 +10,7 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/store/schema";
 import { users, userCompanyMemberships, workspaceInvitations } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
+import { isAtAccountLimit } from "~/lib/auth/device-accounts";
 import { workspacePiles } from "~/server/profile/teammates";
 
 import { WorkspaceSelectClient, type PendingInvite } from "./WorkspaceSelectClient";
@@ -139,6 +141,7 @@ export default async function WorkspacesPage({
             account={{ name: accountName, email: accountEmail }}
             fromSignup={fromSignup}
             pendingInvites={pendingInvites}
+            accountLimitReached={isAtAccountLimit((await cookies()).getAll())}
         />
     );
 }

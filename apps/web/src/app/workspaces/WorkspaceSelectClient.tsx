@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { LanguageToggle } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
-import { withAddAccount } from "~/lib/auth/device-accounts";
+import { MAX_DEVICE_ACCOUNTS, withAddAccount } from "~/lib/auth/device-accounts";
 import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_HREF } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
@@ -64,6 +64,11 @@ type Props = {
     account: Account;
     fromSignup: boolean;
     pendingInvites?: PendingInvite[];
+    /**
+     * This browser already holds the most accounts it keeps (read from the
+     * cookies on the server): adding one is off, and says why.
+     */
+    accountLimitReached?: boolean;
 };
 
 const SWATCH_COUNT = 6;
@@ -143,12 +148,14 @@ export function WorkspaceSelectClient({
     account,
     fromSignup,
     pendingInvites = [],
+    accountLimitReached = false,
 }: Props) {
     const t = useTranslations("auth.workspaces");
     const tRelative = useTranslations("auth.workspaces.relative");
     const tRoles = useTranslations("auth.roles");
     const tChrome = useTranslations("auth.chrome");
     const tc = useTranslations("common");
+    const tAdd = useTranslations("auth.addAccount");
     const when = (iso: string) => relativeTime(tRelative, tc("time.justNow"), iso);
     const roleName = (role: string) => {
         const slug = normalizeRoleSlug(role);
@@ -485,6 +492,7 @@ export function WorkspaceSelectClient({
                     triggerClassName={styles.me}
                     emailClassName={styles.meEmail}
                     chevronClassName={styles.meChevron}
+                    limitReached={accountLimitReached}
                 />
                 <LanguageToggle />
                 <button
@@ -991,7 +999,12 @@ export function WorkspaceSelectClient({
                         ? t.rich("foot", { email: account.email, b: footBold })
                         : t.rich("footNoEmail", { b: footBold })}
                     <br />
-                    <a href={withAddAccount("/signin")}>{t("differentAccount")}</a>
+                    {accountLimitReached ? (
+                        // The link would only lead to the same sentence.
+                        <span>{tAdd("limit", { max: MAX_DEVICE_ACCOUNTS })}</span>
+                    ) : (
+                        <a href={withAddAccount("/signin")}>{t("differentAccount")}</a>
+                    )}
                     <span className={styles.sepDot}>·</span>
                     {/* Cross-origin — support lives on the public site. */}
                     <a href={LANDING_CONTACT_HREF} rel="noopener">

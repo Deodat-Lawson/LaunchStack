@@ -185,6 +185,29 @@ describe("AccountMenu", () => {
             "aria-disabled",
             "true"
         );
-        expect(screen.getByText(/signed in to 5 accounts at once/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/signed in to 5 accounts, the most one browser keeps/)
+        ).toBeInTheDocument();
+    });
+
+    it("takes the server's word for the limit (it counts slots the list leaves out)", async () => {
+        const user = userEvent.setup();
+        render(
+            <AccountMenu account={{ name: ADA.name, email: ADA.email }} photo={null} limitReached />
+        );
+        await user.click(screen.getByRole("button", { name: /switch or add accounts/ }));
+        await screen.findAllByTestId("account-other");
+
+        expect(screen.getByRole("menuitem", { name: "Add another account" })).toHaveAttribute(
+            "aria-disabled",
+            "true"
+        );
+        expect(screen.getByText(/the most one browser keeps/)).toBeInTheDocument();
+    });
+
+    it("labels its sections in sentence case", async () => {
+        await openMenu();
+        expect(screen.getByText("Signed in as")).not.toHaveClass("uppercase");
+        expect(screen.getByText("Switch to")).toBeInTheDocument();
     });
 });

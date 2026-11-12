@@ -10,7 +10,7 @@ import { Button } from "~/components/ui/button";
 import { rememberActiveSession, useAuth, useUser } from "~/lib/auth-client";
 import { isAddAccountMode, withAddAccount } from "~/lib/auth/device-accounts";
 import { cn } from "~/lib/utils";
-import { AddAccountNotice } from "~/components/auth/AddAccountNotice";
+import { AccountLimitNotice, AddAccountNotice } from "~/components/auth/AddAccountNotice";
 import { oauthErrorMessage } from "~/components/auth/auth-errors";
 import { safeNextPath, withNext } from "~/components/auth/next-path";
 import { SignInForm } from "~/app/_components/CredentialsForm";
@@ -38,7 +38,18 @@ import type { SocialProvider } from "~/server/auth/providers";
  *                     stays signed in as themselves, and lands on /workspaces
  *                     as the new account (~/server/auth/device-sessions)
  */
-export function SignInView({ socialProviders }: { socialProviders: SocialProvider[] }) {
+export function SignInView({
+    socialProviders,
+    accountLimitReached = false,
+}: {
+    socialProviders: SocialProvider[];
+    /**
+     * This browser already holds the most accounts it keeps (from the
+     * cookies, on the server). In add mode the form would only replace the
+     * active account, so a notice stands in for it.
+     */
+    accountLimitReached?: boolean;
+}) {
     const t = useTranslations("auth.signIn");
     const ta = useTranslations("auth.addAccount");
     const te = useTranslations("auth.errors");
@@ -93,10 +104,19 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                 setKeptAccountEmail(user?.email ?? "");
                 // Before this form can replace the session: a session from
                 // before multi-session must be remembered or it is lost.
-                void rememberActiveSession();
+                if (!accountLimitReached) void rememberActiveSession();
             }
         }
-    }, [isAuthLoaded, isSignedIn, signedInOnArrival, reauthForAssistant, addAccount, user]);
+    }, [
+        isAuthLoaded,
+        isSignedIn,
+        signedInOnArrival,
+        reauthForAssistant,
+        addAccount,
+        user,
+        accountLimitReached,
+    ]);
+    const atAccountLimit = keptAccountEmail !== null && accountLimitReached;
 
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col">
@@ -117,6 +137,8 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                             <Notice tone="success">{t("passwordUpdated")}</Notice>
                         ) : reauthForAssistant ? (
                             <Notice tone="info">{t("assistantReauth")}</Notice>
+                        ) : atAccountLimit ? (
+                            <AccountLimitNotice />
                         ) : keptAccountEmail !== null ? (
                             <AddAccountNotice email={keptAccountEmail} />
                         ) : next !== "/" && signedInOnArrival !== true ? (
@@ -129,7 +151,7 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
 
                         {signedInOnArrival ? (
                             <AlreadySignedIn continueHref={next === "/" ? "/workspaces" : next} />
-                        ) : (
+                        ) : atAccountLimit ? null : (
                             <SignInForm
                                 redirectTo={redirectTo}
                                 socialProviders={socialProviders}
@@ -141,22 +163,25 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                             />
                         )}
 
-                        <div className="text-ink-3 mt-6 text-center text-[12.5px]">
-                            {t.rich("newHere", {
-                                link: chunks => (
-                                    <Link
-                                        href={
-                                            addAccount
-                                                ? withAddAccount(withNext("/signup", nextParam))
-                                                : withNext("/signup", nextParam)
-                                        }
-                                        className="text-brand font-semibold no-underline hover:underline"
-                                    >
-                                        {chunks}
-                                    </Link>
-                                ),
-                            })}
-                        </div>
+                        {/* At the limit a new account can't join the list either. */}
+                        {atAccountLimit ? null : (
+                            <div className="text-ink-3 mt-6 text-center text-[12.5px]">
+                                {t.rich("newHere", {
+                                    link: chunks => (
+                                        <Link
+                                            href={
+                                                addAccount
+                                                    ? withAddAccount(withNext("/signup", nextParam))
+                                                    : withNext("/signup", nextParam)
+                                            }
+                                            className="text-brand font-semibold no-underline hover:underline"
+                                        >
+                                            {chunks}
+                                        </Link>
+                                    ),
+                                })}
+                            </div>
+                        )}
                         <AuthLegalLinks className="mt-4" />
                     </div>
                 </main>

@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 
 import { authSession } from "~/server/db/schema";
 import type { auth as Auth } from "~/server/auth";
-import { MAX_DEVICE_ACCOUNTS } from "~/lib/auth/device-accounts";
+import { isAtAccountLimit, MAX_DEVICE_ACCOUNTS } from "~/lib/auth/device-accounts";
 
 import {
     createFounderWeeklyReviewTestDatabase,
@@ -269,9 +269,18 @@ describeIfDatabase("several accounts in one browser", () => {
         const browser = new Browser(auth);
         const emails: string[] = [];
         for (let i = 0; i < MAX_DEVICE_ACCOUNTS + 1; i++) emails.push(await newAccount());
-        for (const email of emails) await browser.signIn(email);
+        const cookies = () => [...browser.jar].map(([name, value]) => ({ name, value }));
 
-        // The one past the limit is signed in and active, but not remembered.
+        for (const email of emails.slice(0, -1)) {
+            // The server-side gate agrees with the plugin: room until the limit.
+            expect(isAtAccountLimit(cookies())).toBe(false);
+            await browser.signIn(email);
+        }
+        expect(isAtAccountLimit(cookies())).toBe(true);
+
+        // Which is why the add-account pages refuse here: the one past the
+        // limit is signed in and active, but not remembered.
+        await browser.signIn(emails.at(-1)!);
         expect(await browser.who()).toBe(emails.at(-1));
         expect(browser.multiCookies()).toHaveLength(MAX_DEVICE_ACCOUNTS);
     });

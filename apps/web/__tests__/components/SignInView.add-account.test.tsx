@@ -57,6 +57,30 @@ describe("SignInView while signed in", () => {
         expect(mockRemember).not.toHaveBeenCalled();
     });
 
+    it("with add=1 at the account limit: a notice instead of the form", async () => {
+        mockParams = new URLSearchParams("add=1");
+        render(<SignInView socialProviders={[]} accountLimitReached />);
+
+        expect(
+            await screen.findByText(/signed in to 5 accounts, the most one browser keeps/)
+        ).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Back to your workspaces" })).toHaveAttribute(
+            "href",
+            "/workspaces"
+        );
+        expect(screen.queryByLabelText("Email")).toBeNull();
+        expect(screen.queryByRole("link", { name: /Start a free workspace/ })).toBeNull();
+        expect(mockRemember).not.toHaveBeenCalled();
+    });
+
+    it("the limit doesn't touch a plain sign-in", async () => {
+        mockParams = new URLSearchParams();
+        render(<SignInView socialProviders={[]} accountLimitReached />);
+
+        expect(await screen.findByText("You’re already signed in.")).toBeInTheDocument();
+        expect(screen.queryByText(/the most one browser keeps/)).toBeNull();
+    });
+
     it("with add=1: the form, the stay-signed-in note and a way back", async () => {
         mockParams = new URLSearchParams("add=1");
         render(<SignInView socialProviders={[]} />);

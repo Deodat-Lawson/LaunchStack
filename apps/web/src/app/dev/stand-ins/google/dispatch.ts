@@ -1,7 +1,8 @@
 /**
  * Development stand-in for the Google endpoints the Drive connector talks to:
  * OAuth (token, revoke, the consent decision), the slice of Drive v3 the
- * sync reads, and a Picker script. Point the app at it with
+ * sync reads, the few writes Create › File and the file editor make
+ * (./writes.ts), and a Picker script. Point the app at it with
  *
  *   GOOGLE_STAND_IN_URL=<origin>/dev/stand-ins/google
  *
@@ -30,6 +31,7 @@ import {
 import { standInClock } from "../shared/store";
 import { docxFromMarkdown } from "./docx";
 import { pickerScript } from "./picker-script";
+import { createDoc, createFolder, patchMetadata, updateDocMedia } from "./writes";
 import {
     ACCOUNT,
     FOLDER_MIME,
@@ -77,7 +79,11 @@ export function acceptableRedirect(raw: string | null): URL | null {
     if (!raw) return null;
     try {
         const url = new URL(raw);
-        const local = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+        // `*.localhost` is loopback too (RFC 6761; browsers never resolve it
+        // elsewhere): the preview harness serves worktrees on such names.
+        const local =
+            ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) ||
+            url.hostname.endsWith(".localhost");
         return (url.protocol === "http:" || url.protocol === "https:") && local ? url : null;
     } catch {
         return null;
@@ -192,9 +198,22 @@ async function consent(w: GoogleWorld, req: Request): Promise<Response> {
 function listFiles(w: GoogleWorld, scopes: string[], url: URL): Response {
     const q = url.searchParams.get("q") ?? "";
     const parent = /'([^']+)' in parents/.exec(q)?.[1];
-    // Anything else the app might query (Drive-linked files' own folder) has
-    // no match here.
-    if (!parent) return json({ kind: "drive#fileList", files: [] });
+    if (!parent) {
+        // ensureFolder's lookup: a folder by name (Drive-linked files' own
+        // folder). Anything else has no match here.
+        const name = /name = '((?:[^'\\]|\\.)*)'/.exec(q)?.[1]?.replace(/\\(.)/g, "$1");
+        const folders =
+            name !== undefined && q.includes(FOLDER_MIME)
+                ? Object.values(w.files).filter(
+                      f =>
+                          f.mimeType === FOLDER_MIME &&
+                          f.name === name &&
+                          !f.trashed &&
+                          visible(w, scopes, f)
+                  )
+                : [];
+        return json({ kind: "drive#fileList", files: folders.map(fileResource) });
+    }
     const driveId = url.searchParams.get("driveId");
     const files = Object.values(w.files).filter(
         f =>
@@ -402,7 +421,17 @@ async function route(req: Request): Promise<Response> {
         if (c === "changes" && !d) return changes(w, scopes, url);
     }
     if ((a === "drive" || a === "upload") && method !== "GET") {
-        return driveError(501, "notImplemented", "The stand-in does not write files.");
+        const scopes = scopesOf(w, req);
+        if (!scopes) return unauthenticated();
+        if (a === "drive" && b === "v3" && c === "files") {
+            if (method === "POST" && !d) return createFolder(w, req);
+            if (method === "PATCH" && d && !e) return patchMetadata(w, scopes, d, req);
+        }
+        if (a === "upload" && b === "drive" && c === "v3" && d === "files") {
+            if (method === "POST" && !e) return createDoc(w, req);
+            if (method === "PATCH" && e) return updateDocMedia(w, scopes, e, req);
+        }
+        return driveError(501, "notImplemented", "The stand-in does not make this write.");
     }
     return driveError(404, "notFound", `No stand-in for ${method} ${url.pathname}`);
 }

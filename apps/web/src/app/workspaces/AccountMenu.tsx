@@ -171,7 +171,7 @@ export function AccountMenu({
             <DropdownMenuContent
                 align="end"
                 sideOffset={8}
-                className="border-line w-[min(19rem,calc(100vw-2rem))] p-1.5"
+                className="border-line w-[min(21rem,calc(100vw-2rem))] p-1.5"
             >
                 <DropdownMenuLabel className="text-ink-3 px-2 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.04em]">
                     {t("signedInAs")}

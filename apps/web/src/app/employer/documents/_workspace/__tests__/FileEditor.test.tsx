@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { FileEditor } from "../FileEditor";
+import { hasUnsavedEdits } from "../unsavedEdits";
 
 /**
  * The file editor: it loads what `/editable` hands it, saves HTML (or plain
@@ -148,14 +149,24 @@ describe("FileEditor", () => {
                 : json(editable())
         );
         const onSaved = jest.fn();
+        const onNewerVersion = jest.fn();
         const user = userEvent.setup();
-        render(<FileEditor documentId={7} onExit={jest.fn()} onSaved={onSaved} />);
+        render(
+            <FileEditor
+                documentId={7}
+                onExit={jest.fn()}
+                onSaved={onSaved}
+                onNewerVersion={onNewerVersion}
+            />
+        );
         await loaded();
 
         await edit(user);
         await user.click(screen.getByTestId("file-editor-save"));
 
         const alert = await screen.findByTestId("file-editor-conflict");
+        // The rail re-reads its versions so it shows the newer one.
+        expect(onNewerVersion).toHaveBeenCalled();
         expect(alert).toHaveTextContent("Changed since you opened it");
         expect(alert).toHaveTextContent("Someone saved a newer version while you were editing.");
         expect(screen.getByRole("button", { name: "Reload latest" })).toBeInTheDocument();
@@ -215,6 +226,96 @@ describe("FileEditor", () => {
         await user.keyboard("{Meta>}s{/Meta}");
 
         await waitFor(() => expect(puts()).toHaveLength(1));
+    });
+
+    it("does nothing on ⌘S when nothing changed — no empty version, no push into a Google Doc", async () => {
+        fetchMock.mockImplementation(() =>
+            json(
+                editable({
+                    kind: "docx",
+                    drive: { url: "https://docs.google.com/d/1", native: true },
+                })
+            )
+        );
+        const user = userEvent.setup();
+        render(<FileEditor documentId={7} onExit={jest.fn()} />);
+        await loaded();
+
+        await user.click(screen.getByText("First line"));
+        await user.keyboard("{Meta>}s{/Meta}");
+        await new Promise(resolve => setTimeout(resolve, 50));
+        expect(puts()).toHaveLength(0);
+    });
+
+    it("tells the shell while it holds unsaved edits, and lets go once saved or closed", async () => {
+        fetchMock.mockImplementation((_url: string, init?: RequestInit) =>
+            init?.method === "PUT"
+                ? json({ success: true, versionId: 9, versionNumber: 2, base: "v:2" })
+                : json(editable())
+        );
+        const user = userEvent.setup();
+        const view = render(<FileEditor documentId={7} onExit={jest.fn()} />);
+        await loaded();
+        expect(hasUnsavedEdits(7)).toBe(false);
+
+        await edit(user);
+        expect(hasUnsavedEdits(7)).toBe(true);
+
+        await user.click(screen.getByTestId("file-editor-save"));
+        await waitFor(() => expect(hasUnsavedEdits(7)).toBe(false));
+
+        await edit(user);
+        expect(hasUnsavedEdits(7)).toBe(true);
+        view.unmount();
+        expect(hasUnsavedEdits(7)).toBe(false);
+    });
+
+    it("says a Drive save is waiting to come back, instead of naming an old version", async () => {
+        fetchMock.mockImplementation((_url: string, init?: RequestInit) =>
+            init?.method === "PUT"
+                ? json({
+                      success: true,
+                      versionId: 9,
+                      versionNumber: 4,
+                      base: "drive:v13",
+                      syncPending: true,
+                  })
+                : json(editable({ kind: "docx", drive: { url: null, native: true } }))
+        );
+        const user = userEvent.setup();
+        render(<FileEditor documentId={7} onExit={jest.fn()} />);
+        await loaded();
+        await edit(user);
+        await user.click(screen.getByTestId("file-editor-save"));
+
+        await waitFor(() =>
+            expect(toast.success).toHaveBeenCalledWith(
+                "Saved to Google Docs. The copy here catches up in a few minutes."
+            )
+        );
+    });
+
+    it("offers row and column controls while the cursor is in a table", async () => {
+        fetchMock.mockImplementation(() => json(editable()));
+        const user = userEvent.setup();
+        render(<FileEditor documentId={7} onExit={jest.fn()} />);
+        await loaded();
+        expect(screen.queryByRole("button", { name: "Add row below" })).not.toBeInTheDocument();
+
+        await edit(user);
+        for (const name of [
+            "Add row below",
+            "Add column to the right",
+            "Delete row",
+            "Delete column",
+            "Delete table",
+        ]) {
+            expect(await screen.findByRole("button", { name })).toBeInTheDocument();
+        }
+        await user.click(screen.getByRole("button", { name: "Delete table" }));
+        await waitFor(() =>
+            expect(screen.queryByRole("button", { name: "Add row below" })).not.toBeInTheDocument()
+        );
     });
 
     it("asks before Done throws away unsaved edits", async () => {

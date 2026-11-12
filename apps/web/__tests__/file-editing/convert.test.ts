@@ -11,8 +11,10 @@ import {
     docxToHtml,
     htmlToDocx,
     htmlToMarkdown,
+    markdownHasRawHtml,
     markdownToHtml,
     sanitizeEditorHtml,
+    splitFrontMatter,
     wrapHtmlDocument,
 } from "~/server/services/file-editing/convert";
 import { editableKindOf } from "~/lib/file-editing";
@@ -120,6 +122,88 @@ describe("Markdown round trip", () => {
         );
         expect(html).not.toMatch(/script|onerror/);
         expect(html).toContain("<h1>T</h1>");
+    });
+});
+
+/** Open in the editor and save straight back, as a no-change edit would. */
+const roundTrip = (markdown: string) => htmlToMarkdown(markdownToHtml(markdown));
+
+describe("Markdown that must survive an open and a save", () => {
+    it("keeps text that looks like HTML or an entity as the words typed", () => {
+        const typed =
+            "<p>Press &lt;Enter&gt; to submit. Use List&lt;String&gt;. Write &amp;copy; here.</p>";
+        const markdown = htmlToMarkdown(typed);
+        expect(markdown).toContain("\\<Enter>");
+        // Reopened, the words are all still there.
+        const reopened = markdownToHtml(markdown);
+        expect(reopened).toContain("Press &lt;Enter&gt; to submit.");
+        expect(reopened).toContain("List&lt;String&gt;");
+        expect(reopened).toContain("&amp;copy;");
+        // And a typed script tag stays text, never markup.
+        const script = htmlToMarkdown("<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>");
+        expect(markdownToHtml(script)).toContain("&lt;script&gt;alert(1)&lt;/script&gt;");
+        expect(markdownToHtml(script)).not.toContain("<script");
+    });
+
+    it("keeps front matter out of the editor, and splits it off exactly", () => {
+        const file = "---\ntitle: Plan\ntags: [a, b]\n---\n# Plan\n\nBody.\n";
+        expect(splitFrontMatter(file)).toEqual({
+            frontMatter: "---\ntitle: Plan\ntags: [a, b]\n---\n",
+            body: "# Plan\n\nBody.\n",
+        });
+        const html = markdownToHtml(file);
+        expect(html).not.toContain("title: Plan");
+        expect(html).toContain("<h1>Plan</h1>");
+        // A thematic break later in the file is not front matter.
+        expect(splitFrontMatter("Intro\n\n---\n\nMore\n").frontMatter).toBe("");
+    });
+
+    it("keeps wiki links, task boxes and footnotes", () => {
+        const markdown = [
+            "See [[Launch plan]] and [[Q3_review|the review]].",
+            "",
+            "- [ ] Book the venue",
+            "- [x] Send the contract",
+            "",
+            "A claim.[^1]",
+            "",
+            "[^1]: The source.",
+            "",
+        ].join("\n");
+        const saved = roundTrip(markdown);
+        expect(saved).toContain("[[Launch plan]]");
+        expect(saved).toContain("[[Q3_review|the review]]");
+        expect(saved).toContain("- [ ] Book the venue");
+        expect(saved).toContain("- [x] Send the contract");
+        expect(saved).toContain("A claim.[^1]");
+        expect(saved).toContain("[^1]: The source.");
+        // Stable: a second trip changes nothing.
+        expect(roundTrip(saved)).toBe(saved);
+    });
+
+    it("keeps words in angle brackets that a person wrote straight into the file", () => {
+        const file = "Press <Enter> to submit; use List<String> or </Close>.\n";
+        const html = markdownToHtml(file);
+        expect(html).toContain(
+            "Press &lt;Enter&gt; to submit; use List&lt;String&gt; or &lt;/Close&gt;."
+        );
+        // Saved back escaped, which every Markdown reader shows the same way.
+        const saved = htmlToMarkdown(html);
+        expect(saved).toContain("Press \\<Enter> to submit; use List\\<String> or \\</Close>.");
+        expect(roundTrip(saved)).toBe(saved);
+        // Not raw HTML, so no warning for it.
+        expect(markdownHasRawHtml(file)).toBe(false);
+    });
+
+    it("finds raw HTML the editor will drop, but not a <br>", () => {
+        expect(markdownHasRawHtml("Text <!-- note --> more\n")).toBe(true);
+        expect(markdownHasRawHtml("<details><summary>More</summary>\n\nHidden\n</details>\n")).toBe(
+            true
+        );
+        expect(markdownHasRawHtml("Line one<br>line two\n")).toBe(false);
+        expect(markdownHasRawHtml("Plain **Markdown** and a [link](https://x.y).\n")).toBe(false);
+        // Front matter is not HTML.
+        expect(markdownHasRawHtml("---\na: <b>\n---\nText\n")).toBe(false);
     });
 });
 

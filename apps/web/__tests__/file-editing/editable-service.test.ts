@@ -9,9 +9,10 @@
  */
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
 jest.mock("~/lib/storage", () => ({ uploadFile: jest.fn(), fetchFile: jest.fn() }));
-jest.mock("~/server/services/document-creation", () => ({
-    createDocumentVersionLifecycle: jest.fn(),
-}));
+jest.mock("~/server/services/document-creation", () => {
+    class StaleDocumentVersionError extends Error {}
+    return { createDocumentVersionLifecycle: jest.fn(), StaleDocumentVersionError };
+});
 jest.mock("~/server/services/google-drive/config", () => ({
     isDriveLinkingEnabled: jest.fn(() => true),
 }));
@@ -55,6 +56,9 @@ function mockChain(): Record<string, unknown> {
 }
 jest.mock("~/server/db", () => ({
     db: {
+        // The per-document edit lock: a transaction that only takes the lock.
+        transaction: (run: (tx: { execute: jest.Mock }) => Promise<unknown>) =>
+            run({ execute: jest.fn().mockResolvedValue(undefined) }),
         select: () => mockChain(),
         update: () => ({
             set: (values: Record<string, unknown>) => {
@@ -76,13 +80,19 @@ import {
 } from "@launchstack/google-drive";
 
 import { fetchFile, uploadFile } from "~/lib/storage";
-import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
+import {
+    createDocumentVersionLifecycle,
+    StaleDocumentVersionError,
+} from "~/server/services/document-creation";
 import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
 import { getActiveDriveLink, getDriveLinkForDocument } from "~/server/services/google-drive/links";
 import { pullDriveLink } from "~/server/services/google-drive/sync";
 import { htmlToDocx } from "~/server/services/file-editing/convert";
 import {
     FileEditError,
+    MAX_EDITABLE_BYTES,
+    MAX_SAVE_BYTES,
+    ensureSavable,
     loadEditable,
     saveEditable,
     type EditableDocument,
@@ -189,6 +199,25 @@ describe("loadEditable — stored files", () => {
         expect(payload.html).toContain("<strong>Bold</strong>");
     });
 
+    it("warns, for Markdown with raw HTML, that a save drops it", async () => {
+        stored("# Plan\n\n<!-- private note -->\n\n<details><summary>More</summary>x</details>\n");
+        const payload = await loadEditable(doc());
+        expect(payload.noticeKey).toBe("markdownRawHtmlNotice");
+    });
+
+    it("refuses, when it opens, a file whose editor content could never be saved", () => {
+        // A Word file's pictures come back as base64, a third larger than on
+        // disk: content over the save cap is refused before anyone edits it.
+        const over = "x".repeat(MAX_SAVE_BYTES + 1);
+        expect(() => ensureSavable({ html: over, text: "" })).toThrow(
+            expect.objectContaining({ status: 413, code: "too_large", values: { mb: "32" } })
+        );
+        expect(() => ensureSavable({ html: "", text: over })).toThrow(FileEditError);
+        expect(ensureSavable({ html: "<p>ok</p>", text: "" }).html).toBe("<p>ok</p>");
+        // Every file under the open cap fits, pictures and all.
+        expect(MAX_EDITABLE_BYTES * (4 / 3)).toBeLessThan(MAX_SAVE_BYTES);
+    });
+
     it("refuses a kind it cannot edit", async () => {
         await expect(
             loadEditable(
@@ -223,6 +252,7 @@ describe("saveEditable — stored files", () => {
     });
 
     it("writes Markdown as a new version credited to the editor", async () => {
+        stored("# Plan\n");
         const result = await saveEditable({
             ...SAVE,
             doc: doc(),
@@ -249,8 +279,26 @@ describe("saveEditable — stored files", () => {
                 mimeType: "text/markdown",
                 changelog: "Edited in LaunchStack",
                 creationKey: expect.stringMatching(/^edit:5:v:70:[0-9a-f]{64}$/),
+                // Compare-and-set under the row lock: a concurrent save from
+                // the same version cannot also land.
+                expectedCurrentVersionId: BigInt(70),
             })
         );
+    });
+
+    it("puts the file's front matter back in front of the saved body", async () => {
+        stored("---\ntitle: Plan\ntags: [a, b]\n---\n# Old\n");
+        await saveEditable({ ...SAVE, doc: doc(), base: "v:70", html: "<h1>New</h1>" });
+        const upload = mockUpload.mock.calls[0]![0] as { data: Buffer };
+        expect(upload.data.toString("utf8")).toBe("---\ntitle: Plan\ntags: [a, b]\n---\n# New\n");
+    });
+
+    it("refuses a save another save beat to the same version (409), under the row lock", async () => {
+        stored("# Plan\n");
+        mockLifecycle.mockRejectedValueOnce(new StaleDocumentVersionError(5, BigInt(71)));
+        await expect(
+            saveEditable({ ...SAVE, doc: doc(), base: "v:70", html: "<p>Mine</p>" })
+        ).rejects.toMatchObject({ status: 409, code: "changed_since_opened" });
     });
 
     it("writes plain text as given", async () => {

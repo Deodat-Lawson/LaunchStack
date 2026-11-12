@@ -317,7 +317,17 @@
     "discardConfirm": "Discard",
     "reloadTitle": "Reload the latest version?",
     "reloadBody": "Your unsaved edits will be replaced by the version saved most recently.",
-    "reloadConfirm": "Reload"
+    "reloadConfirm": "Reload",
+    "savedSyncPending": "Saved to Google Docs. The copy here catches up in a few minutes.",
+    "tableAddRow": "Add row below",
+    "tableAddColumn": "Add column to the right",
+    "tableDeleteRow": "Delete row",
+    "tableDeleteColumn": "Delete column",
+    "tableDelete": "Delete table",
+    "closeTabTitle": "Close without saving?",
+    "closeTabBody": "{title} has edits that aren't saved. Closing it now loses them.",
+    "closeTabsBody": "{count, plural, one {# open file has} other {# open files have}} edits that aren't saved. Closing now loses them.",
+    "closeTabConfirm": "Close without saving"
   },
   "review": {
     "kinds": {

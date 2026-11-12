@@ -970,16 +970,18 @@ function FileOption({
     testId: string;
 }) {
     return (
-        <button
+        <Button
             type="button"
+            variant="outline"
             disabled={disabled}
             onClick={onClick}
             data-testid={testId}
             aria-busy={busy || undefined}
             className={cn(
-                "border-line flex items-start gap-3 rounded-[10px] border p-3 text-left transition-colors",
-                "hover:border-brand hover:bg-brand-soft/40 focus-visible:ring-brand/50 outline-none focus-visible:ring-[3px]",
-                busy ? "bg-brand-soft cursor-wait" : "bg-panel",
+                // A card, not a pill: two lines of text that wrap, aligned left.
+                "border-line h-auto items-start justify-start gap-3 whitespace-normal rounded-[10px] p-3 text-left font-normal",
+                "hover:border-brand hover:bg-brand-soft/40",
+                busy ? "bg-brand-soft cursor-wait disabled:opacity-100" : "bg-panel",
                 disabled && !busy && "opacity-60"
             )}
         >
@@ -991,7 +993,7 @@ function FileOption({
                 <span className="text-ink-3 block text-[11.5px] leading-snug">{desc}</span>
                 {footer}
             </span>
-        </button>
+        </Button>
     );
 }
 

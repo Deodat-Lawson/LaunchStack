@@ -20,6 +20,8 @@ import { TableKit } from "@tiptap/extension-table";
 import Image from "@tiptap/extension-image";
 import {
     AlertTriangle,
+    BetweenHorizontalEnd,
+    BetweenVerticalEnd,
     Bold,
     Code2,
     ExternalLink,
@@ -33,6 +35,9 @@ import {
     RotateCw,
     Strikethrough,
     Table2,
+    TableColumnsSplit,
+    TableRowsSplit,
+    Trash2,
     Underline as UnderlineIcon,
     Undo2,
 } from "lucide-react";
@@ -62,6 +67,7 @@ import {
     type EditableContent,
     type SavedContent,
 } from "./fileEditing";
+import { setUnsavedEdits } from "./unsavedEdits";
 import "./file-editor.css";
 
 type EditorT = ReturnType<typeof useTranslations<"viewers.fileEditor">>;
@@ -74,6 +80,12 @@ export interface FileEditorProps {
     onExit: () => void;
     /** A save made a new version: the viewer reloads its versions and preview. */
     onSaved?: (saved: SavedContent) => void;
+    /**
+     * The file moved on without a save from here — a refused save found a
+     * newer version, or the editor reloaded it: the viewer re-reads its
+     * versions so the rail matches what the editor holds.
+     */
+    onNewerVersion?: () => void;
 }
 
 type Load =
@@ -81,7 +93,7 @@ type Load =
     | { phase: "error"; message: string }
     | { phase: "ready"; content: EditableContent };
 
-export function FileEditor({ documentId, onExit, onSaved }: FileEditorProps) {
+export function FileEditor({ documentId, onExit, onSaved, onNewerVersion }: FileEditorProps) {
     const t = useTranslations("viewers.fileEditor");
     const [load, setLoad] = useState<Load>({ phase: "loading" });
     const [loadNonce, setLoadNonce] = useState(0);
@@ -134,6 +146,7 @@ export function FileEditor({ documentId, onExit, onSaved }: FileEditorProps) {
                 setConflict(null);
                 editCount.current = 0;
                 setLoad({ phase: "ready", content });
+                if (loadNonce > 0) onNewerVersion?.();
             } catch (err) {
                 if (controller.signal.aborted) return;
                 setLoad({
@@ -156,6 +169,12 @@ export function FileEditor({ documentId, onExit, onSaved }: FileEditorProps) {
         editor.commands.focus("end");
     }, [editor, content]);
 
+    // The shell asks before closing this file's tab while edits are unsaved.
+    useEffect(() => {
+        setUnsavedEdits(documentId, dirty);
+    }, [documentId, dirty]);
+    useEffect(() => () => setUnsavedEdits(documentId, false), [documentId]);
+
     // Leaving the page with unsaved edits asks first.
     useEffect(() => {
         if (!dirty) return;
@@ -168,7 +187,9 @@ export function FileEditor({ documentId, onExit, onSaved }: FileEditorProps) {
     }, [dirty]);
 
     const save = useCallback(async () => {
-        if (!content || base === null || saving) return;
+        // Nothing changed, nothing to write: a save would still make a
+        // version, and into a Google Doc it would replace the body for nothing.
+        if (!content || base === null || saving || !dirty) return;
         if (content.mode === "rich" && !editor) return;
         const startedAt = editCount.current;
         setSaving(true);
@@ -181,19 +202,23 @@ export function FileEditor({ documentId, onExit, onSaved }: FileEditorProps) {
             setBase(saved.base);
             setConflict(null);
             if (editCount.current === startedAt) setDirty(false);
-            toast.success(t("savedVersion", { number: saved.versionNumber }));
+            // Drive took the edit but its copy here has not caught up yet:
+            // say so instead of naming the version that was already current.
+            if (saved.syncPending) toast.success(t("savedSyncPending"));
+            else toast.success(t("savedVersion", { number: saved.versionNumber }));
             onSaved?.(saved);
         } catch (err) {
             const message = err instanceof Error ? err.message : t("saveFailed");
             if (err instanceof FileEditingError && err.code === "changed_since_opened") {
                 setConflict(message);
+                onNewerVersion?.();
             } else {
                 toast.error(message);
             }
         } finally {
             setSaving(false);
         }
-    }, [content, base, saving, editor, text, documentId, t, onSaved]);
+    }, [content, base, saving, dirty, editor, text, documentId, t, onSaved, onNewerVersion]);
 
     const reload = useCallback(() => {
         setConfirm(null);
@@ -432,6 +457,7 @@ function FormattingTools({ editor, t }: { editor: Editor; t: EditorT }) {
             blockquote: e.isActive("blockquote"),
             codeBlock: e.isActive("codeBlock"),
             link: e.isActive("link"),
+            inTable: e.isActive("table"),
             href: (e.getAttributes("link").href as string | undefined) ?? "",
             canUndo: e.can().undo(),
             canRedo: e.can().redo(),
@@ -532,6 +558,40 @@ function FormattingTools({ editor, t }: { editor: Editor; t: EditorT }) {
             >
                 <Table2 />
             </ToolButton>
+            {state.inTable && (
+                <>
+                    <ToolButton
+                        label={t("tableAddRow")}
+                        onPress={() => editor.chain().focus().addRowAfter().run()}
+                    >
+                        <BetweenHorizontalEnd />
+                    </ToolButton>
+                    <ToolButton
+                        label={t("tableAddColumn")}
+                        onPress={() => editor.chain().focus().addColumnAfter().run()}
+                    >
+                        <BetweenVerticalEnd />
+                    </ToolButton>
+                    <ToolButton
+                        label={t("tableDeleteRow")}
+                        onPress={() => editor.chain().focus().deleteRow().run()}
+                    >
+                        <TableRowsSplit />
+                    </ToolButton>
+                    <ToolButton
+                        label={t("tableDeleteColumn")}
+                        onPress={() => editor.chain().focus().deleteColumn().run()}
+                    >
+                        <TableColumnsSplit />
+                    </ToolButton>
+                    <ToolButton
+                        label={t("tableDelete")}
+                        onPress={() => editor.chain().focus().deleteTable().run()}
+                    >
+                        <Trash2 />
+                    </ToolButton>
+                </>
+            )}
             <Separator orientation="vertical" className="mx-1 h-5" />
             <ToolButton
                 label={t("undo")}

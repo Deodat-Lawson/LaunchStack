@@ -52,6 +52,12 @@ export interface SavedContent {
     versionId: number;
     versionNumber: number;
     base: string;
+    /**
+     * Set when a Drive-linked save reached Google but the copy here has not
+     * been pulled yet: the version numbers are the previous ones, and the
+     * Drive sync brings the new version in.
+     */
+    syncPending?: boolean;
 }
 
 /** A failed call, with the server's sentence when it sent one. */

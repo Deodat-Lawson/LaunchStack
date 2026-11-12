@@ -317,7 +317,17 @@
     "discardConfirm": "放弃",
     "reloadTitle": "重新载入最新版本？",
     "reloadBody": "你未保存的编辑将被最近保存的版本替换。",
-    "reloadConfirm": "重新载入"
+    "reloadConfirm": "重新载入",
+    "savedSyncPending": "已保存到 Google 文档。此处的副本将在几分钟内同步。",
+    "tableAddRow": "在下方添加行",
+    "tableAddColumn": "在右侧添加列",
+    "tableDeleteRow": "删除行",
+    "tableDeleteColumn": "删除列",
+    "tableDelete": "删除表格",
+    "closeTabTitle": "不保存就关闭？",
+    "closeTabBody": "{title} 有尚未保存的修改。现在关闭将丢失这些修改。",
+    "closeTabsBody": "{count, plural, other {# 个打开的文件}}有尚未保存的修改。现在关闭将丢失这些修改。",
+    "closeTabConfirm": "不保存并关闭"
   },
   "review": {
     "kinds": {

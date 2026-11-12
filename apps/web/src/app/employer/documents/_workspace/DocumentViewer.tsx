@@ -1436,6 +1436,7 @@ export function DocumentViewer({
                                 if (driveDocumentId !== null) void drive.refresh();
                                 onVersionChanged?.();
                             }}
+                            onNewerVersion={() => void refreshVersions()}
                         />
                     ) : source.pending ? (
                         <div

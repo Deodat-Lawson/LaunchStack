@@ -17,7 +17,7 @@
  */
 import { createHash } from "node:crypto";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import {
     DOCX_MIME,
@@ -42,7 +42,10 @@ import {
 import { getEngine } from "~/server/engine";
 import { fetchFile, uploadFile } from "~/lib/storage";
 import { EDITABLE_KIND_MIME, editableKindOf, type EditableKind } from "~/lib/file-editing";
-import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
+import {
+    createDocumentVersionLifecycle,
+    StaleDocumentVersionError,
+} from "~/server/services/document-creation";
 import { isDriveLinkingEnabled } from "~/server/services/google-drive/config";
 import {
     GoogleNotConnectedError,
@@ -60,17 +63,24 @@ import {
     docxToHtml,
     htmlToDocx,
     htmlToMarkdown,
+    markdownHasRawHtml,
     markdownToHtml,
     sanitizeEditorHtml,
+    splitFrontMatter,
     wrapHtmlDocument,
 } from "./convert";
 
 /** Stored as the version's changelog; English like the Drive pull's. */
 export const EDIT_CHANGELOG = "Edited in LaunchStack";
 
-/** Largest file the editor opens, and largest save it accepts. */
+/**
+ * Largest file the editor opens, and largest save it accepts. A Word file's
+ * pictures travel back as base64 (a third larger), so the save limit sits
+ * above the open limit; and a file whose editor content would not fit under
+ * it is refused when it opens, not after someone has edited it.
+ */
 export const MAX_EDITABLE_BYTES = 20 * 1024 * 1024;
-export const MAX_SAVE_BYTES = 5 * 1024 * 1024;
+export const MAX_SAVE_BYTES = 32 * 1024 * 1024;
 
 /** A refusal the route words from `fileEditing.server.<key>`. */
 export class FileEditError extends Error {
@@ -107,7 +117,7 @@ export interface EditablePayload {
     base: string;
     drive: { url: string | null; native: boolean } | null;
     /** `fileEditing.server.<key>` for the notice line, or null. */
-    noticeKey: "docxNotice" | "driveNotice" | null;
+    noticeKey: "docxNotice" | "driveNotice" | "markdownRawHtmlNotice" | null;
 }
 
 export interface SaveResult {
@@ -259,12 +269,13 @@ async function loadStored(doc: EditableDocument, kind: EditableKind): Promise<Ed
         return { ...common, mode: "plain", html: "", text: decodeText(bytes), noticeKey: null };
     }
     if (kind === "markdown") {
+        const markdown = decodeText(bytes);
         return {
             ...common,
             mode: "rich",
-            html: markdownToHtml(decodeText(bytes)),
+            html: markdownToHtml(markdown),
             text: "",
-            noticeKey: null,
+            noticeKey: markdownHasRawHtml(markdown) ? "markdownRawHtmlNotice" : null,
         };
     }
     return {
@@ -276,7 +287,24 @@ async function loadStored(doc: EditableDocument, kind: EditableKind): Promise<Ed
     };
 }
 
+/**
+ * What the editor sends back must fit under the save limit: a file that could
+ * open but never save would only be found out after someone had edited it.
+ */
+export function ensureSavable<T extends Pick<EditablePayload, "html" | "text">>(payload: T): T {
+    if (Buffer.byteLength(payload.html || payload.text, "utf8") > MAX_SAVE_BYTES) {
+        throw new FileEditError(413, "too_large", "tooLarge", {
+            mb: String(MAX_SAVE_BYTES / (1024 * 1024)),
+        });
+    }
+    return payload;
+}
+
 export async function loadEditable(doc: EditableDocument): Promise<EditablePayload> {
+    return ensureSavable(await loadEditableContent(doc));
+}
+
+async function loadEditableContent(doc: EditableDocument): Promise<EditablePayload> {
     const drive = await driveContextFor(doc);
     if (drive) {
         const meta = await liveDriveFile(drive);
@@ -373,7 +401,31 @@ async function currentVersionNumber(
     return { versionId: row?.id ?? 0, versionNumber: row?.versionNumber ?? 0 };
 }
 
+/** Namespace for the per-document edit lock (pg_advisory_xact_lock's first key). */
+const EDIT_LOCK_NAMESPACE = 0x46454454; // "FEDT"
+
+/**
+ * One Drive save per document at a time, across every app instance. The
+ * revision check and the push must not interleave with another save of the
+ * same file, or both pass the check and the second silently replaces the
+ * first. The lock lives in a transaction that does nothing else; the work
+ * itself runs on the pool as usual, and the lock lets go when it returns.
+ */
+async function withDocumentEditLock<T>(documentId: number, run: () => Promise<T>): Promise<T> {
+    return db.transaction(async tx => {
+        await tx.execute(sql`select pg_advisory_xact_lock(${EDIT_LOCK_NAMESPACE}, ${documentId})`);
+        return run();
+    });
+}
+
 async function saveToDrive(params: SaveEditableParams, drive: DriveContext): Promise<SaveResult> {
+    return withDocumentEditLock(params.doc.id, () => saveToDriveLocked(params, drive));
+}
+
+async function saveToDriveLocked(
+    params: SaveEditableParams,
+    drive: DriveContext
+): Promise<SaveResult> {
     const { doc } = params;
     if (!params.base.startsWith("drive:")) {
         // It was linked to Drive after the editor opened.
@@ -440,8 +492,12 @@ async function saveStored(params: SaveEditableParams, kind: EditableKind): Promi
 
     let bytes: Buffer;
     if (kind === "text") bytes = Buffer.from(content, "utf8");
-    else if (kind === "markdown") bytes = Buffer.from(htmlToMarkdown(content), "utf8");
-    else bytes = await htmlToDocx(content, doc.title);
+    else if (kind === "markdown") {
+        // Front matter never went to the editor; it goes back as it was. The
+        // base check above means the stored file is the one that was opened.
+        const { frontMatter } = splitFrontMatter(decodeText(await readStoredBytes(doc)));
+        bytes = Buffer.from(frontMatter + htmlToMarkdown(content), "utf8");
+    } else bytes = await htmlToDocx(content, doc.title);
 
     // The version keeps the type the document was created with (the
     // versions route enforces the same match).
@@ -457,22 +513,33 @@ async function saveStored(params: SaveEditableParams, kind: EditableKind): Promi
         companyId: doc.companyId,
     });
     const digest = createHash("sha256").update(bytes).digest("hex");
-    const lifecycle = await createDocumentVersionLifecycle({
-        documentId: doc.id,
-        companyId: doc.companyId,
-        userId: params.userId,
-        title: doc.title,
-        category: doc.category,
-        url: blob.url,
-        processingUrl: toProcessingUrl(blob.url, params.requestUrl),
-        // A retried save of the same bytes over the same base converges on
-        // one version instead of two.
-        creationKey: `edit:${doc.id}:${params.base}:${digest}`,
-        mimeType,
-        fileSize: bytes.length,
-        changelog: EDIT_CHANGELOG,
-        originalFilename: filename,
-    });
+    let lifecycle: Awaited<ReturnType<typeof createDocumentVersionLifecycle>>;
+    try {
+        lifecycle = await createDocumentVersionLifecycle({
+            documentId: doc.id,
+            companyId: doc.companyId,
+            userId: params.userId,
+            title: doc.title,
+            category: doc.category,
+            url: blob.url,
+            processingUrl: toProcessingUrl(blob.url, params.requestUrl),
+            // A retried save of the same bytes over the same base converges on
+            // one version instead of two.
+            creationKey: `edit:${doc.id}:${params.base}:${digest}`,
+            mimeType,
+            fileSize: bytes.length,
+            changelog: EDIT_CHANGELOG,
+            originalFilename: filename,
+            // Checked again under the document's row lock: two saves sent from the
+            // same version at the same moment cannot both land.
+            expectedCurrentVersionId: doc.currentVersionId,
+        });
+    } catch (err) {
+        if (err instanceof StaleDocumentVersionError) {
+            throw new FileEditError(409, "changed_since_opened", "changedSinceOpened");
+        }
+        throw err;
+    }
     return {
         versionId: lifecycle.versionId,
         versionNumber: lifecycle.version.versionNumber,

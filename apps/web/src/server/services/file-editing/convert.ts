@@ -14,7 +14,7 @@
 import * as cheerio from "cheerio";
 import TurndownService from "turndown";
 import { gfm } from "@joplin/turndown-plugin-gfm";
-import { marked } from "marked";
+import { Marked } from "marked";
 import mammoth from "mammoth";
 import HTMLtoDOCX from "@turbodocx/html-to-docx";
 import JSZip from "jszip";
@@ -196,10 +196,89 @@ export function sanitizeEditorHtml(html: string, options: SanitizeOptions): stri
 // Markdown
 // ---------------------------------------------------------------------------
 
-export function markdownToHtml(markdown: string): string {
-    const html = marked.parse(markdown.replace(/^﻿/, ""), { gfm: true, async: false });
+/** YAML (`---`) or TOML (`+++`) front matter at the very top of a Markdown file. */
+const FRONT_MATTER = /^(---|\+\+\+)[ \t]*\r?\n[\s\S]*?\r?\n(?:\1|\.\.\.)[ \t]*(?:\r?\n|$)/;
+
+/**
+ * A Markdown file's front matter, kept apart from its body. The editor never
+ * sees it (it would come back as a heading and a paragraph); a save puts it
+ * back in front of the new body exactly as it was.
+ */
+export function splitFrontMatter(markdown: string): { frontMatter: string; body: string } {
+    const text = markdown.replace(/^\uFEFF/, "");
+    const match = FRONT_MATTER.exec(text);
+    if (!match) return { frontMatter: "", body: text };
+    const frontMatter = match[0].endsWith("\n") ? match[0] : `${match[0]}\n`;
+    return { frontMatter, body: text.slice(match[0].length) };
+}
+
+/** Every element name HTML defines (and the SVG/MathML roots): anything else is just text. */
+const HTML_ELEMENTS = new Set(
+    (
+        "a abbr address area article aside audio b base bdi bdo blockquote body br button " +
+        "canvas caption center cite code col colgroup data datalist dd del details dfn dialog " +
+        "div dl dt em embed fieldset figcaption figure font footer form h1 h2 h3 h4 h5 h6 head " +
+        "header hgroup hr html i iframe img input ins kbd label legend li link main map mark " +
+        "math menu meta meter nav noscript object ol optgroup option output p param picture " +
+        "pre progress q rp rt ruby s samp script search section select slot small source span " +
+        "strike strong style sub summary sup svg table tbody td template textarea tfoot th " +
+        "thead time title tr track tt u ul var video wbr"
+    ).split(" ")
+);
+
+/**
+ * `<Enter>`, `List<String>`: a tag no HTML element answers to. Markdown
+ * parses it as raw HTML, a browser would drop it, and so would the editor —
+ * but it is someone's words, so it stays text.
+ */
+function isWordsInBrackets(html: string): boolean {
+    const tag = /^<\/?([A-Za-z][A-Za-z0-9-]*)[^>]*>$/.exec(html.trim());
+    return Boolean(tag && !HTML_ELEMENTS.has(tag[1]!.toLowerCase()));
+}
+
+function escapeText(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+const markdown = new Marked({
+    gfm: true,
+    async: false,
+    renderer: {
+        html({ text }) {
+            return isWordsInBrackets(text) ? escapeText(text) : text;
+        },
+    },
+});
+
+/** Raw HTML in a Markdown body (comments, `<details>`…), which the editor drops. */
+export function markdownHasRawHtml(source: string): boolean {
+    const { body } = splitFrontMatter(source);
+    let found = false;
+    // The callback is synchronous; walkTokens' array of results means nothing here.
+    void markdown.walkTokens(markdown.lexer(body), token => {
+        if (token.type !== "html") return;
+        const raw = token.raw.trim();
+        // A line break written as <br> survives as a hard break, and words in
+        // angle brackets stay words.
+        if (/^<br\s*\/?>$/i.test(raw) || isWordsInBrackets(raw)) return;
+        found = true;
+    });
+    return found;
+}
+
+export function markdownToHtml(source: string): string {
+    const { body } = splitFrontMatter(source);
+    // A footnote definition ("[^1]: text") would read as a link definition
+    // and vanish; escaped, it stays text and a save writes it back as it was.
+    const prepared = body.replace(/^( {0,3})\[\^([^\]\s]+)\]:/gm, "$1\\[^$2]:");
+    const html = markdown.parse(prepared) as string;
+    // Task-list boxes become their literal markers, which the editor can hold
+    // and a save turns back into "- [ ]" / "- [x]".
+    const withTasks = html.replace(/<input\b[^>]*\btype="checkbox"[^>]*>\s?/g, input =>
+        /\bchecked\b/.test(input) ? "[x] " : "[ ] "
+    );
     // Markdown can carry raw HTML; the editor gets only what it can hold.
-    return sanitizeEditorHtml(html, { allowRemoteImages: true });
+    return sanitizeEditorHtml(withTasks, { allowRemoteImages: true });
 }
 
 function createTurndown(): TurndownService {
@@ -212,6 +291,13 @@ function createTurndown(): TurndownService {
         hr: "---",
     });
     service.use(gfm);
+    // Text that looks like HTML ("Press <Enter>", "List<String>") or like an
+    // entity ("&copy;") is escaped, or the next open would read it as markup.
+    const escapeMarkdown = service.escape.bind(service);
+    service.escape = (text: string) =>
+        escapeMarkdown(text)
+            .replace(/</g, "\\<")
+            .replace(/&(?=#?[a-z0-9]+;)/gi, "\\&");
     // Turndown pads list markers to four columns ("-   item"); a single
     // space reads like Markdown people write, and nested content indents by
     // the marker's own width so CommonMark still nests it.
@@ -280,9 +366,25 @@ function prepareForMarkdown(html: string): string {
     return $.root().html() ?? "";
 }
 
+/** Undo turndown's escaping where it would break Markdown people rely on. */
+function restoreMarkdownSyntax(markdown: string): string {
+    return (
+        markdown
+            // [[Wiki links]] (Obsidian and friends), with their own text as typed.
+            .replace(/\\\[\\\[([^\n]+?)\\\]\\\]/g, (_, inner: string) => {
+                const plain = inner.replace(/\\([\\`*_{}[\]()#+\-.!|<>~&])/g, "$1");
+                return `[[${plain}]]`;
+            })
+            // Task-list markers at the start of a list item.
+            .replace(/^(\s*(?:[-*+]|\d+[.)]) )\\\[([ xX])\\\] /gm, "$1[$2] ")
+            // Footnote references and definitions.
+            .replace(/\\\[\^([^\]\s\\]+)\\\]/g, "[^$1]")
+    );
+}
+
 export function htmlToMarkdown(html: string): string {
     const clean = sanitizeEditorHtml(html, { allowRemoteImages: true });
-    const markdown = createTurndown().turndown(prepareForMarkdown(clean));
+    const markdown = restoreMarkdownSyntax(createTurndown().turndown(prepareForMarkdown(clean)));
     return `${markdown.trim()}\n`;
 }
 

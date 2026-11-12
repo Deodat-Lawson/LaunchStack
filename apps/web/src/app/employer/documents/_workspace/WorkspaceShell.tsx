@@ -113,6 +113,8 @@ import {
 import { TOOL_ALIASES, movedToolScreen, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
+import { hasUnsavedEdits } from "./unsavedEdits";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { refreshProcessingQueue, useProcessingQueue } from "./processing/queueStore";
 import {
     hasUnfinishedLocalTasks,
@@ -244,6 +246,7 @@ export function WorkspaceShell() {
     const router = useRouter();
     const t = useTranslations("workspace");
     const tc = useTranslations("common");
+    const tEditor = useTranslations("viewers.fileEditor");
     const studio = useStudioText();
     const tSourceTypes = useTranslations("sources.sourceTypes");
     const tAudience = useTranslations("sources.audience");
@@ -1828,8 +1831,10 @@ export function WorkspaceShell() {
         close: () => {
             const group = groupOf(layout, activeFeatureId);
             if (!group) return;
-            releaseTabs([activeFeatureId]);
-            closeTabIn(group.id, activeFeatureId);
+            guardClose([activeFeatureId], () => {
+                releaseTabs([activeFeatureId]);
+                closeTabIn(group.id, activeFeatureId);
+            });
         },
         focusAdjacent: focusAdjacentGroup,
     };
@@ -1971,6 +1976,28 @@ export function WorkspaceShell() {
                 : group.tabIds.slice(at + 1);
         },
         [layout]
+    );
+
+    /**
+     * A tab whose file editor holds unsaved edits asks before it closes —
+     * the editor's own Done does, and its tab's ×, "close the others",
+     * "close to the right", closing a column and the keyboard must too.
+     */
+    const [pendingClose, setPendingClose] = useState<{
+        titles: string[];
+        proceed: () => void;
+    } | null>(null);
+    const guardClose = useCallback(
+        (closing: readonly string[], proceed: () => void) => {
+            const titles = closing.flatMap(id => {
+                if (!id.startsWith(SOURCE_TAB_PREFIX)) return [];
+                const source = sources.find(item => item.id === sourceIdOfTab(id));
+                return source && hasUnsavedEdits(source.documentId) ? [source.title] : [];
+            });
+            if (titles.length === 0) proceed();
+            else setPendingClose({ titles, proceed });
+        },
+        [sources]
     );
 
     /** Put a source in a column of its own, beside whatever is open. */
@@ -2732,25 +2759,36 @@ export function WorkspaceShell() {
                 studioKeys={shortcutHints.studio}
                 tabFor={tabFor}
                 onSelect={selectTab}
-                onClose={(groupId, id) => {
-                    releaseTabs([id]);
-                    closeTabIn(groupId, id);
-                }}
+                onClose={(groupId, id) =>
+                    guardClose([id], () => {
+                        releaseTabs([id]);
+                        closeTabIn(groupId, id);
+                    })
+                }
                 onCloseOthers={(groupId, id) => {
-                    releaseTabs(tabsRemovedBy(groupId, id, "others"));
-                    closeOthers(groupId, id);
+                    const closing = tabsRemovedBy(groupId, id, "others");
+                    guardClose(closing, () => {
+                        releaseTabs(closing);
+                        closeOthers(groupId, id);
+                    });
                 }}
                 onCloseToRight={(groupId, id) => {
-                    releaseTabs(tabsRemovedBy(groupId, id, "right"));
-                    closeToRight(groupId, id);
+                    const closing = tabsRemovedBy(groupId, id, "right");
+                    guardClose(closing, () => {
+                        releaseTabs(closing);
+                        closeToRight(groupId, id);
+                    });
                 }}
                 onSplit={splitTab}
                 onSplitRoot={splitAtRoot}
                 paneKeys={shortcutHints}
                 onSplitPane={(groupId, side) => splitPane(side, groupId)}
                 onCloseGroup={groupId => {
-                    releaseTabs(layout.groups.find(group => group.id === groupId)?.tabIds ?? []);
-                    closeGroup(groupId);
+                    const closing = layout.groups.find(group => group.id === groupId)?.tabIds ?? [];
+                    guardClose(closing, () => {
+                        releaseTabs(closing);
+                        closeGroup(groupId);
+                    });
                 }}
                 onToggleZoom={toggleZoom}
                 onResize={resizeSplit}
@@ -3200,6 +3238,24 @@ export function WorkspaceShell() {
                         : handleCreateFolder(path)
                 }
                 onClose={() => setFolderDialog(null)}
+            />
+            <ConfirmDialog
+                open={pendingClose !== null}
+                onOpenChange={open => {
+                    if (!open) setPendingClose(null);
+                }}
+                title={tEditor("closeTabTitle")}
+                description={
+                    pendingClose && pendingClose.titles.length === 1
+                        ? tEditor("closeTabBody", { title: pendingClose.titles[0]! })
+                        : tEditor("closeTabsBody", { count: pendingClose?.titles.length ?? 0 })
+                }
+                confirmLabel={tEditor("closeTabConfirm")}
+                onConfirm={() => {
+                    const proceed = pendingClose?.proceed;
+                    setPendingClose(null);
+                    proceed?.();
+                }}
             />
 
             <DeleteFolderDialog

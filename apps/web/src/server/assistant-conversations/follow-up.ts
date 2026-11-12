@@ -3,10 +3,13 @@
  * conversation, owned by the person who saved it, attached to the
  * conversation's document, refreshed in place on every re-save.
  *
- * Runs after the tool has answered (`./after-response`). Its state lives on
- * the `assistant_conversations` row: `pending` while queued, then `done`, or
- * `failed` with the error. A failure here never touches the saved
- * conversation — the document and its versions are already committed.
+ * It runs off the request, in one of two places (`./follow-up-queue`): on
+ * the worker as an Inngest job (`./follow-up-job`, durable and retried), or
+ * in the web process after the response (`./after-response`). Both use the
+ * pieces here. Its state lives on the `assistant_conversations` row:
+ * `pending` while queued, then `done`, or `failed` with the error. A failure
+ * here never touches the saved conversation — the document and its versions
+ * are already committed.
  *
  * Re-saves race: two saves of one conversation can each queue a follow-up,
  * and the slower model call must not overwrite the newer note. Each run
@@ -14,7 +17,7 @@
  * row still has that hash — checked under a row lock, in the same transaction
  * as the note write.
  */
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { ASSISTANT_LABELS } from "~/lib/session-transcript";
@@ -31,7 +34,8 @@ import type { NormalizedMessage } from "./validate";
 
 export const FOLLOW_UP_TAG = "assistant-follow-up";
 
-export interface FollowUpJob {
+/** Which save a follow-up run is for: everything but the transcript itself. */
+export interface FollowUpTarget {
     /** `assistant_conversations.id`. */
     conversationRowId: number;
     documentId: number;
@@ -42,6 +46,10 @@ export interface FollowUpJob {
     family: AssistantClient;
     /** The hash this run is generated from; the note is written only while the row still has it. */
     contentHash: string;
+}
+
+/** A follow-up run in the web process, with the transcript the save already has in hand. */
+export interface FollowUpJob extends FollowUpTarget {
     messages: readonly NormalizedMessage[];
     /** The saver's document scope, for the note's wiki-link sync. */
     documentScope: () => Promise<DocumentScope>;
@@ -116,123 +124,125 @@ function errorMessage(error: unknown): string {
     return (message || "The follow-up note could not be written").slice(0, MAX_ERROR_CHARS);
 }
 
-/** Record a failure, unless a newer save has already moved the row on. Never throws. */
-async function markFailed(job: FollowUpJob, error: unknown): Promise<void> {
+/**
+ * Record a failure, unless a newer save has already moved the row on (or this
+ * save's note is already written). Never throws.
+ */
+export async function markFollowUpFailed(
+    target: Pick<FollowUpTarget, "conversationRowId" | "documentId" | "contentHash">,
+    error: unknown
+): Promise<void> {
     try {
         await db
             .update(assistantConversations)
             .set({ followUpStatus: "failed", followUpError: errorMessage(error) })
             .where(
                 and(
-                    eq(assistantConversations.id, job.conversationRowId),
-                    eq(assistantConversations.contentHash, job.contentHash)
+                    eq(assistantConversations.id, target.conversationRowId),
+                    eq(assistantConversations.contentHash, target.contentHash),
+                    ne(assistantConversations.followUpStatus, "done")
                 )
             );
     } catch (writeError) {
         console.error(
-            `[assistant-conversations] could not record follow-up failure for conversation ${job.documentId}:`,
+            `[assistant-conversations] could not record follow-up failure for conversation ${target.documentId}:`,
             writeError
         );
     }
 }
 
-/**
- * Generate and write (or refresh) the follow-up note for one save.
- * Never throws: every failure ends as `failed` on the row.
- */
-export async function writeFollowUp(
-    job: FollowUpJob,
+/** The note body for one save, from the model. Throws on any model or output failure. */
+export async function generateFollowUpMarkdown(
+    input: FollowUpPromptInput,
     generate: Generate = generateFollowUpContent
-): Promise<FollowUpOutcome> {
-    let markdown: string;
-    try {
-        const content = await generate({
-            title: job.title,
-            family: job.family,
-            messages: job.messages,
-        });
-        markdown = renderFollowUpNote(content, job.family);
-    } catch (error) {
-        console.error(
-            `[assistant-conversations] follow-up generation failed for conversation ${job.documentId}:`,
-            error
-        );
-        await markFailed(job, error);
-        return "failed";
-    }
+): Promise<string> {
+    const content = await generate(input);
+    return renderFollowUpNote(content, input.family);
+}
 
-    let written: { note: DocumentNoteRow; reason: "created" | "updated" } | null;
-    try {
-        written = await db.transaction(async tx => {
-            const [row] = await tx
-                .select({
-                    contentHash: assistantConversations.contentHash,
-                    followUpNoteId: assistantConversations.followUpNoteId,
-                })
-                .from(assistantConversations)
-                .where(eq(assistantConversations.id, job.conversationRowId))
-                .for("update")
-                .limit(1);
-            // Gone, or re-saved since this run started: the newer run writes the note.
-            if (!row || row.contentHash !== job.contentHash) return null;
+export interface WrittenFollowUp {
+    note: DocumentNoteRow;
+    reason: "created" | "updated";
+}
 
-            const fields = {
-                title: followUpNoteTitle(job.title),
-                contentMarkdown: markdown,
-                // Server-written notes are markdown only; the editor parses it on open.
-                contentRich: null,
-                content: null,
-                tags: [FOLLOW_UP_TAG, job.family],
-            };
+/**
+ * Write (or refresh) the note and mark the row `done`, in one transaction and
+ * only while the row still has this run's hash. Null when the row is gone or
+ * a newer save moved it on. Throws when the write fails.
+ */
+export async function commitFollowUpNote(
+    target: FollowUpTarget,
+    markdown: string
+): Promise<WrittenFollowUp | null> {
+    return db.transaction(async tx => {
+        const [row] = await tx
+            .select({
+                contentHash: assistantConversations.contentHash,
+                followUpNoteId: assistantConversations.followUpNoteId,
+            })
+            .from(assistantConversations)
+            .where(eq(assistantConversations.id, target.conversationRowId))
+            .for("update")
+            .limit(1);
+        // Gone, or re-saved since this run started: the newer run writes the note.
+        if (!row || row.contentHash !== target.contentHash) return null;
 
-            let note: DocumentNoteRow | undefined;
-            let reason: "created" | "updated" = "updated";
-            if (row.followUpNoteId !== null) {
-                [note] = await tx
-                    .update(documentNotes)
-                    .set(fields)
-                    .where(
-                        and(
-                            eq(documentNotes.id, row.followUpNoteId),
-                            eq(documentNotes.userId, job.authUserId)
-                        )
+        const fields = {
+            title: followUpNoteTitle(target.title),
+            contentMarkdown: markdown,
+            // Server-written notes are markdown only; the editor parses it on open.
+            contentRich: null,
+            content: null,
+            tags: [FOLLOW_UP_TAG, target.family],
+        };
+
+        let note: DocumentNoteRow | undefined;
+        let reason: "created" | "updated" = "updated";
+        if (row.followUpNoteId !== null) {
+            [note] = await tx
+                .update(documentNotes)
+                .set(fields)
+                .where(
+                    and(
+                        eq(documentNotes.id, row.followUpNoteId),
+                        eq(documentNotes.userId, target.authUserId)
                     )
-                    .returning();
-            }
-            if (!note) {
-                // First save, or the person deleted the earlier note: write a new one.
-                note = await insertNoteRow(tx, {
-                    authUserId: job.authUserId,
-                    companyId: job.companyId,
-                    documentId: String(job.documentId),
-                    ...fields,
-                });
-                reason = "created";
-            }
-            if (!note) throw new Error("The follow-up note was not written");
+                )
+                .returning();
+        }
+        if (!note) {
+            // First save, or the person deleted the earlier note: write a new one.
+            note = await insertNoteRow(tx, {
+                authUserId: target.authUserId,
+                companyId: target.companyId,
+                documentId: String(target.documentId),
+                ...fields,
+            });
+            reason = "created";
+        }
+        if (!note) throw new Error("The follow-up note was not written");
 
-            await tx
-                .update(assistantConversations)
-                .set({ followUpNoteId: note.id, followUpStatus: "done", followUpError: null })
-                .where(eq(assistantConversations.id, job.conversationRowId));
-            return { note, reason };
-        });
-    } catch (error) {
-        console.error(
-            `[assistant-conversations] follow-up note write failed for conversation ${job.documentId}:`,
-            error
-        );
-        await markFailed(job, error);
-        return "failed";
-    }
-    if (!written) return "stale";
+        await tx
+            .update(assistantConversations)
+            .set({ followUpNoteId: note.id, followUpStatus: "done", followUpError: null })
+            .where(eq(assistantConversations.id, target.conversationRowId));
+        return { note, reason };
+    });
+}
 
-    // Committed: the note is written and the row says so. Its embedding and
-    // link sync log their own failures and never undo that.
+/**
+ * After the commit: the note's embedding and wiki-link sync. They log their
+ * own failures and never undo the note. Never throws.
+ */
+export async function indexFollowUpNote(
+    target: Pick<FollowUpTarget, "companyId">,
+    written: WrittenFollowUp,
+    documentScope: () => Promise<DocumentScope>
+): Promise<void> {
     try {
         await afterNoteWrite(written.note, written.reason, {
-            companyId: job.companyId,
-            scope: await job.documentScope(),
+            companyId: target.companyId,
+            scope: await documentScope(),
         });
     } catch (error) {
         console.error(
@@ -240,5 +250,44 @@ export async function writeFollowUp(
             error
         );
     }
+}
+
+/**
+ * Generate and write (or refresh) the follow-up note for one save, in this
+ * process. Never throws: every failure ends as `failed` on the row.
+ */
+export async function writeFollowUp(
+    job: FollowUpJob,
+    generate: Generate = generateFollowUpContent
+): Promise<FollowUpOutcome> {
+    let markdown: string;
+    try {
+        markdown = await generateFollowUpMarkdown(
+            { title: job.title, family: job.family, messages: job.messages },
+            generate
+        );
+    } catch (error) {
+        console.error(
+            `[assistant-conversations] follow-up generation failed for conversation ${job.documentId}:`,
+            error
+        );
+        await markFollowUpFailed(job, error);
+        return "failed";
+    }
+
+    let written: WrittenFollowUp | null;
+    try {
+        written = await commitFollowUpNote(job, markdown);
+    } catch (error) {
+        console.error(
+            `[assistant-conversations] follow-up note write failed for conversation ${job.documentId}:`,
+            error
+        );
+        await markFollowUpFailed(job, error);
+        return "failed";
+    }
+    if (!written) return "stale";
+
+    await indexFollowUpNote(job, written, job.documentScope);
     return "done";
 }

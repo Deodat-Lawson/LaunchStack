@@ -115,8 +115,8 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     [
         "apps/web/src/server/assistant-conversations/follow-up-model.ts",
         {
-            scopedBy: [`${API}/mcp/route.ts`],
-            note: "save_conversation over MCP; the follow-up runs in after(), which keeps the scope",
+            scopedBy: [`${API}/mcp/route.ts`, `${JOBS}/assistantConversationFollowUp.ts`],
+            note: "save_conversation over MCP; the follow-up runs in after() (which keeps the scope) or on the worker, scoped inside the generate step",
         },
     ],
 

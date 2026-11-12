@@ -25,13 +25,16 @@ import { studioAppFor, useStudioAccess } from "../studioAccess";
 import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { DriveSyncPanel } from "./DriveSyncPanel";
+import { Microsoft365Section } from "./Microsoft365Section";
 import { Code, StatusNote, StatusRow } from "./ui";
 
 const PROVIDER_LABELS: Record<string, string> = {
     "google-drive": "Google Drive",
+    "microsoft-365": "Microsoft 365",
     slack: "Slack",
     github: "GitHub",
     gmail: "Gmail",
+    outlook: "Outlook",
     notion: "Notion",
     linkedin: "LinkedIn",
     bluesky: "Bluesky",
@@ -239,6 +242,7 @@ const SLACK_COMMANDS = [
 /** Which Add-source tab reconnects a provider — the same map the workspace uses. Drive is picked from Files. */
 const RECONNECT_TAB: Record<string, string> = {
     "google-drive": "files",
+    "microsoft-365": "microsoft-365",
     slack: "slack",
     github: "github",
     notion: "notion",
@@ -291,13 +295,15 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const disconnect = async (connectionId: string, label: string, provider: string) => {
         setDisconnecting(connectionId);
         try {
-            // Gmail has its own route, which also records the audit event.
+            // Gmail and Outlook have their own routes, which also record the audit event.
             // The generic route lets an owner remove their own per-user row
             // (Notion) and needs connectors.manage for anything else.
             const res = await fetch(
                 provider === "gmail"
                     ? "/api/connectors/gmail"
-                    : `/api/connectors/connections/${connectionId}`,
+                    : provider === "outlook"
+                      ? "/api/connectors/outlook"
+                      : `/api/connectors/connections/${connectionId}`,
                 { method: "DELETE" }
             );
             if (res.ok) {
@@ -322,6 +328,8 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     return (
         <>
             <GoogleDriveSection />
+
+            <Microsoft365Section onChanged={() => void refreshConnectors()} />
 
             <Section title={t("connections.title")} description={t("connections.description")}>
                 <Card>
@@ -427,7 +435,12 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                         if (!next) setPendingDisconnect(null);
                     }}
                     title={t("connections.confirmTitle", { label: pendingDisconnect?.label ?? "" })}
-                    description={t("connections.confirmBody")}
+                    description={
+                        // Microsoft offers no revocation call, so this one says what really happens.
+                        pendingDisconnect?.provider === "microsoft-365"
+                            ? t("microsoft365.confirmBody")
+                            : t("connections.confirmBody")
+                    }
                     confirmLabel={tc("actions.disconnect")}
                     onConfirm={() => {
                         const target = pendingDisconnect;

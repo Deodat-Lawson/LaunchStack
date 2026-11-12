@@ -16,6 +16,10 @@ import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
 import { configuredPublicOrigin } from "~/server/public-origin";
 import { googleStandInUrl } from "../google-drive/config";
+import {
+    isMicrosoft365ConnectorConfigured,
+    isOutlookConnectorConfigured,
+} from "../microsoft/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
 import * as linkedin from "./providers/linkedin";
@@ -79,6 +83,10 @@ export function isConnectorConfigured(provider: ConnectorProvider): boolean {
                 env.server.GOOGLE_OAUTH_CLIENT_SECRET
         );
     }
+    // Microsoft 365 files and Outlook share one Entra app and connect through
+    // their own door (/api/connectors/microsoft/oauth/*); Outlook is opt-in.
+    if (provider === "microsoft-365") return isMicrosoft365ConnectorConfigured();
+    if (provider === "outlook") return isOutlookConnectorConfigured();
     // Bluesky has no OAuth app to register: a workspace pastes an app
     // password, which only needs somewhere safe to be stored.
     if (provider === "bluesky") return true;
@@ -165,5 +173,7 @@ export function getConnectorProvidersStatus(): ConnectorProvidersStatus {
         notion: { configured: isConnectorConfigured("notion") },
         linkedin: { configured: isConnectorConfigured("linkedin") },
         bluesky: { configured: isConnectorConfigured("bluesky") },
+        "microsoft-365": { configured: isConnectorConfigured("microsoft-365") },
+        outlook: { configured: isConnectorConfigured("outlook") },
     };
 }

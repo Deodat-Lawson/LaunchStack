@@ -346,7 +346,7 @@ export async function updateMember(
  * their group seats, and grants naming them. The `users` row
  * stays; if it pointed at this workspace as its default, it is repointed at
  * another workspace they still belong to. Their own connections (Gmail,
- * Notion) are closed before this, by `closePersonalConnections`.
+ * Outlook, Notion) are closed before this, by `closePersonalConnections`.
  */
 async function deleteMembershipEverywhere(
     tx: Executor,

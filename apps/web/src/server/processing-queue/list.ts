@@ -26,6 +26,8 @@ import {
     connectorConnections,
     gmailSyncState,
     googleDriveSyncState,
+    microsoft365SyncState,
+    outlookSyncState,
 } from "~/server/db/schema/connectors";
 import { accessSubject, levelAtLeast } from "~/server/workspace/item-access";
 import {
@@ -102,7 +104,7 @@ export async function buildItems(
 }
 
 /**
- * Syncs the caller can see: their own Gmail (a mailbox is personal), and the
+ * Syncs the caller can see: their own Gmail and Outlook (a mailbox is personal), and the
  * workspace's Drive connections for whoever manages connectors — the same
  * gates as GET /api/connectors/gmail and /api/connectors/google-drive/status.
  */
@@ -125,6 +127,24 @@ export async function listConnectorSyncs(
             and(
                 eq(connectorConnections.companyId, actor.companyId),
                 eq(connectorConnections.provider, "gmail"),
+                eq(connectorConnections.ownerUserId, actor.userPk)
+            )
+        );
+    const outlook = db
+        .select({
+            account: connectorConnections.providerAccountEmail,
+            lastSyncStatus: outlookSyncState.lastSyncStatus,
+            lastSyncAt: outlookSyncState.lastSyncAt,
+            lastSyncError: outlookSyncState.lastSyncError,
+            lastSyncReport: outlookSyncState.lastSyncReport,
+            syncLockedAt: outlookSyncState.syncLockedAt,
+        })
+        .from(connectorConnections)
+        .innerJoin(outlookSyncState, eq(outlookSyncState.connectionId, connectorConnections.id))
+        .where(
+            and(
+                eq(connectorConnections.companyId, actor.companyId),
+                eq(connectorConnections.provider, "outlook"),
                 eq(connectorConnections.ownerUserId, actor.userPk)
             )
         );
@@ -151,11 +171,41 @@ export async function listConnectorSyncs(
               )
               .orderBy(connectorConnections.createdAt)
         : Promise.resolve([]);
+    // OneDrive and SharePoint: the workspace's connection, under Drive's gate.
+    // Wrapped so the query starts now and runs alongside the others.
+    const microsoft365 = Promise.resolve(
+        actor.can("connectors.manage")
+            ? db
+                  .select({
+                      account: connectorConnections.providerAccountEmail,
+                      lastSyncStatus: microsoft365SyncState.lastSyncStatus,
+                      lastSyncAt: microsoft365SyncState.lastSyncAt,
+                      lastSyncError: microsoft365SyncState.lastSyncError,
+                      lastSyncReport: microsoft365SyncState.lastSyncReport,
+                      syncLockedAt: microsoft365SyncState.syncLockedAt,
+                  })
+                  .from(connectorConnections)
+                  .innerJoin(
+                      microsoft365SyncState,
+                      eq(microsoft365SyncState.connectionId, connectorConnections.id)
+                  )
+                  .where(
+                      and(
+                          eq(connectorConnections.companyId, actor.companyId),
+                          eq(connectorConnections.provider, "microsoft-365")
+                      )
+                  )
+                  .orderBy(connectorConnections.createdAt)
+            : []
+    );
 
-    const [gmailRows, driveRows] = await Promise.all([gmail, drive]);
+    const [gmailRows, driveRows, outlookRows] = await Promise.all([gmail, drive, outlook]);
+    const microsoft365Rows = await microsoft365;
     const rows: ConnectorSyncRow[] = [
         ...driveRows.map(row => ({ ...row, provider: "google-drive" as const })),
+        ...microsoft365Rows.map(row => ({ ...row, provider: "microsoft-365" as const })),
         ...gmailRows.map(row => ({ ...row, provider: "gmail" as const })),
+        ...outlookRows.map(row => ({ ...row, provider: "outlook" as const })),
     ];
     return rows.flatMap(row => connectorSyncSummary(row, now) ?? []);
 }

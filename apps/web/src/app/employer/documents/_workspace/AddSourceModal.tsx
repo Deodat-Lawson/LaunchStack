@@ -33,7 +33,9 @@ import {
 } from "./DriveSource";
 import { useDriveSource } from "./useDriveSource";
 import { GmailConnectPanel } from "./GmailConnectPanel";
+import { Microsoft365SourcePanel } from "./Microsoft365Source";
 import { NotionConnectPanel } from "./NotionConnectPanel";
+import { OutlookConnectPanel } from "./OutlookConnectPanel";
 import { ObsidianImportPanel } from "./ObsidianImportPanel";
 import { startFileUploads, startLinkTask } from "./processing/uploadTasks";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
@@ -75,7 +77,7 @@ import type { IconProps } from "~/components/icons/types";
  * the right panel hosts the active tab. Above every tab's content sits the
  * destination bar (`AddDestinationBar`): the folder it goes to and who will
  * be able to open it, so neither is a surprise after the upload. Tabs that
- * always file in one place (Coding sessions, Gmail) show that place;
+ * always file in one place (Coding sessions, Gmail, Outlook) show that place;
  * connectors that add nothing to a folder show no bar.
  *
  * Backend integration is kept unchanged:
@@ -102,7 +104,10 @@ import type { IconProps } from "~/components/icons/types";
  *     into `Notion/<workspace>`, private to them. Gmail has its own panel
  *     (GmailConnectPanel): the connection is the member's own, started at
  *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
- *     in a folder only they can see. Dropbox remains a coming-soon CTA.
+ *     in a folder only they can see. Outlook is the same, with its own
+ *     panel (OutlookConnectPanel) and Microsoft's door,
+ *     `/api/connectors/microsoft/oauth/start?provider=outlook`. Dropbox
+ *     remains a coming-soon CTA.
  *   - Obsidian: ObsidianImportPanel reads a vault (folder or .zip) in the
  *     browser and posts its notes to `/api/connectors/obsidian/import`; they
  *     land in `Obsidian/<vault>`, private to the importer.
@@ -238,6 +243,8 @@ const PICKS_FOLDER = new Set([
     "url",
     "youtube",
     "artifact",
+    // OneDrive and SharePoint: what is picked lands in the chosen folder.
+    "microsoft-365",
 ]);
 
 /**
@@ -259,13 +266,13 @@ const FIXED_DESTINATIONS: Record<string, string> = {
 
 /**
  * Who sees what the fixed-destination connectors file, known by rule:
- * Gmail's folder is per mailbox and its owner's alone (ADR-014); the Notion
+ * a Gmail or Outlook folder is per mailbox and its owner's alone (ADR-014); the Notion
  * sync files each connected workspace in `Notion/<workspace>` and an Obsidian
  * vault in `Obsidian/<vault>`, both created private to whoever added them.
  */
 function fixedAudience(
     t: ModalTranslator,
-    connector: "gmail" | "notion" | "obsidian"
+    connector: "gmail" | "outlook" | "notion" | "obsidian"
 ): AudienceSummary {
     return {
         tone: "private",
@@ -286,7 +293,9 @@ const TAB_KEYS = {
     url: "url",
     youtube: "youtube",
     artifact: "artifact",
+    "microsoft-365": "microsoft365",
     gmail: "gmail",
+    outlook: "outlook",
     notion: "notion",
     obsidian: "obsidian",
     slack: "slack",
@@ -460,8 +469,18 @@ export function AddSourceModal({
         );
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
+    } else if (tab === "microsoft-365") {
+        panel = (
+            <Microsoft365SourcePanel
+                destination={folder}
+                onAdded={handleUploaded}
+                onSynced={onUploaded}
+            />
+        );
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} onImported={handleUploaded} />;
+    } else if (tab === "outlook") {
+        panel = <OutlookConnectPanel tab={active} onImported={handleUploaded} />;
     } else if (tab === "notion") {
         panel = <NotionConnectPanel tab={active} />;
     } else if (tab === "obsidian") {
@@ -533,6 +552,15 @@ export function AddSourceModal({
                 mode="fixed"
                 value={t("fixedDestination.gmail")}
                 fixedAudience={fixedAudience(t, "gmail")}
+                {...barProps}
+            />
+        );
+    } else if (active.id === "outlook") {
+        destination = (
+            <AddDestinationBar
+                mode="fixed"
+                value={t("fixedDestination.outlook")}
+                fixedAudience={fixedAudience(t, "outlook")}
                 {...barProps}
             />
         );
@@ -1838,7 +1866,7 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
 // ---------------------------------------------------------------------------
 // Connect panel. Slack / GitHub connect via workspace OAuth (management role
 // required, tokens live server-side only); the rest are coming-soon CTAs.
-// Gmail and Notion have panels of their own; Drive is picked from Files.
+// Gmail, Outlook and Notion have panels of their own; Drive is picked from Files.
 // ---------------------------------------------------------------------------
 
 interface ConnectPanelProps {
@@ -1897,6 +1925,7 @@ function useConnectorsOverview(enabled: boolean) {
 /** What each connector gives, as keys in `sources.addSourceModal.connect.perks`. */
 const PROVIDER_PERKS = {
     gmail: ["gmailLabels", "gmailPrivate", "gmailResync", "gmailAttachments"],
+    outlook: ["outlookFolders", "outlookPrivate", "outlookResync", "outlookAttachments"],
     slack: ["slackMirror", "slackNotAdded", "slackExport"],
     github: ["githubRepoExplainer", "githubNotSynced", "githubZip"],
     dropbox: ["dropboxFolders", "dropboxAllTypes", "dropboxShared"],

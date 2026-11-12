@@ -25,6 +25,7 @@ import {
     documentReferenceResolution,
     documentViews,
     googleDrivePickedItem,
+    microsoft365PickedItem,
     predictiveDocumentAnalysisResults,
 } from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
@@ -61,6 +62,33 @@ async function forgetDrivePick(tx: Tx, metadata: Record<string, unknown> | null)
         );
 }
 
+/**
+ * The same for a OneDrive or SharePoint file picked on its own: its pick is
+ * the file itself (`pickedRootId` equals its source id), so deleting the
+ * document ends the pick. A file that came through a picked folder leaves
+ * that folder's pick alone.
+ */
+async function forgetMicrosoft365Pick(
+    tx: Tx,
+    metadata: Record<string, unknown> | null
+): Promise<void> {
+    if (metadata?.connector !== "microsoft-365") return;
+    const { driveId, itemId, sourceId } = metadata;
+    const connectionId = Number(metadata.connectionId);
+    if (typeof driveId !== "string" || typeof itemId !== "string") return;
+    if (typeof sourceId !== "string" || metadata.pickedRootId !== sourceId) return;
+    if (!Number.isSafeInteger(connectionId)) return;
+    await tx
+        .delete(microsoft365PickedItem)
+        .where(
+            and(
+                eq(microsoft365PickedItem.connectionId, connectionId),
+                eq(microsoft365PickedItem.driveId, driveId),
+                eq(microsoft365PickedItem.itemId, itemId)
+            )
+        );
+}
+
 export async function deleteDocumentCore(
     tx: Tx,
     docId: number,
@@ -76,6 +104,7 @@ export async function deleteDocumentCore(
     if (row) {
         const metadata = (row.metadata ?? null) as Record<string, unknown> | null;
         await forgetDrivePick(tx, metadata);
+        await forgetMicrosoft365Pick(tx, metadata);
         // A synced file stays deleted: its next sync would otherwise re-import it.
         await rememberDeletedSource(tx, {
             title: row.title,

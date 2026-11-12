@@ -557,6 +557,25 @@
     }
   },
   "integrations": {
+    "microsoft365": {
+      "description": "在“添加来源”中从 OneDrive 和 SharePoint 选择的文件和文件夹会保持同步，同步的内容列在这里。LaunchStack 只读取，不会更改 Microsoft 365 中的任何内容。",
+      "actions": "Microsoft 365 操作",
+      "connectMenu": "连接 Microsoft 365…",
+      "setupLabel": "Microsoft 365 文件",
+      "setup": "设置 <code>MICROSOFT_OAUTH_CLIENT_ID</code> 和 <code>MICROSOFT_OAUTH_CLIENT_SECRET</code>（一个具有 <code>Files.Read.All</code> 和 <code>Sites.Read.All</code> 权限的 Entra 应用注册），再加上 <code>EMBEDDING_SECRETS_KEY</code>，即可启用此功能。",
+      "adminOnly": "Microsoft 365 连接由管理此工作区连接的人负责。",
+      "account": "工作区账户",
+      "connectedAs": "已以 <code>{email}</code> 身份连接。",
+      "revokedAs": "<code>{email}</code> 的访问权限已被撤销或已过期。重新连接即可继续同步。",
+      "unknown": "未知",
+      "notConnected": "此工作区尚未连接 Microsoft 账户。",
+      "reconnect": "重新连接",
+      "connect": "连接 Microsoft 365",
+      "confirmTitle": "要断开此工作区与 Microsoft 365 的连接吗？",
+      "confirmBody": "同步会停止，已选择内容的列表会被移除，已导入的文档会保留。LaunchStack 会删除它保存的访问凭据。Microsoft 不允许应用自行撤回这项权限，因此它会一直列在该 Microsoft 账户中，直到有人在那里将其移除。",
+      "disconnected": "已断开 Microsoft 365。LaunchStack 已删除它保存的访问凭据。这项权限会一直列在该 Microsoft 账户中，直到在那里被移除。",
+      "disconnectFailed": "无法断开 Microsoft 365"
+    },
     "checking": "正在检查配置…",
     "reconnectMenu": "重新连接…",
     "disconnectMenu": "断开连接…",
@@ -1405,6 +1424,9 @@
       },
       "notion": {
         "note": "只读取在 Notion 授权页面中选择的页面，不会向 Notion 写入任何内容。"
+      },
+      "microsoft365": {
+        "note": "只读取在“添加来源”中选择的 OneDrive 和 SharePoint 文件和文件夹，不会向 Microsoft 365 写入任何内容。"
       },
       "secEdgar": {
         "label": "投资人搜索",

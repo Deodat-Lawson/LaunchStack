@@ -59,6 +59,9 @@ const ENV_PAIRS: Record<ConnectorProvider, string> = {
     linkedin: "LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET",
     // Bluesky needs no app pair, only somewhere safe to keep the app password.
     bluesky: "",
+    "microsoft-365": "MICROSOFT_OAUTH_CLIENT_ID and MICROSOFT_OAUTH_CLIENT_SECRET",
+    outlook:
+        "OUTLOOK_CONNECTOR_ENABLED=true plus MICROSOFT_OAUTH_CLIENT_ID and MICROSOFT_OAUTH_CLIENT_SECRET",
 };
 
 /** The same variables as a list, for a language that does not join them with "and". */
@@ -70,6 +73,12 @@ const ENV_VARS: Record<ConnectorProvider, readonly string[]> = {
     notion: ["NOTION_OAUTH_CLIENT_ID", "NOTION_OAUTH_CLIENT_SECRET"],
     linkedin: ["LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"],
     bluesky: [],
+    "microsoft-365": ["MICROSOFT_OAUTH_CLIENT_ID", "MICROSOFT_OAUTH_CLIENT_SECRET"],
+    outlook: [
+        "OUTLOOK_CONNECTOR_ENABLED=true",
+        "MICROSOFT_OAUTH_CLIENT_ID",
+        "MICROSOFT_OAUTH_CLIENT_SECRET",
+    ],
 };
 
 /** In `locale` (English by default, as before). */

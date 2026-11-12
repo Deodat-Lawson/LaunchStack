@@ -270,10 +270,25 @@ import {
     POST as addGmailItems,
 } from "~/app/api/connectors/gmail/items/route";
 import { POST as syncGmail } from "~/app/api/connectors/gmail/sync/route";
+import { GET as outlookFolders } from "~/app/api/connectors/outlook/folders/route";
+import {
+    DELETE as removeOutlookItems,
+    POST as addOutlookItems,
+} from "~/app/api/connectors/outlook/items/route";
+import { POST as syncOutlook } from "~/app/api/connectors/outlook/sync/route";
 import { GET as startProviderOAuth } from "~/app/api/connectors/[provider]/oauth/start/route";
 import { GET as providerOAuthCallback } from "~/app/api/connectors/[provider]/oauth/callback/route";
 import { GET as providerStatus } from "~/app/api/connectors/[provider]/status/route";
 import { POST as syncProvider } from "~/app/api/connectors/[provider]/sync/route";
+import { GET as browseMicrosoft365 } from "~/app/api/connectors/microsoft-files/browse/route";
+import { DELETE as restoreMicrosoft365Deleted } from "~/app/api/connectors/microsoft-files/deleted/route";
+import {
+    DELETE as removeMicrosoft365Items,
+    GET as listMicrosoft365Items,
+    POST as addMicrosoft365Items,
+} from "~/app/api/connectors/microsoft-files/items/route";
+import { GET as microsoft365Status } from "~/app/api/connectors/microsoft-files/status/route";
+import { POST as syncMicrosoft365 } from "~/app/api/connectors/microsoft-files/sync/route";
 import { POST as openInDrive } from "~/app/api/documents/[id]/google-docs/open/route";
 import {
     GET as previewAgentKnowledge,
@@ -637,6 +652,37 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () => syncGmail(json("/api/connectors/gmail/sync", "POST", {})),
     },
+    // documents.upload — Outlook is the member's own mailbox too.
+    {
+        route: "GET /api/connectors/outlook/folders",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => outlookFolders(new Request("http://localhost/api/connectors/outlook/folders")),
+    },
+    {
+        route: "POST /api/connectors/outlook/items",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            addOutlookItems(
+                json("/api/connectors/outlook/items", "POST", {
+                    items: [{ kind: "folder", value: "AAMkInbox", name: "Inbox" }],
+                })
+            ),
+    },
+    {
+        route: "DELETE /api/connectors/outlook/items",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            removeOutlookItems(json("/api/connectors/outlook/items", "DELETE", { ids: ["1"] })),
+    },
+    {
+        route: "POST /api/connectors/outlook/sync",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => syncOutlook(json("/api/connectors/outlook/sync", "POST", {})),
+    },
     // documents.upload — a Notion connection is the member's own (per-user),
     // so connecting and syncing ask for upload access. Reading your own
     // status does not (someone who lost upload access can still disconnect);
@@ -687,6 +733,75 @@ const GATES: readonly Gate[] = [
         permission: "connectors.manage",
         deniedRole: "member",
         call: () => disconnectGoogle(),
+    },
+    // connectors.manage — the Microsoft 365 connection (OneDrive and
+    // SharePoint) is the workspace's, like Drive's: every route on it is gated.
+    {
+        route: "GET /api/connectors/microsoft-files/status",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            microsoft365Status(
+                new Request("http://localhost/api/connectors/microsoft-files/status")
+            ),
+    },
+    {
+        route: "GET /api/connectors/microsoft-files/items",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            listMicrosoft365Items(
+                new Request("http://localhost/api/connectors/microsoft-files/items")
+            ),
+    },
+    {
+        route: "POST /api/connectors/microsoft-files/items",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            addMicrosoft365Items(
+                json("/api/connectors/microsoft-files/items", "POST", {
+                    items: [{ driveId: "b!drive", itemId: "01ITEM" }],
+                })
+            ),
+    },
+    {
+        route: "DELETE /api/connectors/microsoft-files/items",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            removeMicrosoft365Items(
+                json("/api/connectors/microsoft-files/items", "DELETE", {
+                    items: [{ driveId: "b!drive", itemId: "01ITEM" }],
+                })
+            ),
+    },
+    {
+        route: "GET /api/connectors/microsoft-files/browse",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            browseMicrosoft365(
+                new Request("http://localhost/api/connectors/microsoft-files/browse?sites=clients")
+            ),
+    },
+    {
+        route: "POST /api/connectors/microsoft-files/sync",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () => syncMicrosoft365(json("/api/connectors/microsoft-files/sync", "POST", {})),
+    },
+    {
+        route: "DELETE /api/connectors/microsoft-files/deleted",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            restoreMicrosoft365Deleted(
+                json("/api/connectors/microsoft-files/deleted", "DELETE", {
+                    connectionId: "1",
+                    all: true,
+                })
+            ),
     },
     {
         route: "GET /api/connectors/google/oauth/start",

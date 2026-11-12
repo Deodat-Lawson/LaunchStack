@@ -88,6 +88,10 @@
       "connect": "连接"
     },
     "tabs": {
+      "microsoft365": {
+        "label": "OneDrive 和 SharePoint",
+        "desc": "文件和文件夹保持同步"
+      },
       "mindmap": {
         "label": "思维导图",
         "desc": "先画出来，再引用它"
@@ -132,6 +136,10 @@
         "label": "Gmail",
         "desc": "你的邮箱，仅你可见"
       },
+      "outlook": {
+        "label": "Outlook",
+        "desc": "你的邮箱，仅你可见"
+      },
       "notion": {
         "label": "Notion",
         "desc": "选择页面或数据库"
@@ -160,6 +168,7 @@
     "mindmapAudienceNote": "这适用于已发布的副本，即工作区可以引用的那一份。",
     "fixedDestination": {
       "gmail": "Gmail/你的邮箱",
+      "outlook": "Outlook/你的邮箱",
       "notion": "Notion/你的工作区",
       "obsidian": "Obsidian/你的仓库"
     },
@@ -167,6 +176,10 @@
       "gmail": {
         "headline": "仅你可见",
         "detail": "邮件会存入你自己的 Gmail 文件夹，工作区中的其他人都无法打开。"
+      },
+      "outlook": {
+        "headline": "仅你可见",
+        "detail": "邮件会存入你自己的 Outlook 文件夹，工作区中的其他人都无法打开。"
       },
       "notion": {
         "headline": "在你共享之前仅你可见",
@@ -298,6 +311,10 @@
         "gmailPrivate": "仅你可见，存入你自己的文件夹",
         "gmailResync": "每 15 分钟重新同步一次，只读",
         "gmailAttachments": "包含 PDF 和 Office 附件",
+        "outlookFolders": "选择邮件文件夹或 Outlook 搜索",
+        "outlookPrivate": "仅你可见，存入你自己的文件夹",
+        "outlookResync": "每 15 分钟重新同步一次，只读",
+        "outlookAttachments": "包含 PDF 和 Office 附件",
         "slackMirror": "将智能体会议同步到 Slack 频道",
         "slackNotAdded": "消息和文件不会添加到你的来源中",
         "slackExport": "如需搜索 Slack，请上传导出的 JSON 文件",
@@ -379,7 +396,7 @@
   },
   "deletedHere": {
     "title": "已在此处删除（{count}）",
-    "body": "{provider, select, notion {这些页面在此处保持删除状态：同步时会跳过它们。Notion 中的内容没有任何改动。} other {这些文件在此处保持删除状态：同步时会跳过它们。Google Drive 中的内容没有任何改动。}}",
+    "body": "{provider, select, notion {这些页面在此处保持删除状态：同步时会跳过它们。Notion 中的内容没有任何改动。} microsoft365 {这些文件在此处保持删除状态：同步时会跳过它们。OneDrive 和 SharePoint 中的内容没有任何改动。} other {这些文件在此处保持删除状态：同步时会跳过它们。Google Drive 中的内容没有任何改动。}}",
     "syncAgain": "重新同步",
     "syncAgainAria": "重新同步“{name}”",
     "syncAllAgain": "全部 {count} 项重新同步",
@@ -460,6 +477,67 @@
     "starting": "正在启动…",
     "syncNow": "立即同步",
     "disconnectConfirm": "要断开连接吗？已导入的邮件会保留。"
+  },
+  "outlookConnect": {
+    "checking": "正在检查 Outlook…",
+    "loadError": "无法加载你的 Outlook 连接，请稍后重试。",
+    "retry": "重试",
+    "notEnabledTitle": "此服务器未启用 Outlook",
+    "notEnabledAdmin": "请在 <code>MICROSOFT_OAUTH_CLIENT_ID</code> 和 <code>MICROSOFT_OAUTH_CLIENT_SECRET</code> 之外设置 <code>OUTLOOK_CONNECTOR_ENABLED=true</code>，并为 Microsoft 应用注册添加委托权限 <code>Mail.Read</code>。具体步骤见 <code>.env.example</code> 中的“Microsoft 365”部分。",
+    "notEnabledMember": "请让负责运行 LaunchStack 的人开启 Outlook 连接器。你这边无需做任何更改。",
+    "notEnabledStillConnected": "{account} 是在连接器关闭之前连接的。现在不会同步新内容，但你仍可以断开连接。",
+    "connectTitle": "连接你的 Outlook",
+    "connectBody": "只读。连接后再选择邮件文件夹或搜索，邮件会话会存入仅你可见的文件夹。",
+    "connectButton": "连接 Outlook",
+    "reconnectTitle": "重新连接你的 Outlook",
+    "reconnectBody": "Microsoft 访问权限已被撤销或已过期，重新连接即可恢复同步。",
+    "reconnectBodyDetail": "Microsoft 访问权限已被撤销或已过期（{detail}），重新连接即可恢复同步。",
+    "reconnectButton": "重新连接 Outlook",
+    "noPermission": "你的角色无法向此工作区添加来源，因此不能连接邮箱。请向管理员申请上传权限。",
+    "noPermissionConnected": "你的角色已无法向此工作区添加来源，同步已暂停。你仍可以断开连接。",
+    "syncedTo": "同步的邮件会话会存入 <b>{folder}</b>，该文件夹仅你可见。每 15 分钟同步一次，只读。",
+    "lastSyncFailed": "上次同步失败：{error}",
+    "lastRun": "上次运行：导入 {conversations} 个会话和 {attachments} 个附件，未变化 {unchanged} 个，失败 {failed} 个。",
+    "lastRunDeltaExpired": "上次运行：导入 {conversations} 个会话和 {attachments} 个附件，未变化 {unchanged} 个，失败 {failed} 个。Outlook 的变更历史已过期，因此重新检查了所有已选文件夹。",
+    "syncedHeading": "从 Outlook 同步的内容（{count}）",
+    "nothingSelected": "尚未选择任何内容。选择邮件文件夹或添加搜索即可开始同步。",
+    "kindFolder": "文件夹",
+    "kindSearch": "搜索",
+    "stopSyncing": "停止同步“{name}”。已导入的邮件会保留。",
+    "removeFailed": "无法将其从同步中移除",
+    "chooseFolders": "选择文件夹",
+    "chooseFoldersTitle": "选择要同步的邮件文件夹",
+    "chooseFoldersHint": "文件夹只同步它自身的邮件。如需同步其中的子文件夹，请一并勾选。",
+    "loadingFolders": "正在加载文件夹…",
+    "noFolders": "此邮箱中没有找到邮件文件夹。",
+    "foldersLoadFailed": "无法加载你的邮件文件夹，请尝试重新连接 Outlook。",
+    "expandFolder": "显示“{name}”中的文件夹",
+    "collapseFolder": "隐藏“{name}”中的文件夹",
+    "alreadySyncing": "同步中",
+    "addFolders": "{count, plural, =0 {添加文件夹} other {添加 # 个文件夹}}",
+    "foldersAdded": "已添加 {count} 个文件夹，正在同步。",
+    "foldersAddedNoSync": "已添加 {count} 个文件夹，但同步无法开始。",
+    "saveSelectionFailed": "无法保存所选内容",
+    "searchPlaceholder": "Outlook 搜索，例如 from:investor@fund.com subject:contract",
+    "searchAria": "要同步的 Outlook 搜索",
+    "searchHint": "使用 Outlook 自身的搜索关键词，例如 from:、subject: 和 hasattachments:true。",
+    "addSearch": "添加搜索",
+    "searchAdded": "已添加搜索，正在同步。",
+    "searchAddedNoSync": "已添加搜索，但同步无法开始。",
+    "saveSearchFailed": "无法保存该搜索",
+    "syncNow": "立即同步",
+    "syncing": "正在同步…",
+    "starting": "正在启动…",
+    "syncRequested": "已请求同步",
+    "syncStartFailed": "无法开始同步",
+    "disconnect": "断开连接",
+    "disconnectTitle": "要断开 Outlook 吗？",
+    "disconnectBody": "LaunchStack 会删除保存的对 {account} 的访问凭据并停止同步。已导入的邮件会保留在你的文件夹中。在你到 Microsoft 那边移除之前，LaunchStack 仍会出现在你账户的应用列表中。",
+    "disconnectAccountFallback": "你的邮箱",
+    "disconnected": "已断开 Outlook，已导入的邮件已保留。",
+    "disconnectedRemoveApp": "LaunchStack 已删除保存的访问凭据。如需同时从 Microsoft 账户中移除它，请打开“我的应用”（工作或学校账户）或 Microsoft 账户的应用权限页面。",
+    "openMicrosoftApps": "打开“我的应用”",
+    "disconnectFailed": "无法断开 Outlook"
   },
   "notionConnect": {
     "perks": {
@@ -823,8 +901,11 @@
   },
   "externalLink": {
     "openGoogleDrive": "在 Google Drive 中打开",
+    "openOneDrive": "在 OneDrive 中打开",
+    "openSharePoint": "在 SharePoint 中打开",
     "openNotion": "在 Notion 中打开",
     "openGmail": "在 Gmail 中打开",
+    "openOutlook": "在 Outlook 中打开",
     "openObsidian": "在 Obsidian 中打开",
     "openGithub": "在 GitHub 上打开",
     "openYoutube": "在 YouTube 上打开",
@@ -836,8 +917,11 @@
     "hintFile": "在新的浏览器标签页中打开文件本身",
     "detailsLabel": "打开位置",
     "placeGoogleDrive": "Google Drive",
+    "placeOneDrive": "OneDrive",
+    "placeSharePoint": "SharePoint",
     "placeNotion": "Notion",
     "placeGmail": "Gmail",
+    "placeOutlook": "Outlook",
     "placeObsidian": "Obsidian",
     "placeYoutube": "YouTube",
     "placeFile": "你的浏览器"
@@ -869,6 +953,99 @@
     "registerFailed": "{name}：无法添加（HTTP {status}）",
     "connectionLost": "{name}：上传时连接中断"
   },
+  "microsoft365Source": {
+    "title": "OneDrive 和 SharePoint",
+    "subtitle": "从 Microsoft 365 添加文件和文件夹，并保持同步。",
+    "perks": {
+      "pick": "浏览你的 OneDrive 和 SharePoint 网站，或粘贴链接",
+      "sync": "添加的内容会保持同步，大约每 15 分钟一次",
+      "readOnly": "只读。LaunchStack 不会更改 Microsoft 365 中的任何内容"
+    },
+    "checking": "正在检查 Microsoft 365…",
+    "loadError": "无法加载 Microsoft 365 连接，请稍后重试。",
+    "forbidden": "OneDrive 和 SharePoint 是为整个工作区连接的，因此只有管理连接的人才能从中添加内容。请让工作区管理员连接 Microsoft 365，或替你添加所需的文件。",
+    "notConfigured": "此服务器尚未配置 Microsoft 365。运行 LaunchStack 的人需要设置 <code>MICROSOFT_OAUTH_CLIENT_ID</code>、<code>MICROSOFT_OAUTH_CLIENT_SECRET</code> 和 <code>EMBEDDING_SECRETS_KEY</code>。步骤见 <code>.env.example</code>。",
+    "connect": "连接 Microsoft 365",
+    "connectHint": "Microsoft 会要求你登录并允许 LaunchStack 读取文件。你所在的组织可能需要管理员先行批准。",
+    "reconnectTitle": "重新连接 Microsoft 365",
+    "reconnectBody": "Microsoft 的访问权限已被撤销或已过期。重新连接即可继续同步，已选择的内容会保留。",
+    "reconnect": "重新连接 Microsoft 365",
+    "connectedAs": "已以 {account} 身份连接",
+    "connectedFallback": "已连接 Microsoft 365",
+    "browse": "浏览",
+    "browseHint": "从你的 OneDrive 或某个 SharePoint 网站中选择。",
+    "pasteLinkLabel": "或粘贴 OneDrive 或 SharePoint 链接",
+    "add": "添加",
+    "adding": "正在添加…",
+    "notMicrosoftLink": "这不是 OneDrive 或 SharePoint 链接。请在 OneDrive 或 SharePoint 中点击“共享”，然后点击“复制链接”。",
+    "linkHintAccount": "适用于 {account} 能打开的任何文件或文件夹，包括与它共享的内容。",
+    "linkHintThis": "适用于此账户能打开的任何文件或文件夹，包括与它共享的内容。",
+    "addedOne": "正在从 Microsoft 365 添加“{name}”。它稍后就会出现，并保持同步。",
+    "addedFolder": "正在从 Microsoft 365 添加文件夹“{name}”。它会在一分钟内陆续填充，并保持同步。",
+    "addedMany": "正在从 Microsoft 365 添加 {count} 项。它们稍后就会出现，并保持同步。",
+    "addFailed": "无法从 Microsoft 365 添加该内容",
+    "syncLater": "已添加。同步尚未开始，稍后会自动运行。",
+    "destinationHint": "文件会放入上方显示的文件夹。添加的文件夹会在其中重建，包括子文件夹。",
+    "manageHint": "要查看同步的内容、停止同步某一项或断开连接，请打开“设置”，然后进入“集成”。",
+    "browser": {
+      "title": "从 Microsoft 365 添加",
+      "description": "选择文件或文件夹。文件夹会带入其中的所有内容，以及之后添加到其中的文件。",
+      "myOneDrive": "我的 OneDrive",
+      "sites": "SharePoint 网站",
+      "searchSites": "搜索 SharePoint 网站",
+      "search": "搜索",
+      "location": "位置",
+      "loading": "正在加载…",
+      "loadFailed": "无法加载，请重试。",
+      "retry": "重试",
+      "emptyFolder": "此文件夹为空。",
+      "noSites": "未找到网站。",
+      "noLibraries": "此网站没有文档库。",
+      "truncated": "仅显示前 {count} 项。要添加更靠后的内容，请改为粘贴它的链接。",
+      "unsupported": "无法读取此文件类型",
+      "selectItem": "选择 {name}",
+      "openItem": "打开 {name}",
+      "site": "网站",
+      "library": "文档库",
+      "selected": "{count, plural, =0 {未选择任何内容} other {已选择 # 项}}",
+      "limit": "一次最多可添加 {max} 项。",
+      "addSelected": "{count, plural, =0 {添加} other {添加 # 项}}",
+      "clear": "清除选择"
+    }
+  },
+  "microsoft365Sync": {
+    "cardTitle": "从 OneDrive 和 SharePoint 同步",
+    "checking": "正在检查 Microsoft 365…",
+    "notConnected": "尚未从 OneDrive 或 SharePoint 同步任何内容。请在“添加来源”的“OneDrive 和 SharePoint”中连接 Microsoft 365，你在那里选择的内容会列在这里。",
+    "reconnectTitle": "重新连接 Microsoft 365",
+    "reconnectBody": "Microsoft 的访问权限已被撤销或已过期。重新连接即可继续同步，已选择的内容会保留。",
+    "lastSyncFailed": "上次同步失败：{error}",
+    "lastRun": "上次运行：导入 {stored} 个，未更改 {unchanged} 个，失败 {failed} 个。",
+    "empty": "{names} 没有带入任何内容。Microsoft 显示{count, plural, one {它} other {它们}}是空的。",
+    "accessLost": "有 {count} 项已无法打开。它们已被删除，或不再与已连接的账户共享。",
+    "truncated": "上次同步达到了文件数量上限，因此有些文件没有带入。",
+    "syncedTitle": "已同步（{count}）",
+    "nothingYet": "暂无内容。请在“添加来源”的“OneDrive 和 SharePoint”中选择文件或文件夹。",
+    "stopSyncingTitle": "停止同步（保留已导入的文档）",
+    "stopSyncingAria": "停止同步 {name}",
+    "stopFailed": "无法停止同步该项，请重试。",
+    "syncing": "正在同步…",
+    "starting": "正在启动…",
+    "syncNow": "立即同步",
+    "syncRequested": "已请求同步",
+    "syncStartFailed": "无法启动同步",
+    "destination": {
+      "inFolder": "位于 {path}",
+      "inPrivateFolder": "位于选择者的私人文件夹中",
+      "inDefault": "位于 Microsoft 365",
+      "becomesFolder": "下次同步时会成为独立的文件夹"
+    },
+    "names": {
+      "one": "“{name}”",
+      "two": "“{first}”和“{second}”",
+      "more": "“{first}”、“{second}”等另外 {count} 个"
+    }
+  },
   "sourceTypes": {
     "doc": "文件",
     "audio": "音频",
@@ -876,6 +1053,7 @@
     "github": "GitHub",
     "notion": "Notion",
     "gmail": "Gmail",
+    "outlook": "Outlook",
     "drive": "Drive",
     "slack": "Slack",
     "dropbox": "Dropbox",
@@ -976,6 +1154,28 @@
       "notManager": "你不是此文件夹的管理者。",
       "noEditAccessDestination": "你没有目标文件夹的编辑权限。"
     },
+    "microsoft": {
+      "notConfigured": "此服务器尚未配置 Microsoft 365。请设置 MICROSOFT_OAUTH_CLIENT_ID、MICROSOFT_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。"
+    },
+    "microsoft365": {
+      "notConnected": "没有 Microsoft 365 连接。",
+      "connectFirst": "请先连接 Microsoft 365。",
+      "revoked": "Microsoft 的访问权限已被撤销，请先重新连接。",
+      "invalidBody": "请求内容无效。",
+      "syncStarted": "同步已开始。",
+      "itemAdded": "已添加“{name}”。",
+      "itemsAdded": "已添加 {count} 项。",
+      "itemNotFound": "已连接的 Microsoft 账户无法打开该项。它可能已被删除，或不再共享。",
+      "itemUnsupported": "该项既不是文件也不是文件夹，无法添加。",
+      "selectionUpdated": "选择已更新。已导入的文档已保留。",
+      "browseInvalid": "浏览器无法打开这个位置。",
+      "browseNotFound": "已连接的 Microsoft 账户无法打开它。它可能已被删除，或不再共享。",
+      "libraryFallback": "文档",
+      "myOneDrive": "我的 OneDrive",
+      "linkNotFound": "{account} 无法打开该链接。请让它的所有者与 {account} 共享，然后重新粘贴。",
+      "linkNotFoundAccount": "已连接的 Microsoft 账户无法打开该链接。请让它的所有者与该账户共享，然后重新粘贴。",
+      "linkUnsupported": "“{name}”既不是文件也不是文件夹，无法添加。"
+    },
     "drive": {
       "notEnabled": "此部署未启用 Google Drive 关联。",
       "notConfigured": "Google Drive 关联尚未配置。请设置 GOOGLE_OAUTH_CLIENT_ID 和 GOOGLE_OAUTH_CLIENT_SECRET（以及 GOOGLE_DOCS_EDITING_ENABLED=true）。",
@@ -1041,6 +1241,7 @@
       "obsidianNeedsUpload": "导入笔记需要添加文档的权限。",
       "driveConnectsElsewhere": "Google Drive 需通过 /api/connectors/google/oauth/start 连接。",
       "gmailConnectsElsewhere": "Gmail 需通过 /api/connectors/google/oauth/start?provider=gmail 连接。",
+      "outlookConnectsElsewhere": "Outlook 需通过 /api/connectors/microsoft/oauth/start?provider=outlook 连接。",
       "unknownProvider": "未知的连接器提供方：{provider}",
       "deletedDriveNotionOnly": "只有 google-drive 和 notion 会记录已删除的文件。",
       "deletedRestored": "{count, plural, =0 {没有需要恢复的内容。} other {# 个文件将在下次同步时恢复。}}"
@@ -1060,6 +1261,15 @@
         "starred": "已加星标",
         "important": "重要"
       }
+    },
+    "outlook": {
+      "notConfigured": "此服务器未启用 Outlook 连接器。请设置 OUTLOOK_CONNECTOR_ENABLED=true、MICROSOFT_OAUTH_CLIENT_ID、MICROSOFT_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。",
+      "connectFirst": "请先连接 Outlook。",
+      "accessRevoked": "Outlook 访问权限已被撤销，请先重新连接。",
+      "disconnected": "已断开 Outlook。LaunchStack 已删除保存的访问凭据并停止同步，已导入的邮件保留在你的文件夹中。Microsoft 账户的应用列表中仍会显示 LaunchStack：如需在那里一并移除，请打开 https://myapps.microsoft.com（工作或学校账户）或 https://account.live.com/consent/Manage（个人账户）。",
+      "pickSomething": "请至少选择一个邮件文件夹或搜索来同步。",
+      "itemsAdded": "已添加 {count} 项。",
+      "selectionUpdated": "已更新所选内容。已导入的邮件会保留。"
     }
   }
 }

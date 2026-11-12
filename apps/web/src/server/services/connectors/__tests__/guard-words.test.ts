@@ -24,6 +24,9 @@ describe("connector configuration hints", () => {
         await expect(messageOf(notConfiguredResponse("bluesky"))).resolves.toBe(
             "The bluesky connector is not configured. Set EMBEDDING_SECRETS_KEY on the server."
         );
+        await expect(messageOf(notConfiguredResponse("microsoft-365"))).resolves.toBe(
+            "The microsoft-365 connector is not configured. Set MICROSOFT_OAUTH_CLIENT_ID and MICROSOFT_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY on the server."
+        );
     });
 
     it("list the variables in Chinese", async () => {
@@ -32,6 +35,9 @@ describe("connector configuration hints", () => {
         );
         await expect(messageOf(gmailNotConfiguredResponse("zh-CN"))).resolves.toBe(
             "此服务器未启用 Gmail 连接器。请设置 GMAIL_CONNECTOR_ENABLED=true、GOOGLE_OAUTH_CLIENT_ID、GOOGLE_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。"
+        );
+        await expect(messageOf(notConfiguredResponse("microsoft-365", "zh-CN"))).resolves.toBe(
+            "microsoft-365 连接器尚未配置。请在服务器上设置 MICROSOFT_OAUTH_CLIENT_ID、MICROSOFT_OAUTH_CLIENT_SECRET、EMBEDDING_SECRETS_KEY。"
         );
         expect(notConfiguredResponse("slack", "zh-CN").status).toBe(403);
     });

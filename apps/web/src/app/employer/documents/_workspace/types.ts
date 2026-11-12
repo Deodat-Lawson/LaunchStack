@@ -42,7 +42,9 @@ import {
     IconDrive,
     IconGithub,
     IconGmail,
+    IconMicrosoft,
     IconNotion,
+    IconOutlook,
     IconObsidian,
     IconSlack,
     IconYoutube,
@@ -58,6 +60,7 @@ export type SourceTypeId =
     | "github"
     | "notion"
     | "gmail"
+    | "outlook"
     | "drive"
     | "slack"
     | "dropbox"
@@ -80,6 +83,7 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     github: { label: "GitHub", Icon: IconGithub, color: "oklch(0.35 0.01 280)" },
     notion: { label: "Notion", Icon: IconNotion, color: "oklch(0.35 0.01 280)" },
     gmail: { label: "Gmail", Icon: IconGmail, color: "oklch(0.55 0.18 25)" },
+    outlook: { label: "Outlook", Icon: IconOutlook, color: "oklch(0.55 0.15 250)" },
     drive: { label: "Drive", Icon: IconDrive, color: "oklch(0.6 0.15 140)" },
     slack: { label: "Slack", Icon: IconSlack, color: "oklch(0.55 0.17 330)" },
     dropbox: { label: "Dropbox", Icon: IconDropbox, color: "oklch(0.55 0.17 240)" },
@@ -913,7 +917,21 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         group: "Connect",
         items: [
+            {
+                // The workspace's Microsoft 365 files: browsed or pasted as a
+                // link, into the folder the destination bar shows.
+                id: "microsoft-365",
+                label: "OneDrive and SharePoint",
+                Icon: IconMicrosoft,
+                desc: "Files and folders stay in sync",
+            },
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
+            {
+                id: "outlook",
+                label: "Outlook",
+                Icon: IconOutlook,
+                desc: "Your mailbox, private to you",
+            },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
             {
                 id: "obsidian",

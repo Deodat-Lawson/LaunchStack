@@ -1,6 +1,6 @@
 /**
- * A member's own connections (`connector_connections.owner_user_id`: Gmail
- * and Notion) and what becomes of them when the member is gone.
+ * A member's own connections (`connector_connections.owner_user_id`: Gmail,
+ * Outlook and Notion) and what becomes of them when the member is gone.
  *
  * A personal connection belongs to its member, not to the workspace, so it
  * lasts exactly as long as their membership:
@@ -8,11 +8,14 @@
  * - **Removed, or left.** The connection row goes (its sync state and scope
  *   cascade) and its grant is revoked at Google or Notion once the
  *   transaction commits (`revokePersonalGrants`, bounded so a hung provider
- *   never holds the request). A Notion connection's pages stay, and its
+ *   never holds the request). Microsoft offers no revocation endpoint, so an
+ *   Outlook connection ends when its stored token is deleted with the row.
+ *   A Notion connection's pages stay, and its
  *   folder is handed over like the member's other sole-managed items.
  *   The mail it brought in goes too: every document still inside the
- *   member's Gmail folder, and the folder. A mailbox was private to its owner
- *   (ADR-014 kept the `Gmail` subtree out of the admin carry-over), so nobody
+ *   member's Gmail or Outlook folder, and the folder. A mailbox was private
+ *   to its owner (ADR-014 kept the `Gmail` subtree out of the admin
+ *   carry-over, and `Outlook` follows it), so nobody
  *   inherits it. Mail the member moved out of that folder was put in front of
  *   the team on purpose and is handed over like their other files.
  * - **Suspended, or moved to a role that can't add files.** The sync pauses
@@ -21,7 +24,7 @@
  * Two things keep the cleanup to what is theirs, and complete:
  *
  * - Disconnecting keeps a mailbox's folder, so someone else may since have
- *   connected the same Google account into it. A mailbox another connection
+ *   connected the same account into it. A mailbox another connection
  *   syncs into belongs to that connection and stays.
  * - A sync already running when its owner goes can write after the cleanup.
  *   It sweeps its mailbox when it ends (`sweepMailboxOfClosedConnection`).
@@ -30,7 +33,7 @@
  * existed, applies the departure rule itself (`closePersonalConnectionsNow`).
  */
 
-import { and, eq, inArray, like, sql } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 
 import { decryptSecret } from "@launchstack/store/crypto";
 import { category, document } from "@launchstack/store/schema";
@@ -48,16 +51,37 @@ import { descendantPattern } from "~/server/folders";
 import { deleteDocumentCore } from "~/server/services/document-delete";
 import type { Tx } from "~/server/workspace/db-types";
 
+import { OUTLOOK_PROVIDER } from "../microsoft/config";
+import { GMAIL_PROVIDER } from "./gmail/config";
 import {
-    GMAIL_PROVIDER,
-    GMAIL_ROOT_FOLDER,
-    gmailFolderFor,
+    MAILBOX_PROVIDER_IDS,
+    MAILBOX_ROOT_FOLDERS,
     isPersonalMailboxPath,
-} from "./gmail/config";
+    mailboxProviderFor,
+} from "./mailboxes";
 import { revokeConnectionTokens, type ConnectionTokens } from "./revoke";
 
 /** Personal providers whose grants are Google's, revoked at Google's endpoint. */
 const GOOGLE_PERSONAL_PROVIDERS: ReadonlySet<string> = new Set([GMAIL_PROVIDER]);
+
+/**
+ * Personal providers with nowhere to send a revocation. Microsoft gives a
+ * confidential client no endpoint to revoke a delegated refresh token, so
+ * deleting the row (and with it our only copy of the token) is the whole of
+ * it, and nothing is decrypted or queued.
+ */
+const PROVIDERS_WITHOUT_REVOCATION: ReadonlySet<string> = new Set([OUTLOOK_PROVIDER]);
+
+/** A mailbox connection and the address its folder is named after. */
+interface MailboxAccount {
+    readonly provider: string;
+    readonly email: string;
+}
+
+/** Matches a path under any mail provider's root (`Gmail/%`, `Outlook/%`). */
+function underAMailboxRoot(column: Parameters<typeof like>[0]) {
+    return or(...MAILBOX_ROOT_FOLDERS.map(root => like(column, descendantPattern(root))));
+}
 
 export interface ClosedPersonalConnections {
     readonly connections: number;
@@ -85,8 +109,8 @@ function decryptOrNull(ciphertext: string | null): string | null {
 
 /**
  * The mailbox folders that are this member's: the folder each of their
- * Gmail connections syncs into (the sync's own naming), plus any Gmail
- * folder carrying the manage grant they gave themselves when it was made
+ * Gmail and Outlook connections syncs into (the sync's own naming), plus any
+ * mailbox folder carrying the manage grant they gave themselves when it was made
  * (the owner signature `folderOwner` reads), so a mailbox whose connection
  * was already disconnected is found too.
  */
@@ -95,9 +119,13 @@ async function ownedMailboxPaths(
     companyId: bigint,
     userPk: bigint,
     authUserId: string | null,
-    accountEmails: readonly string[]
+    accounts: readonly MailboxAccount[]
 ): Promise<string[]> {
-    const paths = new Set(accountEmails.map(email => gmailFolderFor(email)));
+    const paths = new Set<string>();
+    for (const account of accounts) {
+        const mailbox = mailboxProviderFor(account.provider);
+        if (mailbox) paths.add(mailbox.folderFor(account.email));
+    }
     if (authUserId) {
         const signed = await tx
             .select({ name: category.name })
@@ -121,9 +149,9 @@ async function ownedMailboxPaths(
 }
 
 /**
- * Mailbox folders a Gmail connection still syncs into, leaving out
- * `exceptOwner`'s own. Disconnecting keeps a mailbox's folder and grants, so
- * someone else may since have connected the same Google account into it;
+ * Mailbox folders a Gmail or Outlook connection still syncs into, leaving
+ * out `exceptOwner`'s own. Disconnecting keeps a mailbox's folder and grants,
+ * so someone else may since have connected the same account into it;
  * that mailbox is theirs now, whatever older grants still say.
  */
 async function mailboxesStillConnected(
@@ -133,6 +161,7 @@ async function mailboxesStillConnected(
 ): Promise<Set<string>> {
     const rows = await tx
         .select({
+            provider: connectorConnections.provider,
             ownerUserId: connectorConnections.ownerUserId,
             accountEmail: connectorConnections.providerAccountEmail,
             ownerEmail: users.email,
@@ -142,14 +171,15 @@ async function mailboxesStillConnected(
         .where(
             and(
                 eq(connectorConnections.companyId, companyId),
-                eq(connectorConnections.provider, GMAIL_PROVIDER)
+                inArray(connectorConnections.provider, [...MAILBOX_PROVIDER_IDS])
             )
         );
     const paths = new Set<string>();
     for (const row of rows) {
         if (exceptOwner !== null && row.ownerUserId === exceptOwner) continue;
         const email = row.accountEmail ?? row.ownerEmail;
-        if (email) paths.add(gmailFolderFor(email));
+        const mailbox = mailboxProviderFor(row.provider);
+        if (email && mailbox) paths.add(mailbox.folderFor(email));
     }
     return paths;
 }
@@ -168,12 +198,7 @@ async function deleteMailboxes(
     const mail = await tx
         .select({ id: document.id, category: document.category })
         .from(document)
-        .where(
-            and(
-                eq(document.companyId, companyId),
-                like(document.category, descendantPattern(GMAIL_ROOT_FOLDER))
-            )
-        );
+        .where(and(eq(document.companyId, companyId), underAMailboxRoot(document.category)));
     for (const doc of mail) {
         if (!inMailbox(doc.category)) continue;
         await deleteDocumentCore(tx, Number(doc.id));
@@ -184,12 +209,7 @@ async function deleteMailboxes(
     const drafts = await tx
         .select({ id: mindmaps.id, folder: mindmaps.folder })
         .from(mindmaps)
-        .where(
-            and(
-                eq(mindmaps.companyId, companyId),
-                like(mindmaps.folder, descendantPattern(GMAIL_ROOT_FOLDER))
-            )
-        );
+        .where(and(eq(mindmaps.companyId, companyId), underAMailboxRoot(mindmaps.folder)));
     const strayDrafts = drafts.filter(draft => inMailbox(draft.folder)).map(d => d.id);
     if (strayDrafts.length > 0) {
         await tx
@@ -202,12 +222,7 @@ async function deleteMailboxes(
     const folderRows = await tx
         .select({ id: category.id, name: category.name })
         .from(category)
-        .where(
-            and(
-                eq(category.companyId, companyId),
-                like(category.name, descendantPattern(GMAIL_ROOT_FOLDER))
-            )
-        );
+        .where(and(eq(category.companyId, companyId), underAMailboxRoot(category.name)));
     const doomed = folderRows.filter(row => inMailbox(row.name)).map(row => row.id);
     if (doomed.length > 0) await tx.delete(category).where(inArray(category.id, doomed));
     return { documents, folders: doomed.length };
@@ -216,7 +231,7 @@ async function deleteMailboxes(
 /**
  * Ends every personal connection `userPk` holds in `companyId`, inside the
  * caller's transaction: the rows, the mail still in their mailbox folders,
- * and those folders. Revoking the grants at Google is network work, so the
+ * and those folders. Revoking the grants at Google or Notion is network work, so the
  * tokens come back for `revokePersonalGrants` to send after the commit.
  *
  * The rows are locked first, so a sync finishing at the same moment waits
@@ -247,6 +262,7 @@ export async function closePersonalConnections(
     const googleTokensToRevoke: string[] = [];
     const otherGrantsToRevoke: { provider: string; tokens: ConnectionTokens }[] = [];
     for (const row of connections) {
+        if (PROVIDERS_WITHOUT_REVOCATION.has(row.provider)) continue;
         if (GOOGLE_PERSONAL_PROVIDERS.has(row.provider)) {
             const refreshToken = decryptOrNull(row.refreshTokenCiphertext);
             if (refreshToken) googleTokensToRevoke.push(refreshToken);
@@ -262,17 +278,19 @@ export async function closePersonalConnections(
     }
 
     // The sync names the folder after the connected account, falling back
-    // to the member's own address (gmail/sync-service.ts).
-    const accountEmails = connections
-        .filter(row => row.provider === GMAIL_PROVIDER)
-        .map(row => row.providerAccountEmail ?? user?.email ?? null)
-        .filter((email): email is string => Boolean(email));
+    // to the member's own address (gmail/ and outlook/sync-service.ts).
+    const accounts: MailboxAccount[] = [];
+    for (const row of connections) {
+        if (!mailboxProviderFor(row.provider)) continue;
+        const email = row.providerAccountEmail ?? user?.email ?? null;
+        if (email) accounts.push({ provider: row.provider, email });
+    }
     const owned = await ownedMailboxPaths(
         tx,
         companyId,
         userPk,
         user?.authUserId ?? null,
-        accountEmails
+        accounts
     );
     const others = await mailboxesStillConnected(tx, companyId, userPk);
     const { documents, folders } = await deleteMailboxes(

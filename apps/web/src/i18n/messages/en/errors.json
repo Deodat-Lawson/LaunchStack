@@ -124,6 +124,7 @@
     "githubUrlRequired": "GitHub URL is required",
     "valueOrReset": "Send a value, or reset: true",
     "notGmailLabel": "Not a Gmail label id",
+    "notOutlookFolder": "Not an Outlook mail folder id",
     "clientNameRequired": "Give the client a name",
     "redirectUriFullUrl": "Each redirect URI must be a full URL",
     "redirectUriHttps": "Redirect URIs must use https",

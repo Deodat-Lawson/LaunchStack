@@ -7,14 +7,15 @@
  * every consumer of the synced data is company-owned, and the reconciler and
  * sync jobs run in the worker with no user session. One table serves every
  * OAuth provider — `provider` discriminates — Google Drive, Slack, GitHub,
- * Gmail, and Notion today.
+ * Gmail, Notion, Microsoft 365 (OneDrive and SharePoint files) and Outlook
+ * today.
  *
- * Gmail and Notion are the per-user providers (PER_USER_CONNECTOR_PROVIDERS):
- * a mailbox is personal, and so are the Notion pages a person picks on
- * Notion's consent screen. Their rows are owned by a member (`ownerUserId`)
+ * Gmail, Outlook and Notion are the per-user providers
+ * (PER_USER_CONNECTOR_PROVIDERS): a mailbox is personal, and so are the
+ * Notion pages a person picks on Notion's consent screen. Their rows are owned by a member (`ownerUserId`)
  * and what they sync lands in a folder only that member can see until they
- * share it. A member has at most one Gmail connection per workspace but may
- * connect several Notion workspaces. Workspace-scoped rows leave
+ * share it. A member has at most one Gmail and one Outlook connection per
+ * workspace but may connect several Notion workspaces. Workspace-scoped rows leave
  * `ownerUserId` null.
  *
  * Token shape varies by provider. Google issues a refresh token and short
@@ -58,6 +59,10 @@ export const CONNECTOR_PROVIDERS = [
     // OAuth grant; Bluesky stores an app password where a token would go.
     "linkedin",
     "bluesky",
+    // Microsoft 365: OneDrive and SharePoint files for the workspace, and a
+    // member's own Outlook mailbox. One Entra app, two kinds of connection.
+    "microsoft-365",
+    "outlook",
 ] as const;
 export type ConnectorProvider = (typeof CONNECTOR_PROVIDERS)[number];
 
@@ -70,7 +75,11 @@ export function isConnectorProvider(value: string): value is ConnectorProvider {
  * workspace. Their rows carry `ownerUserId`, only the owner sees or manages
  * them, and nothing company-scoped may borrow their tokens.
  */
-export const PER_USER_CONNECTOR_PROVIDERS: readonly ConnectorProvider[] = ["gmail", "notion"];
+export const PER_USER_CONNECTOR_PROVIDERS: readonly ConnectorProvider[] = [
+    "gmail",
+    "notion",
+    "outlook",
+];
 
 export function isPerUserProvider(provider: string): boolean {
     return (PER_USER_CONNECTOR_PROVIDERS as readonly string[]).includes(provider);
@@ -82,6 +91,13 @@ export function isPerUserProvider(provider: string): boolean {
  * clause's WHERE implies it.
  */
 export const GMAIL_OWNER_INDEX_PREDICATE = sql`owner_user_id is not null and provider = 'gmail'`;
+
+/**
+ * The same, for Outlook. A second index rather than a wider predicate on the
+ * Gmail one: the Gmail upsert's ON CONFLICT names that predicate exactly, and
+ * an index nobody has to drop is a migration nobody has to mark destructive.
+ */
+export const OUTLOOK_OWNER_INDEX_PREDICATE = sql`owner_user_id is not null and provider = 'outlook'`;
 
 export const connectorConnections = pgTable(
     "connector_connections",
@@ -162,6 +178,10 @@ export const connectorConnections = pgTable(
         )
             .on(table.companyId, table.provider, table.ownerUserId)
             .where(GMAIL_OWNER_INDEX_PREDICATE),
+        /** One Outlook connection per member per workspace. */
+        companyOutlookOwnerUnique: uniqueIndex("connector_connections_company_outlook_owner_unique")
+            .on(table.companyId, table.provider, table.ownerUserId)
+            .where(OUTLOOK_OWNER_INDEX_PREDICATE),
     })
 );
 
@@ -387,6 +407,129 @@ export const notionSyncState = pgTable("notion_sync_state", {
 });
 
 /**
+ * Microsoft 365 file-sync bookkeeping: the sync lease and last-run summary.
+ * One row per Microsoft 365 connection, created on connect. There is no
+ * cursor: every run walks the picked items and compares each file's cTag,
+ * which costs listings but never a download for a file that has not changed.
+ */
+export const microsoft365SyncState = pgTable("microsoft365_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, skipped, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
+/**
+ * What an admin picked in Add source: a OneDrive or SharePoint file or
+ * folder, browsed to or pasted as a sharing link. A picked folder brings
+ * everything inside it. These rows are the entire universe the sync reads,
+ * whatever the grant itself could reach.
+ */
+export const microsoft365PickedItem = pgTable(
+    "microsoft365_picked_item",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** The drive (a OneDrive or a SharePoint document library) the item lives in. */
+        driveId: varchar("drive_id", { length: 128 }).notNull(),
+        itemId: varchar("item_id", { length: 128 }).notNull(),
+        /** file | folder */
+        kind: varchar("kind", { length: 8 }).notNull(),
+        name: text("name").notNull(),
+        mimeType: varchar("mime_type", { length: 255 }),
+        /** Where the item opens in OneDrive or SharePoint. */
+        webUrl: text("web_url"),
+        addedByUserPk: bigint("added_by_user_pk", { mode: "number" }).references(() => users.id),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        /**
+         * For a picked folder: the LaunchStack folder (category id) it was
+         * rebuilt as on its first sync. An id, not a path, so a rename or
+         * move in LaunchStack is followed. Null for picked files. No FK: the
+         * category table belongs to the engine schema.
+         */
+        folderCategoryId: bigint("folder_category_id", { mode: "number" }),
+        /**
+         * The folder picked in Add source's destination bar, as a path: a
+         * picked file lands in it, a picked folder is rebuilt inside it.
+         * Read once, when the pick's first files are placed.
+         */
+        destination: varchar("destination", { length: 256 }),
+    },
+    table => ({
+        connectionItemUnique: uniqueIndex("m365_picked_conn_drive_item_idx").on(
+            table.connectionId,
+            table.driveId,
+            table.itemId
+        ),
+        connectionIdx: index("m365_picked_connection_idx").on(table.connectionId),
+    })
+);
+
+/**
+ * Outlook sync bookkeeping: the per-folder delta links and the sync lease.
+ * One row per Outlook connection, created on connect. Same shape as the
+ * Gmail state row; Outlook's cursor is one delta link per synced folder.
+ */
+export const outlookSyncState = pgTable("outlook_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    /** Mail-folder id → its delta link; advances only inside the sync lease. */
+    deltaLinks: jsonb("delta_links").$type<Record<string, string>>(),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, skipped, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
+/**
+ * What the member chose to sync: mail folders (by id) and free-text search
+ * queries. Under Mail.Read the app could read the whole mailbox; these rows
+ * are the entire universe the sync actually touches.
+ */
+export const outlookSyncScope = pgTable(
+    "outlook_sync_scope",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** folder | query */
+        kind: varchar("kind", { length: 8 }).notNull(),
+        /** The mail-folder id or the search query. */
+        value: varchar("value", { length: 512 }).notNull(),
+        /** Display name — the folder's name, or the query itself. */
+        name: text("name").notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionValueUnique: uniqueIndex("outlook_scope_conn_kind_value_idx").on(
+            table.connectionId,
+            table.kind,
+            table.value
+        ),
+        connectionIdx: index("outlook_scope_connection_idx").on(table.connectionId),
+    })
+);
+
+/**
  * Synced files someone deleted in LaunchStack, so the sync leaves them
  * deleted. Drive and Notion sync what a pick or a share reaches, not a list
  * of documents: without this, a deleted file is simply "new" to the next
@@ -463,3 +606,7 @@ export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
 export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;
 export type NotionSyncState = InferSelectModel<typeof notionSyncState>;
 export type ConnectorDeletedItem = InferSelectModel<typeof connectorDeletedItem>;
+export type Microsoft365SyncState = InferSelectModel<typeof microsoft365SyncState>;
+export type Microsoft365PickedItem = InferSelectModel<typeof microsoft365PickedItem>;
+export type OutlookSyncState = InferSelectModel<typeof outlookSyncState>;
+export type OutlookSyncScope = InferSelectModel<typeof outlookSyncScope>;

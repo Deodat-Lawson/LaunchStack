@@ -557,6 +557,25 @@
     }
   },
   "integrations": {
+    "microsoft365": {
+      "description": "Files and folders picked from OneDrive and SharePoint in Add source stay in sync. What syncs is listed here. LaunchStack only reads: nothing is changed in Microsoft 365.",
+      "actions": "Microsoft 365 actions",
+      "connectMenu": "Connect Microsoft 365…",
+      "setupLabel": "Microsoft 365 files",
+      "setup": "Set <code>MICROSOFT_OAUTH_CLIENT_ID</code> and <code>MICROSOFT_OAUTH_CLIENT_SECRET</code> (an Entra app registration with the <code>Files.Read.All</code> and <code>Sites.Read.All</code> permissions) plus <code>EMBEDDING_SECRETS_KEY</code> to enable this.",
+      "adminOnly": "The Microsoft 365 connection is managed by people who manage this workspace's connections.",
+      "account": "Workspace account",
+      "connectedAs": "Connected as <code>{email}</code>.",
+      "revokedAs": "Access for <code>{email}</code> was revoked or has expired. Reconnect to keep syncing.",
+      "unknown": "unknown",
+      "notConnected": "No Microsoft account is connected for this workspace yet.",
+      "reconnect": "Reconnect",
+      "connect": "Connect Microsoft 365",
+      "confirmTitle": "Disconnect Microsoft 365 from this workspace?",
+      "confirmBody": "Syncing stops and the list of what was picked is removed. Documents already imported are kept. LaunchStack deletes its stored access. Microsoft gives an app no way to withdraw the permission itself, so it stays listed in the Microsoft account until someone removes it there.",
+      "disconnected": "Microsoft 365 disconnected. LaunchStack deleted its stored access. The permission stays listed in the Microsoft account until it is removed there.",
+      "disconnectFailed": "Could not disconnect Microsoft 365"
+    },
     "checking": "Checking configuration…",
     "reconnectMenu": "Reconnect…",
     "disconnectMenu": "Disconnect…",
@@ -1405,6 +1424,9 @@
       },
       "notion": {
         "note": "Reads only the pages picked on Notion's consent screen. Nothing is written to Notion."
+      },
+      "microsoft365": {
+        "note": "Reads only the OneDrive and SharePoint files and folders picked in Add source. Nothing is written to Microsoft 365."
       },
       "secEdgar": {
         "label": "Investor search",

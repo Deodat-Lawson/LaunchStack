@@ -120,7 +120,8 @@ export async function listDeviceAccounts(activeSessionToken?: string): Promise<D
 /** Makes sure the account in hand stays signed in when another is added. */
 export async function rememberActiveSession(): Promise<void> {
     try {
-        await authClient.$fetch("/device-sessions/remember", { method: "POST" });
+        // An empty JSON body: Better Auth answers a body-less POST with 415.
+        await authClient.$fetch("/device-sessions/remember", { method: "POST", body: {} });
     } catch {
         // Best effort: without it the worst case is the pre-multi-session
         // behaviour, where adding an account replaces this one.

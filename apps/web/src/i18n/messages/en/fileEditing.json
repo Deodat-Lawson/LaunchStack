@@ -1,0 +1,24 @@
+{
+  "server": {
+    "invalidDocumentId": "That is not a valid file id.",
+    "notFound": "This file could not be found. It may have been deleted, or it is in a folder you cannot open.",
+    "editDenied": "You can view this file but not edit it.",
+    "notEditable": "This kind of file can't be edited in LaunchStack. Markdown, plain text and Word files can.",
+    "invalid": "The editor sent something LaunchStack could not save. Reload the file and try again.",
+    "tooLarge": "This file is too large to edit here (the limit is {mb} MB).",
+    "changedSinceOpened": "This file changed since you opened it. Reload to get the latest version, then make your edits again.",
+    "changedInGoogleDocs": "This file was changed in Google Docs since you opened it. Reload to get the latest version, then make your edits again.",
+    "googleNotConnected": "LaunchStack's Google connection for this workspace is missing or was revoked, so this linked file can't be opened or saved. An admin can reconnect Google in Settings.",
+    "driveUnavailable": "Google Drive didn't respond. Try again in a moment.",
+    "driveDisabled": "Google Drive is turned off on this server, so this linked file can't be saved.",
+    "driveFileGone": "The linked Google Docs file was deleted or moved to the trash. Reload to edit LaunchStack's copy instead.",
+    "readFailed": "LaunchStack couldn't read this file from storage (HTTP {status}).",
+    "saveFailed": "The file couldn't be saved. Try again.",
+    "docxNotice": "Saving keeps headings, lists, bold and italic, links, tables and images. Page layout, headers and footers, tracked changes and comments are dropped. The previous version stays in History.",
+    "driveNotice": "Saving replaces the Google Doc's content. Comments and suggestions left in Google Docs are lost. The previous version stays in History.",
+    "untitled": "Untitled document",
+    "invalidTitleOrFolder": "That title or folder can't be used.",
+    "folderDenied": "You do not have edit access to this folder.",
+    "createFailed": "The file couldn't be created. Try again."
+  }
+}

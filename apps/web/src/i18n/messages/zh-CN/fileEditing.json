@@ -1,0 +1,24 @@
+{
+  "server": {
+    "invalidDocumentId": "这不是有效的文件 ID。",
+    "notFound": "找不到此文件。它可能已被删除,或位于你无法打开的文件夹中。",
+    "editDenied": "你可以查看此文件,但不能编辑。",
+    "notEditable": "此类文件无法在 LaunchStack 中编辑。可以编辑的是 Markdown、纯文本和 Word 文件。",
+    "invalid": "编辑器发送的内容无法保存。请重新加载文件后再试。",
+    "tooLarge": "此文件太大,无法在这里编辑(上限为 {mb} MB)。",
+    "changedSinceOpened": "自你打开以来,此文件已被更改。请重新加载以获取最新版本,然后重新编辑。",
+    "changedInGoogleDocs": "自你打开以来,此文件已在 Google 文档中被更改。请重新加载以获取最新版本,然后重新编辑。",
+    "googleNotConnected": "此工作区与 Google 的连接缺失或已被撤销,因此无法打开或保存这个关联文件。管理员可以在设置中重新连接 Google。",
+    "driveUnavailable": "Google 云端硬盘没有响应。请稍后再试。",
+    "driveDisabled": "此服务器已关闭 Google 云端硬盘,因此无法保存这个关联文件。",
+    "driveFileGone": "关联的 Google 文档已被删除或移至回收站。请重新加载,改为编辑 LaunchStack 中的副本。",
+    "readFailed": "LaunchStack 无法从存储中读取此文件(HTTP {status})。",
+    "saveFailed": "文件无法保存。请再试一次。",
+    "docxNotice": "保存后会保留标题、列表、粗体和斜体、链接、表格和图片;页面布局、页眉页脚、修订记录和批注会被删除。之前的版本会保留在历史记录中。",
+    "driveNotice": "保存会替换 Google 文档的内容,在 Google 文档中留下的批注和建议将会丢失。之前的版本会保留在历史记录中。",
+    "untitled": "无标题文档",
+    "invalidTitleOrFolder": "无法使用该标题或文件夹。",
+    "folderDenied": "你没有此文件夹的编辑权限。",
+    "createFailed": "无法创建文件。请再试一次。"
+  }
+}

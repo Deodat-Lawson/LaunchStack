@@ -228,3 +228,24 @@ describe("New scenario", () => {
         ).toBeInTheDocument();
     });
 });
+
+describe("Growth's sources (a beta app)", () => {
+    it("offers prospects and post comments while the workspace has beta apps on", async () => {
+        mount();
+        await subjectBox();
+        expect(await screen.findByText("Prospects")).toBeInTheDocument();
+        expect(screen.getByText("Comments on your posts")).toBeInTheDocument();
+    });
+
+    it("offers neither once the server says beta apps are off", async () => {
+        resetScenariosSim({ betaApps: false });
+        mount();
+        await describeSituation("We raise prices.");
+        await act(async () => {
+            await jest.advanceTimersByTimeAsync(10);
+        });
+        expect(screen.getByText("Search my files")).toBeInTheDocument();
+        expect(screen.queryByText("Prospects")).not.toBeInTheDocument();
+        expect(screen.queryByText("Comments on your posts")).not.toBeInTheDocument();
+    });
+});

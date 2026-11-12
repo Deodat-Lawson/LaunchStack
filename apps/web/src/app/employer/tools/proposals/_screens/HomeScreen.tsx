@@ -194,16 +194,12 @@ export function HomeScreen() {
             </section>
 
             <section>
-                <SectionHeading
-                    title={t("deadlines")}
-                    aside={d && d.deadlines.length > 0 ? t("nearestFirst") : undefined}
-                />
+                <SectionHeading title={t("deadlines")} />
                 {home.loading ? (
                     <SkeletonRows rows={3} height={52} />
                 ) : d && d.deadlines.length === 0 ? (
                     <EmptyState
                         title={t("noDated")}
-                        body={t("noDatedBody")}
                         action={
                             <Button size="sm" variant="outline" onClick={() => setCreating(true)}>
                                 {tp("newApplication")}
@@ -261,9 +257,7 @@ export function HomeScreen() {
                         <EmptyState
                             title={t("noFunders")}
                             body={
-                                d.profile.status === "ready"
-                                    ? t("noFundersReady")
-                                    : t("noFundersNoProfile")
+                                d.profile.status === "ready" ? undefined : t("noFundersNoProfile")
                             }
                             action={
                                 <Button size="sm" variant="outline" asChild>

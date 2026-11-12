@@ -82,9 +82,6 @@ export function AskTab({
                         )}
                     </SelectContent>
                 </Select>
-                <p className="text-ink-3 text-xs">
-                    {agentId === ANALYST_ID ? t("aboutAnalyst") : t("aboutPerson")}
-                </p>
             </div>
 
             {selected && (

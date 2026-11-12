@@ -13,6 +13,8 @@ jest.mock("~/i18n/client", () => ({
 }));
 jest.mock("~/lib/settings/useSettings", () => ({
     useSettingValue: () => false,
+    // The workspace's beta switch (`useStudioAccess`): off, as in a new workspace.
+    useSetting: () => ({ value: false, loaded: true, error: null }),
     useSettingsSearch: () => () => [],
     useSettingCopier: () => (definition: unknown) => definition,
 }));

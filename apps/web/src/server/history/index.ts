@@ -16,6 +16,7 @@ import {
     type HistoryKind,
 } from "~/lib/workspace-history";
 import type { Locale } from "~/i18n/locales";
+import { betaAppsOn } from "~/server/beta-apps";
 import { PIPELINE_LOADERS, type HistoryLoaderContext } from "~/server/history/loaders";
 import type { SessionActor } from "~/server/sessions/access";
 import { listChatFeed, type ChatFeedRow } from "~/server/sessions/feed";
@@ -89,9 +90,16 @@ export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<His
         });
     }
     if (!input.archived) {
-        for (const loader of PIPELINE_LOADERS) {
-            if (wanted.has(loader.kind))
-                jobs.push({ kind: loader.kind, run: () => loader.load(ctx) });
+        const loaders = PIPELINE_LOADERS.filter(loader => wanted.has(loader.kind));
+        // A beta app's rows go with the app while the workspace has beta apps
+        // off. Asked only when such a row is wanted; an unreadable switch
+        // counts as off, like the app.
+        const betaOn = loaders.some(loader => loader.beta)
+            ? await betaAppsOn(input.companyId).catch(() => false)
+            : true;
+        for (const loader of loaders) {
+            if (loader.beta && !betaOn) continue;
+            jobs.push({ kind: loader.kind, run: () => loader.load(ctx) });
         }
     }
 

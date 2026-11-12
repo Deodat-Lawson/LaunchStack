@@ -21,6 +21,7 @@ import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
+import { studioAppFor, useStudioAccess } from "../studioAccess";
 import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { DriveSyncPanel } from "./DriveSyncPanel";
@@ -259,6 +260,9 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const { data, loading, refresh } = useAgents();
     const connectors = useConnectorsOverview();
     const refreshConnectors = connectors.refresh;
+    // LinkedIn and Bluesky are reconnected in Growth, which is hidden while
+    // the workspace's beta switch is off; the row then offers no Reconnect.
+    const { canOpen } = useStudioAccess();
     const [disconnecting, setDisconnecting] = useState<string | null>(null);
     /** The connection a Disconnect from its menu has been asked for, pending the confirm dialog. */
     const [pendingDisconnect, setPendingDisconnect] = useState<{
@@ -336,7 +340,14 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     ) : (
                         connectors.data?.connections.map(row => {
                             const label = PROVIDER_LABELS[row.provider] ?? row.provider;
-                            const reconnectTo = reconnectHref(row.provider);
+                            const reconnectLink = reconnectHref(row.provider);
+                            const reconnectApp = reconnectLink
+                                ? studioAppFor(reconnectLink)
+                                : undefined;
+                            const reconnectTo =
+                                reconnectLink && (!reconnectApp || canOpen(reconnectApp))
+                                    ? reconnectLink
+                                    : null;
                             return (
                                 <ContextTarget
                                     key={row.id}
@@ -451,7 +462,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section title={t("setup.title")} description={t("setup.description")}>
+            <Section title={t("setup.title")}>
                 <Card>
                     <ol
                         style={{

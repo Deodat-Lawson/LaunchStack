@@ -35,7 +35,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "better-auth/crypto";
 import { nextCookies } from "better-auth/next-js";
-import { jwt, lastLoginMethod } from "better-auth/plugins";
+import { genericOAuth, jwt, lastLoginMethod } from "better-auth/plugins";
 import { cimd } from "@better-auth/cimd";
 import { fetchClientMetadataResource } from "@better-auth/cimd/node";
 import { mcp } from "@better-auth/mcp";
@@ -62,7 +62,7 @@ import { workspaceAccessTokenClaims, workspacePostLogin } from "~/server/mcp/oau
 import { accountLinkingHooks } from "./account-linking";
 import { deviceSessionPlugins } from "./device-sessions";
 import { sendAuthEmail } from "./email";
-import { enabledSocialProviders } from "./providers";
+import { enabledSocialProviders, microsoftSignInConfig, oidcSignInConfig } from "./providers";
 
 // process.env directly, not ~/env — the same trade the middleware's own DB
 // client makes. This module sits in the middleware bundle, and ~/env drags
@@ -86,9 +86,11 @@ const buildAuth = () => {
     };
     const db = drizzle(client, { schema: authTables });
 
-    const social = enabledSocialProviders();
+    const social = enabledSocialProviders().map(provider => provider.id);
     const google = social.includes("google");
     const github = social.includes("github");
+    const microsoft = microsoftSignInConfig();
+    const oidc = oidcSignInConfig();
 
     return betterAuth({
         secret: process.env.BETTER_AUTH_SECRET,
@@ -122,11 +124,11 @@ const buildAuth = () => {
         // a provider takeover (./account-linking), whose whole point is that
         // the earlier holder is out at once. The cost is one indexed read per
         // signed-in request.
-        // A Google or GitHub sign-in on an address that already has an account
-        // links to it even when the address was never confirmed (no password
-        // sign-up confirms one here). The hooks make that safe: the provider
-        // takes the account over instead of joining whoever made it. See
-        // ./account-linking.
+        // A provider sign-in (Google, Microsoft, GitHub, the deployment's own
+        // OIDC) on an address that already has an account links to it even
+        // when the address was never confirmed (no password sign-up confirms
+        // one here). The hooks make that safe: the provider takes the account
+        // over instead of joining whoever made it. See ./account-linking.
         account: {
             accountLinking: { requireLocalEmailVerified: false },
         },
@@ -153,15 +155,60 @@ const buildAuth = () => {
                       },
                   }
                 : {}),
+            // Microsoft work, school and personal accounts. Sign-in only asks
+            // for who the person is: no Graph scopes, no refresh token, and no
+            // profile photo (Better Auth would store it in the user row as a
+            // base64 data URL; people add their own photo to their profile).
+            // Microsoft reports the address confirmed only when the app
+            // registration adds the verified_primary_email optional claim, so
+            // without it a Microsoft sign-in can't join an existing account.
+            ...(microsoft
+                ? {
+                      microsoft: {
+                          clientId: microsoft.clientId,
+                          clientSecret: microsoft.clientSecret,
+                          tenantId: microsoft.tenantId,
+                          authority: microsoft.authority,
+                          disableProfilePhoto: true,
+                          disableDefaultScope: true,
+                          scope: ["openid", "profile", "email"],
+                      },
+                  }
+                : {}),
         },
         plugins: [
             // Sets a readable 30-day cookie naming the method behind each new
-            // session ("email", "google", "github"), so the sign-in page can
-            // mark it "Last used". Cookie only — no column, no migration.
+            // session ("email", "google", "microsoft", "oidc"…), so the sign-in
+            // page can mark it "Last used". Cookie only — no column, no migration.
             lastLoginMethod(),
             // Stay signed in to several accounts in this browser; a sign-in
             // adds one instead of replacing the last. ./device-sessions.
             ...deviceSessionPlugins(),
+            // A self-hoster's own identity provider (Okta, Entra, Keycloak,
+            // Authentik…), found through its discovery document. Better Auth
+            // registers it as one more social provider: same /sign-in/social
+            // and /callback/:id endpoints, so ./account-linking and "Last
+            // used" treat it like Google. Its ID token is checked against the
+            // issuer's keys with a nonce. Its email_verified claim is trusted
+            // the way Google's is, which is why the deployment guide says to
+            // connect only an IdP that confirms addresses.
+            ...(oidc
+                ? [
+                      genericOAuth({
+                          config: [
+                              {
+                                  providerId: "oidc",
+                                  name: oidc.name,
+                                  clientId: oidc.clientId,
+                                  clientSecret: oidc.clientSecret,
+                                  discoveryUrl: oidc.discoveryUrl,
+                                  scopes: ["openid", "email", "profile"],
+                                  pkce: true,
+                              },
+                          ],
+                      }),
+                  ]
+                : []),
             ...mcpPlugins(db),
             // Last, per better-auth: it forwards cookies the hooks above set.
             nextCookies(),

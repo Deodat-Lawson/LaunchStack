@@ -18,7 +18,7 @@ import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
 import { LANDING_HREF } from "~/config/landing";
-import type { SocialProvider } from "~/server/auth/providers";
+import type { SocialProvider } from "~/lib/auth/providers";
 
 /**
  * Sign-in page.
@@ -69,7 +69,12 @@ export function SignInView({
         code: searchParams.get("error"),
         provider: searchParams.get("provider"),
     }));
-    const oauthErrorText = oauthErrorMessage(oauthError.code, oauthError.provider, te);
+    const oauthErrorText = oauthErrorMessage(
+        oauthError.code,
+        socialProviders.find(provider => provider.id === oauthError.provider) ??
+            oauthError.provider,
+        te
+    );
     const [passwordReset] = useState(() => searchParams.get("notice") === "password-reset");
     const [initialView] = useState(() =>
         searchParams.get("view") === "forgot" ? ("forgot" as const) : ("signin" as const)

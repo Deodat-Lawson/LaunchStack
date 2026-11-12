@@ -5,7 +5,7 @@
  * and `/invite/<token>` (an invitation for one email address).
  *
  * One screen does the whole trip. It names the workspace and who invited
- * you, signs you up or in right here (email, Google, GitHub), and joins the
+ * you, signs you up or in right here (email or a sign-in provider), and joins the
  * moment you're back — no second click, no detour through /signup — then
  * drops you inside the workspace. Someone already signed in clicks Join
  * once; they are never joined without that click (see `~/lib/join-handoff`).
@@ -31,7 +31,7 @@ import {
 } from "~/lib/join-handoff";
 import { resetMyProfile } from "~/lib/profile/use-my-profile";
 import { cn } from "~/lib/utils";
-import type { SocialProvider } from "~/server/auth/providers";
+import type { SocialProvider } from "~/lib/auth/providers";
 
 export type JoinSource = { kind: "link"; code: string } | { kind: "invite"; token: string };
 

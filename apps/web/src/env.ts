@@ -104,6 +104,20 @@ const serverSchema = z.object({
     AUTH_GOOGLE_CLIENT_SECRET: optionalString(),
     AUTH_GITHUB_CLIENT_ID: optionalString(),
     AUTH_GITHUB_CLIENT_SECRET: optionalString(),
+    // Microsoft work, school and personal accounts. TENANT_ID narrows who can
+    // sign in (common | organizations | consumers | a tenant id; default
+    // common); AUTH_MICROSOFT_AUTHORITY moves sign-in to a national cloud.
+    AUTH_MICROSOFT_CLIENT_ID: optionalString(),
+    AUTH_MICROSOFT_CLIENT_SECRET: optionalString(),
+    AUTH_MICROSOFT_TENANT_ID: optionalString(),
+    AUTH_MICROSOFT_AUTHORITY: optionalString(),
+    // The deployment's own OpenID Connect identity provider (Okta, Entra,
+    // Keycloak, Authentik…): its issuer URL, a client, and the button's name
+    // ("Continue with <AUTH_OIDC_NAME>", default "SSO").
+    AUTH_OIDC_ISSUER: optionalString(),
+    AUTH_OIDC_CLIENT_ID: optionalString(),
+    AUTH_OIDC_CLIENT_SECRET: optionalString(),
+    AUTH_OIDC_NAME: optionalString(),
     BLOB_READ_WRITE_TOKEN: optionalString(),
     UPLOADTHING_TOKEN: optionalString(),
     DATALAB_API_KEY: optionalString(),
@@ -599,6 +613,14 @@ function parseServerEnv() {
         AUTH_GOOGLE_CLIENT_SECRET: process.env.AUTH_GOOGLE_CLIENT_SECRET,
         AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,
         AUTH_GITHUB_CLIENT_SECRET: process.env.AUTH_GITHUB_CLIENT_SECRET,
+        AUTH_MICROSOFT_CLIENT_ID: process.env.AUTH_MICROSOFT_CLIENT_ID,
+        AUTH_MICROSOFT_CLIENT_SECRET: process.env.AUTH_MICROSOFT_CLIENT_SECRET,
+        AUTH_MICROSOFT_TENANT_ID: process.env.AUTH_MICROSOFT_TENANT_ID,
+        AUTH_MICROSOFT_AUTHORITY: process.env.AUTH_MICROSOFT_AUTHORITY,
+        AUTH_OIDC_ISSUER: process.env.AUTH_OIDC_ISSUER,
+        AUTH_OIDC_CLIENT_ID: process.env.AUTH_OIDC_CLIENT_ID,
+        AUTH_OIDC_CLIENT_SECRET: process.env.AUTH_OIDC_CLIENT_SECRET,
+        AUTH_OIDC_NAME: process.env.AUTH_OIDC_NAME,
         BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
         UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
         DATALAB_API_KEY: process.env.DATALAB_API_KEY,

@@ -11,7 +11,7 @@ import { isCopy } from "~/i18n/copy";
 import type { Locale } from "~/i18n/locales";
 import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { wordCopy, wordOr } from "~/i18n/translate";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, handleRouteError, json } from "~/server/distribution/http";
 import { stageErrorText } from "~/server/distribution/stage-errors";
 import { requirementCopy } from "~/server/prospects/adapter";
@@ -31,7 +31,7 @@ export function prospectsT(request: Request) {
 export async function prospectsContext(): Promise<
     { ok: true; ctx: ProspectsCtx } | { ok: false; response: NextResponse }
 > {
-    const result = await requireWorkspaceContext();
+    const result = await requireBetaAppContext();
     if (!result.success) return { ok: false, response: result.response };
     return {
         ok: true,

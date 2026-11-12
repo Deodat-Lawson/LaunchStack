@@ -15,6 +15,10 @@ import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 
+// Vantage is a beta app: the workspace's switch is on here.
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: async () => true,
+}));
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<

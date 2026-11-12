@@ -35,16 +35,10 @@ import {
     type AuthFailure,
 } from "~/components/auth/auth-errors";
 import { withNext } from "~/components/auth/next-path";
-import { IconGithub, IconGoogle } from "~/components/icons/brand";
-import type { IconComponent } from "~/components/icons/types";
+import { PROVIDER_ICONS } from "~/components/auth/provider-icons";
 import { authClient, oauthFlowRedirect } from "~/lib/auth-client";
+import type { SocialProvider, SocialProviderId } from "~/lib/auth/providers";
 import { cn } from "~/lib/utils";
-import type { SocialProvider } from "~/server/auth/providers";
-
-const SOCIAL: Record<SocialProvider, { label: string; Icon: IconComponent }> = {
-    google: { label: "Google", Icon: IconGoogle },
-    github: { label: "GitHub", Icon: IconGithub },
-};
 
 /** How long "Resend link" stays disabled after a reset email goes out. */
 const RESEND_COOLDOWN_S = 30;
@@ -110,7 +104,7 @@ interface SocialTargets {
     errorCallbackURL: string;
 }
 
-function startSocialSignIn(provider: SocialProvider, targets: SocialTargets) {
+function startSocialSignIn(provider: SocialProviderId, targets: SocialTargets) {
     return attempt(hooks => authClient.signIn.social({ provider, ...targets }, hooks));
 }
 
@@ -123,7 +117,7 @@ function socialFailureMessage(
         ? networkErrorMessage(t)
         : failure.status === 429
           ? rateLimitMessage(failure.retryAfter, t)
-          : t("socialStartFailed", { provider: SOCIAL[provider].label });
+          : t("socialStartFailed", { provider: provider.name });
 }
 
 function SocialButtons({
@@ -146,24 +140,24 @@ function SocialButtons({
         <>
             <div className="flex flex-col gap-2">
                 {providers.map(provider => {
-                    const { label, Icon } = SOCIAL[provider];
+                    const Icon = PROVIDER_ICONS[provider.id];
                     return (
                         <Button
-                            key={provider}
+                            key={provider.id}
                             type="button"
                             variant="outline"
                             className="relative h-10 w-full"
                             disabled={disabled}
-                            aria-busy={pending === provider}
+                            aria-busy={pending === provider.id}
                             onClick={() => onStart(provider)}
                         >
-                            {pending === provider ? (
+                            {pending === provider.id ? (
                                 <Loader2 className="animate-spin" aria-hidden />
                             ) : (
                                 <Icon size={16} />
                             )}
-                            {t("continueWith", { provider: label })}
-                            {lastMethod === provider && (
+                            {t("continueWith", { provider: provider.name })}
+                            {lastMethod === provider.id && (
                                 <LastUsedBadge className="absolute -top-2 right-3" />
                             )}
                         </Button>
@@ -212,7 +206,7 @@ function SubmitButton({
 }
 
 type View = "signin" | "forgot" | "sent";
-type Pending = "email" | "reset" | SocialProvider | null;
+type Pending = "email" | "reset" | SocialProviderId | null;
 type FormError = { message: React.ReactNode; field?: "email" | "password"; rateLimited?: boolean };
 
 export function SignInForm({
@@ -366,16 +360,16 @@ export function SignInForm({
 
     const startSocial = async (provider: SocialProvider) => {
         setError(null);
-        setPending(provider);
+        setPending(provider.id);
         onAuthStart?.();
         const next = redirectTo === "/" ? null : redirectTo;
-        const failure = await startSocialSignIn(provider, {
+        const failure = await startSocialSignIn(provider.id, {
             callbackURL: redirectTo,
             // A first-time social sign-in has an account but no workspace
             // yet; registration lives on /signup unless the caller joins.
             newUserCallbackURL: newUserRedirectTo ?? withNext("/signup", next),
             errorCallbackURL: withNext(
-                `${signInPath}${signInPath.includes("?") ? "&" : "?"}provider=${provider}`,
+                `${signInPath}${signInPath.includes("?") ? "&" : "?"}provider=${provider.id}`,
                 next
             ),
         });
@@ -606,18 +600,18 @@ export function SignUpForm({
     const [password, setPassword] = useState("");
     const [error, setError] = useState<React.ReactNode>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [socialPending, setSocialPending] = useState<SocialProvider | null>(null);
+    const [socialPending, setSocialPending] = useState<SocialProviderId | null>(null);
     const passwordHintId = useId();
     const emailHintId = useId();
 
     const startSocial = async (provider: SocialProvider) => {
         setError(null);
-        setSocialPending(provider);
+        setSocialPending(provider.id);
         onAuthStart?.();
-        const failure = await startSocialSignIn(provider, {
+        const failure = await startSocialSignIn(provider.id, {
             callbackURL: socialRedirectTo,
             newUserCallbackURL: socialRedirectTo,
-            errorCallbackURL: withNext(`/signin?provider=${provider}`, socialRedirectTo),
+            errorCallbackURL: withNext(`/signin?provider=${provider.id}`, socialRedirectTo),
         });
         if (failure) {
             setError(socialFailureMessage(provider, failure, te));

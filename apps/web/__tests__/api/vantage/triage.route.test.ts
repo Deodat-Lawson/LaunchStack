@@ -14,6 +14,11 @@ import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 
+// Vantage and Growth are beta apps: the workspace's switch is on here unless a test turns it off.
+let mockBetaApps = true;
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: async () => mockBetaApps,
+}));
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<
@@ -72,7 +77,21 @@ function signInAs(role: string, permissions?: Permission[]) {
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockBetaApps = true;
     mockLoadTriage.mockResolvedValue(triage);
+});
+
+describe("Vantage is a beta app", () => {
+    it("refuses an owner, without reading, while the workspace has beta apps off", async () => {
+        signInAs("owner");
+        mockBetaApps = false;
+
+        const response = await GET(new Request(TRIAGE_URL));
+
+        expect(response.status).toBe(403);
+        expect(await response.json()).toMatchObject({ code: "beta_apps_off" });
+        expect(mockLoadTriage).not.toHaveBeenCalled();
+    });
 });
 
 describe("GET /api/vantage/triage", () => {

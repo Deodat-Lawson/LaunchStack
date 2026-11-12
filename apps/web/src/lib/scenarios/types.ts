@@ -120,6 +120,12 @@ export interface ScenarioSourceOptions {
     companyProfile: boolean;
     /** The viewer may add files to the workspace from the form. */
     canUpload: boolean;
+    /**
+     * Whether the workspace has its beta apps on. Prospects and post comments
+     * are Growth's, a beta app: while it is off the form offers neither (and
+     * both counts are 0). Missing from an older server: offered as before.
+     */
+    betaApps?: boolean;
 }
 
 export interface ScenarioSummary {

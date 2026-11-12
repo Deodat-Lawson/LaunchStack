@@ -118,6 +118,11 @@ jest.mock("~/server/brand/claim-gate", () => ({
     claimGate: (...a: unknown[]) => mockClaimGate(...a),
 }));
 jest.mock("~/server/db", () => ({ db: {} }));
+// Growth is a beta app: the workspace's switch is on here unless a test turns it off.
+const mockReadWorkspaceSetting = jest.fn();
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: (...a: unknown[]) => mockReadWorkspaceSetting(...a),
+}));
 jest.mock("@launchstack/tools/social-publish/bluesky", () => ({ getBlueskyProfile: jest.fn() }));
 
 import { GET as getAccounts } from "~/app/api/brand/accounts/route";
@@ -164,6 +169,7 @@ const PAGE = {
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockReadWorkspaceSetting.mockResolvedValue(true);
     mockListBrandChannels.mockResolvedValue([PAGE]);
     mockCreateBrandPosts.mockImplementation((args: { targets: unknown[] }) =>
         Promise.resolve(args.targets.map((t, i) => ({ id: `p${i}`, ...(t as object) })))
@@ -694,5 +700,50 @@ describe("in the reader's language", () => {
             params({ id: "p1" })
         );
         expect((await english.json()).error).toBe("Pick a time that is still ahead.");
+    });
+});
+
+describe("Growth is a beta app", () => {
+    it("refuses Brand and the campaign writer while the workspace has beta apps off", async () => {
+        as("owner");
+        mockReadWorkspaceSetting.mockResolvedValue(false);
+        const accounts = await getAccounts(req("/api/brand/accounts", "GET"));
+        expect(accounts.status).toBe(403);
+        expect(await accounts.json()).toMatchObject({ code: "beta_apps_off" });
+        expect(mockReadWorkspaceSetting).toHaveBeenCalledWith(BigInt(5), "labs.betaApps");
+        expect(mockListBrandAccounts).not.toHaveBeenCalled();
+
+        const posted = await compose(
+            req("/api/brand/posts", "POST", { text: "Hello", channelIds: ["ch-page"] })
+        );
+        expect(posted.status).toBe(403);
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+
+        const campaign = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "linkedin" })
+        );
+        expect(campaign.status).toBe(403);
+        expect(await campaign.json()).toMatchObject({ code: "beta_apps_off" });
+    });
+
+    it("answers as before once beta apps are on", async () => {
+        as("member");
+        mockListBrandAccounts.mockResolvedValue([]);
+        const accounts = await getAccounts(req("/api/brand/accounts", "GET"));
+        expect(accounts.status).toBe(200);
+        expect(mockListBrandAccounts).toHaveBeenCalled();
+    });
+
+    it("still says who is asking first: a signed-out caller gets the 401, not the beta refusal", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({
+            success: false,
+            response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                status: 401,
+            }) as never,
+        });
+        mockReadWorkspaceSetting.mockResolvedValue(false);
+        const accounts = await getAccounts(req("/api/brand/accounts", "GET"));
+        expect(accounts.status).toBe(401);
+        expect(mockReadWorkspaceSetting).not.toHaveBeenCalled();
     });
 });

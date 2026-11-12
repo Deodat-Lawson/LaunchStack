@@ -248,6 +248,11 @@
       }
     },
     "labs": {
+      "betaApps": {
+        "label": "测试版应用",
+        "description": "显示仍在开发中的应用：增长和 Vantage。关闭时，工作区里的所有人都看不到它们，它们的数据保持原样。",
+        "consequence": "关闭后，所有人会立即看不到增长和 Vantage。已在增长中排期的帖子仍会照常发布。"
+      },
       "predictiveGaps": {
         "label": "预测性缺口分析",
         "description": "列出你的文档中缺失的附件、附表和合规缺口。分析功能已经就绪，但展示它的界面尚未完成，因此开启后只会在命令面板中显示入口。"
@@ -1822,6 +1827,7 @@
   "server": {
     "errors": {
       "unknownSetting": "未知的设置“{key}”",
+      "betaAppsOff": "这个应用仍在开发中，而本工作区已关闭测试版应用。管理工作区的人可以在“工作区 › 实验室”中开启。",
       "folderScopeNeedsPath": "文件夹范围需要提供文件夹路径",
       "scopeNotAllowed": "“{key}”不能在{scope, select, workspace {工作区} folder {文件夹} member {成员} other {“{scope}”}}范围设置",
       "settingNeedsPermission": "更改“{label}”需要 {permission} 权限",

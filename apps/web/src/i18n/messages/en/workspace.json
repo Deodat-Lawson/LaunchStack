@@ -284,7 +284,9 @@
     "openBeside": "Open beside",
     "comingSoon": "Coming soon",
     "comingSoonReason": "Coming soon.",
-    "soon": "SOON"
+    "soon": "SOON",
+    "beta": "Beta",
+    "betaTitle": "Still being built. Shown because this workspace has beta apps on (Workspace › Labs)."
   },
   "paneLauncher": {
     "allApps": "All apps"
@@ -524,6 +526,9 @@
     "folderCreated": "Created “{name}”",
     "folderCreatedDescription": "This workspace already has a folder called “{name}”.",
     "deniedApp": "{app} isn't part of your role",
+    "betaAppOff": "{app} is a beta app",
+    "betaAppOffNote": "Beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
+    "betaAppOffAction": "Open Labs",
     "connectorConnected": "{name} connected",
     "connectorNoChannels": "{name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.",
     "connectorPartial": "{name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.",

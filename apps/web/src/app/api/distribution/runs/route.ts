@@ -13,7 +13,7 @@ import { createRun, getProgram, getRun, listRuns } from "@launchstack/pipelines/
 import { hasTokens } from "~/lib/credits";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { localeOfRequest, requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { isMeteringEnforced } from "~/server/deployment";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
@@ -34,7 +34,7 @@ const RUN_MINIMUM_CREDITS = 3_000;
 
 export async function GET(request: NextRequest) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const programId = request.nextUrl.searchParams.get("programId") ?? undefined;
         const runs = await listRuns(ctx.data.companyId, { programId, limit: 50 });
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireBetaAppContext();
     if (!ctx.success) return ctx.response;
     const refused = await refuseAtAiAllowance(
         ctx.data.companyId,

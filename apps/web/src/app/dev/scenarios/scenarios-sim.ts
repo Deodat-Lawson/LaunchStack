@@ -110,9 +110,11 @@ interface SimRun {
 export interface ScenariosSimOptions {
     empty: boolean;
     credits: "ok" | "short" | "race";
+    /** The workspace's beta switch: off, Growth's prospects and post comments are not offered. */
+    betaApps: boolean;
 }
 
-const DEFAULT_OPTIONS: ScenariosSimOptions = { empty: false, credits: "ok" };
+const DEFAULT_OPTIONS: ScenariosSimOptions = { empty: false, credits: "ok", betaApps: true };
 
 /** A file uploaded in the harness: listed at once, read `TIMING.reading` later. */
 interface SimUpload {
@@ -757,8 +759,16 @@ export async function simulateScenarios(
         return err(405, "Method not allowed");
     }
 
-    if (head === "sources" && method === "GET")
-        return json({ ...SOURCE_OPTIONS, documents: filesAt(S, now) });
+    if (head === "sources" && method === "GET") {
+        const betaApps = S.options.betaApps;
+        return json({
+            ...SOURCE_OPTIONS,
+            documents: filesAt(S, now),
+            prospects: betaApps ? SOURCE_OPTIONS.prospects : 0,
+            brandComments: betaApps ? SOURCE_OPTIONS.brandComments : 0,
+            betaApps,
+        });
+    }
 
     if (head === "estimate" && method === "POST") {
         const body = readBody(init);

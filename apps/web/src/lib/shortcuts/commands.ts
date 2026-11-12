@@ -64,20 +64,6 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         when: "outside-input",
     },
     {
-        id: "feature.draft",
-        label: "Open Draft",
-        description: "Generate a new document with AI.",
-        defaultKeys: "Mod+Shift+D",
-        when: "always",
-    },
-    {
-        id: "feature.rewrite",
-        label: "Open Rewrite",
-        description: "Improve existing content.",
-        defaultKeys: "Mod+Shift+E",
-        when: "always",
-    },
-    {
         id: "feature.workflows",
         label: "Open Workflows",
         description: "Automate recurring tasks across your sources.",
@@ -172,8 +158,6 @@ export const SHORTCUT_MESSAGE_KEYS = {
     "studio.toggle": "studioToggle",
     "rail.toggle": "railToggle",
     "search.focus": "searchFocus",
-    "feature.draft": "featureDraft",
-    "feature.rewrite": "featureRewrite",
     "feature.workflows": "featureWorkflows",
     "feature.meetings": "featureMeetings",
     "settings.open": "settingsOpen",
@@ -212,8 +196,6 @@ export function shortcutDescription(
 
 /** Feature ids the palette and the Studio menu label with a shortcut. */
 export const FEATURE_COMMAND_IDS: Readonly<Record<string, string>> = {
-    draft: "feature.draft",
-    rewrite: "feature.rewrite",
     workflows: "feature.workflows",
     meetings: "feature.meetings",
 };

@@ -236,6 +236,11 @@
       }
     },
     "labs": {
+      "betaApps": {
+        "label": "Beta apps",
+        "description": "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
+        "consequence": "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out."
+      },
       "predictiveGaps": {
         "label": "Predictive gaps",
         "description": "Adds a Predictive gaps entry to ⌘K. Picking it opens nothing yet."
@@ -278,7 +283,8 @@
   },
   "account": {
     "providers": {
-      "credential": "Email and password"
+      "credential": "Email and password",
+      "oidc": "Single sign-on"
     },
     "agent": {
       "unknown": "Unknown browser",
@@ -1798,6 +1804,7 @@
   "server": {
     "errors": {
       "unknownSetting": "Unknown setting \"{key}\"",
+      "betaAppsOff": "This app is still being built, and beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
       "folderScopeNeedsPath": "A folder scope needs a folder path",
       "scopeNotAllowed": "\"{key}\" cannot be set at the {scope} scope",
       "settingNeedsPermission": "Changing \"{label}\" needs {permission}",

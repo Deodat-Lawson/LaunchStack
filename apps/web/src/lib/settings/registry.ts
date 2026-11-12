@@ -68,6 +68,13 @@ export interface SettingDefinition<T = unknown> {
     bound?: boolean;
 }
 
+/**
+ * The workspace's switch for apps that are still being built (Workspace ›
+ * Labs). Off, the Studio entries marked `beta` are hidden and their APIs
+ * refuse (`~/server/beta-apps`).
+ */
+export const BETA_APPS_SETTING = "labs.betaApps";
+
 const RETENTION_DAYS_OPTIONS = [
     { value: null, key: "forever", label: "Keep forever" },
     { value: 30, key: "days30", label: "30 days" },
@@ -347,6 +354,24 @@ export const SETTINGS: readonly SettingDefinition[] = [
         schema: z.number().int().min(1).max(3650).nullable(),
         default: null,
         control: { kind: "select", options: TRASH_DAYS_OPTIONS },
+    },
+    {
+        // Read by `useStudioAccess` (which apps a person sees) and by
+        // `~/server/beta-apps` (whether the apps' APIs answer). The apps are
+        // the Studio entries marked `beta` in `_workspace/types.ts`.
+        key: BETA_APPS_SETTING,
+        section: "labs",
+        label: "Beta apps",
+        description:
+            "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
+        consequence:
+            "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out.",
+        aliases: ["beta", "growth", "vantage", "brand", "prospects", "unfinished", "preview"],
+        scopes: ["workspace"],
+        permission: "settings.manage",
+        schema: z.boolean(),
+        default: false,
+        control: { kind: "switch" },
     },
     {
         key: "labs.predictiveGaps",

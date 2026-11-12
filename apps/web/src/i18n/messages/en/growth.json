@@ -955,8 +955,6 @@
       "draft": "Campaign draft",
       "preview": "{platform} preview",
       "messagePlaceholder": "Your campaign message...",
-      "saveAsDocTitle": "Save this draft to your documents workspace for further editing",
-      "saveAsDoc": "Save as document",
       "hideRewrite": "Hide Rewrite",
       "refine": "Refine with AI",
       "copied": "Copied!",
@@ -1006,8 +1004,6 @@
       "evaluationFailed": "Evaluation failed",
       "refinementFailed": "Refinement failed"
     },
-    "draftDocTitle": "Campaign Draft ({platform})",
-    "draftDocFallback": "Marketing",
     "studio": {
       "settings": "Post settings",
       "characters": "{count, number} characters",

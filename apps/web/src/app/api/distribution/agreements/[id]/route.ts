@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { AgreementInputSchema } from "@launchstack/pipelines/distribution/types";
 import { updateAgreement } from "@launchstack/pipelines/distribution/db";
 import { requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 
@@ -12,7 +12,7 @@ const api = (request: Request) => requestTranslator(request, "errors.api");
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const parsed = AgreementInputSchema.partial().safeParse(await readJsonBody(request));

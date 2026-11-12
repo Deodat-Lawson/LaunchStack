@@ -79,14 +79,6 @@
       "label": "Investor relations",
       "description": "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources"
     },
-    "draft": {
-      "label": "Templated Drafts",
-      "description": "Generate new docs from templates tuned to your sources"
-    },
-    "rewrite": {
-      "label": "Rewrite",
-      "description": "Improve existing prose with a diff-first rewrite"
-    },
     "settings": {
       "label": "Settings",
       "description": "Your account, appearance, shortcuts and privacy"
@@ -130,12 +122,6 @@
     "team": {
       "label": "Team",
       "description": "People, groups, and who did what across the workspace"
-    },
-    "draft": {
-      "label": "Draft"
-    },
-    "rewrite": {
-      "label": "Rewrite"
     },
     "workflows": {
       "label": "Workflows"
@@ -295,7 +281,9 @@
     "openBeside": "Open beside",
     "comingSoon": "Coming soon",
     "comingSoonReason": "Coming soon.",
-    "soon": "SOON"
+    "soon": "SOON",
+    "beta": "Beta",
+    "betaTitle": "Still being built. Shown because this workspace has beta apps on (Workspace › Labs)."
   },
   "paneLauncher": {
     "allApps": "All apps"
@@ -529,6 +517,9 @@
     "folderCreated": "Created “{name}”",
     "folderCreatedDescription": "This workspace already has a folder called “{name}”.",
     "deniedApp": "{app} isn't part of your role",
+    "betaAppOff": "{app} is a beta app",
+    "betaAppOffNote": "Beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
+    "betaAppOffAction": "Open Labs",
     "connectorConnected": "{name} connected",
     "connectorNoChannels": "{name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.",
     "connectorPartial": "{name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.",

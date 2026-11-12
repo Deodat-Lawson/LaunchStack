@@ -26,6 +26,7 @@ import {
     type WorkspaceSource,
 } from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
+import { studioAppFor, useStudioAccess } from "./studioAccess";
 import {
     HISTORY_KIND_META,
     type HistoryEntry,
@@ -154,6 +155,9 @@ export function CommandPalette({
     // The one lab that only surfaces a palette entry: hidden until it is on.
     const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
     const { can } = usePermissions();
+    // Brand and Prospects rows are Growth's, so they go with it while the
+    // workspace's beta switch is off.
+    const { canOpen } = useStudioAccess();
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -208,7 +212,11 @@ export function CommandPalette({
             .filter(f => {
                 if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
-                if (app) return can(app.requires);
+                if (app) return canOpen(app);
+                // A row for a place inside a beta app (Brand, Prospects) goes
+                // with the app while the workspace has beta apps off.
+                const host = studioAppFor(f.id);
+                if (host?.beta && !canOpen(host)) return false;
                 const section = settingsSectionOfHref(f.href);
                 return section ? canSeeSettingsSection(section, can) : true;
             })
@@ -353,6 +361,7 @@ export function CommandPalette({
         predictiveGaps,
         people,
         can,
+        canOpen,
         t,
         studio,
         tSourceTypes,

@@ -14,7 +14,7 @@ import {
     Wand2,
     X,
 } from "lucide-react";
-import { LegalGeneratorTheme, legalTheme as s } from "../LegalGeneratorTheme";
+import s from "./rewriteWorkflow.module.css";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -27,76 +27,14 @@ interface RewriteWorkflowProps {
     persistedState?: Partial<RewriteWorkflowStateSnapshot>;
     onStateChange?: (state: RewriteWorkflowStateSnapshot) => void;
     /**
-     * Custom rewrite backend; receives the source text and the composed
-     * prompt, returns the full rewritten text (throw to surface an error).
-     * Defaults to the generic document-generator route — the marketing
-     * workspace injects the context-aware /api/marketing-pipeline/refine.
+     * The rewrite backend; receives the source text and the composed prompt,
+     * returns the full rewritten text (throw to surface an error). Growth
+     * passes the context-aware /api/marketing-pipeline/refine.
      */
-    rewrite?: (args: { text: string; prompt: string }) => Promise<string>;
+    rewrite: (args: { text: string; prompt: string }) => Promise<string>;
 }
 
 type WorkflowT = ReturnType<typeof useTranslations<"generator.rewriteWorkflow">>;
-
-/**
- * A failure the default backend describes itself; the workspace shows it in
- * the reader's language (`generator.rewriteWorkflow.errors.<code>`).
- */
-class RewriteClientError extends Error {
-    constructor(readonly code: "network" | "invalidResponse" | "failed") {
-        super(code);
-        this.name = "RewriteClientError";
-    }
-}
-
-/** The generic rewrite backend (the pre-injection behavior, verbatim). */
-async function defaultRewrite(args: { text: string; prompt: string }): Promise<string> {
-    let response: Response;
-    try {
-        response = await fetch("/api/document-generator/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                action: "rewrite",
-                content: args.text,
-                prompt: args.prompt,
-                options: {
-                    tone: "professional",
-                    length: "medium",
-                    audience: "general",
-                },
-            }),
-        });
-    } catch {
-        throw new RewriteClientError("network");
-    }
-
-    const responseText = await response.text();
-    let data: {
-        success: boolean;
-        message?: string;
-        generatedContent?: string;
-        error?: string;
-    };
-    try {
-        // Known response shape of our AI generation route.
-        data = JSON.parse(responseText) as typeof data;
-    } catch {
-        const raw = responseText.slice(0, 120);
-        if (raw) throw new Error(raw);
-        throw new RewriteClientError("invalidResponse");
-    }
-
-    if (
-        data.success &&
-        typeof data.generatedContent === "string" &&
-        data.generatedContent.trim().length > 0
-    ) {
-        return data.generatedContent;
-    }
-    const serverMessage = data.message ?? data.error;
-    if (serverMessage) throw new Error(serverMessage);
-    throw new RewriteClientError("failed");
-}
 
 export type WorkflowStep = "input" | "options" | "preview" | "complete";
 
@@ -505,7 +443,7 @@ export function RewriteWorkflow({
         setError(null);
 
         try {
-            const generated = await (rewrite ?? defaultRewrite)({
+            const generated = await rewrite({
                 text,
                 prompt: composedPrompt,
             });
@@ -537,13 +475,7 @@ export function RewriteWorkflow({
             });
         } catch (err) {
             console.error("Rewrite request failed", err);
-            setError(
-                err instanceof RewriteClientError
-                    ? t(`errors.${err.code}`)
-                    : err instanceof Error && err.message
-                      ? err.message
-                      : t("errors.network")
-            );
+            setError(err instanceof Error && err.message ? err.message : t("errors.network"));
         } finally {
             setIsProcessing(false);
         }
@@ -565,99 +497,97 @@ export function RewriteWorkflow({
 
     // ── render ────────────────────────────────────────────────────────────────
     const hasProposal = !!proposedText.trim();
-    const breadcrumbLast = hasProposal ? t("breadcrumbReview") : t("breadcrumbNew");
+    const stageLabel = hasProposal ? t("breadcrumbReview") : t("breadcrumbNew");
 
     return (
-        <LegalGeneratorTheme ambient={false}>
-            <div className="flex h-full flex-col">
-                {/* Top bar */}
-                <div className={s.rwsTop}>
-                    <button
-                        type="button"
-                        className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
-                        onClick={onCancel}
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                        {t("exit")}
-                    </button>
-                    <span className={s.rwsNavSep} />
-                    <div className={s.rwsCrumbs}>
-                        <span>{t("crumbDocuments")}</span>
-                        <span className={s.rwsCrumbsSep}>›</span>
-                        <span>{t("crumbRewrite")}</span>
-                        <span className={s.rwsCrumbsSep}>›</span>
-                        <span className={s.rwsCrumbsLast}>{breadcrumbLast}</span>
+        <div className={s.root}>
+            <div className={s.content}>
+                <div className="flex h-full flex-col">
+                    {/* Top bar */}
+                    <div className={s.rwsTop}>
+                        <button
+                            type="button"
+                            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+                            onClick={onCancel}
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            {t("exit")}
+                        </button>
+                        <span className={s.rwsNavSep} />
+                        <div className={s.rwsCrumbs}>
+                            <span className={s.rwsCrumbsLast}>{stageLabel}</span>
+                        </div>
+                        <div className={s.rwsTopSpacer} />
+                        <span className={s.rwsTopPill}>
+                            <FileText />
+                            {t("versionWords", { count: wordCount })}
+                        </span>
                     </div>
-                    <div className={s.rwsTopSpacer} />
-                    <span className={s.rwsTopPill}>
-                        <FileText />
-                        {t("versionWords", { count: wordCount })}
-                    </span>
-                </div>
 
-                {/* Three-pane workspace */}
-                <div className={s.rwsWorkspace}>
-                    <ScopeRail
-                        text={text}
-                        onTextChange={setText}
-                        sourceTitle={deriveSourceTitle(text) || t("untitledSource")}
-                        wordCount={wordCount}
-                        sections={sections}
-                        customPrompt={customPrompt}
-                        onCustomPromptChange={setCustomPrompt}
-                        activePresets={activePresets}
-                        onTogglePreset={togglePreset}
-                        guardrailState={guardrailState}
-                        onToggleGuardrail={toggleGuardrail}
-                        onToggleSection={toggleSectionSelected}
-                        error={error}
-                        isProcessing={isProcessing}
-                        selectedCount={selectedCount}
-                        onRunRewrite={handleRunRewrite}
-                    />
+                    {/* Three-pane workspace */}
+                    <div className={s.rwsWorkspace}>
+                        <ScopeRail
+                            text={text}
+                            onTextChange={setText}
+                            sourceTitle={deriveSourceTitle(text) || t("untitledSource")}
+                            wordCount={wordCount}
+                            sections={sections}
+                            customPrompt={customPrompt}
+                            onCustomPromptChange={setCustomPrompt}
+                            activePresets={activePresets}
+                            onTogglePreset={togglePreset}
+                            guardrailState={guardrailState}
+                            onToggleGuardrail={toggleGuardrail}
+                            onToggleSection={toggleSectionSelected}
+                            error={error}
+                            isProcessing={isProcessing}
+                            selectedCount={selectedCount}
+                            onRunRewrite={handleRunRewrite}
+                        />
 
-                    <main className={s.rwsPipe}>
-                        {hasProposal && currentSection?.proposed.trim() ? (
-                            <DiffPipeline
-                                section={currentSection}
-                                index={currentIndex}
-                                total={sections.length}
-                                parts={currentDiffParts}
-                                onPrev={currentIndex > 0 ? goPrev : undefined}
-                                onNext={
-                                    currentIndex >= 0 && currentIndex < sections.length - 1
-                                        ? goNext
-                                        : undefined
-                                }
-                                onAcceptSection={handleAcceptCurrent}
-                                onRejectSection={handleRejectCurrent}
-                                disabled={isProcessing}
-                            />
-                        ) : (
-                            <PipelineEmpty
-                                hasText={!!text.trim()}
-                                isProcessing={isProcessing}
-                                selectedCount={selectedCount}
-                            />
-                        )}
-                    </main>
+                        <main className={s.rwsPipe}>
+                            {hasProposal && currentSection?.proposed.trim() ? (
+                                <DiffPipeline
+                                    section={currentSection}
+                                    index={currentIndex}
+                                    total={sections.length}
+                                    parts={currentDiffParts}
+                                    onPrev={currentIndex > 0 ? goPrev : undefined}
+                                    onNext={
+                                        currentIndex >= 0 && currentIndex < sections.length - 1
+                                            ? goNext
+                                            : undefined
+                                    }
+                                    onAcceptSection={handleAcceptCurrent}
+                                    onRejectSection={handleRejectCurrent}
+                                    disabled={isProcessing}
+                                />
+                            ) : (
+                                <PipelineEmpty
+                                    hasText={!!text.trim()}
+                                    isProcessing={isProcessing}
+                                    selectedCount={selectedCount}
+                                />
+                            )}
+                        </main>
 
-                    <ReviewRail
-                        sections={sections}
-                        currentSectionId={currentSection?.id ?? ""}
-                        counts={counts}
-                        acceptedPct={acceptedPct}
-                        rejectedPct={rejectedPct}
-                        hasProposal={hasProposal}
-                        onSelect={setCurrentSectionId}
-                        onAcceptOne={id => setSectionStatus(id, "accepted")}
-                        onRejectOne={id => setSectionStatus(id, "rejected")}
-                        onApply={handleApply}
-                        onRejectAll={handleRejectAll}
-                    />
+                        <ReviewRail
+                            sections={sections}
+                            currentSectionId={currentSection?.id ?? ""}
+                            counts={counts}
+                            acceptedPct={acceptedPct}
+                            rejectedPct={rejectedPct}
+                            hasProposal={hasProposal}
+                            onSelect={setCurrentSectionId}
+                            onAcceptOne={id => setSectionStatus(id, "accepted")}
+                            onRejectOne={id => setSectionStatus(id, "rejected")}
+                            onApply={handleApply}
+                            onRejectAll={handleRejectAll}
+                        />
+                    </div>
                 </div>
             </div>
-        </LegalGeneratorTheme>
+        </div>
     );
 }
 

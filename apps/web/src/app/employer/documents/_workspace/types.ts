@@ -28,10 +28,8 @@ import {
     Megaphone as IconMegaphone,
     MessageSquareText as IconFeedback,
     ClipboardList as IconPaste,
-    Pen as IconPen,
     Settings as IconSettings,
     Shield as IconShield,
-    Sparkles as IconSparkle,
     Users as IconUsers,
     UsersRound as IconTeam,
     Video as IconVideo,
@@ -379,7 +377,7 @@ export interface DemotedFeature {
 }
 
 /**
- * Quick links for the ⌘K command palette (draft, rewrite, notebooks, etc.).
+ * Quick links for the ⌘K command palette (knowledge, workflows, notebooks, etc.).
  * Each links to a real employer route.
  */
 export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
@@ -410,20 +408,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconTeam,
         desc: "People, groups, and who did what across the workspace",
         href: "/employer/documents?feature=team",
-    },
-    {
-        id: "draft",
-        label: "Draft",
-        Icon: IconPen,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.draft")!.defaultKeys),
-        href: "/employer/documents?feature=draft",
-    },
-    {
-        id: "rewrite",
-        label: "Rewrite",
-        Icon: IconSparkle,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.rewrite")!.defaultKeys),
-        href: "/employer/documents?feature=rewrite",
     },
     {
         // A "coming soon" pane: nothing to describe yet.
@@ -625,6 +609,13 @@ export interface StudioFeature {
      * Unset, nothing is said.
      */
     deniedNote?: string;
+    /**
+     * Still being built. Shown only while the workspace's beta switch
+     * (`labs.betaApps`, Workspace › Labs) is on, and drawn with a Beta badge
+     * then; its APIs refuse while it is off (`~/server/beta-apps`). Checked
+     * with the permission through `useStudioAccess().canOpen`.
+     */
+    beta?: boolean;
 }
 
 export interface StudioGroup {
@@ -694,6 +685,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
                 href: "/employer/documents?feature=growth",
+                beta: true,
             },
             {
                 // A writing app: the proposal is the unit of work, and every
@@ -723,6 +715,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconVantage,
                 desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
                 href: "/employer/documents?feature=vantage",
+                beta: true,
             },
             {
                 // A simulated social network: people built from the
@@ -733,18 +726,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconScenarios,
                 desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
                 href: "/employer/documents?feature=scenarios",
-            },
-            {
-                id: "draft",
-                label: "Templated Drafts",
-                Icon: IconPen,
-                desc: "Generate new docs from templates tuned to your sources",
-            },
-            {
-                id: "rewrite",
-                label: "Rewrite",
-                Icon: IconSparkle,
-                desc: "Improve existing prose with a diff-first rewrite",
             },
         ],
     },
@@ -1034,8 +1015,6 @@ const STUDIO_APP_MESSAGE_KEYS = {
     agents: "agents",
     team: "team",
     investors: "investors",
-    draft: "draft",
-    rewrite: "rewrite",
     workspace: "workspace",
     settings: "settings",
     usage: "usage",
@@ -1052,8 +1031,6 @@ const STUDIO_APP_DESCRIPTION_KEYS = {
     agents: "agents",
     team: "team",
     investors: "investors",
-    draft: "draft",
-    rewrite: "rewrite",
     workspace: "workspace",
     settings: "settings",
     usage: "usage",
@@ -1110,8 +1087,6 @@ const PALETTE_LINK_LABEL_KEYS = {
     meetings: "meetings",
     agents: "agents",
     team: "team",
-    draft: "draft",
-    rewrite: "rewrite",
     workflows: "workflows",
     mindmap: "mindmap",
     artifacts: "artifacts",

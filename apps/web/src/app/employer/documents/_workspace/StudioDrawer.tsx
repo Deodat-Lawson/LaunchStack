@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Sparkles } from "lucide-react";
 
 import { ContextTarget } from "~/components/context-menu";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -14,7 +15,7 @@ import {
     DialogTitle,
 } from "~/components/ui/dialog";
 import { cn } from "~/lib/utils";
-import { usePermissions } from "~/lib/use-permissions";
+import { useStudioAccess } from "./studioAccess";
 import { STUDIO_GROUPS, localizedStudioFeature, studioGroupLabel, useStudioText } from "./types";
 
 export interface StudioDrawerProps {
@@ -38,8 +39,9 @@ export interface StudioDrawerProps {
  * there is nothing left to expand: this picks one and gets out of the way.
  */
 export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: StudioDrawerProps) {
-    // Fails closed: until permissions have loaded, gated entries are absent.
-    const { can } = usePermissions();
+    // Fails closed: until permissions (and, for a beta app, the workspace's
+    // beta switch) have loaded, gated entries are absent.
+    const { canOpen } = useStudioAccess();
     const t = useTranslations("workspace");
     const tc = useTranslations("common");
     const studio = useStudioText();
@@ -49,10 +51,10 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                 ...group,
                 label: studioGroupLabel(studio, group),
                 features: group.features
-                    .filter(feature => can(feature.requires))
+                    .filter(feature => canOpen(feature))
                     .map(feature => localizedStudioFeature(studio, feature)),
             })).filter(group => group.features.length > 0),
-        [can, studio]
+        [canOpen, studio]
     );
 
     const pickFeature = (featureId: string, beside = false) => {
@@ -172,6 +174,15 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                         <span className="truncate">
                                                             {feature.label}
                                                         </span>
+                                                        {feature.beta && (
+                                                            <Badge
+                                                                variant="info"
+                                                                title={t("studioDrawer.betaTitle")}
+                                                                className="px-1.5 py-0 font-mono text-[9px] font-semibold uppercase tracking-wide"
+                                                            >
+                                                                {t("studioDrawer.beta")}
+                                                            </Badge>
+                                                        )}
                                                         {isComing && (
                                                             <span
                                                                 title={t("studioDrawer.comingSoon")}

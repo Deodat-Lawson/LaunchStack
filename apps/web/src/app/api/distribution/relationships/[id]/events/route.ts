@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { RelationshipEventInputSchema } from "@launchstack/pipelines/distribution/types";
 import { addEvent, getRelationship, listEvents } from "@launchstack/pipelines/distribution/db";
 import { requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 
@@ -15,7 +15,7 @@ type Params = { params: Promise<{ id: string }> };
 
 export async function GET(request: NextRequest, { params }: Params) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const relationship = await getRelationship(id, ctx.data.companyId);
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: Params) {
 
 export async function POST(request: NextRequest, { params }: Params) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const relationship = await getRelationship(id, ctx.data.companyId);

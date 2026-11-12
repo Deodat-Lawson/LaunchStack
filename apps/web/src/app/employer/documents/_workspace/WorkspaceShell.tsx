@@ -98,6 +98,7 @@ import {
 } from "./paneLayout";
 import * as sourceApi from "./sourceApi";
 import { sourceApiErrorMessage } from "./sourceApi";
+import { useStudioAccess } from "./studioAccess";
 import {
     SOURCE_META,
     demotedFeatureHref,
@@ -147,8 +148,6 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "with-ai-qa": "/employer/documents",
     "with-ai-qa-history": "/employer/documents",
     "predictive-analysis": "/employer/documents?feature=audit",
-    generator: "/employer/documents?feature=draft",
-    rewrite: "/employer/documents?feature=rewrite",
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=usage",
@@ -184,8 +183,6 @@ const MOUNT_ON_FIRST_SHOW = new Set([
     "vantage",
     "scenarios",
     "investors",
-    "draft",
-    "rewrite",
 ]);
 
 /**
@@ -300,6 +297,8 @@ export function WorkspaceShell() {
         // in it yet is "not loaded", not "gone".
         loading: sourcesLoading,
     } = useWorkspaceData(userId ?? null);
+    // `can` and, for an app still being built, the workspace's beta switch.
+    const { canOpen, betaLoaded, betaFailed, closedByBeta } = useStudioAccess();
 
     const [selected, setSelected] = useState<string[]>([]);
     const [thread, setThread] = useState<ThreadMessage[]>([]);
@@ -1716,8 +1715,27 @@ export function WorkspaceShell() {
                 router.push(href);
                 return;
             }
-            // Fails closed: `can` answers false until permissions load.
-            if (!can(feature.requires)) {
+            // Fails closed: `can` answers false until permissions load, and
+            // the beta switch reads as off until the settings do.
+            if (!canOpen(feature)) {
+                // A beta app the workspace has switched off: say so, and where
+                // the switch is, rather than open nothing without a word.
+                if (closedByBeta(feature)) {
+                    if (betaLoaded && !betaFailed) {
+                        toast.info(
+                            t("shell.betaAppOff", { app: studioFeatureLabel(studio, feature) }),
+                            {
+                                id: `beta-off:${feature.id}`,
+                                description: t("shell.betaAppOffNote"),
+                                action: {
+                                    label: t("shell.betaAppOffAction"),
+                                    onClick: () => openSettingsPlace("labs"),
+                                },
+                            }
+                        );
+                    }
+                    return;
+                }
                 // Once they have, an app that explains its gate says why
                 // nothing opened — a Guest following a Team link lands on
                 // the chat otherwise, with no word. One toast per app. Not
@@ -1736,7 +1754,10 @@ export function WorkspaceShell() {
             setStudioOpen(false);
         },
         [
-            can,
+            canOpen,
+            closedByBeta,
+            betaLoaded,
+            betaFailed,
             permissionsLoaded,
             permissionsError,
             router,
@@ -1805,14 +1826,14 @@ export function WorkspaceShell() {
     const openFeatureBeside = useCallback(
         (featureId: string) => {
             const feature = resolveStudioFeature(featureId);
-            if (compactViewport || !feature || !can(feature.requires)) {
+            if (compactViewport || !canOpen(feature)) {
                 expandFeature(featureId);
                 return;
             }
             setStudioOpen(false);
             openBeside(featureId);
         },
-        [compactViewport, can, expandFeature, openBeside]
+        [compactViewport, canOpen, expandFeature, openBeside]
     );
     paneVerbsRef.current = {
         split: () => splitPane("right"),
@@ -1887,7 +1908,7 @@ export function WorkspaceShell() {
                 };
             }
             const feature = resolveStudioFeature(id);
-            if (!feature || !can(feature.requires)) return undefined;
+            if (!feature || !canOpen(feature)) return undefined;
             const localized = localizedStudioFeature(studio, feature);
             if (id === "knowledge" && knowledgeBadge) {
                 return {
@@ -1898,7 +1919,7 @@ export function WorkspaceShell() {
             }
             return localized;
         },
-        [sources, can, studio, tSourceTypes, knowledgeBadge]
+        [sources, canOpen, studio, tSourceTypes, knowledgeBadge]
     );
 
     /**
@@ -2020,6 +2041,10 @@ export function WorkspaceShell() {
             // not landed. Wait for them — the effect re-runs — but only for
             // the feature param, so a connector return still toasts on time.
             if (feature?.requires && !permissionsLoaded) return;
+            // The same for a beta app and the workspace's beta switch: a link
+            // to Growth must not be refused before the settings have said
+            // whether beta apps are on.
+            if (feature?.beta && !betaLoaded) return;
             if (feature && at) requestToolLocation(toolId, at);
             expandFeature(toolId);
         }
@@ -2095,6 +2120,7 @@ export function WorkspaceShell() {
         atParam,
         legacyRedirect,
         permissionsLoaded,
+        betaLoaded,
         expandFeature,
         openSettingsPlace,
         requestToolLocation,
@@ -2781,7 +2807,7 @@ export function WorkspaceShell() {
                         }
                         apps={LAUNCHER_APPS.flatMap(id => {
                             const feature = resolveStudioFeature(id);
-                            return feature && can(feature.requires) ? [feature] : [];
+                            return feature && canOpen(feature) ? [feature] : [];
                         })}
                         onPick={id => expandFeature(id, groupId)}
                         onMore={() => {
@@ -2794,6 +2820,15 @@ export function WorkspaceShell() {
                     const paneGroup = groupOf(layout, paneId);
                     const paneFocused =
                         paneGroup?.id === layout.activeGroupId && paneGroup.activeId === paneId;
+                    // An app this person may no longer open (a beta app the
+                    // workspace switched off, a role that changed) leaves the
+                    // strip with `tabFor`; unmount its pane too, so it stops
+                    // loading and polling out of sight. The tab id stays in
+                    // the layout and comes back with the access.
+                    if (!paneId.startsWith(SOURCE_TAB_PREFIX)) {
+                        const app = resolveStudioFeature(paneId);
+                        if (app && !canOpen(app)) return null;
+                    }
                     if (paneGroup?.activeId === paneId) shownTools.current.add(paneId);
                     if (MOUNT_ON_FIRST_SHOW.has(paneId) && !shownTools.current.has(paneId)) {
                         return null;

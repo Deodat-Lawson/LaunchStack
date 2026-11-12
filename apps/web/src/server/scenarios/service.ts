@@ -76,6 +76,7 @@ import {
     type TrackRecord,
 } from "~/lib/scenarios/types";
 import { db } from "~/server/db";
+import { betaAppsOn } from "~/server/beta-apps";
 import { brandComments, companyMetadata, companyProfileSources } from "~/server/db/schema";
 import { isMeteringEnforced } from "~/server/deployment";
 import { workspaceLooks } from "~/server/profile/store";
@@ -258,6 +259,12 @@ export async function createScenario(
         throw fail("situationTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.subjectMax) });
     }
     const sources = cleanSources(input.sources);
+    // Prospects and post comments are Growth's: not read while the workspace
+    // has its beta apps off, whatever the form sent.
+    if ((sources.prospects || sources.brandComments) && !(await betaAppsOn(ctx.companyId))) {
+        sources.prospects = false;
+        sources.brandComments = false;
+    }
     if (sources.documentIds.length > SCENARIO_LIMITS.documentsMax) {
         throw fail("tooManyFiles", 400, "invalid", { max: String(SCENARIO_LIMITS.documentsMax) });
     }
@@ -355,7 +362,8 @@ function fileStatus(row: {
 
 export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOptions> {
     const scope = await ctx.documentScope();
-    const [docs, [prospects], [comments], [profile]] = await Promise.all([
+    const [betaApps, docs, [prospects], [comments], [profile]] = await Promise.all([
+        betaAppsOn(ctx.companyId),
         db
             .select({
                 id: document.id,
@@ -418,10 +426,11 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
             status: fileStatus(d),
             aboutCompany: isCounted(d),
         })),
-        prospects: prospects?.n ?? 0,
-        brandComments: comments?.n ?? 0,
+        prospects: betaApps ? (prospects?.n ?? 0) : 0,
+        brandComments: betaApps ? (comments?.n ?? 0) : 0,
         companyProfile: (profile?.n ?? 0) > 0,
         canUpload: ctx.can("documents.upload"),
+        betaApps,
     };
 }
 

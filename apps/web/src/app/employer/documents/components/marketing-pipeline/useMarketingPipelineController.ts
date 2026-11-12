@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/generator/RewriteWorkflow";
+import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/marketing-pipeline/RewriteWorkflow";
 import {
     MARKETING_ACTIVE_SESSION_KEY,
     MARKETING_SESSIONS_STORAGE_KEY,
     MAX_MARKETING_SESSIONS,
-    PENDING_REWRITE_STORAGE_KEY,
     PIPELINE_STEP_ORDER,
     PLATFORM_OPTIONS,
     markdownToHtml,
@@ -91,7 +89,6 @@ export interface EvalResult {
 export function useMarketingPipelineController(options: { debug: boolean }) {
     const { debug } = options;
     const t = useTranslations("growth.marketingPipeline");
-    const router = useRouter();
     const [platform, setPlatform] = useState<MarketingSession["platform"]>(null);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
@@ -354,26 +351,6 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         },
         [activeSessionId]
     );
-
-    const handlePushToRewriteDocument = useCallback(() => {
-        if (!editableMessage.trim()) return;
-        try {
-            sessionStorage.setItem(
-                PENDING_REWRITE_STORAGE_KEY,
-                JSON.stringify({
-                    title: t("draftDocTitle", {
-                        platform: selectedPlatform?.label ?? t("draftDocFallback"),
-                    }),
-                    content: editableMessage,
-                    createdAt: Date.now(),
-                    source: "marketing-pipeline",
-                })
-            );
-        } catch {
-            // Ignore storage errors and still navigate.
-        }
-        router.push("/employer/documents?feature=rewrite");
-    }, [editableMessage, router, selectedPlatform?.label, t]);
 
     const handleCopy = useCallback(async () => {
         if (!editableMessage.trim()) return;
@@ -974,7 +951,6 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         handleRewriteComplete,
         handleRewriteWorkflowStateChange,
         refineWithCompanyContext,
-        handlePushToRewriteDocument,
         handleCopy,
         runPipeline,
         cancelPipeline,

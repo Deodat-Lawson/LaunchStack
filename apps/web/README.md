@@ -97,9 +97,6 @@ entries with `IconComponent` from `~/components/icons/types`.
 
 - `public/brand/` — logo exports (`logo.svg`); the canonical in-app mark is
   the `LaunchstackMark` component — keep the two in sync.
-- `public/templates/*.docx` — **live production data**, resolved at runtime
-  by `pipelines/src/legal-templates/template-service.ts` via
-  `process.cwd()`. Do not move or rename without fixing that coupling.
 - Anything a component imports goes through the bundler, not `public/`.
 
 ## Route areas with their own README

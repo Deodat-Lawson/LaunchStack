@@ -1,7 +1,7 @@
 {
   "name": "@launchstack/pipelines",
   "version": "0.1.0",
-  "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
+  "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Twelve verticals: marketing, email outreach, founder weekly review, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -10,8 +10,6 @@
   "exports": {
     ".": "./src/index.ts",
     "./schema": "./src/schema.ts",
-    "./legal-templates": "./src/legal-templates/index.ts",
-    "./legal-templates/template-service": "./src/legal-templates/template-service.ts",
     "./repo-explainer": "./src/repo-explainer/index.ts",
     "./repo-workspace": "./src/repo-workspace/index.ts",
     "./repo-workspace/db": "./src/repo-workspace/db.ts",
@@ -85,14 +83,6 @@
       "./schema": {
         "types": "./dist/schema.d.ts",
         "default": "./dist/schema.js"
-      },
-      "./legal-templates": {
-        "types": "./dist/legal-templates/index.d.ts",
-        "default": "./dist/legal-templates/index.js"
-      },
-      "./legal-templates/template-service": {
-        "types": "./dist/legal-templates/template-service.d.ts",
-        "default": "./dist/legal-templates/template-service.js"
       },
       "./repo-explainer": {
         "types": "./dist/repo-explainer/index.d.ts",
@@ -322,10 +312,8 @@
     "@launchstack/store": "workspace:^",
     "@launchstack/tools": "workspace:^",
     "dayjs": "^1.11.18",
-    "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",
-    "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

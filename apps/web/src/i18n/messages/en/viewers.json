@@ -83,12 +83,6 @@
     "loading": "Loading document...",
     "header": "Word Document Preview"
   },
-  "drafts": {
-    "title": "Templated Drafts",
-    "newDocument": "New document",
-    "myDocuments": "My documents",
-    "assistant": "Assistant"
-  },
   "image": {
     "loadFailed": "Failed to load image",
     "imageLabel": "Image: {alt}",

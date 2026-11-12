@@ -1,8 +1,9 @@
 "use client";
 
 /**
- * The one-time explanation after a Google or GitHub sign-in took over an
- * account whose email address had never been confirmed
+ * The one-time explanation after a provider sign-in (Google, Microsoft,
+ * GitHub, the deployment's own OIDC) took over an account whose email address
+ * had never been confirmed
  * (~/server/auth/account-linking). The server leaves a short-lived cookie on
  * that sign-in; this reads it once, clears it, and says what changed, so a
  * reload or a later visit never shows it again. The cookie lasts a day, so a

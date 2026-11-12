@@ -375,8 +375,13 @@ describeDb("Drive folder destinations (integration)", () => {
             .returning();
 
         await test.db.transaction(async tx => {
-            await deleteDocumentCore(tx, deck!.id);
-            await deleteDocumentCore(tx, inner!.id);
+            const context = {
+                requestedBy: "system:user_delete",
+                reason: "user_delete",
+                traceId: crypto.randomUUID(),
+            };
+            await deleteDocumentCore(tx, deck!.id, context);
+            await deleteDocumentCore(tx, inner!.id, context);
         });
 
         const left = await test.db

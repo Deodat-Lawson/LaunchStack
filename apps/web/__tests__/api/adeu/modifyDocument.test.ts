@@ -7,8 +7,11 @@ jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback(jest.requireMock("~/server/db").db),
     },
 }));
+jest.mock("~/server/storage/deletion/plan", () => ({ planObjectDeletion: jest.fn() }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
     fetchBlob: jest.fn(),
@@ -32,23 +35,12 @@ jest.mock("@launchstack/editing", () => ({
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
-import { processDocumentBatch, AdeuServiceError } from "@launchstack/editing";
-
-// ---------------------------------------------------------------------------
-// Helper: extract function config from the Inngest function object
-// ---------------------------------------------------------------------------
-function getFunctionConfig(fn: typeof modifyDocument) {
-    // Inngest functions expose their config through internal properties
-    const raw = fn as unknown as Record<string, unknown>;
-    // Access the raw options — Inngest stores them on the function object
-    return raw;
-}
+import { processDocumentBatch } from "@launchstack/editing";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 
 // ---------------------------------------------------------------------------
 // Helper: simulate Inngest step.run
 // ---------------------------------------------------------------------------
-type StepFn = (name: string, fn: () => Promise<unknown>) => Promise<unknown>;
-
 function createMockStep(): { run: jest.Mock } {
     const stepResults = new Map<string, unknown>();
     return {
@@ -70,6 +62,11 @@ describe("modifyDocument Inngest function", () => {
             from: jest.fn().mockReturnValue({
                 where: jest.fn().mockReturnValue({
                     limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                    for: jest
+                        .fn()
+                        .mockResolvedValue([
+                            { companyId: BigInt(7), url: "/api/files/old-current" },
+                        ]),
                 }),
             }),
         });
@@ -165,8 +162,18 @@ describe("modifyDocument Inngest function", () => {
             expect(handler).toBeDefined();
             await handler({ event, step });
 
+            expect(jest.mocked(planObjectDeletion).mock.invocationCallOrder[0]).toBeLessThan(
+                mockSet.mock.invocationCallOrder[0]!
+            );
             expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
             expect(putFile).toHaveBeenCalledWith(expect.objectContaining({ companyId: BigInt(7) }));
+            expect(planObjectDeletion).toHaveBeenCalledWith(db, {
+                companyId: BigInt(7),
+                urls: ["/api/files/old-current"],
+                requestedBy: "system:replaced_object",
+                reason: "replaced_object",
+                traceId: expect.any(String),
+            });
         });
 
         it("throws when Blob fetch returns non-ok", async () => {
@@ -386,6 +393,38 @@ describe("modifyDocument Inngest function", () => {
     // =========================================================================
     // Step 3: store-result
     // =========================================================================
+    it("does not repoint a document if durable cleanup cannot be planned", async () => {
+        (fetchBlob as jest.Mock).mockResolvedValueOnce({
+            ok: true,
+            arrayBuffer: async () => new ArrayBuffer(0),
+        });
+        (processDocumentBatch as jest.Mock).mockResolvedValueOnce({
+            summary: {},
+            file: new Blob(["modified"]),
+        });
+        (putFile as jest.Mock).mockResolvedValueOnce({ url: "/api/files/new" });
+        jest.mocked(planObjectDeletion).mockRejectedValueOnce(new Error("outbox unavailable"));
+        // Inngest exposes the handler through an internal function-object property.
+        const rawFunction = modifyDocument as unknown as {
+            fn: (ctx: { event: unknown; step: unknown }) => Promise<unknown>;
+        };
+        const handler = rawFunction.fn;
+        await expect(
+            handler({
+                event: {
+                    data: {
+                        documentId: 42,
+                        documentUrl: "/api/files/old",
+                        authorName: "Author",
+                        edits: [],
+                    },
+                },
+                step: createMockStep(),
+            })
+        ).rejects.toThrow("outbox unavailable");
+        expect(db.update).not.toHaveBeenCalled();
+    });
+
     describe("store-result step", () => {
         it("uploads modified DOCX to Blob and updates DB", async () => {
             const storedUrl = "https://blob.store/documents/modified-42.docx";

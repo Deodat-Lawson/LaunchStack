@@ -335,7 +335,8 @@ async function fetchAttachment(
     const internal =
         isInternalFileUrl(att.url, requestOrigin) ||
         isInternalFileUrl(att.url, env.server.APP_PUBLIC_URL);
-    const storage = isConfiguredStorageUrl(att.url);
+    // Canonical internal URLs are relative, which the storage check cannot parse.
+    const storage = !internal && isConfiguredStorageUrl(att.url);
     if (!internal && !storage) {
         try {
             return await fetchPublicUrl(att.url, { signal });

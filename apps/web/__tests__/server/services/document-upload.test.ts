@@ -32,6 +32,10 @@ const mockDeleteDocumentCore = jest.fn().mockResolvedValue(undefined);
 jest.mock("~/server/services/document-delete", () => ({
     deleteDocumentCore: (...args: unknown[]) => mockDeleteDocumentCore(...args) as unknown,
 }));
+const mockPlanObjectDeletion = jest.fn().mockResolvedValue(1);
+jest.mock("~/server/storage/deletion/plan", () => ({
+    planObjectDeletion: (...args: unknown[]) => mockPlanObjectDeletion(...args) as unknown,
+}));
 
 jest.mock("~/server/db", () => ({
     db: { transaction: (fn: (tx: unknown) => Promise<unknown>) => fn("tx") },
@@ -54,6 +58,8 @@ import {
 import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/video-transcription";
 import { processDocumentUpload, processVideoUrlUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
+import * as internalFileRef from "~/server/services/internal-file-ref";
+import * as ocrConfig from "@launchstack/conversion/ocr/config";
 import { putFile } from "~/server/storage/vercel-blob";
 import { createDocumentLifecycle } from "~/server/services/document-creation";
 import { hasTokens } from "~/lib/credits";
@@ -71,6 +77,57 @@ const mockIsMeteringEnforced = isMeteringEnforced as jest.Mock;
 beforeEach(() => {
     jest.clearAllMocks();
     mockIsMeteringEnforced.mockReturnValue(false);
+});
+
+describe("processDocumentUpload database URL persistence", () => {
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists a canonical database URL for %j", async rawDocumentUrl => {
+        (shouldTranscribeFile as jest.Mock).mockReturnValue(false);
+        const authorization = jest
+            .spyOn(internalFileRef, "authorizeInternalFileRef")
+            .mockResolvedValueOnce(7);
+        const config = jest.spyOn(ocrConfig, "getOcrConfig").mockReturnValue({
+            ...ocrConfig.getOcrConfig(),
+            appPublicUrl: "https://app.test",
+            defaultProvider: "AZURE",
+        });
+        mockCreateDocumentLifecycle.mockResolvedValueOnce({
+            document: { id: 12, title: "Report", url: "/api/files/7", category: "Unfiled" },
+            jobId: "document-job",
+            eventIds: [],
+        });
+
+        try {
+            const result = await processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "Report",
+                rawDocumentUrl,
+                requestUrl: "https://app.test/upload",
+                mimeType: "application/pdf",
+                originalFilename: "report.pdf",
+                explicitStorageType: "s3",
+            });
+
+            expect(authorization).toHaveBeenCalledWith(rawDocumentUrl, 7n, expect.anything());
+            expect(mockCreateDocumentLifecycle).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: "/api/files/7",
+                    processingUrl: "https://app.test/api/files/7",
+                })
+            );
+            expect(result.storageType).toBe("database");
+            expect(result.resolvedDocumentUrl).toBe("https://app.test/api/files/7");
+        } finally {
+            authorization.mockRestore();
+            config.mockRestore();
+            (shouldTranscribeFile as jest.Mock).mockReturnValue(true);
+        }
+    });
 });
 
 describe("processDocumentUpload audio lifecycle", () => {
@@ -177,7 +234,19 @@ describe("processDocumentUpload when transcription fails", () => {
                 })
             ).rejects.toBe(rowFailure);
 
-            expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41);
+            expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41, {
+                requestedBy: "user-1",
+                reason: "transcript_rollback",
+                traceId: expect.any(String),
+                planStorageDeletion: false,
+            });
+            expect(mockPlanObjectDeletion).toHaveBeenCalledWith("tx", {
+                companyId: 7n,
+                requestedBy: "user-1",
+                reason: "transcript_rollback",
+                traceId: expect.any(String),
+                urls: ["/api/files/9"],
+            });
             // The transcript text was stored before either row.
             expect(mockUploadFile.mock.invocationCallOrder[0]).toBeLessThan(
                 mockCreateDocumentLifecycle.mock.invocationCallOrder[0]!
@@ -215,6 +284,10 @@ describe("processDocumentUpload when transcription fails", () => {
             })
         ).rejects.toThrow("insert failed");
         expect(mockDeleteDocumentCore).not.toHaveBeenCalled();
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(
+            "tx",
+            expect.objectContaining({ urls: ["/api/files/9"] })
+        );
     });
 
     it("hands the browser's type to the transcriber", async () => {
@@ -282,11 +355,74 @@ describe("transcript metadata for the media viewer", () => {
                 ocrMetadata: expect.objectContaining({
                     source: "transcription",
                     audioDocumentId: 12,
+                    audioUrl: "/api/files/4",
                     mediaMimeType: "video/mp4",
                     segments: SEGMENTS,
                 }) as unknown,
             })
         );
+        expect(mockTranscribeAudioFromUrl).toHaveBeenCalledWith(
+            "https://blob.test/standup.mp4",
+            "standup.mp4",
+            7n,
+            "video/mp4"
+        );
+    });
+    it("canonicalizes an aliased recording reference while transcribing via the localhost processing URL", async () => {
+        const authorization = jest
+            .spyOn(internalFileRef, "authorizeInternalFileRef")
+            .mockResolvedValueOnce(4);
+        const config = jest.spyOn(ocrConfig, "getOcrConfig").mockReturnValue({
+            ...ocrConfig.getOcrConfig(),
+            appPublicUrl: "http://localhost:3000",
+        });
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce(lifecycle(12, "standup.mp4", "/api/files/4"))
+            .mockResolvedValueOnce(lifecycle(13, "standup.mp4 (Transcription)", "/api/files/5"));
+        mockTranscribeAudioFromUrl.mockResolvedValue({
+            text: "Hello.",
+            language: "en",
+            confidence: 0.9,
+            segments: SEGMENTS,
+        });
+        mockUploadFile.mockResolvedValue({ url: "/api/files/5" });
+        try {
+            await processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "standup.mp4",
+                rawDocumentUrl: "/api/files/unused/../4",
+                requestUrl: "http://localhost:3000/upload",
+                mimeType: "video/mp4",
+                originalFilename: "standup.mp4",
+            });
+            expect(mockTranscribeAudioFromUrl).toHaveBeenCalledWith(
+                "http://localhost:3000/api/files/4",
+                "standup.mp4",
+                7n,
+                "video/mp4"
+            );
+            expect(mockCreateDocumentLifecycle).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({ url: "/api/files/4" })
+            );
+            expect(mockCreateDocumentLifecycle).toHaveBeenNthCalledWith(
+                2,
+                expect.objectContaining({
+                    ocrMetadata: expect.objectContaining({
+                        audioDocumentId: 12,
+                        audioUrl: "/api/files/4",
+                    }),
+                    processing: expect.objectContaining({
+                        transcriptionMetadata: expect.objectContaining({
+                            audioUrl: "/api/files/4",
+                        }),
+                    }),
+                })
+            );
+        } finally {
+            authorization.mockRestore();
+            config.mockRestore();
+        }
     });
 
     it("reports both rows of a media upload as new, and neither on a converged retry", async () => {

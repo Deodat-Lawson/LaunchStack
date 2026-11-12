@@ -91,6 +91,10 @@ export const brandChannels = pgTable(
             table.externalId
         ),
         index("brand_channels_connection_idx").on(table.connectionId),
+        index("brand_channels_avatar_url_idx").using("hash", table.avatarUrl).concurrently(),
+        index("brand_channels_avatar_file_id_idx")
+            .on(sql`((regexp_match(${table.avatarUrl}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
     ]
 );
 export type BrandChannelRow = InferSelectModel<typeof brandChannels>;
@@ -116,7 +120,13 @@ export const brandMedia = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    table => [index("brand_media_company_idx").on(table.companyId)]
+    table => [
+        index("brand_media_company_idx").on(table.companyId),
+        index("brand_media_storage_url_idx").using("hash", table.storageUrl).concurrently(),
+        index("brand_media_storage_file_id_idx")
+            .on(sql`((regexp_match(${table.storageUrl}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
+    ]
 );
 export type BrandMediaRow = InferSelectModel<typeof brandMedia>;
 

@@ -2069,6 +2069,33 @@ describe("chat attachment limits and ownership", () => {
         );
         expect(denied.status).toBe(404);
     });
+
+    it("reads a canonical relative internal file while a storage bucket is configured", async () => {
+        Object.assign(env.server, {
+            NEXT_PUBLIC_S3_ENDPOINT: "http://127.0.0.1:8333",
+            S3_BUCKET_NAME: "files",
+        });
+        mockQueuedRows = [
+            [
+                {
+                    companyId: BigInt(5),
+                    storageProvider: "database",
+                    mimeType: "image/png",
+                    fileData: Buffer.from(pngBytes).toString("base64"),
+                },
+            ],
+            [],
+        ];
+        const response = await POST(
+            queryRequest({
+                question: "Review",
+                searchScope: "none",
+                attachments: [{ ...attachment, url: "/api/files/12" }],
+            })
+        );
+        expect(response.status).toBe(200);
+        expect(fetchSpy).not.toHaveBeenCalled();
+    });
 });
 
 describe("selected passages", () => {

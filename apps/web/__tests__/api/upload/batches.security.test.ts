@@ -7,6 +7,18 @@
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
+const mockDbSelect = jest.fn();
+const mockDbUpdate = jest.fn();
+const mockRegisteredFile = jest.fn();
+jest.mock("~/server/db", () => ({
+    db: {
+        select: (...args: unknown[]) => mockDbSelect(...args),
+        update: (...args: unknown[]) => mockDbUpdate(...args),
+    },
+}));
+jest.mock("~/env", () => ({
+    env: { server: { NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example", S3_BUCKET_NAME: "files" } },
+}));
 
 jest.mock("~/lib/require-workspace-context", () =>
     jest
@@ -38,11 +50,15 @@ jest.mock("~/lib/rate-limiter", () => ({
 jest.mock("~/server/services/upload-batches", () => ({
     createUploadBatch: jest.fn(),
     findBatchOwnedByUser: jest.fn(),
+    refreshBatchAggregates: jest.fn(),
+    updateBatchStatus: jest.fn(),
+    toFileSizeBigint: (size: number) => BigInt(size),
     serializeBatch: jest.fn((batch: unknown) => batch),
 }));
 
 import { POST as createBatch } from "~/app/api/upload/batches/route";
 import { GET as getBatch } from "~/app/api/upload/batches/[batchId]/route";
+import { POST as registerFiles } from "~/app/api/upload/batches/[batchId]/files/route";
 import { createUploadBatch, findBatchOwnedByUser } from "~/server/services/upload-batches";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
@@ -156,5 +172,88 @@ describe("GET /api/upload/batches/[batchId]", () => {
             { params: Promise.resolve({ batchId: "batch-1" }) }
         );
         expect(response.status).toBe(404);
+    });
+});
+
+describe("POST /api/upload/batches/[batchId]/files stored URLs", () => {
+    const canonical = "https://s3.example/files/documents/owned.pdf";
+    const register = (urls: string[]) =>
+        registerFiles(
+            postRequest({
+                files: urls.map((storageUrl, index) => ({
+                    filename: `file-${index}.pdf`,
+                    storageUrl,
+                })),
+            }),
+            { params: Promise.resolve({ batchId: "batch-1" }) }
+        );
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockAuthenticated();
+        findBatchOwnedByUserMock.mockResolvedValue({
+            id: "batch-1",
+            status: "uploading",
+            files: [],
+        } as never);
+        mockDbSelect.mockReturnValue({
+            from: () => ({
+                where: () => Promise.resolve([{ companyId: 7n, url: canonical, deletedAt: null }]),
+            }),
+        });
+        mockRegisteredFile.mockReturnValue({
+            where: () => ({ returning: () => Promise.resolve([{ id: 1 }]) }),
+        });
+        mockDbUpdate.mockReturnValue({ set: mockRegisteredFile });
+    });
+
+    it("rejects a noncanonical provider URL before registering any file", async () => {
+        const response = await register([
+            canonical,
+            "https://s3.example/files/documents/%6fwned.pdf",
+        ]);
+        expect(response.status).toBe(404);
+        expect(await response.json()).toEqual({ error: expect.any(String) });
+        expect(mockDbUpdate).not.toHaveBeenCalled();
+    });
+
+    it("registers a live owned ledger URL without rewriting it", async () => {
+        const response = await register([canonical]);
+        expect(response.status).toBe(200);
+        expect(mockRegisteredFile).toHaveBeenCalledWith(
+            expect.objectContaining({ storageUrl: canonical })
+        );
+    });
+
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("registers the canonical database URL for %j", async url => {
+        const response = await register([url]);
+        expect(response.status).toBe(200);
+        expect(mockRegisteredFile).toHaveBeenCalledWith(
+            expect.objectContaining({ storageUrl: "/api/files/7" })
+        );
+        expect(mockRegisteredFile).not.toHaveBeenCalledWith(
+            expect.objectContaining({ storageUrl: url })
+        );
+    });
+
+    it("rejects a foreign database file", async () => {
+        mockDbSelect.mockReturnValue({
+            from: () => ({ where: () => Promise.resolve([{ companyId: 99n }]) }),
+        });
+        const response = await register(["/api/files/123"]);
+        expect(response.status).toBe(404);
+        expect(mockDbUpdate).not.toHaveBeenCalled();
+    });
+
+    it("does not treat another provider's location as an internal upload", async () => {
+        const response = await register(["https://another.public.blob.vercel-storage.com/doc.pdf"]);
+        expect(response.status).toBe(200);
+        expect(mockDbSelect).not.toHaveBeenCalled();
     });
 });

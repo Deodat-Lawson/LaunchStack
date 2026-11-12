@@ -43,6 +43,13 @@
       "when": 1792730143499,
       "tag": "20261023043543_ocr_job_progress",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794374547221,
+      "tag": "20261111052227_storage_reference_indexes",
+      "breakpoints": true
     }
   ]
 }

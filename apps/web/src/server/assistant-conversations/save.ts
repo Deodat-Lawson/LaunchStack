@@ -253,7 +253,7 @@ async function updateConversation(
         userId: ctx.authUserId,
         title: conversation.title,
         category: doc.category,
-        url: stored.url,
+        url: internalFileId !== null ? `/api/files/${internalFileId}` : stored.url,
         processingUrl,
         // One version per save. Content-keyed would converge an A→B→A→B
         // sequence on B's first version and leave the document showing A.

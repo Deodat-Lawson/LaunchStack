@@ -38,6 +38,20 @@ async function listMigrationFiles(dir: string): Promise<string[]> {
         .map(entry => join(dir, `${entry.tag}.sql`));
 }
 
+async function applyMigrationSql(client: postgres.Sql, body: string): Promise<void> {
+    if (/^--\s*launchstack:no-transaction\b/.test(body.split("\n", 1)[0] ?? "")) {
+        // Match the production runner: concurrent indexes cannot run in BEGIN,
+        // nor can multiple concurrent builds share one implicit multi-query tx.
+        for (const statement of body.split("--> statement-breakpoint")) {
+            if (statement.trim()) await client.unsafe(statement);
+        }
+        return;
+    }
+    await client.begin(async tx => {
+        await tx.unsafe(body);
+    });
+}
+
 function withDatabase(connectionString: string, databaseName: string): string {
     const url = new URL(connectionString);
     url.pathname = `/${databaseName}`;
@@ -170,9 +184,7 @@ export async function createFounderWeeklyReviewTestDatabase(
                     continue;
                 }
                 const body = await readFile(file, "utf8");
-                await admin.begin(async tx => {
-                    await tx.unsafe(body);
-                });
+                await applyMigrationSql(admin, body);
             }
         }
     } catch (error) {
@@ -191,9 +203,7 @@ export async function createFounderWeeklyReviewTestDatabase(
             const file = heldBack.get(tag);
             if (!file) throw new Error(`Migration ${tag} was not held back`);
             const body = await readFile(file, "utf8");
-            await admin.begin(async tx => {
-                await tx.unsafe(body);
-            });
+            await applyMigrationSql(admin, body);
             heldBack.delete(tag);
         },
         createSession: () => createSession(testUrl),

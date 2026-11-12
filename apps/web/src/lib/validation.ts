@@ -109,8 +109,19 @@ const aiPersonaOptions = [
     "legal-expert",
     "math-reasoning",
 ] as const;
+const AttachmentUrlSchema = z.union([
+    z.string().url(V.attachmentUrlInvalid),
+    // A strict end assertion also rejects the trailing newline that `$` permits;
+    // ids beyond safe integers are not file ids anywhere else either.
+    z
+        .string()
+        .regex(/^\/api\/files\/\d+(?![\s\S])/, V.attachmentUrlInvalid)
+        .refine(url => Number.isSafeInteger(Number(url.slice("/api/files/".length))), {
+            message: V.attachmentUrlInvalid,
+        }),
+]);
 const AttachmentPayloadSchema = z.object({
-    url: z.string().url(V.attachmentUrlInvalid),
+    url: AttachmentUrlSchema,
     name: z.string().min(1).max(512),
     mimeType: z.string().min(1).max(256),
     kind: z.enum(["image", "text"]),
@@ -859,13 +870,10 @@ export const UpdateArtifactSchema = z
 // ---------------------------------------------------------------------------
 
 /**
- * One stored turn. `citations` and `attachments` travel as opaque JSON: they
- * are the UI's own render payload (`ThreadReference`, `EphemeralAttachment`),
- * replayed verbatim when the session is reopened, and pinning their shape here
- * would mean a schema change every time a citation gains a field. They are
- * bounded instead of parsed — an array cap plus the text cap is what keeps a
- * session row from becoming a dumping ground.
+ * Stored attachments retain their render payload, but must expose a URL so
+ * the repository can authorize every reference before persisting it.
  */
+const SessionAttachmentSchema = z.object({ url: z.string().min(1).max(4096) }).passthrough();
 export const ChatSendPayloadSchema = z.object({
     recallText: z.string().max(120_000).optional(),
     origin: z.enum(["user", "attachment", "plan-implementation"]).optional(),
@@ -881,7 +889,7 @@ export const ChatSendPayloadSchema = z.object({
                     .number()
                     .nonnegative()
                     .max(50 * 1024 * 1024),
-                url: z.string().url().max(4096),
+                url: z.string().max(4096).pipe(AttachmentUrlSchema),
                 kind: z.enum(["image", "text"]),
             })
         )
@@ -946,7 +954,7 @@ export const SessionMessageSchema = z.object({
     refs: z.array(z.string().max(64)).max(200).optional(),
     // One per cited source: an answer about every attached file cites each one.
     citations: z.array(z.unknown()).max(100).optional(),
-    attachments: z.array(z.unknown()).max(100).optional(),
+    attachments: z.array(SessionAttachmentSchema).max(100).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */

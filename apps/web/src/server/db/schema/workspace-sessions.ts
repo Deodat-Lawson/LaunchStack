@@ -100,6 +100,9 @@ export const workspaceSessions = pgTable(
             table.lastMessageAt
         ),
         companyIdx: index("workspace_sessions_company_idx").on(table.companyId),
+        queuedAttachmentsIdx: index("workspace_sessions_queued_messages_idx")
+            .using("gin", table.queuedMessages.op("jsonb_path_ops"))
+            .concurrently(),
     })
 );
 
@@ -139,6 +142,12 @@ export const workspaceSessionMessages = pgTable(
             table.sessionId,
             table.seq
         ),
+        attachmentsIdx: index("workspace_session_messages_attachments_idx")
+            .using("gin", table.attachments.op("jsonb_path_ops"))
+            .concurrently(),
+        metadataAttachmentsIdx: index("workspace_session_messages_metadata_idx")
+            .using("gin", table.metadata.op("jsonb_path_ops"))
+            .concurrently(),
     })
 );
 

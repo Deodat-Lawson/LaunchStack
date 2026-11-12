@@ -330,6 +330,34 @@
       "when": 1794365471452,
       "tag": "20261111025111_storage_objects",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1794366375749,
+      "tag": "20261111030615_storage_deletion_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794370058517,
+      "tag": "20261111040738_storage_product_guard_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1794371093193,
+      "tag": "20261111042453_storage_chat_reference_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1794374889330,
+      "tag": "20261111052809_storage_owner_file_id_indexes",
+      "breakpoints": true
     }
   ]
 }

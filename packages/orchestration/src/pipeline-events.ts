@@ -48,6 +48,7 @@ export const EVENT_TYPES = [
     "company.state.projection.requested",
     "company.state.projected",
     "note.embedding.requested",
+    "storage.deletion.requested",
 ] as const;
 
 export const eventTypeSchema = z.enum(EVENT_TYPES);
@@ -172,6 +173,11 @@ export const noteEmbeddingRequestedPayloadSchema = z.object({
     reason: z.enum(["created", "updated"]),
 });
 
+/** A durable storage deletion plan is ready for background processing. */
+export const storageDeletionRequestedPayloadSchema = z.object({
+    requestId: z.number().int().positive(),
+});
+
 export const sourceVersionCreatedEventSchema = eventEnvelopeBaseSchema.extend({
     eventType: z.literal("source.version.created"),
     payload: sourceVersionCreatedPayloadSchema,
@@ -196,6 +202,10 @@ export const noteEmbeddingRequestedEventSchema = eventEnvelopeBaseSchema.extend(
     eventType: z.literal("note.embedding.requested"),
     payload: noteEmbeddingRequestedPayloadSchema,
 });
+export const storageDeletionRequestedEventSchema = eventEnvelopeBaseSchema.extend({
+    eventType: z.literal("storage.deletion.requested"),
+    payload: storageDeletionRequestedPayloadSchema,
+});
 
 export const pipelineEventSchema = z.discriminatedUnion("eventType", [
     sourceVersionCreatedEventSchema,
@@ -204,6 +214,7 @@ export const pipelineEventSchema = z.discriminatedUnion("eventType", [
     companyStateProjectionRequestedEventSchema,
     companyStateProjectedEventSchema,
     noteEmbeddingRequestedEventSchema,
+    storageDeletionRequestedEventSchema,
 ]);
 
 export type SourceVersionCreatedEvent = z.infer<typeof sourceVersionCreatedEventSchema>;
@@ -214,6 +225,7 @@ export type CompanyStateProjectionRequestedEvent = z.infer<
 >;
 export type CompanyStateProjectedEvent = z.infer<typeof companyStateProjectedEventSchema>;
 export type NoteEmbeddingRequestedEvent = z.infer<typeof noteEmbeddingRequestedEventSchema>;
+export type StorageDeletionRequestedEvent = z.infer<typeof storageDeletionRequestedEventSchema>;
 export type PipelineEvent = z.infer<typeof pipelineEventSchema>;
 
 /**
@@ -242,4 +254,5 @@ export const eventIds = {
      */
     noteEmbeddingRequested: (noteId: number, fingerprint: string) =>
         `note.embedding.requested:${noteId}:${fingerprint}`,
+    storageDeletionRequested: (requestId: number) => `storage.deletion.requested:${requestId}`,
 } as const;

@@ -109,6 +109,26 @@ export const document = pgTable(
             table.creationKey
         ),
         currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
+        urlIdx: index("document_url_idx").on(table.url).concurrently(),
+        fileIdIdx: index("document_file_id_idx")
+            .on(sql`((regexp_match(${table.url}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
+        websitePreviewUrlIdx: index("document_website_preview_url_idx")
+            .on(sql`(${table.ocrMetadata}->'websitePreview'->>'url')`)
+            .concurrently(),
+        audioUrlIdx: index("document_audio_url_idx")
+            .on(sql`(${table.ocrMetadata}->>'audioUrl')`)
+            .concurrently(),
+        websitePreviewFileIdIdx: index("document_website_preview_file_id_idx")
+            .on(
+                sql`((regexp_match(${table.ocrMetadata}->'websitePreview'->>'url', '/api/files/0*([0-9]+)([/?#]|$)'))[1])`
+            )
+            .concurrently(),
+        audioFileIdIdx: index("document_audio_file_id_idx")
+            .on(
+                sql`((regexp_match(${table.ocrMetadata}->>'audioUrl', '/api/files/0*([0-9]+)([/?#]|$)'))[1])`
+            )
+            .concurrently(),
     })
 );
 
@@ -142,6 +162,26 @@ export const documentVersions = pgTable(
     },
     table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        urlIdx: index("doc_versions_url_idx").on(table.url).concurrently(),
+        fileIdIdx: index("doc_versions_file_id_idx")
+            .on(sql`((regexp_match(${table.url}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
+        websitePreviewUrlIdx: index("doc_versions_website_preview_url_idx")
+            .on(sql`(${table.ocrMetadata}->'websitePreview'->>'url')`)
+            .concurrently(),
+        audioUrlIdx: index("doc_versions_audio_url_idx")
+            .on(sql`(${table.ocrMetadata}->>'audioUrl')`)
+            .concurrently(),
+        websitePreviewFileIdIdx: index("doc_versions_website_preview_file_id_idx")
+            .on(
+                sql`((regexp_match(${table.ocrMetadata}->'websitePreview'->>'url', '/api/files/0*([0-9]+)([/?#]|$)'))[1])`
+            )
+            .concurrently(),
+        audioFileIdIdx: index("doc_versions_audio_file_id_idx")
+            .on(
+                sql`((regexp_match(${table.ocrMetadata}->>'audioUrl', '/api/files/0*([0-9]+)([/?#]|$)'))[1])`
+            )
+            .concurrently(),
         documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
             table.documentId,
             table.creationKey
@@ -247,6 +287,7 @@ export const fileUploads = pgTable(
     table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),
         companyIdIdx: index("file_uploads_company_id_idx").on(table.companyId),
+        storageUrlIdx: index("file_uploads_storage_url_idx").on(table.storageUrl).concurrently(),
     })
 );
 
@@ -336,6 +377,10 @@ export const ocrJobs = pgTable(
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
         documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
+        documentUrlIdx: index("ocr_jobs_document_url_idx").on(table.documentUrl).concurrently(),
+        documentFileIdIdx: index("ocr_jobs_document_file_id_idx")
+            .on(sql`((regexp_match(${table.documentUrl}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
         versionIdIdx: index("ocr_jobs_version_id_idx").on(table.versionId),
         statusIdx: index("ocr_jobs_status_idx").on(table.status),
         createdAtIdx: index("ocr_jobs_created_at_idx").on(table.createdAt),
@@ -503,6 +548,12 @@ export const uploadBatchFiles = pgTable(
         statusIdx: index("upload_batch_files_status_idx").on(table.status),
         jobIdx: index("upload_batch_files_job_idx").on(table.jobId),
         documentIdx: index("upload_batch_files_document_idx").on(table.documentId),
+        storageUrlIdx: index("upload_batch_files_storage_url_idx")
+            .on(table.storageUrl)
+            .concurrently(),
+        storageFileIdIdx: index("upload_batch_files_storage_file_id_idx")
+            .on(sql`((regexp_match(${table.storageUrl}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
     })
 );
 

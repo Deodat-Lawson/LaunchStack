@@ -34,6 +34,7 @@ import {
     upsertConnection,
 } from "~/server/services/connectors/connection-store";
 import { ConnectorGrantRevokedError } from "~/server/services/connectors/providers/types";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
 
 import type { Locale } from "~/i18n/locales";
 
@@ -216,6 +217,11 @@ async function upsertChannels(
     connectionId: number,
     seeds: ChannelSeed[]
 ): Promise<BrandChannelRow[]> {
+    for (const seed of seeds) {
+        if (seed.avatarUrl) {
+            seed.avatarUrl = (await authorizeStoredObjectUrl(seed.avatarUrl, companyId)).url;
+        }
+    }
     const rows: BrandChannelRow[] = [];
     for (const seed of seeds) {
         const [row] = await db

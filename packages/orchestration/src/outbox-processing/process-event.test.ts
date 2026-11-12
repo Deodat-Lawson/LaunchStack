@@ -10,6 +10,7 @@ import type {
     ExtractionPipelinePort,
     NoteEmbeddingPort,
     NoteRehydrationPort,
+    StorageDeletionPort,
 } from "../ports";
 
 const NOW = new Date("2026-08-09T12:00:00.000Z");
@@ -26,6 +27,7 @@ function deps(overrides?: {
     projection?: CompanyProjectionPort;
     noteRehydration?: NoteRehydrationPort;
     noteEmbedding?: NoteEmbeddingPort;
+    storageDeletion?: StorageDeletionPort;
 }) {
     const pipeline: ExtractionPipelinePort = {
         extract: vi.fn(async () => ({
@@ -50,11 +52,15 @@ function deps(overrides?: {
     const noteEmbedding: NoteEmbeddingPort = overrides?.noteEmbedding ?? {
         embedNote: vi.fn(async () => {}),
     };
+    const storageDeletion: StorageDeletionPort = overrides?.storageDeletion ?? {
+        process: vi.fn(async () => {}),
+    };
     return {
         pipeline,
         projection,
         noteRehydration,
         noteEmbedding,
+        storageDeletion,
         clock: { now: () => NOW },
         logger: silentLogger,
     };
@@ -254,5 +260,51 @@ describe("pipeline processor", () => {
             traceId: "trace-2",
         });
         expect(followUps).toEqual([]);
+    });
+
+    it("processes storage deletion requests without follow-up events", async () => {
+        const d = deps();
+        const processor = createPipelineProcessor(d);
+        const deletionEvent: PipelineEvent = {
+            eventId: eventIds.storageDeletionRequested(17),
+            eventType: "storage.deletion.requested",
+            schemaVersion: PROTOCOL_VERSION,
+            occurredAt: NOW.toISOString(),
+            traceId: "trace-delete",
+            companyId: 42,
+            payload: { requestId: 17 },
+        };
+
+        await expect(processor.process(claimed(deletionEvent))).resolves.toEqual({
+            followUps: [],
+        });
+        expect(d.storageDeletion.process).toHaveBeenCalledWith({
+            requestId: 17,
+            traceId: "trace-delete",
+        });
+        expect(d.pipeline.extract).not.toHaveBeenCalled();
+        expect(d.pipeline.index).not.toHaveBeenCalled();
+    });
+
+    it("propagates storage deletion failures for outbox retry", async () => {
+        const error = new Error("provider temporarily unavailable");
+        const d = deps({
+            storageDeletion: { process: vi.fn().mockRejectedValue(error) },
+        });
+        const processor = createPipelineProcessor(d);
+
+        await expect(
+            processor.process(
+                claimed({
+                    eventId: eventIds.storageDeletionRequested(17),
+                    eventType: "storage.deletion.requested",
+                    schemaVersion: PROTOCOL_VERSION,
+                    occurredAt: NOW.toISOString(),
+                    traceId: "trace-delete",
+                    companyId: 42,
+                    payload: { requestId: 17 },
+                })
+            )
+        ).rejects.toBe(error);
     });
 });

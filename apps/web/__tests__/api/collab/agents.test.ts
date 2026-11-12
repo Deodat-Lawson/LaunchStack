@@ -15,6 +15,9 @@ import type { WorkerNode } from "~/app/employer/documents/_workspace/collab/type
 import { serializeAgentFile } from "~/lib/agents/agent-file";
 import { coerceAgentDefinition } from "~/lib/agents/definition";
 import type { Permission } from "~/lib/authz/permissions";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
+
+const mockPersonaWriteError: { current: Error | null } = { current: null };
 
 interface StoredPersona {
     dbId: string;
@@ -117,6 +120,7 @@ jest.mock("~/server/collab/personas", () => ({
     },
     // Mirrors the real module: the column is `key`, the persona field is `id`.
     createPersona: (_companyId: bigint, input: { key: string } & Partial<StoredPersona>) => {
+        if (mockPersonaWriteError.current) return Promise.reject(mockPersonaWriteError.current);
         if (mockCtx.personas.some(p => p.id === input.key)) {
             return Promise.reject(
                 new Error(
@@ -143,6 +147,7 @@ jest.mock("~/server/collab/personas", () => ({
         dbId: string,
         patch: { key?: string } & Partial<StoredPersona>
     ) => {
+        if (mockPersonaWriteError.current) return Promise.reject(mockPersonaWriteError.current);
         const persona = mockCtx.personas.find(p => p.dbId === dbId);
         if (!persona) return Promise.resolve(null);
         const { key, ...rest } = patch;
@@ -196,6 +201,7 @@ const VALID = {
 
 describe("collab agents routes", () => {
     beforeEach(() => {
+        mockPersonaWriteError.current = null;
         mockCtx.userId = "user_1";
         mockCtx.role = "owner";
         mockCtx.permissions = null;
@@ -205,6 +211,34 @@ describe("collab agents routes", () => {
         mockCtx.hubEnabled = true;
         mockCtx.slack = { canPost: true, canReceive: true, missing: [] };
     });
+
+    it.each(["create", "update", "import"])(
+        "returns a normal 404 response for an unauthorized %s avatar",
+        async operation => {
+            mockPersonaWriteError.current = new UploadAuthorizationError(
+                { key: "upload.server.errors.fileNotInWorkspace" },
+                404
+            );
+            const avatarUrl = "https://s3.example/files/avatars/%6fwned.png";
+            const response =
+                operation === "create"
+                    ? await POST(jsonRequest({ ...VALID, avatarUrl }))
+                    : operation === "update"
+                      ? await PATCH(jsonRequest({ avatarUrl }, "PATCH"), {
+                            params: Promise.resolve({ personaId: "p1" }),
+                        })
+                      : await IMPORT(
+                            jsonRequest({
+                                file: serializeAgentFile(
+                                    coerceAgentDefinition({ ...VALID, avatarUrl })
+                                ),
+                            })
+                        );
+            expect(response.status).toBe(404);
+            expect(await response.json()).toEqual({ error: expect.any(String) });
+            expect(mockCtx.personas).toEqual([]);
+        }
+    );
 
     it("rejects unauthenticated callers", async () => {
         mockCtx.userId = null;

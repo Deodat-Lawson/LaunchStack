@@ -18,6 +18,7 @@ import type { McpPrincipal } from "~/server/mcp/principal";
 import { uploadFile } from "~/lib/storage";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { authorizeInternalFileRef } from "~/server/services/internal-file-ref";
 import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -338,6 +339,35 @@ describe("saving again with conversationId", () => {
         ]);
         fakeDb.onSelect(document, [{ id: 40, category: "Unfiled" }]);
     }
+
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists a canonical generated conversation version for %j", async url => {
+        await existingRow("previous-content");
+        (uploadFile as jest.Mock).mockResolvedValue({ url, provider: "database" });
+        (authorizeInternalFileRef as jest.Mock).mockResolvedValueOnce(7);
+
+        await saveAssistantConversation({
+            principal: principal(),
+            origin: ORIGIN,
+            title: "Pricing",
+            messages: MESSAGES,
+            conversationId: 40,
+        });
+
+        expect(authorizeInternalFileRef).toHaveBeenCalledWith(url, BigInt(5), "AZURE");
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: "/api/files/7",
+                processingUrl: "https://app.test/api/files/7",
+            })
+        );
+        expect(processDocumentUpload).not.toHaveBeenCalled();
+    });
 
     /** The hash a first save of MESSAGES stores. */
     async function hashOfFirstSave(): Promise<string> {

@@ -12,6 +12,7 @@
  * not change.
  */
 
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { and, inArray } from "drizzle-orm";
 import { z } from "zod";
@@ -94,9 +95,13 @@ export async function DELETE(request: Request) {
                 access.set(Number(row.id), item);
             }
 
+            const traceId = randomUUID();
             await db.transaction(async tx => {
-                for (const row of rows) {
+                for (const row of rows.sort((a, b) => Number(a.id) - Number(b.id))) {
                     await deleteDocumentCore(tx, Number(row.id), {
+                        requestedBy: ctx.data.authUserId,
+                        reason: "batch_delete",
+                        traceId,
                         deletedByUserPk: Number(ctx.data.userPk),
                     });
                     await recordAuditEvent(tx, {

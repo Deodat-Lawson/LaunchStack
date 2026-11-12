@@ -302,10 +302,14 @@ export async function loadStagedFile(
         )
         .limit(1);
     const label = id.startsWith("upload_") ? "upload" : "draft";
+    const again =
+        label === "upload"
+            ? "Upload the file again: call start_upload for a new link."
+            : "Send the content again.";
     if (!row) {
         throw new StagingError(
             "not_found",
-            `No ${label} "${id}" of yours exists in this workspace. Send the content again.`
+            `No ${label} "${id}" of yours exists in this workspace. ${again}`
         );
     }
     if (row.status === "used") {
@@ -315,10 +319,7 @@ export async function loadStagedFile(
         );
     }
     if (row.expiresAt.getTime() <= now.getTime()) {
-        throw new StagingError(
-            "expired",
-            `That ${label} expired (they last an hour). Send the content again.`
-        );
+        throw new StagingError("expired", `That ${label} expired (they last an hour). ${again}`);
     }
     if (row.status !== "ready" || !row.storageUrl) {
         throw new StagingError(

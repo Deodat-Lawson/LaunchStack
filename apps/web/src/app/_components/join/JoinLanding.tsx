@@ -63,6 +63,7 @@ type Problem =
               | "linkExhausted"
               | "linkInactive"
               | "inviteGone"
+              | "inviteDeclined"
               | "inviteUsed"
               | "sessionEnded"
               | "joinFailed";
@@ -194,7 +195,12 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
     if (body.status !== "pending") {
         return {
             phase: "dead",
-            problem: body.status === "accepted" ? { key: "inviteUsed" } : INVITE_GONE,
+            problem:
+                body.status === "accepted"
+                    ? { key: "inviteUsed" }
+                    : body.status === "declined"
+                      ? { key: "inviteDeclined" }
+                      : INVITE_GONE,
         };
     }
     return {

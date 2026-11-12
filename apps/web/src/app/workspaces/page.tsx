@@ -59,7 +59,7 @@ export default async function WorkspacesPage({
         .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
     // Invitations addressed to this account's email that are still open:
-    // not accepted, not withdrawn, not past their expiry.
+    // not accepted, not withdrawn, not declined, not past their expiry.
     const accountEmail = session.user.email;
     const inviter = alias(users, "inviter");
     const inviteRows = accountEmail
@@ -81,6 +81,7 @@ export default async function WorkspacesPage({
                       sql`lower(${workspaceInvitations.email}) = ${accountEmail.toLowerCase()}`,
                       isNull(workspaceInvitations.acceptedAt),
                       isNull(workspaceInvitations.revokedAt),
+                      isNull(workspaceInvitations.declinedAt),
                       gt(workspaceInvitations.expiresAt, new Date())
                   )
               )

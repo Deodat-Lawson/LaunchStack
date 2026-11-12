@@ -1,7 +1,8 @@
 /**
  * Email invitations. The token travels in the accept link only; the row
  * keeps its SHA-256. Accepting creates an active membership — an invitation
- * is pre-approval by someone who may hand out that role.
+ * is pre-approval by someone who may hand out that role. The invited person
+ * can decline instead; that sticks until an admin resends it.
  */
 
 import { createHash, randomBytes } from "node:crypto";
@@ -32,7 +33,7 @@ import { ensureUserRow } from "./user-row";
 
 export const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
-export type InvitationStatus = "pending" | "accepted" | "revoked" | "expired";
+export type InvitationStatus = "pending" | "accepted" | "revoked" | "declined" | "expired";
 
 export interface InvitationView {
     id: number;
@@ -75,6 +76,7 @@ interface InvitationRow {
     expiresAt: Date;
     acceptedAt: Date | null;
     revokedAt: Date | null;
+    declinedAt: Date | null;
     createdAt: Date;
 }
 
@@ -91,11 +93,19 @@ function newToken(): string {
 }
 
 export function invitationStatus(
-    row: { acceptedAt: Date | null; revokedAt: Date | null; expiresAt: Date },
+    row: {
+        acceptedAt: Date | null;
+        revokedAt: Date | null;
+        declinedAt?: Date | null;
+        expiresAt: Date;
+    },
     now: Date = new Date()
 ): InvitationStatus {
     if (row.acceptedAt) return "accepted";
     if (row.revokedAt) return "revoked";
+    // Before "expired": a declined invitation that has since run out still
+    // tells the admin the more useful thing.
+    if (row.declinedAt) return "declined";
     if (row.expiresAt.getTime() <= now.getTime()) return "expired";
     return "pending";
 }
@@ -266,6 +276,7 @@ export async function createInvitation(
                 eq(workspaceInvitations.email, email),
                 isNull(workspaceInvitations.acceptedAt),
                 isNull(workspaceInvitations.revokedAt),
+                isNull(workspaceInvitations.declinedAt),
                 gt(workspaceInvitations.expiresAt, new Date())
             )
         )
@@ -320,9 +331,10 @@ export async function resendInvitation(
     const token = newToken();
     const expiresAt = new Date(Date.now() + INVITATION_TTL_MS);
     await db.transaction(async tx => {
+        // Resending asks again, so a decline no longer stands.
         await tx
             .update(workspaceInvitations)
-            .set({ tokenHash: hashInvitationToken(token), expiresAt })
+            .set({ tokenHash: hashInvitationToken(token), expiresAt, declinedAt: null })
             .where(eq(workspaceInvitations.id, id));
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
@@ -330,11 +342,11 @@ export async function resendInvitation(
             action: "invitation.resent",
             targetType: "invitation",
             targetId: id,
-            detail: { email: row.email },
+            detail: { email: row.email, wasDeclined: status === "declined" },
         });
     });
 
-    const refreshed = { ...row, expiresAt };
+    const refreshed = { ...row, expiresAt, declinedAt: null };
     const { acceptUrl, emailSent } = await deliver(ctx, refreshed, token, origin);
     const [invitation] = await toViews(ctx.companyId, [refreshed]);
     if (!invitation) throw new Error("Invitation view missing");
@@ -379,6 +391,7 @@ export async function previewInvitation(token: string): Promise<InvitationPrevie
             expiresAt: workspaceInvitations.expiresAt,
             acceptedAt: workspaceInvitations.acceptedAt,
             revokedAt: workspaceInvitations.revokedAt,
+            declinedAt: workspaceInvitations.declinedAt,
             invitedBy: workspaceInvitations.invitedBy,
             workspaceName: company.name,
             workspaceSlug: company.slug,
@@ -432,6 +445,7 @@ export async function acceptInvitation(
     const status = invitationStatus(row);
     if (status === "accepted") throw gone(copy("team.server.errors.invitationUsed"));
     if (status === "revoked") throw gone(copy("team.server.errors.invitationRevoked"));
+    if (status === "declined") throw gone(copy("team.server.errors.invitationDeclined"));
     if (status === "expired") throw gone(copy("team.server.errors.invitationExpired"));
     if (row.email.trim().toLowerCase() !== user.email) {
         throw forbidden(copy("team.server.errors.invitationOtherEmail"));
@@ -526,4 +540,53 @@ export async function acceptInvitation(
             alreadyMember,
         };
     });
+}
+
+/**
+ * The invited person turns an invitation down. Only the address it was sent
+ * to may do this, and only while it is open; anyone else learns nothing about
+ * it (404, the same answer as an id that doesn't exist). It stays declined —
+ * off their workspace list, and refused by the accept link — until an admin
+ * resends it.
+ */
+export async function declineInvitation(
+    user: SessionUser,
+    invitationId: number
+): Promise<{ success: true }> {
+    const [row] = await db
+        .select()
+        .from(workspaceInvitations)
+        .where(eq(workspaceInvitations.id, invitationId))
+        .limit(1);
+    if (!row || !user.email || row.email.trim().toLowerCase() !== user.email) {
+        throw notFound(copy("team.server.errors.invitationDoesNotExist"));
+    }
+
+    const status = invitationStatus(row);
+    if (status === "declined") return { success: true };
+    if (status === "accepted") throw gone(copy("team.server.errors.invitationUsed"));
+    if (status === "revoked") throw gone(copy("team.server.errors.invitationRevoked"));
+    if (status === "expired") throw gone(copy("team.server.errors.invitationExpired"));
+
+    await db.transaction(async tx => {
+        await tx
+            .update(workspaceInvitations)
+            .set({ declinedAt: new Date() })
+            .where(
+                and(
+                    eq(workspaceInvitations.id, row.id),
+                    isNull(workspaceInvitations.acceptedAt),
+                    isNull(workspaceInvitations.revokedAt)
+                )
+            );
+        await recordAuditEvent(tx, {
+            companyId: row.companyId,
+            actorUserId: user.authUserId,
+            action: "invitation.declined",
+            targetType: "invitation",
+            targetId: row.id,
+            detail: { email: row.email },
+        });
+    });
+    return { success: true };
 }

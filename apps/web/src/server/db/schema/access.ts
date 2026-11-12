@@ -144,7 +144,8 @@ export const workspaceGroupMembers = pgTable(
 // Email invitations
 // ============================================================================
 // The token itself is never stored — only its SHA-256. An invitation is
-// pre-approval: accepting it creates an `active` membership.
+// pre-approval: accepting it creates an `active` membership. The invited
+// person can decline it instead (`declined_at`); an admin's resend reopens it.
 
 export const workspaceInvitations = pgTable(
     "workspace_invitations",
@@ -165,6 +166,8 @@ export const workspaceInvitations = pgTable(
         acceptedAt: timestamp("accepted_at", { withTimezone: true }),
         acceptedByUserId: bigint("accepted_by_user_id", { mode: "bigint" }),
         revokedAt: timestamp("revoked_at", { withTimezone: true }),
+        /** Set when the invited person turned it down; a resend clears it. */
+        declinedAt: timestamp("declined_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

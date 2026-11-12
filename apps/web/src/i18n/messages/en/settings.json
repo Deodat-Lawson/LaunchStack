@@ -295,7 +295,8 @@
   },
   "account": {
     "providers": {
-      "credential": "Email and password"
+      "credential": "Email and password",
+      "oidc": "Single sign-on"
     },
     "agent": {
       "unknown": "Unknown browser",

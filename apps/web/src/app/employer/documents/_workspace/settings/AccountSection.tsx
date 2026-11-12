@@ -17,7 +17,7 @@
  *
  * The password forms are the person's own forms for their own password: a
  * change goes to `/api/auth/change-password`, and setting one on an account
- * that has none (made with Google or GitHub) to `/api/profile/sign-in`.
+ * that has none (made with a sign-in provider) to `/api/profile/sign-in`.
  *
  * "Connect" links a provider the deployment offers to this account; the
  * round trip through the provider comes back to `/employer/settings` with
@@ -30,15 +30,14 @@ import { KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
 import { connectErrorMessage } from "~/components/auth/auth-errors";
-import { IconGithub, IconGoogle } from "~/components/icons/brand";
-import type { IconComponent } from "~/components/icons/types";
+import { providerIcon } from "~/components/auth/provider-icons";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { Field, TextInput } from "~/components/field";
 import { authClient, useAuth, useUser } from "~/lib/auth-client";
+import { providerName, type SocialProvider } from "~/lib/auth/providers";
 import { cn } from "~/lib/utils";
-import type { SocialProvider } from "~/server/auth/providers";
 
 import { AiAllowanceCard } from "./AiAllowanceCard";
 import { AssistantsBlock } from "./AssistantsBlock";
@@ -74,22 +73,23 @@ interface AccountRow {
 /** `useTranslations("settings.account")`. */
 type AccountT = ReturnType<typeof useTranslations<"settings.account">>;
 
-/** Brand names stay as they are; the password is said in the reader's language. */
-const PROVIDER_BRAND: Record<string, string> = {
-    google: "Google",
-    github: "GitHub",
-};
-
-function providerLabel(t: AccountT, providerId: string): string | undefined {
+/**
+ * Brand names stay as they are; the password is said in the reader's
+ * language. The deployment's OIDC provider is named by the deployment (the
+ * offered list carries AUTH_OIDC_NAME); a linked one the deployment no longer
+ * offers is just "Single sign-on".
+ */
+function providerLabel(
+    t: AccountT,
+    providerId: string,
+    offered: readonly SocialProvider[]
+): string | undefined {
     if (providerId === "credential") return t("providers.credential");
-    return PROVIDER_BRAND[providerId];
+    return (
+        providerName(providerId, offered) ??
+        (providerId === "oidc" ? t("providers.oidc") : undefined)
+    );
 }
-
-const PROVIDER_ICON: Record<string, IconComponent> = {
-    credential: KeyRound,
-    google: IconGoogle,
-    github: IconGithub,
-};
 
 /**
  * "For your security, sign in again to …" with the button that does it:
@@ -123,7 +123,7 @@ function SignInAgainNote({ message }: { message: string }) {
 
 /** Where a "Connect" round trip lands, success or failure. */
 function connectReturnPath(provider: SocialProvider): string {
-    return `/employer/settings?connect=${provider}#account`;
+    return `/employer/settings?connect=${provider.id}#account`;
 }
 
 interface Arrival {
@@ -203,6 +203,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         provider: string;
         error: string;
     } | null>(null);
+    // Back from a successful "Connect": toasted once the offered list has
+    // loaded, since only that list can name the deployment's OIDC provider.
+    const [connectedArrival, setConnectedArrival] = useState<string | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
     const signInRef = useRef<HTMLDivElement>(null);
     const [showSignIn, setShowSignIn] = useState(false);
@@ -256,15 +259,19 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         if (connected.error) {
             setConnectFailure({ provider: connected.provider, error: connected.error });
         } else {
-            toast.success(
-                t("connected", {
-                    provider: providerLabel(t, connected.provider) ?? t("accountFallback"),
-                })
-            );
+            setConnectedArrival(connected.provider);
         }
-        // Once, on arrival; `t` changing would replay the toast.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (connectedArrival === null || accounts === null) return;
+        toast.success(
+            t("connected", {
+                provider: providerLabel(t, connectedArrival, offered) ?? t("accountFallback"),
+            })
+        );
+        setConnectedArrival(null);
+    }, [connectedArrival, accounts, offered, t]);
 
     // Once the block has its rows, so it doesn't move after the jump.
     useEffect(() => {
@@ -274,27 +281,26 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     }, [showSignIn, accounts]);
 
     const connect = async (provider: SocialProvider) => {
-        setBusy(`connect:${provider}`);
+        setBusy(`connect:${provider.id}`);
         setConnectFailure(null);
         try {
             // Leaves the page for the provider on success; Better Auth's client
             // follows the redirect it answers with.
             const result = await authClient.linkSocial({
-                provider,
+                provider: provider.id,
                 callbackURL: connectReturnPath(provider),
                 errorCallbackURL: connectReturnPath(provider),
             });
             if (result.error) {
                 throw new Error(
-                    result.error.message ??
-                        t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
+                    result.error.message ?? t("couldNotConnect", { provider: provider.name })
                 );
             }
         } catch (err) {
             toast.error(
                 err instanceof Error
                     ? err.message
-                    : t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
+                    : t("couldNotConnect", { provider: provider.name })
             );
             setBusy(null);
         }
@@ -338,7 +344,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
     const hasPassword = accounts?.some(account => account.providerId === "credential") ?? false;
     const unlinked = offered.filter(
-        provider => !accounts?.some(account => account.providerId === provider)
+        provider => !accounts?.some(account => account.providerId === provider.id)
     );
     const others = (sessions ?? []).filter(row => !row.current);
 
@@ -356,7 +362,8 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     <StatusNote tone="danger">
                         {connectErrorMessage(
                             connectFailure.error,
-                            connectFailure.provider,
+                            offered.find(provider => provider.id === connectFailure.provider) ??
+                                connectFailure.provider,
                             user?.email,
                             tAuthErrors
                         )}
@@ -385,7 +392,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     <ProviderMark providerId={account.providerId} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {providerLabel(t, account.providerId) ??
+                                            {providerLabel(t, account.providerId, offered) ??
                                                 account.providerId}
                                         </div>
                                         <div className="text-ink-3 text-[12px]">
@@ -403,8 +410,10 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                                 setBusy(account.id);
                                                 setUnlinkNeedsSignIn(false);
                                                 try {
+                                                    // Better Auth's own row id, not the
+                                                    // provider's subject (accountId).
                                                     const result = await authClient.unlinkAccount({
-                                                        accountId: account.accountId,
+                                                        accountId: account.id,
                                                     });
                                                     if (result.error?.code === SESSION_NOT_FRESH) {
                                                         setUnlinkNeedsSignIn(true);
@@ -436,16 +445,16 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                             ))}
                             {unlinked.map((provider, index) => (
                                 <li
-                                    key={provider}
+                                    key={provider.id}
                                     className={cn(
                                         "flex items-center gap-3 py-2.5",
                                         (accounts.length > 0 || index > 0) && "border-line border-t"
                                     )}
                                 >
-                                    <ProviderMark providerId={provider} />
+                                    <ProviderMark providerId={provider.id} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {providerLabel(t, provider) ?? provider}
+                                            {provider.name}
                                         </div>
                                         <div className="text-ink-3 text-[12px]">
                                             {tc("status.notConnected")}
@@ -457,7 +466,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                         disabled={busy?.startsWith("connect:") ?? false}
                                         onClick={() => void connect(provider)}
                                     >
-                                        {busy === `connect:${provider}`
+                                        {busy === `connect:${provider.id}`
                                             ? t("signIn.connecting")
                                             : tc("actions.connect")}
                                     </Button>
@@ -552,7 +561,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 }
 
 function ProviderMark({ providerId }: { providerId: string }) {
-    const Icon = PROVIDER_ICON[providerId] ?? KeyRound;
+    const Icon = providerId === "credential" ? KeyRound : providerIcon(providerId);
     return (
         <span
             aria-hidden
@@ -564,7 +573,7 @@ function ProviderMark({ providerId }: { providerId: string }) {
 }
 
 /**
- * For an account with no password: one made with Google or GitHub, or one
+ * For an account with no password: one made with a sign-in provider, or one
  * whose unconfirmed password a provider sign-in removed. No current password
  * to ask for, so the session is the proof (see /api/profile/sign-in).
  */

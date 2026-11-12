@@ -426,6 +426,7 @@
     "askAbout": "Ask about this",
     "shareHint": "Share · {audience}",
     "deleteDocument": "Delete document",
+    "editLinkedHint": "Edit it here. Saving writes into the Google Doc.",
     "previewingBanner": "Previewing v{number}. Search still uses the current version.",
     "mindmapError": "Couldn't open this mindmap: {error}",
     "processing": "This source is still processing — content will appear once indexing finishes.",

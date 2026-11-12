@@ -92,9 +92,9 @@
         "label": "Mindmap",
         "desc": "Diagram it, then cite it"
       },
-      "googleDoc": {
-        "label": "Google Doc",
-        "desc": "Write it in Google Docs"
+      "file": {
+        "label": "File",
+        "desc": "Write it here or in Google Docs"
       },
       "paste": {
         "label": "Paste text",
@@ -196,17 +196,26 @@
       "untitled": "Untitled mindmap",
       "openingEditor": "Opening the editor…"
     },
-    "googleDoc": {
-      "connectIntro": "Connect a Google account for this workspace and new documents will be created in its Drive, in a <b>LaunchStack</b> folder.",
-      "connectGoogle": "Connect Google",
-      "created": "Created in Google Docs",
-      "createFailed": "Couldn't create that document",
-      "intro": "Write it in Google Docs. It shows up here right away, and edits sync back as new versions your workspace can cite.",
-      "introAs": "Write it in Google Docs as {email}. It shows up here right away, and edits sync back as new versions your workspace can cite.",
+    "file": {
+      "titleLabel": "Title",
       "untitled": "Untitled document",
-      "blank": "Blank document",
-      "creating": "Creating in Google Docs…",
-      "opensInNewTab": "Opens in a new tab"
+      "intro": "Give it a title, then choose where to write it.",
+      "here": {
+        "title": "Write it here",
+        "desc": "In LaunchStack's editor. Saved as a Markdown file in this folder, and citable once it's read.",
+        "creating": "Opening the editor…",
+        "createFailed": "Couldn't create that file"
+      },
+      "google": {
+        "title": "Write it in Google Docs",
+        "desc": "Opens in a new tab. Edits sync back here as new versions.",
+        "descAs": "As {email}. Opens in a new tab, and edits sync back here as new versions.",
+        "connectDesc": "Connect a Google account for this workspace and new documents will be created in its Drive, in a <b>LaunchStack</b> folder.",
+        "connectGoogle": "Connect Google",
+        "creating": "Creating in Google Docs…",
+        "created": "Created in Google Docs",
+        "createFailed": "Couldn't create that document"
+      }
     },
     "files": {
       "files": {

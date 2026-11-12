@@ -370,13 +370,14 @@ export function WorkspaceShell() {
     });
     /**
      * What a source tab opens on, when it was opened for a reason: the cited
-     * passage to find and highlight, or a mindmap's presenter. One at a time —
-     * the latest citation wins.
+     * passage to find and highlight, a mindmap's presenter, or a new file's
+     * editor. One at a time — the latest citation wins.
      */
     const [sourceTabFocus, setSourceTabFocus] = useState<{
         sourceId: string;
         highlight?: CitationHighlight;
         present?: boolean;
+        edit?: boolean;
     } | null>(null);
 
     const sourceUrl = useCallback(
@@ -487,7 +488,10 @@ export function WorkspaceShell() {
      * Already open somewhere, it comes forward there instead of opening twice.
      */
     const openSourceTab = useCallback(
-        (id: string, focus?: { highlight?: CitationHighlight; present?: boolean }) => {
+        (
+            id: string,
+            focus?: { highlight?: CitationHighlight; present?: boolean; edit?: boolean }
+        ) => {
             setSourceTabFocus(prev =>
                 focus ? { sourceId: id, ...focus } : prev?.sourceId === id ? null : prev
             );
@@ -2956,6 +2960,17 @@ export function WorkspaceShell() {
                                     prev?.sourceId === sourceIdOfTab(paneId) ? null : prev
                                 )
                             }
+                            editRequested={
+                                sourceTabFocus?.sourceId === sourceIdOfTab(paneId) &&
+                                sourceTabFocus.edit === true
+                            }
+                            onEditRequestHandled={() =>
+                                setSourceTabFocus(prev =>
+                                    prev?.sourceId === sourceIdOfTab(paneId) && prev.edit
+                                        ? null
+                                        : prev
+                                )
+                            }
                         />
                     ) : paneId === "mindmap" && editedMindmap?.mindmapId ? (
                         // The editor stays mounted behind other tabs — that is
@@ -3129,6 +3144,13 @@ export function WorkspaceShell() {
                     // the sync effect reads the id as stale and drops it.
                     void refresh().then(() => openSource(`m${id}`, true));
                 }}
+                onFileCreated={id => {
+                    setAddOpen(false);
+                    setAddTab(undefined);
+                    // As for a map: the list learns the file first, so its tab
+                    // has a source to show — already in the editor.
+                    void refresh().then(() => openSourceTab(`d${id}`, { edit: true }));
+                }}
             />
 
             <CommandPalette
@@ -3276,6 +3298,8 @@ function EmbeddedSourcePane({
     highlight: CitationHighlight | null;
     present: boolean;
     onExitPresent: () => void;
+    editRequested: boolean;
+    onEditRequestHandled: () => void;
 }) {
     const t = useTranslations("workspace.shell");
     const tc = useTranslations("common");

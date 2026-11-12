@@ -131,8 +131,15 @@ export function AccountMenu({
         run(async () => {
             const mine = accounts?.find(a => a.userId === activeUserId);
             if (others.length > 0 && mine) {
-                // The server makes another signed-in account active.
                 await signOutDeviceAccount(mine.sessionToken);
+                // The plugin has already made one of the others active, but
+                // its pick need not be the one this menu shows first. Land on
+                // the top of "Switch to"; if that fails, its pick stands.
+                try {
+                    await switchDeviceAccount(others[0]!.sessionToken);
+                } catch {
+                    // Still signed in as whichever account the plugin chose.
+                }
                 reloadAs("/workspaces");
             } else if (others.length > 0 && activeToken) {
                 // Signed in past the limit, so this browser doesn't remember

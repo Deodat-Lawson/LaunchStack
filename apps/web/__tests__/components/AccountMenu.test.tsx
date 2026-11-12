@@ -137,6 +137,45 @@ describe("AccountMenu", () => {
         expect(mockReload).toHaveBeenCalledWith("/workspaces");
     });
 
+    it("after signing out, lands on the first account under Switch to, not the plugin's pick", async () => {
+        const ZOE = {
+            ...GRACE,
+            userId: "u-zoe",
+            sessionToken: "tok-zoe",
+            name: "Zoe",
+            email: "zoe@example.com",
+        };
+        mockAccounts = [ADA, GRACE, ZOE];
+        const user = await openMenu();
+        const listed = await screen.findAllByTestId("account-other");
+        expect(listed[0]).toHaveTextContent("Grace Hopper");
+
+        await user.click(screen.getByRole("menuitem", { name: "Sign out of ada@example.com" }));
+
+        await waitFor(() => expect(mockReload).toHaveBeenCalledWith("/workspaces"));
+        expect(mockSignOutOne).toHaveBeenCalledWith("tok-ada");
+        expect(mockSwitch).toHaveBeenCalledWith("tok-grace");
+        // Revoked first, then switched, then reloaded.
+        expect(mockSignOutOne.mock.invocationCallOrder[0]).toBeLessThan(
+            mockSwitch.mock.invocationCallOrder[0]!
+        );
+        expect(mockSwitch.mock.invocationCallOrder[0]).toBeLessThan(
+            mockReload.mock.invocationCallOrder[0]!
+        );
+    });
+
+    it("if that switch fails, keeps the plugin's pick instead of stranding the person", async () => {
+        mockSwitch.mockRejectedValue(new Error("session ended"));
+        const user = await openMenu();
+        await screen.findByRole("menuitem", { name: /Grace Hopper/ });
+
+        await user.click(screen.getByRole("menuitem", { name: "Sign out of ada@example.com" }));
+
+        await waitFor(() => expect(mockReload).toHaveBeenCalledWith("/workspaces"));
+        expect(mockSignOutOne).toHaveBeenCalledWith("tok-ada");
+        expect(mockSignOutAll).not.toHaveBeenCalled();
+    });
+
     it("offers signing out of all accounts only when there are several", async () => {
         const user = await openMenu();
         await screen.findByRole("menuitem", { name: /Grace Hopper/ });

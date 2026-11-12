@@ -10,7 +10,12 @@
 import type { Permission } from "~/lib/authz/permissions";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import type { McpPrincipal } from "~/server/mcp/principal";
-import { handleMcpPost, type McpToolOutcome } from "~/server/mcp/protocol";
+import {
+    handleMcpPost,
+    isInputRequired,
+    type McpToolAnswer,
+    type McpToolOutcome,
+} from "~/server/mcp/protocol";
 import { MCP_TOOLS } from "~/server/mcp/tools";
 import { FETCH_MAX_CHARS, fetchTool, joinChunkText } from "~/server/mcp/tools/fetch";
 import {
@@ -103,17 +108,30 @@ function principal(
 }
 
 function run(tool: typeof searchTool, args: unknown, who = principal()) {
-    return tool.call(args, { principal: who, origin: ORIGIN });
+    return tool.call(args, {
+        principal: who,
+        origin: ORIGIN,
+        client: { era: "legacy", formElicitation: false },
+        roundTrip: null,
+        rawArguments: (args ?? {}) as Record<string, unknown>,
+    });
 }
 
-function okOf(outcome: McpToolOutcome) {
-    if (!outcome.ok) throw new Error(`expected success, got: ${outcome.message}`);
+function answerOf(outcome: McpToolOutcome): McpToolAnswer {
+    if (isInputRequired(outcome)) throw new Error("expected an answer, got input_required");
     return outcome;
 }
 
+function okOf(outcome: McpToolOutcome) {
+    const answer = answerOf(outcome);
+    if (!answer.ok) throw new Error(`expected success, got: ${answer.message}`);
+    return answer;
+}
+
 function messageOf(outcome: McpToolOutcome): string {
-    if (outcome.ok) throw new Error(`expected an error, got: ${outcome.text}`);
-    return outcome.message;
+    const answer = answerOf(outcome);
+    if (answer.ok) throw new Error(`expected an error, got: ${answer.text}`);
+    return answer.message;
 }
 
 beforeEach(() => {

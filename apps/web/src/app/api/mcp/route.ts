@@ -1,5 +1,6 @@
 /**
- * LaunchStack's MCP server: Streamable HTTP, JSON responses, stateless.
+ * LaunchStack's MCP server: Streamable HTTP, JSON responses, stateless
+ * (revisions 2025-03-26 to 2026-07-28; see `~/server/mcp/protocol`).
  * Claude, ChatGPT and Gemini (and their CLIs) POST one JSON-RPC message per
  * request with an OAuth access token or an `lsk_` access key.
  *
@@ -132,6 +133,8 @@ export async function POST(request: Request) {
                             body,
                             accept: request.headers.get("accept"),
                             protocolVersion: request.headers.get("mcp-protocol-version"),
+                            method: request.headers.get("mcp-method"),
+                            name: request.headers.get("mcp-name"),
                         },
                         {
                             principal,

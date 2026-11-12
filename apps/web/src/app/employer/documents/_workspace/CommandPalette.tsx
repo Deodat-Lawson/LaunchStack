@@ -144,6 +144,7 @@ export function CommandPalette({
     // Settings rows in the reader's language, found by either language.
     const searchSettings = useSettingsSearch();
     const settingCopy = useSettingCopier();
+    const tSections = useTranslations("settings.sections");
     const studio = useStudioText();
     const tSourceTypes = useTranslations("sources.sourceTypes");
     const th = useTranslations("workspace.history");
@@ -219,7 +220,7 @@ export function CommandPalette({
                     sub: demotedFeatureDescription(studio, f),
                     // The English name still finds it in any language, and so
                     // does its id ("byok").
-                    keywords: `${f.id} ${f.label} ${f.desc}`,
+                    keywords: `${f.id} ${f.label} ${f.desc ?? ""}`,
                     Icon: f.Icon,
                     onRun: () => {
                         if (onPickFeature) onPickFeature(f.id);
@@ -324,7 +325,8 @@ export function CommandPalette({
                         : isUsageSection(definition.section)
                           ? "usageSettingSub"
                           : "workspaceSettingSub",
-                    { description: copy.description }
+                    // A row with no description of its own names its section.
+                    { description: copy.description ?? tSections(`${definition.section}.label`) }
                 ),
                 Icon: Settings,
                 onRun: () => {
@@ -359,6 +361,7 @@ export function CommandPalette({
         changeLocale,
         searchSettings,
         settingCopy,
+        tSections,
     ]);
 
     useEffect(() => {

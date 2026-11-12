@@ -300,7 +300,7 @@ export function NewScreen() {
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-            <PageHeader size="md" title={t("title")} accent={t("accent")} sub={t("sub")} />
+            <PageHeader size="md" title={t("title")} accent={t("accent")} />
             <input
                 ref={fileInput}
                 type="file"

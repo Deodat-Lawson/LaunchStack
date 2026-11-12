@@ -451,7 +451,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section title={t("setup.title")} description={t("setup.description")}>
+            <Section title={t("setup.title")}>
                 <Card>
                     <ol
                         style={{

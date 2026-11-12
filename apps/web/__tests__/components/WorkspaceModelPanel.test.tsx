@@ -804,7 +804,6 @@ describe("Models & usage › Models › Server default", () => {
         renderModels();
         const section = await webSearchSection();
 
-        expect(section).toHaveTextContent("set on the server, so nothing here changes it");
         expect(section).toHaveTextContent(
             "The first configured engine; set SEARCH_PROVIDER to choose."
         );

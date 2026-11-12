@@ -1067,10 +1067,7 @@ export function WorkspaceShell() {
             hydratedSession.current = null;
             setSessionParam(null);
             setActiveFeatureId("chat");
-            if (await saving)
-                toast.success(t("shell.forkSaved"), {
-                    description: t("shell.forkSavedDescription"),
-                });
+            if (await saving) toast.success(t("shell.forkSaved"));
         },
         [setSessionParam, setActiveFeatureId, forkRuntime, thread, t]
     );

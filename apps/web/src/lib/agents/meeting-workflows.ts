@@ -43,7 +43,7 @@ export interface MeetingWorkflow {
     title: string;
     /** One line for the card. */
     tagline: string;
-    /** Two or three sentences on when to reach for it. */
+    /** When to reach for it, in a line. */
     description: string;
     /** Suggested objective; the person edits it before starting. */
     objectiveTemplate: string;
@@ -67,8 +67,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "daci-decision",
         title: "DACI decision",
         tagline: "One driver, clear contributors, a recommendation you approve.",
-        description:
-            "For a decision that needs several perspectives and a clear owner. The chair drives: frames the decision and the options, collects each contributor's input, has the devil's advocate test the leading option, and ends with a recommendation. You are the approver — the meeting produces the recommendation, you make the call.",
+        description: "For a decision that needs several perspectives and a clear owner.",
         objectiveTemplate: "Decide whether to <change>, and name who owns the outcome",
         agenda: [
             "The decision, the options, the deadline",
@@ -120,8 +119,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "six-thinking-hats",
         title: "Six Thinking Hats",
         tagline: "Facts, feelings, benefits, risks, alternatives — one at a time.",
-        description:
-            "For a question the room keeps arguing about in circles. Everyone thinks in the same direction at the same time: first the facts, then gut reactions, then benefits, then risks, then alternatives, and finally the decision. Parallel thinking replaces adversarial debate.",
+        description: "For a question the room keeps arguing about in circles.",
         objectiveTemplate: "Work through <question> hat by hat and land on a decision",
         agenda: [
             "White: facts",
@@ -197,8 +195,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "lightning-decision-jam",
         title: "Lightning decision jam",
         tagline: "Problems, then priorities, then solutions — no open discussion.",
-        description:
-            "For a team that talks a lot and decides little. Everyone names what is working and what is not, the chair prioritises, the biggest problem is reframed as a 'how might we', everyone proposes solutions, and one becomes an experiment with an owner. Written turns keep it from turning into a debate.",
+        description: "For a team that talks a lot and decides little.",
         objectiveTemplate: "Pick one experiment to run against the biggest problem in <area>",
         agenda: [
             "What is working",
@@ -263,7 +260,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         title: "Pre-mortem",
         tagline: "It is a year later and the plan failed. Why?",
         description:
-            "Run before committing to a plan. Everyone assumes the plan has already failed and writes down why — prospective hindsight surfaces risks people would not raise as objections. The room then ranks the causes and assigns a mitigation to each one that matters.",
+            "Run before committing to a plan, to surface risks people would not raise as objections.",
         objectiveTemplate:
             "Find the ways <plan> fails and assign a mitigation to each one that matters",
         agenda: [
@@ -316,8 +313,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "prfaq-review",
         title: "Working-backwards PR/FAQ review",
         tagline: "Start from the customer's press release; work back to what must be true.",
-        description:
-            "For a new product, feature or initiative. Amazon's working-backwards discipline: state the idea as the press release a customer would read, answer the five customer questions, then take the hard internal FAQ — what has to be true, what it costs, what could kill it — and give a verdict.",
+        description: "For a new product, feature or initiative.",
         objectiveTemplate: "Review the PR/FAQ for <idea> and decide: proceed, refine, or stop",
         agenda: ["The press release", "The customer questions", "The hard FAQ", "Verdict"],
         agents: ["facilitator", "product", "support", "engineer", "finance", "critic"],
@@ -366,8 +362,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         title: "Pitch review",
         tagline:
             "Purpose, problem, solution, why now, market, model, team — the investor's outline.",
-        description:
-            "For a deck, a memo or an application. The room reads the pitch the way an investor does, section by section on Sequoia's outline, and finishes with the three questions the founder will get asked and how to answer them.",
+        description: "For a deck, a memo or an application.",
         objectiveTemplate:
             "Review the pitch for <company or round> and list the questions an investor will ask",
         agenda: [
@@ -429,8 +424,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "retrospective-4ls",
         title: "Retrospective (4Ls)",
         tagline: "Loved, loathed, longed for, learned — then actions.",
-        description:
-            "After a launch, a sprint or a bad week. Each seat says what it loved, loathed, longed for and learned; the chair turns the loathed and longed-for into a short list of actions with owners.",
+        description: "After a launch, a sprint or a bad week.",
         objectiveTemplate: "Run a retrospective on <period or project> and agree the actions",
         agenda: ["Loved", "Loathed", "Longed for", "Learned", "Actions"],
         agents: ["facilitator", "product", "engineer", "sales", "support"],
@@ -487,8 +481,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "customer-discovery",
         title: "Customer discovery synthesis",
         tagline: "From what they said to what we do — without fooling ourselves.",
-        description:
-            "Point it at interviews, tickets, reviews or call notes. The customer voice reports what people said with counts, product names the forces behind a switch, sales separates compliments from commitments, and the room agrees the next interviews or experiments.",
+        description: "For interviews, tickets, reviews or call notes in the workspace.",
         objectiveTemplate:
             "Synthesise the customer evidence in <sources> into what to build, test or ask next",
         agenda: [
@@ -541,8 +534,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "open-discussion",
         title: "Open discussion",
         tagline: "No phases — just the objective and the room.",
-        description:
-            "Pick the agents, state the objective, and let the turn policy run. The right choice when the question does not fit a recipe.",
+        description: "For a question that does not fit a recipe.",
         objectiveTemplate: "",
         agenda: [],
         agents: ["facilitator", "analyst", "critic"],
@@ -558,8 +550,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "weekly-business-review",
         title: "Weekly business review",
         tagline: "Inputs, outputs, exceptions, next steps — in that order.",
-        description:
-            "The standing weekly meeting over the week's numbers and notes. Controllable input metrics first, then the outputs they are meant to move and the variances, then only the exceptions, then next steps with owners. No storytelling around a number that is on track.",
+        description: "The standing weekly meeting over the week's numbers and notes.",
         objectiveTemplate: "Review the week for <company or team> and agree next steps",
         agenda: ["Input metrics", "Output metrics and variances", "Exceptions", "Next steps"],
         agents: ["facilitator", "analyst", "finance", "sales", "product"],
@@ -607,8 +598,7 @@ export const MEETING_WORKFLOWS: readonly MeetingWorkflow[] = [
         key: "okr-setting",
         title: "OKR setting",
         tagline: "One objective, three measurable key results, stress-tested.",
-        description:
-            "For a quarter or a launch. Draft the objective, have each function propose key results, then test them: measurable, ambitious, outcomes rather than tasks, few enough to remember. Commit to what survives.",
+        description: "For a quarter or a launch.",
         objectiveTemplate: "Set the OKRs for <quarter or initiative>",
         agenda: ["The objective", "Key results by function", "Stress test", "Commit"],
         agents: ["facilitator", "product", "sales", "engineer", "finance", "critic"],

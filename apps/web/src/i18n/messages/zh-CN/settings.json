@@ -29,26 +29,25 @@
     "account": {
       "label": "账户",
       "blurb": "个人资料、头像、密码、会话",
-      "title": "你是谁，以及你在哪里登录",
-      "description": "你的个人资料和头像、你在此工作区中的显示方式、登录信息，以及当前保持登录会话的每个浏览器。"
+      "title": "你是谁，以及你在哪里登录"
     },
     "appearance": {
       "label": "外观",
       "blurb": "语言、主题、密度、动画、回答",
       "title": "应用的外观，以及它如何回答你",
-      "description": "只有五项设置，而不是十一项：四项关于界面显示，一项关于助手的回答方式。思维导图中的配色属于导图本身，而不属于主题。"
+      "description": "思维导图的配色属于导图本身，主题不会改变它们。"
     },
     "shortcuts": {
       "label": "快捷键",
       "blurb": "所有命令及其按键",
       "title": "键盘能做什么",
-      "description": "所有命令、对应的按键，以及修改它们的地方。仅对你生效；打开思维导图时，思维导图编辑器使用自己的一套快捷键。"
+      "description": "仅对你生效，其他成员保留各自的设置。"
     },
     "people": {
       "label": "成员与权限",
       "blurb": "成员、角色、文件夹",
       "title": "工作区里有谁，以及他们能看到什么",
-      "description": "成员及其角色、邀请和加入链接、用户组、自定义角色，以及审计日志。谁能打开某个文件夹在文件夹本身上设置，其余一切由角色决定。"
+      "description": "谁能打开某个文件夹在文件夹本身上设置，其余一切由角色决定。"
     },
     "company": {
       "label": "公司档案",
@@ -59,8 +58,7 @@
     "byok": {
       "label": "API 密钥",
       "blurb": "工作区 AI 使用你自己的 API 密钥",
-      "title": "API 密钥",
-      "description": "工作区的 AI（对话、起草、会议和后台任务）使用你自己的提供商账户。可选：留空则使用服务器的密钥。"
+      "title": "API 密钥"
     },
     "models": {
       "label": "模型",
@@ -71,55 +69,48 @@
     "agents": {
       "label": "智能体与自主程度",
       "blurb": "智能体名单及其权限",
-      "title": "谁参加会议，以及他们可以独立做多少事",
-      "description": "每个智能体都是会议中的一个席位：有名字、角色、常设指令和自主程度。智能体可以在本应用中运行，也可以在你连接的其他机器上运行。"
+      "title": "谁参加会议，以及他们可以独立做多少事"
     },
     "integrations": {
       "label": "集成",
       "blurb": "连接、Slack、远程节点",
-      "title": "此工作区连接了哪些服务",
-      "description": "工作区与 Drive、Slack 和 GitHub 的连接；会议的 Slack 同步；以及远程智能体机器接入的中枢。全部可选，且彼此独立。"
+      "title": "此工作区连接了哪些服务"
     },
     "usage": {
       "label": "支出与上限",
       "blurb": "余额、价格、每人 AI 上限",
       "title": "工作区的支出情况",
-      "description": "token 余额和哪些功能在消耗它、每个人本月的 AI 用量与上限，以及这些数字所参考的两项设置。每次 AI 调用按功能、模型和成员的用量见“概览”。"
+      "description": "每次 AI 调用按功能、模型和成员的用量见“概览”。"
     },
     "archive": {
       "label": "归档与保留",
       "blurb": "回收站、停用的智能体、清除",
-      "title": "哪些内容已被收起，以及何时永久删除",
-      "description": "已删除的思维导图和产物、停用的智能体和已归档的频道，可以恢复或永久删除。保留期决定回收站会自动清空哪些内容。"
+      "title": "哪些内容已被收起，以及何时永久删除"
     },
     "privacy": {
       "label": "数据与隐私",
       "blurb": "哪些数据会离开部署",
-      "title": "哪些数据会离开此部署，哪些会留下",
-      "description": "哪些外部服务能看到文档正文，哪些只能看到元数据，保留了什么、保留多久。在把敏感内容交给本应用之前，请先阅读这部分。"
+      "title": "哪些数据会离开此部署，哪些会留下"
     },
     "labs": {
       "label": "实验室",
       "blurb": "未完成，需手动开启",
-      "title": "尚未完成的功能",
-      "description": "每一项都如实说明了它目前能做什么。默认关闭；开启任意一项都会影响整个工作区。"
+      "title": "尚未完成的功能"
     },
     "general": {
       "label": "常规",
       "blurb": "名称、网址、描述、颜色",
       "title": "工作区叫什么，以及别人如何认出它",
-      "description": "它的名称、列出时使用的网址、一句话介绍它做什么，以及它标志的颜色。工作区里的每个人都能看到这些信息，由管理员修改。"
+      "description": "工作区里的每个人都能看到这些信息，由管理员修改。"
     }
   },
   "registry": {
     "appearance": {
       "theme": {
         "label": "主题",
-        "description": "浅色、深色，或跟随系统设置。",
         "options": {
           "system": {
-            "label": "跟随系统",
-            "description": "跟随操作系统的设置。"
+            "label": "跟随系统"
           },
           "light": {
             "label": "浅色"
@@ -131,7 +122,7 @@
       },
       "density": {
         "label": "密度",
-        "description": "决定屏幕上能放下多少内容。紧凑模式会收紧列表中的间距和字号。",
+        "description": "紧凑模式会收紧列表中的间距和字号。",
         "options": {
           "comfortable": {
             "label": "舒适"
@@ -143,11 +134,9 @@
       },
       "reducedMotion": {
         "label": "动画效果",
-        "description": "应用中的动画和过渡效果。",
         "options": {
           "system": {
-            "label": "跟随系统",
-            "description": "遵循操作系统的“减弱动态效果”设置。"
+            "label": "跟随系统"
           },
           "reduce": {
             "label": "减弱",
@@ -174,13 +163,12 @@
     "privacy": {
       "productAnalytics": {
         "label": "产品分析",
-        "description": "你的浏览器产生的页面浏览是否计入托管版产品的使用分析。不在托管服务上时，无论如何都不会发送任何数据。"
+        "description": "你的浏览器产生的页面浏览是否计入托管版产品的使用分析。"
       }
     },
     "workspace": {
       "auditRetentionDays": {
         "label": "审计事件保留时长",
-        "description": "审计日志保留多长时间。",
         "consequence": "更早的事件会被删除。如需永久留存，请先导出 CSV。",
         "options": {
           "forever": {
@@ -250,7 +238,7 @@
     "labs": {
       "predictiveGaps": {
         "label": "预测性缺口分析",
-        "description": "列出你的文档中缺失的附件、附表和合规缺口。分析功能已经就绪，但展示它的界面尚未完成，因此开启后只会在命令面板中显示入口。"
+        "description": "在命令面板中添加“预测性缺口分析”入口。目前选择它不会打开任何内容。"
       }
     }
   },
@@ -309,7 +297,6 @@
     "othersEnded": "其他所有会话均已结束",
     "signIn": {
       "title": "登录方式",
-      "description": "你的登录方式，以及与你的账户关联的其他账户。",
       "loadFailed": "无法加载你的登录方式。请刷新页面重试。",
       "linked": "关联于 {when}",
       "couldNotUnlink": "无法取消关联。",
@@ -319,7 +306,7 @@
     },
     "sessions": {
       "title": "会话",
-      "description": "当前为你保持登录会话的所有浏览器。结束某个会话后，该浏览器会在下一次请求时退出登录。",
+      "description": "结束某个会话后，该浏览器会在下一次请求时退出登录。",
       "thisBrowser": "当前浏览器",
       "meta": "最近活动：{active} · 过期：{expires}",
       "metaWithIp": "{ip} · 最近活动：{active} · 过期：{expires}",
@@ -379,11 +366,11 @@
   "appearance": {
     "display": {
       "title": "显示",
-      "description": "更改后立即应用于此浏览器，并在你登录的所有地方保持一致。"
+      "description": "在你登录的所有地方保持一致。"
     },
     "answers": {
       "title": "回答",
-      "description": "未选择智能体时，Launchstack 在对话中回答你的方式。仅对你生效，其他人的回答不受影响。"
+      "description": "仅对你生效，其他人的回答不受影响。"
     }
   },
   "archive": {
@@ -409,7 +396,7 @@
     "purged": "加载此页面时，保留期设置移除了 {count, plural, other {# 个}}超过 {days} 天的项目。",
     "retention": {
       "title": "保留期",
-      "description": "回收站会自动清空的内容。停用的智能体和已归档的频道永远不会被自动移除。"
+      "description": "停用的智能体和已归档的频道永远不会被自动移除。"
     },
     "putAway": {
       "title": "已收起",
@@ -418,7 +405,7 @@
     "search": "搜索归档",
     "selected": "已选择 {count} 项",
     "deleteForGood": "永久删除",
-    "needsDelete": "永久删除需要 documents.delete 权限。",
+    "needsDelete": "永久删除需要拥有“删除文档和版本”权限的角色。",
     "notDeletable": "智能体和频道无法永久删除。",
     "loading": "正在加载归档…",
     "noMatch": "没有匹配的内容。",
@@ -468,7 +455,7 @@
       "step1": "在 Claude（claude.ai 或桌面应用）中，打开 <menu>Customize › Connectors › Add custom connector</menu>，然后粘贴服务器 URL。",
       "step2": "选择 <menu>Sign in now</menu>，OAuth 客户端选择 <menu>Use Claude''s published identity</menu>（<menu>Register automatically</menu> 也可以）。",
       "note1": "免费套餐可以添加一个自定义连接器。在 Team 和 Enterprise 套餐中，需由所有者先在 <menu>Organization settings › Connectors › Add › Custom</menu> 中添加；然后每位成员从 Customize › Connectors 进行连接。",
-      "note2": "对于脚本或共享配置，请选择 No sign-in，并改为添加请求头 <code>{header}</code>。对于部分组织，Claude 仍将该选项标记为 Beta。"
+      "note2": "对于脚本或共享配置，请选择 No sign-in，并改为添加请求头 <code>{header}</code>。"
     },
     "chatgpt": {
       "step1": "在 ChatGPT 中，打开 <menu>Settings › Apps & Connectors › Advanced settings</menu>，然后开启 <menu>Developer mode</menu>。",
@@ -525,7 +512,7 @@
     "connectTitle": "连接助手",
     "connected": {
       "title": "已连接的助手",
-      "description": "你已登录到此工作区的助手。撤销后，它会在下一次请求时被切断；它已保存的内容会保留。",
+      "description": "撤销后，它会在下一次请求时被切断；它已保存的内容会保留。",
       "none": "还没有连接任何助手。",
       "connectedAt": "连接于 {when}",
       "connected": "已连接",
@@ -558,7 +545,7 @@
     "removing": "正在移除…",
     "listSeparator": "、",
     "drive": {
-      "description": "在“添加来源”中从 Google Drive 选择的文件和文件夹会保持同步，同步的内容列在这里。关联功能还可以让你使用专业工具编辑 PDF 和 Word 文档：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
+      "description": "在“添加来源”中从 Google Drive 选择的文件和文件夹会保持同步。关联的 Word 文件可在 Google 文档中编辑，PDF 可在任意 Drive 应用或 Drive 桌面版中编辑；编辑完成后会作为文档版本同步回来。",
       "actions": "Google Drive 操作",
       "connectMenu": "连接 Google Drive…",
       "linking": "Drive 关联",
@@ -586,7 +573,7 @@
     "disconnectFailedToast": "无法断开 {label}",
     "connections": {
       "title": "工作区连接",
-      "description": "此工作区已连接的账户。连接操作在文档工作区的“添加来源 → 连接”中进行；令牌以加密方式存储，且不会离开服务器。",
+      "description": "在“添加来源 → 连接”中连接账户。",
       "checking": "正在检查连接…",
       "noneAvailable": "尚未连接任何账户。此服务器可用：{list}。",
       "noClients": "未配置任何提供商的 OAuth 客户端。请设置 <code>.env.example</code> 中（Workspace connections 部分）所述的 client-id / client-secret，并设置 <code>EMBEDDING_SECRETS_KEY</code>。",
@@ -608,14 +595,13 @@
     },
     "setup": {
       "title": "Slack 应用设置",
-      "description": "需要在 Slack 端配置的两件事，每个工作区只需配置一次。",
       "step1": "将 <strong>Event Subscriptions</strong> 指向 <code>{url}</code>。",
       "step2": "订阅 <code>message.channels</code>；私有频道还需订阅 <code>message.groups</code>。",
       "step3": "将机器人邀请到频道，然后在发起会议时粘贴该频道的 ID。"
     },
     "controls": {
       "title": "频道内控制命令",
-      "description": "可以在 Slack 中输入哪些命令来控制进行中的会议。使用 ! 而不是 / 作为前缀，因此无需额外配置 Slack 应用。"
+      "description": "可以在 Slack 中输入哪些命令来控制进行中的会议。"
     },
     "hub": {
       "title": "会议中枢",
@@ -654,7 +640,7 @@
     "reading": "正在读取…",
     "server": {
       "title": "服务器默认",
-      "description": "未自带模型的工作区所使用的服务器模型。一个 AI 端点服务所有路由；其地址和凭据保留在服务器上。",
+      "description": "未自带模型的工作区所使用的服务器模型。",
       "usesOwn": "此工作区使用在“API 密钥”中设置的自有模型运行，因此不会使用下面的服务器默认模型。",
       "ownNoModel": "此工作区自己的 API 密钥尚未选择模型，因此仍在使用服务器默认模型。请在“API 密钥”中选择一个。",
       "fixFile": "{error} 请修正 <code>CHAT_MODELS_CONFIG</code> 指定的文件，然后重新读取。",
@@ -663,7 +649,7 @@
     },
     "routes": {
       "title": "路由",
-      "description": "路由是应用所请求的一种能力。没有明确指定模型的路由，会在 default 能够处理时继承 default。",
+      "description": "没有明确指定模型的路由，会在 default 能够处理时继承 default。",
       "route": "路由",
       "model": "模型",
       "assignment": "分配方式",
@@ -673,7 +659,6 @@
     },
     "declared": {
       "title": "已声明的模型",
-      "description": "每个已配置模型所声明的能力。预设是经过验证的目录条目；覆盖则是运维人员自己的声明，按原样采信。",
       "behaviourFrom": "行为来源",
       "preset": "经过验证的预设",
       "override": "配置文件（运维人员覆盖）",
@@ -688,7 +673,7 @@
     },
     "webSearch": {
       "title": "网页搜索",
-      "description": "所有功能搜索网页时使用的引擎：提问、竞品分析、资助方搜索、文档研究、趋势搜索和潜在客户。它在服务器上设置，这里无法更改。",
+      "description": "所有功能搜索网页时使用的引擎：提问、竞品分析、资助方搜索、文档研究、趋势搜索和潜在客户。",
       "on": "已开启",
       "pickedSetting": "由 <code>SEARCH_PROVIDER</code> 指定。",
       "pickedAuto": "第一个已配置的引擎；设置 <code>SEARCH_PROVIDER</code> 即可自行指定。",
@@ -704,7 +689,7 @@
       "notConfigured": "网页搜索已关闭：尚未配置任何引擎。要开启它，请在服务器上将 <code>SEARCH_PROVIDER</code> 设为下方的某个引擎，并设置该引擎所需的配置项，然后重启。",
       "engines": {
         "title": "引擎",
-        "description": "在服务器环境中将 SEARCH_PROVIDER 设为其中一个值，并设置该引擎的配置项。未设置时，按此顺序使用第一个已配置的引擎。这里从不显示密钥。",
+        "description": "在服务器环境中将 SEARCH_PROVIDER 设为其中一个值，并设置该引擎的配置项。未设置时，按此顺序使用第一个已配置的引擎。",
         "engine": "引擎",
         "needs": "所需配置",
         "status": "本服务器",
@@ -938,7 +923,6 @@
         "title": "你的角色无权查看审计日志",
         "body": "如有需要，请向管理员申请“查看审计日志”权限。"
       },
-      "description": "谁更改了什么，按时间倒序排列：角色、成员资格、邀请、用户组和文件夹访问权限。可以按操作或日期筛选，或导出当前视图。",
       "exportCsv": "导出 CSV",
       "action": "操作",
       "allActions": "全部操作",
@@ -1015,7 +999,7 @@
         "saveFailed": "用户组未能保存。",
         "newTitle": "新建用户组",
         "renameTitle": "重命名用户组",
-        "newDescription": "填写名称，并可选填一句说明哪些人属于该组。创建后再添加成员。",
+        "newDescription": "创建后再添加成员。",
         "renameDescription": "共享给此用户组的文件夹在新名称下保留访问权限。",
         "namePlaceholder": "财务",
         "description": "描述<optional>（可选）</optional>",
@@ -1033,8 +1017,7 @@
         "body": "请联系管理员邀请成员，或为你的角色授予“发送邀请”权限。"
       },
       "intro": {
-        "title": "邀请",
-        "description": "分享一个邀请链接让成员加入，或通过邮箱邀请某人。两种方式都会分配你选择的角色。邀请会过期；链接可以重置或关闭。"
+        "title": "邀请"
       },
       "loading": "正在加载邀请…",
       "form": {
@@ -1202,7 +1185,7 @@
       },
       "intro": {
         "title": "成员",
-        "description": "工作区中的所有人，以及决定其权限的角色。你可以批准通过链接加入的人、更改角色，或在不移除任何人的情况下停用其访问权限。"
+        "description": "你可以批准通过链接加入的人、更改角色，或在不移除任何人的情况下停用其访问权限。"
       },
       "counts": {
         "label": "成员统计",
@@ -1247,8 +1230,7 @@
       "deleted": "已删除 {name}。",
       "deleteFailed": "角色未能删除。",
       "intro": {
-        "title": "角色",
-        "description": "角色是一组有名称的权限。内置角色能满足大多数工作区的需要；当某项工作需要不同的权限组合时（例如可以阅读和上传、但不能删除的审阅者），可以添加自定义角色。"
+        "title": "角色"
       },
       "newRole": "新建角色",
       "loading": "正在加载角色…",
@@ -1289,7 +1271,7 @@
         "newTitle": "新建角色",
         "editTitle": "编辑 {name}",
         "roleFallback": "角色",
-        "description": "勾选拥有此角色的人可以做的事。你只能分配自己拥有的权限；仅限所有者的权限保留给所有者。",
+        "description": "你只能分配自己拥有的权限；仅限所有者的权限保留给所有者。",
         "namePlaceholder": "法务审阅者",
         "descriptionLabel": "描述<optional>（可选）</optional>",
         "descriptionPlaceholder": "可以阅读和评论，但不能删除",
@@ -1313,8 +1295,7 @@
       }
     },
     "settingsCard": {
-      "title": "工作区设置",
-      "description": "适用于此工作区所有人的策略。"
+      "title": "工作区设置"
     },
     "ui": {
       "statusActive": "正常",
@@ -1337,7 +1318,6 @@
     "loadFailed": "无法加载。",
     "outside": {
       "title": "外部服务",
-      "description": "根据此部署的配置计算得出。生成此列表时不会读取任何凭据。",
       "checking": "正在检查配置…",
       "deploymentAnalyticsOn": "这是一个<strong>{mode, select, cloud {托管} other {自托管}}</strong>部署。页面浏览会计入托管版产品的使用分析，除非你在下方选择退出。",
       "deploymentAnalyticsOff": "这是一个<strong>{mode, select, cloud {托管} other {自托管}}</strong>部署。不会向外回传任何数据：此实例上没有产品分析脚本。",
@@ -1372,7 +1352,7 @@
         },
         "engines": {
           "azure": "Azure Document Intelligence",
-          "docling": "本部署上的 Docling（docling-serve 运行时）",
+          "docling": "本部署上的 Docling",
           "landingAi": "Landing AI",
           "datalab": "Datalab"
         },
@@ -1407,7 +1387,6 @@
     },
     "kept": {
       "title": "保留的数据",
-      "description": "保留期在各自的位置设置，这里是汇总。",
       "audit": {
         "label": "审计日志",
         "keptForever": "永久保留",
@@ -1423,7 +1402,7 @@
       "credentials": {
         "label": "已存储的凭据",
         "okLabel": "静态加密",
-        "detail": "工作区保存的 API 密钥、连接器令牌和应用专用密码都使用 EMBEDDING_SECRETS_KEY 加密，且从不完整显示。文档正文会发送到哪里生成嵌入，请见“外部服务”。"
+        "detail": "工作区保存的 API 密钥、连接器令牌和应用专用密码都经过加密，且从不完整显示。"
       }
     },
     "choices": {
@@ -1448,7 +1427,6 @@
     "resetFailed": "无法重置。",
     "section": {
       "title": "个人资料",
-      "loadingDescription": "你在同事面前的形象。",
       "description": "在你所属的每个工作区中通用。某个工作区可以显示不同的照片、名称或职位，详见下方。"
     },
     "changePhoto": "更换照片",
@@ -1592,7 +1570,7 @@
     },
     "burn": {
       "title": "每日消耗",
-      "description": "按消耗来源统计从余额中扣除的 token。嵌入按对话 token 当量扣除，与上方 AI 用量一致。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
+      "description": "按消耗来源统计从余额中扣除的 token。嵌入按对话 token 当量计。",
       "lastDays": "最近 {days} 天",
       "nothing": "此时间段内没有消耗余额。",
       "window": "时间范围"
@@ -1606,8 +1584,7 @@
       "empty": "此时间段内没有记录。"
     },
     "pricing": {
-      "title": "价格与提醒",
-      "description": "以上数字是为这两项设置提供参考。"
+      "title": "价格与提醒"
     },
     "recent": {
       "title": "最近的账本记录",
@@ -1619,7 +1596,6 @@
     },
     "members": {
       "title": "每人 AI 上限",
-      "description": "每个人本月已使用的 AI 额度，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
       "serverCap": "这台服务器限制每人每月最多使用 {limit} 个 token（合计其所有工作区，仅限服务器自己的模型）。该上限由服务器的管理者设置，无法在这里修改。",
       "serverCapNotHere": "这台服务器限制每人每月在其自有模型上最多使用 {limit} 个 token。此上限不适用于这里：此工作区使用自己的模型。",
       "loadFailed": "无法加载每人 AI 上限。",
@@ -1645,7 +1621,7 @@
       "unattributed": "未归属到个人：本月 {tokens} 个 token，来自后台任务以及按人计量之前的用量。",
       "dialog": {
         "title": "{name} 的 AI 上限",
-        "description": "此人每月在此工作区可使用的 AI，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。",
+        "description": "此人每月在此工作区可使用的 AI 用量。每月 1 日（UTC）重置。",
         "choiceLabel": "上限",
         "default": "工作区默认（{limit} 个 token）",
         "defaultNone": "工作区默认（不设上限）",
@@ -1702,7 +1678,7 @@
         "note": "使用 Anthropic 的 OpenAI 兼容 API。这里不能使用 Claude Pro 或 Max 套餐，需要 API 密钥。"
       },
       "openrouter": {
-        "note": "一个账户即可使用数百个模型，费用从你的 OpenRouter 额度中扣除。"
+        "note": "费用从你的 OpenRouter 额度中扣除。"
       },
       "custom": {
         "label": "其他 OpenAI 兼容服务",
@@ -1725,7 +1701,7 @@
     "disconnectFailed": "无法断开连接。",
     "section": {
       "title": "API 密钥",
-      "description": "可选。使用你自己的提供商账户运行此工作区的 AI：对话、起草、会议和后台任务都会使用它，费用由你的提供商直接向你收取，而不是消耗 LaunchStack 额度。如果不设置，工作区会使用服务器的默认模型运行。"
+      "description": "使用你自己的提供商账户运行此工作区的 AI：对话、起草、会议和后台任务都会使用它，费用由你的提供商直接向你收取，而不是消耗 LaunchStack 额度。如果不设置，工作区会使用服务器的默认模型运行。"
     },
     "checking": "正在检查你是否有自己的模型…",
     "connectOpenRouter": "连接 OpenRouter",
@@ -1800,7 +1776,7 @@
       "listedNone": "服务器没有列出任何模型。请直接输入 ID。",
       "listed": "已列出 {count} 个模型。输入时可从中选择，也可以输入任意 ID。",
       "listFailedSuffix": "{message} 你仍然可以输入模型 ID。",
-      "listOptional": "可选：列出你的账户可以使用的模型。有些服务器不会列出模型；你随时可以直接输入 ID。",
+      "listOptional": "你也随时可以直接输入模型 ID。",
       "moreModels": "为部分工作使用不同的模型",
       "moreHint": "留空则该类工作使用主模型。",
       "testConnection": "测试连接",
@@ -1936,7 +1912,7 @@
   },
   "workspaceTab": {
     "title": "工作区",
-    "about": "关于此工作区的一切：它叫什么、里面有谁以及他们能看到什么、它的公司档案、它运行的智能体，以及它连接了哪些服务。它的 API 密钥、模型以及用量和支出在“模型与用量”标签页中。你自己的账户、主题和快捷键在“设置”中。",
+    "about": "API 密钥、模型和支出在“模型与用量”标签页中。你自己的账户、主题和快捷键在“设置”中。",
     "groups": {
       "basics": "基本信息",
       "setup": "配置",
@@ -1961,7 +1937,7 @@
     "saved": "工作区详情已保存",
     "name": {
       "label": "名称",
-      "description": "工作区里每个人看到的名称：显示在侧边栏、工作区选择器和邀请中。",
+      "description": "显示在侧边栏、工作区选择器和邀请中。",
       "missing": "请为工作区命名。"
     },
     "slug": {
@@ -1974,17 +1950,15 @@
     },
     "description": {
       "label": "描述",
-      "description": "用一句话说明公司做什么。可选；有助于助手理解。",
+      "description": "用一句话说明公司做什么，有助于助手理解。",
       "placeholder": "我们把分散的信息整理成知识图谱，供 AI 工作流使用。"
     },
     "industry": {
       "label": "行业",
-      "description": "公司所在的领域。可选。",
       "placeholder": "例如：物流软件"
     },
     "teamSize": {
       "label": "团队规模",
-      "description": "大约有多少人在这里工作。",
       "count": "{count, plural, =1 {只有一个人} other {大约 # 人}}"
     },
     "colour": {

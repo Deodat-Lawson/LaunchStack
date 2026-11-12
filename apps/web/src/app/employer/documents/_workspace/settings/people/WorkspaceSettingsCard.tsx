@@ -21,7 +21,6 @@ export function WorkspaceSettingsCard() {
                 <h2 className="text-ink m-0 text-base font-bold tracking-[-0.01em]">
                     {t("title")}
                 </h2>
-                <p className="text-ink-3 m-0 mt-1 text-[13px] leading-normal">{t("description")}</p>
             </div>
             <SettingRow settingKey="workspace.auditRetentionDays" />
         </Panel>

@@ -8,7 +8,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -55,7 +54,11 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
     const [role, setRole] = useState("member");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [sent, setSent] = useState<{ email: string; acceptUrl: string } | null>(null);
+    const [sent, setSent] = useState<{
+        email: string;
+        acceptUrl: string;
+        emailSent: boolean;
+    } | null>(null);
 
     useEffect(() => {
         if (!open) return;
@@ -96,8 +99,11 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
         setError(null);
         try {
             const res = await peopleApi.invitations.create({ email: trimmed, role });
-            setSent({ email: res.invitation.email, acceptUrl: res.acceptUrl });
-            toast.success(t("sentToast", { email: res.invitation.email }));
+            setSent({
+                email: res.invitation.email,
+                acceptUrl: res.acceptUrl,
+                emailSent: res.emailSent,
+            });
         } catch (err) {
             setError(errorText(err, t("sendError")));
         } finally {
@@ -116,9 +122,13 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
                 {sent ? (
                     <div className="flex flex-col gap-4">
                         <DialogHeader>
-                            <DialogTitle>{t("sentTitle")}</DialogTitle>
+                            <DialogTitle>
+                                {sent.emailSent ? t("sentTitle") : t("notEmailedTitle")}
+                            </DialogTitle>
                             <DialogDescription>
-                                {t("sentBody", { email: sent.email })}
+                                {sent.emailSent
+                                    ? t("sentBody", { email: sent.email })
+                                    : t("notEmailedBody", { email: sent.email })}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="flex items-center gap-2">

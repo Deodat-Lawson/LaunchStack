@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    AlertTriangle,
     Building2,
     ExternalLink,
     FileSearch,
@@ -97,9 +98,12 @@ export function SourcesTab({
                 <SkeletonRows rows={3} height={56} />
             </div>
         ) : (
-            <p className="text-ink-3 text-[13px]">
-                {t("none", { used: usedWords(t, tw, run.sourcesUsed) })}
-            </p>
+            <div className="flex flex-col gap-6">
+                <p className="text-ink-3 text-[13px]">
+                    {t("none", { used: usedWords(t, tw, run.sourcesUsed) })}
+                </p>
+                {run.v2 && <Coverage run={run} />}
+            </div>
         );
     }
 
@@ -201,7 +205,71 @@ export function SourcesTab({
                     })}
                 </ol>
             </section>
+            {run.v2 && <Coverage run={run} />}
         </div>
+    );
+}
+
+/**
+ * What a v2 run read and what it left out, how its people were grounded, and
+ * anything that makes the result less complete than it looks (skipped turns,
+ * people who couldn't be built). Shown with the sources, where someone
+ * judging the result looks for it.
+ */
+function Coverage({ run }: { run: ScenarioDetail }) {
+    const t = useTranslations("scenarios.sources.coverage");
+    const v2 = run.v2!;
+    const notices = [
+        v2.waitingSince && t("waiting"),
+        v2.fallbackReason && t(`fallback.${v2.fallbackReason}`),
+        v2.degradedRounds.length > 0 &&
+            t("degraded", {
+                count: v2.degradedRounds.length,
+                rounds: v2.degradedRounds.join(", "),
+            }),
+        v2.skippedTurns > 0 &&
+            v2.degradedRounds.length === 0 &&
+            t("skipped", { count: v2.skippedTurns }),
+        v2.unfilledSlots > 0 && t("unfilled", { count: v2.unfilledSlots }),
+    ].filter((x): x is string => Boolean(x));
+    return (
+        <section>
+            <SectionHeading
+                title={t("title")}
+                aside={t("read", { sections: v2.coverage.sections, files: v2.coverage.files })}
+            />
+            <div className="border-line bg-panel flex flex-col gap-3 rounded-xl border px-4 py-3.5 text-[13px]">
+                <p className="text-ink-2">{t(`mode.${v2.contextMode}`)}</p>
+                {notices.map(notice => (
+                    <p key={notice} className="text-warn-ink flex items-start gap-2">
+                        <AlertTriangle className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                        <span>{notice}</span>
+                    </p>
+                ))}
+                {v2.coverage.omitted.length > 0 && (
+                    <div>
+                        <div className="text-ink-3 mb-1.5 text-xs">
+                            {t("leftOut", { count: v2.coverage.omitted.length })}
+                        </div>
+                        <ul className="flex flex-col gap-1">
+                            {v2.coverage.omitted.map((o, i) => (
+                                <li key={i} className="flex min-w-0 items-baseline gap-2">
+                                    {o.redacted ? (
+                                        <Lock className="text-ink-3 size-3 shrink-0" aria-hidden />
+                                    ) : null}
+                                    <span className="text-ink min-w-0 truncate">
+                                        {o.redacted ? t("redacted") : o.label}
+                                    </span>
+                                    <span className="text-ink-3 shrink-0 text-xs">
+                                        {t(`reason.${o.reason}`)}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+        </section>
     );
 }
 
@@ -219,7 +287,7 @@ function BuiltInto({
     const shown = people.slice(0, FACES);
     const more = people.length - shown.length;
     return (
-        <div className={cn("flex flex-col items-end gap-1 @max-md:items-start", className)}>
+        <div className={cn("@max-md:items-start flex flex-col items-end gap-1", className)}>
             <div className="flex items-center -space-x-2">
                 {shown.map(person => (
                     <PersonHoverCard key={person.id} person={person}>

@@ -13,8 +13,11 @@ import {
     SheetHeader,
     SheetTitle,
 } from "~/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import type {
+    ScenarioAttributedField,
     ScenarioDetail,
+    ScenarioFieldBasis,
     ScenarioInterview,
     ScenarioPerson,
     ScenarioWouldPay,
@@ -110,7 +113,14 @@ function Profile({
                 <SheetDescription className="text-ink-3 -mt-1 text-[13px]">
                     {atHandle(person.handle)}
                 </SheetDescription>
-                <p className="text-ink-2 text-[14px] leading-snug">{person.role}</p>
+                <p className="text-ink-2 text-[14px] leading-snug">
+                    {person.role}
+                    {person.basis?.role && (
+                        <span className="ml-2 align-baseline">
+                            <BasisMark basis={person.basis.role} onSource={onSource} />
+                        </span>
+                    )}
+                </p>
             </SheetHeader>
 
             <div className="flex flex-col gap-7 px-6 pb-8 pt-3">
@@ -161,7 +171,7 @@ function Profile({
                     </figure>
                 )}
 
-                <Wallet person={person} />
+                <Wallet person={person} onSource={onSource} />
 
                 <section>
                     <SectionHeading title={t("builtFrom")} />
@@ -287,20 +297,36 @@ const PAY_BADGE: Record<ScenarioWouldPay, "info" | "secondary" | "danger"> = {
  * switching would cost them, whether they'd pay now and what holds them
  * back. Runs cast before people had a wallet show nothing here.
  */
-function Wallet({ person }: { person: ScenarioPerson }) {
+function Wallet({
+    person,
+    onSource,
+}: {
+    person: ScenarioPerson;
+    onSource: (sourceId: string) => void;
+}) {
     const t = useTranslations("scenarios.personSheet.wallet");
     const doubt = person.objection ?? person.firstObjection;
     const today = person.currentSolution?.trim();
-    const rows: Array<[string, string]> = [];
+    const basis = person.basis;
+    const rows: Array<[string, string, ScenarioAttributedField]> = [];
     if (today)
         rows.push([
             t("usesToday"),
             /^(nothing|none|n\/a)\.?$/i.test(today) ? t("usesNothing") : today,
+            "currentSolution",
         ]);
-    if (person.budget) rows.push([t("budget"), t(`budgets.${person.budget}`)]);
-    if (person.buyingRole) rows.push([t("buyingRole"), t(`roles.${person.buyingRole}`)]);
+    else if (basis?.currentSolution?.basis === "unknown")
+        rows.push([t("usesToday"), t("notKnown"), "currentSolution"]);
+    if (person.budget) rows.push([t("budget"), t(`budgets.${person.budget}`), "budget"]);
+    else if (basis?.budget?.basis === "unknown") rows.push([t("budget"), t("notKnown"), "budget"]);
+    if (person.buyingRole)
+        rows.push([t("buyingRole"), t(`roles.${person.buyingRole}`), "buyingRole"]);
+    else if (basis?.buyingRole?.basis === "unknown")
+        rows.push([t("buyingRole"), t("notKnown"), "buyingRole"]);
     if (person.switchingCost)
-        rows.push([t("switchingCost"), t(`switching.${person.switchingCost}`)]);
+        rows.push([t("switchingCost"), t(`switching.${person.switchingCost}`), "switchingCost"]);
+    else if (basis?.switchingCost?.basis === "unknown")
+        rows.push([t("switchingCost"), t("notKnown"), "switchingCost"]);
     if (rows.length === 0 && !person.wouldPay && !doubt) return null;
     return (
         <section className="flex flex-col gap-3">
@@ -317,10 +343,15 @@ function Wallet({ person }: { person: ScenarioPerson }) {
             />
             {rows.length > 0 && (
                 <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-[13px]">
-                    {rows.map(([label, value]) => (
+                    {rows.map(([label, value, field]) => (
                         <Fragment key={label}>
                             <dt className="text-ink-3">{label}</dt>
-                            <dd className="text-ink min-w-0">{value}</dd>
+                            <dd className="text-ink flex min-w-0 flex-wrap items-baseline gap-x-2">
+                                <span className="min-w-0">{value}</span>
+                                {basis?.[field] && (
+                                    <BasisMark basis={basis[field]!} onSource={onSource} />
+                                )}
+                            </dd>
                         </Fragment>
                     ))}
                 </dl>
@@ -336,6 +367,54 @@ function Wallet({ person }: { person: ScenarioPerson }) {
                 </figure>
             )}
         </section>
+    );
+}
+
+/**
+ * Where one field came from: the source ids it was read in (each opens in
+ * Sources), or that it was inferred or assumed (with the reason on hover),
+ * so a reader can tell evidence from the model's filling-in.
+ */
+function BasisMark({
+    basis,
+    onSource,
+}: {
+    basis: ScenarioFieldBasis;
+    onSource: (sourceId: string) => void;
+}) {
+    const t = useTranslations("scenarios.personSheet.basis");
+    if (basis.basis === "unknown") return null;
+    const label = t(basis.basis);
+    const word = basis.explanation ? (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <button
+                    type="button"
+                    className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm text-xs underline decoration-dotted underline-offset-2 outline-none focus-visible:ring-2"
+                >
+                    {label}
+                </button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[260px]">{basis.explanation}</TooltipContent>
+        </Tooltip>
+    ) : (
+        <span className="text-ink-3 text-xs">{label}</span>
+    );
+    return (
+        <span className="inline-flex items-baseline gap-1" data-basis={basis.basis}>
+            {word}
+            {basis.sources.map(id => (
+                <button
+                    key={id}
+                    type="button"
+                    onClick={() => onSource(id)}
+                    aria-label={t("openSource", { id })}
+                    className="bg-brand-soft text-brand-ink hover:bg-brand/20 focus-visible:ring-brand/50 rounded px-1 py-px font-mono text-[10.5px] leading-none outline-none focus-visible:ring-2"
+                >
+                    {id}
+                </button>
+            ))}
+        </span>
     );
 }
 

@@ -20,6 +20,7 @@
       "cancelled": "Cancelled",
       "done": "Done",
       "gathering": "Gathering sources",
+      "grounding": "Mapping the evidence",
       "casting": "{count, plural, one {Building # person} other {Building # people}}",
       "simulating": "Round {round, number} of {rounds, number}",
       "reporting": "Writing the report"
@@ -148,6 +149,7 @@
       "budget": "Budget",
       "buyingRole": "In buying",
       "switchingCost": "Switching",
+      "notKnown": "Not known",
       "budgets": {
         "none": "None set aside",
         "tight": "Tight",
@@ -170,6 +172,13 @@
       },
       "holdingBack": "What held them back last",
       "firstDoubt": "Their first doubt"
+    },
+    "basis": {
+      "source": "From",
+      "inferred": "Inferred",
+      "assumed": "Assumed",
+      "unknown": "Not known",
+      "openSource": "Open source {id}"
     }
   },
   "report": {
@@ -238,7 +247,35 @@
     "builtFrom": "Built from {used}",
     "redacted": "A file you don't have access to",
     "openPerson": "Open {name}",
-    "peopleBuilt": "{count, plural, one {# person built from it} other {# people built from it}}"
+    "peopleBuilt": "{count, plural, one {# person built from it} other {# people built from it}}",
+    "coverage": {
+      "title": "What was read",
+      "read": "{sections, plural, one {# passage} other {# passages}} from {files, plural, one {# file} other {# files}}",
+      "mode": {
+        "passage": "Each person was built from the passages most relevant to them.",
+        "facts": "Each person was built from your company facts first, then the passages most relevant to them.",
+        "graph": "Each person was built from a map of who and what your sources mention, with the passage behind every fact."
+      },
+      "fallback": {
+        "graph_not_configured": "The evidence map isn't set up on this server, so passages were used instead.",
+        "graph_unavailable": "The evidence map was unavailable when this run started, so passages were used instead.",
+        "workspace_endpoint": "Your workspace uses its own model, so passages were used: the evidence map would send your files to this server's model.",
+        "no_documents": "No files were picked, so there was nothing to map; passages were used."
+      },
+      "waiting": "Waiting for the evidence map service. The run picks up where it left off once it's back.",
+      "degraded": "{count, plural, one {Many turns failed in round {rounds}; those people sat it out.} other {Many turns failed in rounds {rounds}; those people sat them out.}}",
+      "skipped": "{count, plural, one {# turn failed and was skipped.} other {# turns failed and were skipped.}}",
+      "unfilled": "{count, plural, one {# person couldn't be built from the evidence and was left out.} other {# people couldn't be built from the evidence and were left out.}}",
+      "leftOut": "{count, plural, one {# source left out} other {# sources left out}}",
+      "reason": {
+        "budget": "over the reading limit",
+        "not_ready": "still being processed",
+        "no_access": "you can't open it",
+        "empty": "nothing readable",
+        "unsupported": "can't be read here"
+      },
+      "redacted": "A file you don't have access to"
+    }
   },
   "chart": {
     "start": "Start",
@@ -468,7 +505,11 @@
       "noAnswer": "No answer came back; try again.",
       "roleCantTestPosts": "Your role can read Brand but not test posts.",
       "writePostFirst": "Write the post first.",
-      "postTooLong": "Posts over 3,000 characters can't be tested."
+      "postTooLong": "Posts over 3,000 characters can't be tested.",
+      "idempotencyConflict": "This request key was already used for a different scenario. Start again to create a new one.",
+      "sourcesUnavailable": "This scenario uses files you can no longer open.",
+      "replayNotReady": "Replay is available once the run has finished.",
+      "replayModeUnsupported": "Only recorded replay is supported."
     },
     "leftWorkspace": "Someone who has left",
     "sourceLabels": {

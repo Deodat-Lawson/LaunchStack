@@ -17,7 +17,14 @@ export type ScenarioKind = (typeof SCENARIO_KINDS)[number];
 export const SCENARIO_STATUSES = ["queued", "running", "done", "failed", "cancelled"] as const;
 export type ScenarioStatus = (typeof SCENARIO_STATUSES)[number];
 
-export type ScenarioStage = "gathering" | "casting" | "simulating" | "reporting" | "done";
+/** "grounding" is v2 only: planning the ontology and building the evidence graph. */
+export type ScenarioStage =
+    | "gathering"
+    | "grounding"
+    | "casting"
+    | "simulating"
+    | "reporting"
+    | "done";
 
 export interface ScenarioSourcesInput {
     documentIds: number[];

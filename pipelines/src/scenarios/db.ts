@@ -139,6 +139,10 @@ export interface RunListRow {
     createdAt: Date;
     finishedAt: Date | null;
     headline: string | null;
+    contractVersion: number;
+    generation: number;
+    /** Rounds the world has completed (v2 progress). */
+    worldRound: number;
 }
 
 /** Runs the viewer made, plus runs shared with the workspace. */
@@ -163,6 +167,11 @@ export async function listVisibleRuns(args: {
             createdAt: scenarioRuns.createdAt,
             finishedAt: scenarioRuns.finishedAt,
             headline: sql<string | null>`${scenarioRuns.report} ->> 'headline'`,
+            contractVersion: scenarioRuns.contractVersion,
+            generation: scenarioRuns.generation,
+            worldRound: sql<number>`coalesce((${scenarioRuns.world} ->> 'round')::int, 0)`.mapWith(
+                Number
+            ),
         })
         .from(scenarioRuns)
         .where(
@@ -344,7 +353,8 @@ export async function addInjectionIfOpen(args: {
                     eq(scenarioRuns.companyId, args.companyId),
                     inArray(scenarioRuns.status, ["queued", "running"]),
                     isNull(scenarioRuns.eventsClosedAt),
-                    sql`${scenarioRuns.step} < 2 + ${scenarioRuns.roundCount}`
+                    // v2 runs have many more units; their final round closes the window itself.
+                    sql`(${scenarioRuns.contractVersion} = 2 OR ${scenarioRuns.step} < 2 + ${scenarioRuns.roundCount})`
                 )
             )
             .returning({ id: scenarioRuns.id });

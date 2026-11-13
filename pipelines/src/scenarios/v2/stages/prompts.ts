@@ -180,8 +180,10 @@ export const CAST_V2_SCHEMA: Record<string, unknown> = {
 
 // ─── PlanOntology ────────────────────────────────────────────────────────────
 
-/** Tokens of passages the ontology planner reads across all documents. */
+/** Most tokens of passages the ontology planner reads across all documents. */
 const ONTOLOGY_PASSAGE_TOKENS = 5_000;
+/** Room kept under the unit's input cap for framing the model adds. */
+const ONTOLOGY_MARGIN_TOKENS = 300;
 /** Each document gets at least this many, so no selected file goes unread. */
 const ONTOLOGY_PER_DOCUMENT_MIN = 150;
 
@@ -196,14 +198,14 @@ function documentGroups(items: EvidenceSnapshot[]): Map<number, EvidenceSnapshot
     return groups;
 }
 
-/** Passages from every selected document, best first, within a per-document share. */
-export function representativePassages(items: EvidenceSnapshot[]): string {
+/** Passages from every selected document, best first, within a per-document share of `budget`. */
+export function representativePassages(
+    items: EvidenceSnapshot[],
+    budget: number = ONTOLOGY_PASSAGE_TOKENS
+): string {
     const groups = documentGroups(items);
     if (groups.size === 0) return "(no documents)";
-    const share = Math.max(
-        ONTOLOGY_PER_DOCUMENT_MIN,
-        Math.floor(ONTOLOGY_PASSAGE_TOKENS / groups.size)
-    );
+    const share = Math.max(ONTOLOGY_PER_DOCUMENT_MIN, Math.floor(budget / groups.size));
     const blocks: string[] = [];
     for (const [documentId, list] of groups) {
         const lines: string[] = [];
@@ -258,7 +260,7 @@ export function buildOntologyRequest(input: {
     const others = input.items.filter(
         i => i.sourceType !== "document" && i.sourceType !== "search" && !i.fact
     );
-    const prompt = [
+    const head = [
         `Scenario: ${input.subject}`,
         "",
         "Base schema:",
@@ -271,9 +273,8 @@ export function buildOntologyRequest(input: {
         facts.length > 0
             ? facts.map(i => `- [${i.id}] ${i.fact!.key}: ${clip(i.fact!.label, 80)}`).join("\n")
             : "(none)",
-        "",
-        "Representative passages from each document:",
-        representativePassages(input.items),
+    ];
+    const tail = [
         ...(others.length > 0
             ? [
                   "",
@@ -286,6 +287,20 @@ export function buildOntologyRequest(input: {
             : []),
         "",
         'Shape: {"entities": [{"name": "Contract", "description": "…", "attributes": [{"name": "renewal_date", "type": "string", "description": "…"}], "motivatingEvidenceId": "E2"}], "edges": [{"name": "MIGRATES_FROM", "description": "…", "attributes": [], "endpoints": [{"source": "Organization", "target": "Product"}], "motivatingEvidenceId": "E2"}]}',
+    ];
+    // Passages get what the unit's input cap leaves once everything else is counted.
+    const fixed =
+        approxTokens(system) + approxTokens(head.join("\n")) + approxTokens(tail.join("\n"));
+    const budget = Math.min(
+        ONTOLOGY_PASSAGE_TOKENS,
+        UNIT_TOKEN_CAPS.ontology.input - fixed - ONTOLOGY_MARGIN_TOKENS
+    );
+    const prompt = [
+        ...head,
+        "",
+        "Representative passages from each document:",
+        representativePassages(input.items, budget),
+        ...tail,
     ].join("\n");
     return {
         purpose: "ontology",

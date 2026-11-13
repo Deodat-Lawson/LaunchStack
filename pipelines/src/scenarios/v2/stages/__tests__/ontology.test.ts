@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { BASE_ONTOLOGY, ONTOLOGY_LIMITS, type OntologySpec } from "../../contracts";
 import { hashOf } from "../../hash";
+import { UNIT_TOKEN_CAPS } from "../../plan";
 import { validateOntology } from "../ontology";
 import { buildOntologyRequest } from "../prompts";
 import {
@@ -216,6 +217,37 @@ describe("the ontology stage", () => {
         expect(request.prompt).toContain("From renewal.pdf, page 4 (file 8):\n[E2] Northwind uses");
         expect(request.prompt).toContain("- [E3] people[0]: Maya");
         expect(request.system).toContain("keeps the hedge");
+    });
+
+    it("reads every document and still fits the unit's input cap on a full manifest", () => {
+        const items = Array.from({ length: 120 }, (_, i) => ({
+            id: `E${i + 1}`,
+            kind: "document" as const,
+            sourceType: "document" as const,
+            sourceId: String(100 + (i % 20)),
+            versionId: "1",
+            label: `file-${i % 20}.pdf, page ${i + 1}`,
+            locator: {
+                documentId: 100 + (i % 20),
+                versionId: 1,
+                chunkId: i,
+                page: i + 1,
+                section: null,
+                providerId: null,
+            },
+            quote: `Passage ${i + 1}. ${"contract renewal migration terms ".repeat(40)}`,
+            fact: null,
+            contentHash: "",
+            capturedAt: "",
+            validity: "versioned" as const,
+            documentIds: [100 + (i % 20)],
+            href: null,
+            tokens: 330,
+        }));
+        const request = buildOntologyRequest({ subject: "x".repeat(4_000), items });
+        for (let d = 0; d < 20; d++) expect(request.prompt).toContain(`(file ${100 + d})`);
+        const tokens = Math.ceil((request.system.length + request.prompt.length) / 4);
+        expect(tokens).toBeLessThanOrEqual(UNIT_TOKEN_CAPS.ontology.input);
     });
 
     it("freezes a valid schema with its hash", async () => {

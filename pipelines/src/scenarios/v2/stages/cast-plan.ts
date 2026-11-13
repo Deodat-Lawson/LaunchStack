@@ -33,8 +33,9 @@ import { buildCastPlanRequest } from "./prompts";
 
 /**
  * Starting stances for `n` slots: the mix's whole-person counts (largest
- * remainder, ties to the warier side), spread evenly through the slots.
- * Against starts at −1 and in favour at +1; strong views come from rounds.
+ * remainder, ties to the warier side), spread evenly through the slots with
+ * the warier stance first on a tie, so s01 starts against. Against starts at
+ * −1 and in favour at +1; strong views come from rounds.
  */
 export function stanceTargets(n: number, mix: StartingMix = REALISTIC_MIX): Stance[] {
     const counts = mixCounts(n, mix);

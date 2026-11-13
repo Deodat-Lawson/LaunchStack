@@ -273,6 +273,9 @@ export async function listExtractionTables(
     locale: Locale = "en"
 ): Promise<ExtractionTableSummary[]> {
     const tables = await listVisibleTables(ctx.companyId, ctx.authUserId);
+    // A table whose executor went away (a restart) shows as running here for
+    // good unless someone opens it; looking at the list is enough to resume it.
+    for (const table of tables) resumeIfStalled(table);
     const [counts, names] = await Promise.all([
         countRowsByTable(tables.map(table => table.id)),
         namesFor(

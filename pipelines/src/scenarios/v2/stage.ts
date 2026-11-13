@@ -136,8 +136,6 @@ export interface RunPatchV2 {
     /** Only the report stage sets "done". */
     status?: "running" | "done";
     finishedAt?: Date;
-    /** Set when the final round starts so no event is accepted and dropped. */
-    closeEvents?: boolean;
 }
 
 export interface StageResult {
@@ -214,6 +212,12 @@ export interface StageContext {
     ports: StagePorts;
     /** Parallel model calls inside the unit. */
     concurrency: number;
+    /**
+     * Close the run's event window now (the final round calls it before it
+     * reads pending events), so an event is either applied or refused —
+     * never accepted and dropped.
+     */
+    closeEvents(): Promise<void>;
 }
 
 export type Stage = (ctx: StageContext) => Promise<StageResult>;

@@ -16,6 +16,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { ChatOpenAI } from "@langchain/openai";
 import OpenAI from "openai";
 import { createEndpointFetch } from "./endpoint-fetch";
+import { longWaitFetch } from "./long-wait-fetch";
 import type { UsageMeterContext } from "./usage-meter";
 import {
     DEFAULT_MAX_OUTPUT_TOKENS_FIELD,
@@ -45,6 +46,11 @@ export interface CreateCompatibleChatOptions {
     /** Applied only when the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /**
+     * Wait as long as `timeoutMs` for a reply that is not streamed, past the
+     * five minutes Node's own fetch allows (see long-wait-fetch.ts).
+     */
+    longWait?: boolean;
     /**
      * Retries after a failed attempt. Defaults to the client's own (six, with
      * backoff) for the deployment's endpoint and to two for a workspace's:
@@ -89,6 +95,9 @@ export function buildModelKwargs(
 const fetchWithoutRedirects: typeof fetch = (input, init) =>
     fetch(input, { ...init, redirect: "error" });
 
+const longWaitWithoutRedirects: typeof fetch = (input, init) =>
+    longWaitFetch(input, { ...init, redirect: "error" });
+
 /**
  * Instructions in, provider error text out, usage counted (see
  * endpoint-fetch.ts); no redirects for a workspace's address.
@@ -96,14 +105,18 @@ const fetchWithoutRedirects: typeof fetch = (input, init) =>
 function endpointFetch(
     endpoint: ChatEndpointConfig,
     behavior: ChatModelBehavior,
-    meter?: UsageMeterContext
+    meter?: UsageMeterContext,
+    longWait = false
 ) {
-    return createEndpointFetch(
-        endpoint,
-        behavior,
-        endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined,
-        meter
-    );
+    const workspace = endpoint.owner === "workspace";
+    const base = longWait
+        ? workspace
+            ? longWaitWithoutRedirects
+            : longWaitFetch
+        : workspace
+          ? fetchWithoutRedirects
+          : undefined;
+    return createEndpointFetch(endpoint, behavior, base, meter);
 }
 
 function retriesFor(endpoint: ChatEndpointConfig, maxRetries: number | undefined) {
@@ -125,7 +138,12 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
         modelName: modelId,
         configuration: {
             baseURL: endpoint.baseUrl,
-            fetch: endpointFetch(endpoint, behavior, { ...options.usage, modelId }),
+            fetch: endpointFetch(
+                endpoint,
+                behavior,
+                { ...options.usage, modelId },
+                options.longWait
+            ),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...retriesFor(endpoint, options.maxRetries),

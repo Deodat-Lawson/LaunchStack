@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import { llmChatTokens } from "@launchstack/store/credits";
+
 import { V2_VERSIONS } from "../../contracts";
+import { makeSpec } from "../../engine.fixtures";
+import { ingestUnits } from "../../plan";
 import { hashOf, sha256Hex } from "../../hash";
 import { RetryLaterError } from "../../stage";
 import { episodeUuid, graphBuildKey, graphGroupId } from "../common";
@@ -71,6 +75,14 @@ describe("graph:prepare", () => {
             ["graph:ingest:02", { batch: 2, evidenceIds: ["E2"] }],
         ]);
         expect(h.artifacts.builds.get(id.buildKey)?.ownerRunId).toBe(41);
+    });
+
+    it("holds enough for a batch of six at the cost a live run measured", () => {
+        // Live run 9 (13 Nov 2026): six short episodes used 48,609 input and
+        // 1,526 output tokens; the old per-batch floor held 28,030 credits.
+        const evidence = Array.from({ length: 6 }, (_, i) => ({ id: `E${i + 1}`, tokens: 45 }));
+        const [unit] = ingestUnits(makeSpec(), evidence);
+        expect(unit!.maxCredits).toBeGreaterThanOrEqual(2 * llmChatTokens(48_609, 1_526));
     });
 
     it("reuses a frozen build: no ingestion, no new snapshot", async () => {

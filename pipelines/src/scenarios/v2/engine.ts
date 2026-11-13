@@ -389,11 +389,21 @@ export async function advanceWithFence(
         if (!stage) throw new Error(`No stage handles ${unit.kind} units`);
         const result = await stage(ctx);
         const usage = addUsage(journal.usage(), result.extraUsage);
+        const credits = llmChatTokens(usage.inputTokens, usage.outputTokens);
+        // The charge is what was used. A unit that used more than its hold
+        // means the plan's allowance for it is wrong: say so, loudly.
+        if (unit.maxCredits > 0 && credits > unit.maxCredits)
+            deps.log?.("scenario v2 unit used more than its hold", {
+                runId: run.id,
+                unit: unit.key,
+                credits,
+                hold: unit.maxCredits,
+            });
         const committed = await store.commitUnit(fence, {
             unit: started,
             result,
             usage,
-            credits: llmChatTokens(usage.inputTokens, usage.outputTokens),
+            credits,
             durationMs: Date.now() - clockStart,
             at: deps.now(),
             settlement: { description: settlementDescription(run.title, unit.key) },

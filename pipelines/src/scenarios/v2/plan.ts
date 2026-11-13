@@ -34,9 +34,14 @@ export const UNIT_TOKEN_CAPS = {
     castBatchPerSlot: { output: 520 },
     turn: { input: 3_000, output: 700 },
     report: { input: 9_000, output: 1_800 },
-    /** Graph extraction per captured token (several Graphiti calls per episode) plus a floor. */
+    /**
+     * Graph extraction. Graphiti makes several calls per episode whose prompts
+     * carry fixed instructions and the graph so far, so the cost is mostly per
+     * episode, not per source token: about 8,100 input and 250 output tokens
+     * an episode on a live run (13 Nov 2026). The allowance is about twice that.
+     */
+    ingestPerEpisode: { input: 16_000, output: 2_000 },
     ingestPerSourceToken: { input: 8, output: 2 },
-    ingestFloor: { input: 20_000, output: 5_000 },
 } as const;
 
 export const pad = (n: number) => String(n).padStart(2, "0");
@@ -208,8 +213,8 @@ export function ingestUnits(
             dependsOn: [unitKeys.graphPrepare],
             input: { batch: n, evidenceIds: batch.map(e => e.id) },
             maxCredits: credits(
-                c.ingestFloor.input + c.ingestPerSourceToken.input * tokens,
-                c.ingestFloor.output + c.ingestPerSourceToken.output * tokens
+                c.ingestPerEpisode.input * batch.length + c.ingestPerSourceToken.input * tokens,
+                c.ingestPerEpisode.output * batch.length + c.ingestPerSourceToken.output * tokens
             ),
         });
     }

@@ -11,6 +11,7 @@ import { z } from "zod";
 
 import {
     invokeStructuredWithUsage,
+    NODE_FETCH_HEADERS_TIMEOUT_MS,
     resolveChatModel,
     type ResolveChatModelOptions,
 } from "@launchstack/llm";
@@ -226,13 +227,16 @@ export function createLlmSimulationModel(options: LlmSimulationModelOptions = {}
     return {
         async complete(request) {
             const policy = SCENARIO_MODELS[request.purpose];
+            const timeoutMs = callTimeoutMs(
+                policy.timeoutMs,
+                request.maxOutputTokens,
+                options.floorTokensPerSecond
+            );
             const resolved = resolveChatModel({
                 ...policy,
-                timeoutMs: callTimeoutMs(
-                    policy.timeoutMs,
-                    request.maxOutputTokens,
-                    options.floorTokensPerSecond
-                ),
+                timeoutMs,
+                // Node's fetch would cut a longer wait at five minutes.
+                ...(timeoutMs > NODE_FETCH_HEADERS_TIMEOUT_MS - 10_000 ? { longWait: true } : {}),
                 ...(options.maxRetries !== undefined ? { maxRetries: options.maxRetries } : {}),
                 maxOutputTokens: request.maxOutputTokens,
             });

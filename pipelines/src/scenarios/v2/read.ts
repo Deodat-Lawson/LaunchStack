@@ -64,6 +64,32 @@ export async function readManifest(run: RunRef): Promise<SourceManifest | undefi
     return row?.manifest;
 }
 
+/** The files each run's manifest read, for runs that have one (by run id). */
+export async function readManifestDocumentIds(
+    runs: Array<Pick<RunRef, "id" | "generation">>
+): Promise<Map<number, number[]>> {
+    if (runs.length === 0) return new Map();
+    const rows = await getDb()
+        .select({
+            runId: scenarioSourceManifests.runId,
+            generation: scenarioSourceManifests.generation,
+            documentIds: scenarioSourceManifests.documentIds,
+        })
+        .from(scenarioSourceManifests)
+        .where(
+            inArray(
+                scenarioSourceManifests.runId,
+                runs.map(r => r.id)
+            )
+        );
+    const generation = new Map(runs.map(r => [r.id, r.generation]));
+    return new Map(
+        rows
+            .filter(r => generation.get(r.runId) === r.generation)
+            .map(r => [r.runId, r.documentIds])
+    );
+}
+
 export async function readOntology(runId: number): Promise<OntologySpec | undefined> {
     const [row] = await getDb()
         .select()

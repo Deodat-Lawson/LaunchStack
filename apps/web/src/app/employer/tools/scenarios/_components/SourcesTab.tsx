@@ -210,6 +210,21 @@ export function SourcesTab({
     );
 }
 
+type CoverageT = ReturnType<typeof useTranslations<"scenarios.sources.coverage">>;
+
+/** "9 passages: 6 from 1 file, 3 from notes and other sources". */
+function readLine(t: CoverageT, c: NonNullable<ScenarioDetail["v2"]>["coverage"]): string {
+    const other = c.sections - c.fileSections;
+    if (c.fileSections === 0) return t("readOther", { sections: c.sections });
+    if (other === 0) return t("read", { sections: c.sections, files: c.files });
+    return t("readMixed", {
+        sections: c.sections,
+        fileSections: c.fileSections,
+        files: c.files,
+        other,
+    });
+}
+
 /**
  * What a v2 run read and what it left out, how its people were grounded, and
  * anything that makes the result less complete than it looks (skipped turns,
@@ -234,10 +249,7 @@ function Coverage({ run }: { run: ScenarioDetail }) {
     ].filter((x): x is string => Boolean(x));
     return (
         <section>
-            <SectionHeading
-                title={t("title")}
-                aside={t("read", { sections: v2.coverage.sections, files: v2.coverage.files })}
-            />
+            <SectionHeading title={t("title")} aside={readLine(t, v2.coverage)} />
             <div className="border-line bg-panel flex flex-col gap-3 rounded-xl border px-4 py-3.5 text-[13px]">
                 <p className="text-ink-2">{t(`mode.${v2.contextMode}`)}</p>
                 {notices.map(notice => (

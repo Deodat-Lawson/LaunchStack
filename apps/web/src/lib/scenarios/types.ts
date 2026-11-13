@@ -390,7 +390,9 @@ export interface ScenarioV2Detail {
     coverage: {
         /** Captured passages and facts. */
         sections: number;
-        /** Files they came from. */
+        /** How many of them came from files (picked or found by search). */
+        fileSections: number;
+        /** The files those came from. */
         files: number;
         omitted: ScenarioOmission[];
     };

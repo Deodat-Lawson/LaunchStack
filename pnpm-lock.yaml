@@ -879,6 +879,9 @@ importers:
       string-similarity-js:
         specifier: ^2.1.4
         version: 2.1.4
+      undici:
+        specifier: ^7.29.1
+        version: 7.29.1
       yaml:
         specifier: ^2.8.1
         version: 2.9.0

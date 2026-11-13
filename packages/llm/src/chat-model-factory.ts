@@ -276,6 +276,8 @@ export interface ResolveChatModelOptions {
     timeoutMs?: number;
     /** Retries after a failed attempt; see the transport for the defaults. */
     maxRetries?: number;
+    /** Wait past Node's five-minute fetch limit when `timeoutMs` is longer (see long-wait-fetch.ts). */
+    longWait?: boolean;
     config?: ChatModelsConfig;
 }
 
@@ -337,6 +339,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             streaming: options.streaming,
             timeoutMs: options.timeoutMs,
             maxRetries: options.maxRetries,
+            longWait: options.longWait,
             requestPatch: reasoning.requestPatch,
             // Captured now, in the scope that chose this configuration, so the
             // calls are counted against the same unit of work.

@@ -251,6 +251,8 @@
     "coverage": {
       "title": "What was read",
       "read": "{sections, plural, one {# passage} other {# passages}} from {files, plural, one {# file} other {# files}}",
+      "readMixed": "{sections, plural, one {# passage} other {# passages}}: {fileSections} from {files, plural, one {# file} other {# files}}, {other} from notes and other sources",
+      "readOther": "{sections, plural, one {# passage} other {# passages}} from notes and other sources",
       "mode": {
         "passage": "Each person was built from the passages most relevant to them.",
         "facts": "Each person was built from your company facts first, then the passages most relevant to them.",

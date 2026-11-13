@@ -87,7 +87,7 @@ import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
 import { cancelV2, resumeV2IfStalled } from "./v2/executor";
-import { assertV2Readable, v2DetailContext, v2Progress } from "./v2/service";
+import { assertV2Readable, unreadableV2Runs, v2DetailContext, v2Progress } from "./v2/service";
 import {
     leftWorkspaceName,
     recordSummary,
@@ -377,15 +377,27 @@ export async function listScenarios(ctx: Ctx, locale: Locale = "en"): Promise<Sc
         viewerUserId: ctx.authUserId,
         kind: "scenario",
     });
-    const [names, progress] = await Promise.all([
+    const [names, progress, unreadable] = await Promise.all([
         namesFor(
             ctx.companyId,
             rows.map(r => r.createdByUserId),
             locale
         ),
         v2Progress(rows.filter(r => r.contractVersion === 2)),
+        // Only a finished report has a headline to hide.
+        unreadableV2Runs(
+            ctx,
+            rows.filter(r => r.contractVersion === 2 && r.headline)
+        ),
     ]);
-    return rows.map(r => toSummary(r, ctx.authUserId, names, progress.get(r.id)));
+    return rows.map(r =>
+        toSummary(
+            unreadable.has(r.id) ? { ...r, headline: null } : r,
+            ctx.authUserId,
+            names,
+            progress.get(r.id)
+        )
+    );
 }
 
 /**

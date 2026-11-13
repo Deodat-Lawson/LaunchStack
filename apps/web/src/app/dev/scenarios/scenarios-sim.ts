@@ -530,6 +530,7 @@ function v2DetailFor(run: SimRun, phase: Phase): ScenarioDetail["v2"] {
         fallbackReason: null,
         coverage: {
             sections: sources.filter(s => !s.redacted).length,
+            fileSections: sources.filter(s => !s.redacted && s.kind === "document").length,
             files: new Set(sources.filter(s => s.kind === "document").map(s => s.label)).size,
             omitted: [
                 {

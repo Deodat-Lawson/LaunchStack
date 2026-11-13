@@ -40,6 +40,7 @@ import {
     readCheckpoints,
     readGraphSnapshot,
     readManifest,
+    readManifestDocumentIds,
     readNextUnitKinds,
     readOntology,
     readRequestSpec,
@@ -140,10 +141,10 @@ function ingestAllowance(mode: ContextMode): number {
     if (mode !== "graph") return 0;
     const c = UNIT_TOKEN_CAPS;
     const tokens = DEFAULT_SOURCE_BUDGET.totalTokens;
-    const batches = Math.ceil(DEFAULT_SOURCE_BUDGET.maxSections / DEFAULT_POLICIES.ingestBatchSize);
+    const episodes = DEFAULT_SOURCE_BUDGET.maxSections;
     return llmChatTokens(
-        c.ingestFloor.input * batches + c.ingestPerSourceToken.input * tokens,
-        c.ingestFloor.output * batches + c.ingestPerSourceToken.output * tokens
+        c.ingestPerEpisode.input * episodes + c.ingestPerSourceToken.input * tokens,
+        c.ingestPerEpisode.output * episodes + c.ingestPerSourceToken.output * tokens
     );
 }
 
@@ -306,6 +307,25 @@ export async function assertV2Readable(ctx: Ctx, run: ScenarioRunRecord): Promis
     return deps;
 }
 
+/**
+ * The runs among `runs` whose reader cannot open every file the run read. A
+ * list row shows their title (the person's own words) but not their headline,
+ * which the report wrote from those files.
+ */
+export async function unreadableV2Runs(
+    ctx: Ctx,
+    runs: Array<{ id: number; generation: number }>
+): Promise<Set<number>> {
+    if (runs.length === 0) return new Set();
+    const deps = await readManifestDocumentIds(runs);
+    const all = [...new Set([...deps.values()].flat())];
+    if (all.length === 0) return new Set();
+    const visible = await visibleDocumentIds(ctx.companyId, await ctx.documentScope(), all);
+    return new Set(
+        runs.filter(r => (deps.get(r.id) ?? []).some(id => !visible.has(id))).map(r => r.id)
+    );
+}
+
 /** v2 progress for a set of runs (list rows or one record). */
 export async function v2Progress(
     runs: Array<{
@@ -391,15 +411,21 @@ export async function v2DetailContext(
             redacted,
         };
     });
-    const files = new Set(
-        (manifest?.items ?? []).filter(i => i.sourceType === "document").map(i => i.sourceId)
+    const fromFiles = (manifest?.items ?? []).filter(
+        i => i.sourceType === "document" || i.sourceType === "search"
     );
+    const files = new Set(fromFiles.map(i => i.sourceId));
     const detail: ScenarioV2Detail = {
         specHash: spec?.specHash ?? null,
         worldSpecHash: world?.specHash ?? null,
         contextMode: flags.contextMode,
         fallbackReason: flags.fallbackReason,
-        coverage: { sections: manifest?.items.length ?? 0, files: files.size, omitted },
+        coverage: {
+            sections: manifest?.items.length ?? 0,
+            fileSections: fromFiles.length,
+            files: files.size,
+            omitted,
+        },
         degradedRounds: flags.degradedRounds,
         skippedTurns: flags.skippedTurns,
         unfilledSlots: flags.unfilledSlots,
@@ -453,6 +479,15 @@ export async function getScenarioProvenance(
             return slot ? [[slot, a.persona.id] as const] : [];
         })
     );
+    // A file left out entirely contributed nothing, so it is not a dependency
+    // the reader must be able to open; its name is shown only to those who can.
+    const omittedFiles = (manifest?.omissions ?? []).flatMap(o =>
+        o.sourceType === "document" ? [Number(o.sourceId)] : []
+    );
+    const openable =
+        omittedFiles.length > 0
+            ? await visibleDocumentIds(ctx.companyId, await ctx.documentScope(), omittedFiles)
+            : new Set<number>();
     const limit = Math.max(1, Math.min(CONTEXT_PAGE, page.limit ?? CONTEXT_PAGE));
     const after = page.after;
     const sorted = [...contexts].sort((a, b) => a.slotId.localeCompare(b.slotId));
@@ -483,11 +518,12 @@ export async function getScenarioProvenance(
         })),
         omitted: (manifest?.omissions ?? []).map(o => {
             const kind = omissionKind(o.sourceType);
+            const redacted = o.sourceType === "document" && !openable.has(Number(o.sourceId));
             return {
-                label: sourceLabel(kind, o.label, locale),
+                label: redacted ? "" : sourceLabel(kind, o.label, locale),
                 kind,
                 reason: o.reason,
-                redacted: false,
+                redacted,
             };
         }),
         ontology: ontology

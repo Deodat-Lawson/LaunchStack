@@ -991,6 +991,8 @@ export function createV2Store(options: V2StoreOptions): V2Store {
                             credits: commit.credits,
                             durationMs: Math.round(commit.durationMs),
                             committedAt: at,
+                            // An earlier attempt's error no longer describes the unit.
+                            error: null,
                         })
                         .where(
                             and(

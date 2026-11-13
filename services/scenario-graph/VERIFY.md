@@ -121,33 +121,86 @@ $ curl -s -H 'Authorization: Bearer verify-token-5b1f0c2e9a' http://127.0.0.1:18
 
 ```json
 {
-    "nodes": [
-        { "uuid": "4f7c6903-…", "name": "Northwind", "labels": ["Entity"],
-          "summary": "Northwind uses Acme Legacy.\nMigration of Acme Legacy for Northwind requires approximately fourteen days.", "attributes": {} },
-        { "uuid": "5d674b5a-…", "name": "Lee", "labels": ["Entity"],
-          "summary": "Lee approves Northwind's software purchases.", "attributes": {} },
-        { "uuid": "a268ffa4-…", "name": "Acme Legacy", "labels": ["Entity", "Product"],
-          "summary": "Northwind uses Acme Legacy.\nMigration of Acme Legacy for Northwind requires approximately fourteen days.", "attributes": {} },
-        { "uuid": "b879eec4-…", "name": "Maya", "labels": ["Entity", "Person"],
-          "summary": "Maya recommends Northwind's software purchases.", "attributes": { "title": "null" } },
-        { "uuid": "cfd29e70-…", "name": "Northwind's software purchases", "labels": ["Entity", "Product"],
-          "summary": "Maya recommends Northwind's software purchases.\nLee approves Northwind's software purchases.", "attributes": {} }
-    ],
-    "edges": [
-        { "name": "RELATES_TO", "fact": "Maya recommends Northwind's software purchases.",
-          "source": "Maya", "target": "Northwind's software purchases", "episodes": ["verify-build-1-E1"],
-          "valid_at": "2026-11-01T00:00:00+00:00", "invalid_at": null, "attributes": {} },
-        { "name": "RELATES_TO", "fact": "Northwind uses Acme Legacy.",
-          "source": "Northwind", "target": "Acme Legacy", "episodes": ["verify-build-1-E2"],
-          "valid_at": "2026-11-01T14:00:00+00:00", "invalid_at": null, "attributes": {} },
-        { "name": "HAS_MIGRATION_DURATION_FOR", "fact": "Migration of Acme Legacy for Northwind requires approximately fourteen days.",
-          "source": "Acme Legacy", "target": "Northwind", "episodes": ["verify-build-1-E2"],
-          "valid_at": null, "invalid_at": null, "attributes": {} },
-        { "name": "RELATES_TO", "fact": "Lee approves Northwind's software purchases.",
-          "source": "Lee", "target": "Northwind's software purchases", "episodes": ["verify-build-1-E1"],
-          "valid_at": "2026-11-01T00:00:00+00:00", "invalid_at": null, "attributes": {} }
-    ],
-    "episode_uuids": ["verify-build-1-E1", "verify-build-1-E2"]
+  "nodes": [
+    {
+      "uuid": "4f7c6903-…",
+      "name": "Northwind",
+      "labels": ["Entity"],
+      "summary": "Northwind uses Acme Legacy.\nMigration of Acme Legacy for Northwind requires approximately fourteen days.",
+      "attributes": {}
+    },
+    {
+      "uuid": "5d674b5a-…",
+      "name": "Lee",
+      "labels": ["Entity"],
+      "summary": "Lee approves Northwind's software purchases.",
+      "attributes": {}
+    },
+    {
+      "uuid": "a268ffa4-…",
+      "name": "Acme Legacy",
+      "labels": ["Entity", "Product"],
+      "summary": "Northwind uses Acme Legacy.\nMigration of Acme Legacy for Northwind requires approximately fourteen days.",
+      "attributes": {}
+    },
+    {
+      "uuid": "b879eec4-…",
+      "name": "Maya",
+      "labels": ["Entity", "Person"],
+      "summary": "Maya recommends Northwind's software purchases.",
+      "attributes": { "title": "null" }
+    },
+    {
+      "uuid": "cfd29e70-…",
+      "name": "Northwind's software purchases",
+      "labels": ["Entity", "Product"],
+      "summary": "Maya recommends Northwind's software purchases.\nLee approves Northwind's software purchases.",
+      "attributes": {}
+    }
+  ],
+  "edges": [
+    {
+      "name": "RELATES_TO",
+      "fact": "Maya recommends Northwind's software purchases.",
+      "source": "Maya",
+      "target": "Northwind's software purchases",
+      "episodes": ["verify-build-1-E1"],
+      "valid_at": "2026-11-01T00:00:00+00:00",
+      "invalid_at": null,
+      "attributes": {}
+    },
+    {
+      "name": "RELATES_TO",
+      "fact": "Northwind uses Acme Legacy.",
+      "source": "Northwind",
+      "target": "Acme Legacy",
+      "episodes": ["verify-build-1-E2"],
+      "valid_at": "2026-11-01T14:00:00+00:00",
+      "invalid_at": null,
+      "attributes": {}
+    },
+    {
+      "name": "HAS_MIGRATION_DURATION_FOR",
+      "fact": "Migration of Acme Legacy for Northwind requires approximately fourteen days.",
+      "source": "Acme Legacy",
+      "target": "Northwind",
+      "episodes": ["verify-build-1-E2"],
+      "valid_at": null,
+      "invalid_at": null,
+      "attributes": {}
+    },
+    {
+      "name": "RELATES_TO",
+      "fact": "Lee approves Northwind's software purchases.",
+      "source": "Lee",
+      "target": "Northwind's software purchases",
+      "episodes": ["verify-build-1-E1"],
+      "valid_at": "2026-11-01T00:00:00+00:00",
+      "invalid_at": null,
+      "attributes": {}
+    }
+  ],
+  "episode_uuids": ["verify-build-1-E1", "verify-build-1-E2"]
 }
 ```
 

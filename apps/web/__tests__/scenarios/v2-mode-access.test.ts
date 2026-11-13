@@ -16,6 +16,7 @@ jest.mock("@launchstack/pipelines/scenarios/v2/read", () => ({
     readCheckpoints: jest.fn(async () => []),
     readGraphSnapshot: jest.fn(async () => undefined),
     readManifest: jest.fn(),
+    readManifestDocumentIds: jest.fn(async () => new Map()),
     readNextUnitKinds: jest.fn(async () => new Map()),
     readOntology: jest.fn(async () => undefined),
     readRequestSpec: jest.fn(async () => undefined),
@@ -63,6 +64,7 @@ import {
     getScenarioTrace,
     replayScenario,
     resolveContextMode,
+    unreadableV2Runs,
 } from "~/server/scenarios/v2/service";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
@@ -70,9 +72,10 @@ import { makeWorkspaceContext } from "../helpers/workspace-context";
 const { getCompanyRun } = jest.requireMock<{ getCompanyRun: jest.Mock }>(
     "@launchstack/pipelines/scenarios/db"
 );
-const { readManifest } = jest.requireMock<{ readManifest: jest.Mock }>(
-    "@launchstack/pipelines/scenarios/v2/read"
-);
+const { readManifest, readManifestDocumentIds } = jest.requireMock<{
+    readManifest: jest.Mock;
+    readManifestDocumentIds: jest.Mock;
+}>("@launchstack/pipelines/scenarios/v2/read");
 const { visibleDocumentIds } = jest.requireMock<{ visibleDocumentIds: jest.Mock }>(
     "~/server/scenarios/evidence"
 );
@@ -219,6 +222,52 @@ describe("reading a v2 run's derived artifacts", () => {
         visibleDocumentIds.mockResolvedValue(new Set([7, 8, 9]));
         const ctx = makeWorkspaceContext({ authUserId: "reader" });
         await expect(replayScenario(ctx, 11)).resolves.toMatchObject({ available: false });
+    });
+
+    it("names a left-out file in provenance only to a reader who can open it", async () => {
+        getCompanyRun.mockResolvedValue(run);
+        readManifest.mockResolvedValue({
+            ...manifest,
+            items: [],
+            omissions: [
+                {
+                    sourceType: "document",
+                    sourceId: "12",
+                    label: "Board deck Q3.pdf",
+                    reason: "budget",
+                },
+                { sourceType: "notes", sourceId: "notes", label: "Notes", reason: "budget" },
+            ],
+        });
+        // Every file the run read is open to the reader; the left-out deck is not.
+        visibleDocumentIds.mockImplementation(
+            async (_c: bigint, _s: unknown, ids: number[]) => new Set(ids.filter(id => id !== 12))
+        );
+        const ctx = makeWorkspaceContext({ authUserId: "reader" });
+        const prov = await getScenarioProvenance(ctx, 11, { after: null, limit: null }, "en");
+        expect(prov.omitted).toEqual([
+            expect.objectContaining({ kind: "document", label: "", redacted: true }),
+            expect.objectContaining({ kind: "notes", redacted: false }),
+        ]);
+        expect(JSON.stringify(prov)).not.toContain("Board deck");
+    });
+
+    it("finds the list rows whose headline the reader may not see", async () => {
+        readManifestDocumentIds.mockResolvedValue(
+            new Map([
+                [11, [7, 8, 9]],
+                [12, [7]],
+            ])
+        );
+        visibleDocumentIds.mockResolvedValue(new Set([7, 8]));
+        const ctx = makeWorkspaceContext({ authUserId: "reader" });
+        const hidden = await unreadableV2Runs(ctx, [
+            { id: 11, generation: 1 },
+            { id: 12, generation: 1 },
+            { id: 13, generation: 1 }, // no manifest yet: nothing derived to hide
+        ]);
+        expect([...hidden]).toEqual([11]);
+        expect(visibleDocumentIds).toHaveBeenCalledWith(5n, expect.anything(), [7, 8, 9]);
     });
 
     it("treats an unshared run as missing for anyone but its creator", async () => {

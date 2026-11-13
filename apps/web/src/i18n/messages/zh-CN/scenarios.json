@@ -250,7 +250,9 @@
     "peopleBuilt": "据此构建了 {count, number} 人",
     "coverage": {
       "title": "读取了什么",
-      "read": "{files, plural, other {# 个文件}}中的{sections, plural, other {# 段内容}}",
+      "read": "{files, plural, other {# 个文件}}中的 {sections, plural, other {# 段内容}}",
+      "readMixed": "共 {sections, plural, other {# 段内容}}：{fileSections} 段来自 {files, plural, other {# 个文件}}，{other} 段来自笔记等其他来源",
+      "readOther": "{sections, plural, other {# 段内容}}，来自笔记等其他来源",
       "mode": {
         "passage": "每个人物都基于与其最相关的段落构建。",
         "facts": "每个人物先基于公司事实，再基于与其最相关的段落构建。",

@@ -461,7 +461,10 @@ export function useSettingCopier(): (definition: SettingDefinition) => SettingCo
             }
             return {
                 label: pick("label", definition.label),
-                description: pick("description", definition.description),
+                description:
+                    definition.description === undefined
+                        ? undefined
+                        : pick("description", definition.description),
                 consequence:
                     definition.consequence === undefined
                         ? undefined

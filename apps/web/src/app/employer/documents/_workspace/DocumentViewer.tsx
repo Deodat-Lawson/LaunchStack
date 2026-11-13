@@ -1664,19 +1664,10 @@ export function DocumentViewer({
                                         letterSpacing: "0.08em",
                                         color: "var(--ink-3)",
                                         textTransform: "uppercase",
-                                    }}
-                                >
-                                    {t("documentViewer.versionHistory")}
-                                </div>
-                                <div
-                                    style={{
-                                        fontSize: 11,
-                                        color: "var(--ink-3)",
-                                        marginTop: 2,
                                         marginBottom: 10,
                                     }}
                                 >
-                                    {t("documentViewer.uploadedRevisions")}
+                                    {t("documentViewer.versionHistory")}
                                 </div>
 
                                 <input

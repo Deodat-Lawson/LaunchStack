@@ -6,7 +6,13 @@ import {
     rateLimitMessage,
     signInFailureMessage,
 } from "~/components/auth/auth-errors";
-import { formatTakeoverNotice, parseTakeoverNotice } from "~/lib/auth/takeover-notice";
+import {
+    formatTakeoverNotice,
+    parseTakeoverNotice,
+    parseTakeoverNoticeMethods,
+} from "~/lib/auth/takeover-notice";
+
+const ACME = { id: "oidc", name: "Acme SSO" } as const;
 
 describe("signInFailureMessage", () => {
     it("reads a wrong password and an unknown email the same", () => {
@@ -114,6 +120,29 @@ describe("connectErrorMessage", () => {
     });
 });
 
+describe("naming Microsoft and the deployment's own OIDC provider", () => {
+    it("names Microsoft by its id, like the other brands", () => {
+        expect(oauthErrorMessage("account_not_linked", "microsoft")).toMatch(
+            /^Microsoft hasn't confirmed/
+        );
+        expect(connectErrorMessage("unable_to_link_account", "microsoft")).toBe(
+            "Microsoft hasn't confirmed you own that email address, so it can't be connected."
+        );
+    });
+
+    it("names the OIDC provider only from the offered list", () => {
+        expect(oauthErrorMessage("email_not_found", ACME)).toBe(
+            "Acme SSO didn't share an email address with us, so we couldn't sign you in."
+        );
+        expect(connectErrorMessage("access_denied", ACME)).toBe(
+            "Connecting Acme SSO was cancelled."
+        );
+        // A bare "oidc" from the address bar has no name to show.
+        expect(oauthErrorMessage("email_not_found", "oidc")).toMatch(/^The provider didn't share/);
+        expect(connectErrorMessage("access_denied", "oidc")).not.toContain("oidc");
+    });
+});
+
 describe("parseTakeoverNotice", () => {
     it("reads the provider and what it replaced", () => {
         expect(parseTakeoverNotice("google:credential")).toEqual({
@@ -136,6 +165,30 @@ describe("parseTakeoverNotice", () => {
             provider: "GitHub",
             removed: "the password",
         });
+        expect(
+            parseTakeoverNotice(formatTakeoverNotice("microsoft", ["credential", "oidc"]))
+        ).toMatchObject({
+            provider: "Microsoft",
+            removed: "the password and single sign-on",
+            plural: true,
+        });
+    });
+
+    it("carries the OIDC provider's own name, however the cookie layer encoded it", () => {
+        const written = formatTakeoverNotice("oidc", ["credential", "microsoft"], "Acme: 100% SSO");
+        const expected = { provider: "Acme: 100% SSO", removed: ["credential", "microsoft"] };
+        expect(parseTakeoverNoticeMethods(written)).toEqual(expected);
+        expect(parseTakeoverNoticeMethods(encodeURIComponent(written))).toEqual(expected);
+        // Only OIDC carries a name; a brand can't be renamed by the cookie.
+        expect(formatTakeoverNotice("google", ["credential"], "Evil")).toBe("google:credential");
+        expect(parseTakeoverNoticeMethods("google:credential:Evil")?.provider).toBe("Google");
+    });
+
+    it("bounds a carried name and shows nothing without one", () => {
+        const long = formatTakeoverNotice("oidc", ["credential"], `  ${"x".repeat(80)}  `);
+        expect(parseTakeoverNoticeMethods(long)?.provider).toBe("x".repeat(40));
+        expect(parseTakeoverNoticeMethods("oidc:credential")).toBeNull();
+        expect(parseTakeoverNoticeMethods("oidc:credential:%20%20")).toBeNull();
     });
 
     it("shows nothing for a missing, malformed or unknown value", () => {

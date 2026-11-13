@@ -84,12 +84,6 @@
     "loading": "正在加载文档…",
     "header": "Word 文档预览"
   },
-  "drafts": {
-    "title": "模板草稿",
-    "newDocument": "新建文档",
-    "myDocuments": "我的文档",
-    "assistant": "助手"
-  },
   "image": {
     "loadFailed": "图片加载失败",
     "imageLabel": "图片：{alt}",

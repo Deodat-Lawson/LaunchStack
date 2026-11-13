@@ -11,7 +11,6 @@ import { Checkbox } from "~/components/ui/checkbox";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -110,7 +109,7 @@ export function FilePickerDialog({
         );
     };
 
-    const group = (title: string, note: string, list: ScenarioFileOption[]) =>
+    const group = (title: string, note: string | null, list: ScenarioFileOption[]) =>
         list.length > 0 && (
             <section aria-label={title}>
                 <div className="bg-surface/95 border-line-2 sticky top-0 z-[1] flex items-baseline gap-2 border-t px-5 py-2 backdrop-blur first:border-t-0">
@@ -120,7 +119,7 @@ export function FilePickerDialog({
                             {list.length}
                         </span>
                     </h3>
-                    <span className="text-ink-3 truncate text-xs">{note}</span>
+                    {note && <span className="text-ink-3 truncate text-xs">{note}</span>}
                 </div>
                 <ul>{list.map(row)}</ul>
             </section>
@@ -128,12 +127,12 @@ export function FilePickerDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="flex max-h-[min(720px,calc(100dvh-2rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-[640px]">
+            <DialogContent
+                className="flex max-h-[min(720px,calc(100dvh-2rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-[640px]"
+                aria-describedby={undefined}
+            >
                 <DialogHeader className="px-5 pb-3 pt-5">
                     <DialogTitle className="text-base">{t("title")}</DialogTitle>
-                    <DialogDescription className="text-[13px]">
-                        {t("description")}
-                    </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-wrap items-center gap-2 px-5 pb-3">
                     <div className="border-line bg-surface focus-within:border-brand focus-within:ring-brand/50 flex min-w-[200px] flex-1 items-center gap-2 rounded-md border px-2.5 focus-within:ring-[3px]">
@@ -186,7 +185,7 @@ export function FilePickerDialog({
                     ) : (
                         <>
                             {group(t("companyFiles"), t("companyNote"), company)}
-                            {group(t("otherFiles"), t("otherNote"), other)}
+                            {group(t("otherFiles"), null, other)}
                         </>
                     )}
                 </div>

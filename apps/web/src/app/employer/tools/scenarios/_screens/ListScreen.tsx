@@ -39,7 +39,6 @@ export function ListScreen() {
             <PageHeader
                 title={t("title")}
                 accent={t("accent")}
-                sub={t("sub")}
                 actions={runs.length > 0 ? newButton : undefined}
             />
             {list.error && <InlineError message={list.error} onRetry={() => void list.reload()} />}

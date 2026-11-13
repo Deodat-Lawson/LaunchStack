@@ -155,7 +155,7 @@ Full details, including what degrades without which optional service, are in
 | [`@launchstack/google-drive`](packages/google-drive) | unpublished | Drive v3 and OAuth token client with injected credentials. |
 | [`@launchstack/schema-generator`](packages/schema-generator) | unpublished | Versioned JSON Schema bundle from conversion, orchestration and editing wire contracts. |
 | [`@launchstack/design-tokens`](packages/design-tokens) | private | Shared CSS design tokens for the apps. |
-| [`@launchstack/pipelines`](pipelines) | unpublished | 13 verticals: client-prospector, company-metadata, connectors, distribution, email, founder-weekly-review, legal-templates, marketing, proposals, repo-explainer, repo-workspace, trend-search and vantage. |
+| [`@launchstack/pipelines`](pipelines) | unpublished | 12 verticals: client-prospector, company-metadata, connectors, distribution, email, founder-weekly-review, marketing, proposals, repo-explainer, repo-workspace, trend-search and vantage. |
 | [`apps/web`](apps/web) | — | The Next.js reference app — how we wire everything together |
 
 Pipelines compose bricks through their public package APIs; bricks never import pipelines. The reference app imports both tiers and supplies the storage, credits and RAG ports that connect to real infrastructure. Document ingestion uses the transactional outbox consumed by `apps/worker`, not a jobs port in the app's engine config.

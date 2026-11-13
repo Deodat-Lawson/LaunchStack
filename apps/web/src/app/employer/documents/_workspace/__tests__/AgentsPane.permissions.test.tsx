@@ -173,11 +173,10 @@ describe("the editor for someone who may change only what an agent says", () => 
         expect(dialog.getByDisplayValue("Dana")).toBeEnabled();
         expect(dialog.getByDisplayValue("Guard the margin.")).toBeEnabled();
         expect(dialog.queryByRole("button", { name: /Import file/ })).not.toBeInTheDocument();
+        // Each locked field says who sets it.
         expect(
-            dialog.getByText(/set by people who can manage workspace settings/i, {
-                selector: "span",
-            })
-        ).toBeInTheDocument();
+            dialog.getAllByText(/set by people who can manage workspace settings/i).length
+        ).toBeGreaterThan(0);
     });
 
     it("saves only the content fields", async () => {

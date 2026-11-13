@@ -1,6 +1,6 @@
 /**
- * What a Google or GitHub sign-in may do to an account that already exists
- * for its email address.
+ * What a provider sign-in (Google, Microsoft, GitHub, the deployment's own
+ * OIDC) may do to an account that already exists for its email address.
  *
  * LaunchStack never confirms the address on a password sign-up (no email
  * provider is wired, see ./email), so a password account may have been made
@@ -46,6 +46,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { formatTakeoverNotice, TAKEOVER_NOTICE_COOKIE } from "~/lib/auth/takeover-notice";
+import { oidcSignInConfig } from "./providers";
 
 // The schema barrel, as the middleware itself imports it (see oauth-workspace).
 import {
@@ -147,7 +148,11 @@ export function accountLinkingHooks(db: Db): DatabaseHooks {
                     if (!user || user.emailVerified) return;
                     const removed = await takeOver(ctx, db, account.userId);
                     if (removed.length === 0) return;
-                    const notice = formatTakeoverNotice(account.providerId, removed);
+                    const notice = formatTakeoverNotice(
+                        account.providerId,
+                        removed,
+                        account.providerId === "oidc" ? oidcSignInConfig()?.name : undefined
+                    );
                     ctx.setCookie(TAKEOVER_NOTICE_COOKIE, notice, {
                         path: "/",
                         maxAge: 24 * 60 * 60,

@@ -13,6 +13,7 @@
 import { createTranslator, type useTranslations } from "next-intl";
 
 import auth from "~/i18n/messages/en/auth.json";
+import { providerName, type SocialProvider } from "~/lib/auth/providers";
 
 /** `useTranslations("auth.errors")`, passed in by the screen that shows the sentence. */
 export type AuthErrorsTranslator = ReturnType<typeof useTranslations<"auth.errors">>;
@@ -63,7 +64,17 @@ export function signInFailureMessage(
     return failure.message ?? t("signInFailed");
 }
 
-const PROVIDER_NAMES: Record<string, string> = { google: "Google", github: "GitHub" };
+/**
+ * Which provider a sentence names: an offered provider carries its own name
+ * (the only way to name the deployment's OIDC provider); a bare id from the
+ * address bar is named only when it is a brand.
+ */
+type ProviderRef = SocialProvider | string | null | undefined;
+
+function nameOf(provider: ProviderRef): string | undefined {
+    if (!provider) return undefined;
+    return typeof provider === "string" ? providerName(provider) : provider.name;
+}
 
 /**
  * The `?error=<code>` better-auth appends when a social sign-in fails, as a
@@ -72,11 +83,11 @@ const PROVIDER_NAMES: Record<string, string> = { google: "Google", github: "GitH
  */
 export function oauthErrorMessage(
     code: string | null,
-    provider?: string | null,
+    provider?: ProviderRef,
     t: AuthErrorsTranslator = english
 ): string | null {
     if (!code) return null;
-    const name = provider ? PROVIDER_NAMES[provider] : undefined;
+    const name = nameOf(provider);
     switch (code) {
         case "access_denied":
             return t("oauth.accessDenied");
@@ -114,11 +125,11 @@ export function oauthErrorMessage(
  */
 export function connectErrorMessage(
     code: string,
-    provider: string,
+    provider: ProviderRef,
     email?: string | null,
     t: AuthErrorsTranslator = english
 ): string {
-    const name = PROVIDER_NAMES[provider] ?? t("connect.fallbackProvider");
+    const name = nameOf(provider) ?? t("connect.fallbackProvider");
     switch (code) {
         case "access_denied":
             return t("connect.accessDenied", { provider: name });

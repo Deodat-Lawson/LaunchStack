@@ -41,7 +41,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import {
     AgentSessionsApiError,
     fetchSessionsPreview,
@@ -259,39 +258,23 @@ function SessionRow({
                                 {t("update")}
                             </Button>
                         )}
-                        <TooltipProvider delayDuration={300}>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-7 gap-1 text-xs"
-                                        onClick={() => openTranscript(item.imported!.documentId)}
-                                    >
-                                        <ExternalLink className="h-3.5 w-3.5" />
-                                        {tc("actions.open")}
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom">
-                                    <p className="text-xs">{t("openHint")}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        size="sm"
-                                        className="bg-brand hover:bg-brand-hi text-brand-fg h-7 gap-1 text-xs"
-                                        onClick={() => continueInChat(item.imported!.documentId)}
-                                    >
-                                        <MessageSquarePlus className="h-3.5 w-3.5" />
-                                        {t("continue")}
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom">
-                                    <p className="text-xs">{t("continueHint")}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 gap-1 text-xs"
+                            onClick={() => openTranscript(item.imported!.documentId)}
+                        >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                            {tc("actions.open")}
+                        </Button>
+                        <Button
+                            size="sm"
+                            className="bg-brand hover:bg-brand-hi text-brand-fg h-7 gap-1 text-xs"
+                            onClick={() => continueInChat(item.imported!.documentId)}
+                        >
+                            <MessageSquarePlus className="h-3.5 w-3.5" />
+                            {t("continue")}
+                        </Button>
                     </>
                 ) : (
                     <Button

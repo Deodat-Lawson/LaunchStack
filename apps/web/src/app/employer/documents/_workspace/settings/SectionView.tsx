@@ -13,7 +13,8 @@
  *
  * Its words are `settings.sections.<id>`: `label` (the rail, short), `blurb`
  * (the rail's second line, one clause), `title` (the header, sentence case)
- * and `description` (what the section is *for*, not what it contains). The
+ * and `description` (what the section is *for*, not what it contains; left
+ * out when the body says it all). The
  * Workspace tab names its screens `settings.workspaceTab.screens.<id>`.
  *
  * Who sees and who changes each section is `SETTINGS_SECTION_ACCESS`: a
@@ -173,6 +174,8 @@ function SectionHeader({
 }) {
     const t = useTranslations("settings");
     const busyLabel = actions?.primaryBusyLabel ?? `${actions?.primaryLabel ?? ""}…`;
+    // Only some sections have a description: one whose body already says it all has none.
+    const descriptionKey = `sections.${definition.id}.description` as never;
 
     return (
         <header className="border-line bg-panel @max-md:px-4 shrink-0 border-b px-7 pb-4 pt-[18px]">
@@ -195,9 +198,11 @@ function SectionHeader({
                             </Badge>
                         )}
                     </div>
-                    <p className="text-ink-3 m-0 mt-[7px] max-w-[68ch] text-[13px] leading-[1.55]">
-                        {t(`sections.${definition.id}.description`)}
-                    </p>
+                    {t.has(descriptionKey) && (
+                        <p className="text-ink-3 m-0 mt-[7px] max-w-[68ch] text-[13px] leading-[1.55]">
+                            {t(descriptionKey)}
+                        </p>
+                    )}
                 </div>
 
                 {!readOnly && (actions?.secondary ?? actions?.primaryLabel) && (

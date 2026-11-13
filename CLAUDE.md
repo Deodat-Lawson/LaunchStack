@@ -48,7 +48,5 @@ compositions — product verticals; may import bricks, never the reverse),
 - Format with `pnpm format:write` (Prettier owns style incl. Tailwind class
   order); lint warnings from the design-system guardrails are a ratchet — the
   count may only go down.
-- `public/templates/*.docx` are live production data resolved at runtime via
-  `process.cwd()` — do not move them.
 - Deploys are container images (`.github/workflows/docker.yml` → GHCR) and
   Compose. There is no Vercel pipeline; nothing in the repo builds one.

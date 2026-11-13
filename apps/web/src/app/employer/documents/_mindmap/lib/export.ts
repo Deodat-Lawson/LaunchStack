@@ -248,8 +248,7 @@ export type ExportFormat = "png" | "svg" | "pdf" | "json" | "markdown" | "mermai
  * pdf-lib's bundled `.d.ts` files do not surface `PDFPage`'s draw methods in
  * this project: `PDFPageOptions.d.ts` resolves but contributes no exports, so
  * every member typed against it (`drawImage`, `drawText`, …) disappears from
- * `PDFPage`. `api/document-generator/export/route.ts` papers over the same gap
- * with `any`; declaring the one method we call keeps this call site checked.
+ * `PDFPage`. Declaring the one method we call keeps this call site checked.
  */
 interface DrawablePdfPage {
     drawImage(

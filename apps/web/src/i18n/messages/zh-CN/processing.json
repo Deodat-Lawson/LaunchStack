@@ -1,12 +1,6 @@
 {
-  "frame": {
-    "title": "处理队列",
-    "about": "每个正在进入工作区的文件及其所处阶段：上传、等待处理、读取文本（扫描件和图片会做 OCR）、拆分为段落、建立搜索索引。添加内容时会自动打开。"
-  },
-  "header": {
-    "title": "处理",
-    "accent": "队列",
-    "checking": "正在检查…"
+  "knowledge": {
+    "title": "处理中"
   },
   "summary": {
     "running": "{count} 个处理中",
@@ -21,10 +15,6 @@
     "everyone": "所有人",
     "mine": "我的"
   },
-  "actions": {
-    "clearFinished": "清除已完成",
-    "addSource": "添加来源"
-  },
   "overall": {
     "onTheWay": "{count, plural, other {# 个文件处理中}}",
     "stepsDone": "已完成全部步骤的 {percent}%",
@@ -36,10 +26,6 @@
     "network": "队列未能加载。",
     "behind": "显示的内容可能稍有延迟。",
     "tryNow": "立即重试"
-  },
-  "empty": {
-    "title": "你添加的文件会显示在这里",
-    "body": "上传的文件、文件夹、链接和 Google Drive 导入在读取和索引期间都会显示在这里，并实时显示每个阶段。添加内容时，这个标签页会自动打开。"
   },
   "sections": {
     "attention": {
@@ -53,10 +39,6 @@
     "waiting": {
       "title": "排队中",
       "aside": "有空闲的处理进程时立即开始"
-    },
-    "done": {
-      "title": "已完成",
-      "aside": "过去 24 小时"
     },
     "showAll": "显示全部 {count} 个",
     "showFewer": "收起"

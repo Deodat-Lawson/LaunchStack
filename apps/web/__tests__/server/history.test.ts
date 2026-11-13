@@ -33,9 +33,13 @@ jest.mock("~/server/history/loaders", () => {
         "weekly-review",
         "vantage",
     ];
+    // As in the real list: Vantage's agendas and Prospects' older runs are
+    // a beta app's rows.
+    const beta = new Set<HistoryKind>(["distribution", "vantage"]);
     return {
         PIPELINE_LOADERS: kinds.map(kind => ({
             kind,
+            beta: beta.has(kind) || undefined,
             load: (...args: unknown[]) => {
                 mockLoad[kind] ??= jest.fn().mockResolvedValue([]);
                 return mockLoad[kind](...args);
@@ -43,6 +47,11 @@ jest.mock("~/server/history/loaders", () => {
         })),
     };
 });
+
+const mockBetaAppsOn = jest.fn();
+jest.mock("~/server/beta-apps", () => ({
+    betaAppsOn: (...args: unknown[]) => mockBetaAppsOn(...args),
+}));
 
 import { loadWorkspaceHistory, parseKindsParam } from "~/server/history";
 
@@ -81,9 +90,41 @@ beforeEach(() => {
     jest.clearAllMocks();
     for (const key of Object.keys(mockLoad)) delete mockLoad[key];
     feed([]);
+    mockBetaAppsOn.mockResolvedValue(true);
 });
 
 describe("loadWorkspaceHistory", () => {
+    it("leaves a beta app's rows out while the workspace has beta apps off", async () => {
+        mockBetaAppsOn.mockResolvedValue(false);
+        feed([chat({ id: "s1" })]);
+        run("vantage", [entry("v1", "vantage", "2026-09-05T13:00:00.000Z")]);
+        run("distribution", [entry("d1", "distribution", "2026-09-05T13:30:00.000Z")]);
+        run("email", [entry("e1", "email", "2026-09-05T10:00:00.000Z")]);
+
+        const page = await loadWorkspaceHistory(OWNER);
+
+        expect(page.entries.map(e => e.id)).toEqual(["chat:s1", "e1"]);
+        expect(mockBetaAppsOn).toHaveBeenCalledWith(BigInt(5));
+        expect(mockLoad.vantage).not.toHaveBeenCalled();
+        expect(mockLoad.distribution).not.toHaveBeenCalled();
+        // Left out on purpose, not lost: nothing is reported missing.
+        expect(page.degraded).toEqual([]);
+    });
+
+    it("treats a switch it cannot read as off", async () => {
+        mockBetaAppsOn.mockRejectedValue(new Error("settings table missing"));
+        run("vantage", [entry("v1", "vantage", "2026-09-05T13:00:00.000Z")]);
+
+        const page = await loadWorkspaceHistory(OWNER);
+
+        expect(page.entries.map(e => e.id)).toEqual([]);
+    });
+
+    it("does not ask about the switch when no beta app's rows are wanted", async () => {
+        await loadWorkspaceHistory({ ...OWNER, kinds: ["chat", "email"] });
+        expect(mockBetaAppsOn).not.toHaveBeenCalled();
+    });
+
     it("interleaves chats and runs strictly by recency", async () => {
         feed([chat({ id: "s1", title: "Indemnity cap", messageCount: 4 })]);
         run("distribution", [entry("d1", "distribution", "2026-09-05T13:00:00.000Z")]);

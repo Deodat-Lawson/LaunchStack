@@ -130,9 +130,9 @@ worker's `/readyz` (see `docs/runbooks/outbox.md`).
 - `apps/worker` — outbox consumer + Inngest functions for background
   verticals; dynamically imports the web host's `getEngine`.
 - `apps/landing` — public site; depends on design tokens, not the engine.
-- `pipelines/` (`@launchstack/pipelines`) — 13 vertical compositions:
+- `pipelines/` (`@launchstack/pipelines`) — 12 vertical compositions:
   client prospector, company metadata, connectors, distribution, email,
-  founder weekly review, legal templates, marketing, proposals, repository
+  founder weekly review, marketing, proposals, repository
   explainer, repository workspace, trend search, and Vantage.
 - `packages/runtime` — clock/logger, actor context, errors, storage/job
   ports, and singleton slots.

@@ -29,8 +29,10 @@ export function DealsScreen() {
     const ts = useTranslations("growth.server");
     const errorText = useErrorText();
     const { segmentId, href } = useProspects();
-    const res = useResource(segmentId ? `deals:${segmentId}` : null, () =>
-        prospectsApi.deals(segmentId!)
+    const res = useResource(
+        segmentId ? `deals:${segmentId}` : null,
+        () => prospectsApi.deals(segmentId!),
+        { keepAcrossMounts: true }
     );
     const deals = useMemo(() => res.data?.deals ?? [], [res.data]);
     const byStage = useMemo(() => {

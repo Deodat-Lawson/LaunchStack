@@ -12,6 +12,7 @@ import {
     createKeylessPorts,
     enrichCandidate,
     failRun,
+    fillPicturesAfterRun,
     finalizeRun,
     prepareRun,
     type EnrichCandidateResult,
@@ -135,6 +136,11 @@ export const distributionRunJob = inngest.createFunction(
             );
             results.push(result);
         }
+
+        // A picture for every company saved, not only the ones researched.
+        await step.run("pictures", () =>
+            inWorkspace(async () => fillPicturesAfterRun(ctx, await ports()))
+        );
 
         const summary = await step.run("finalize", () =>
             finalizeRun(ctx, prepared, results, new Date(startedAtIso))

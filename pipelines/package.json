@@ -54,6 +54,7 @@
     "./distribution/stages": "./src/distribution/stages.ts",
     "./distribution/locate": "./src/distribution/locate.ts",
     "./distribution/geocode": "./src/distribution/geocode.ts",
+    "./distribution/pictures": "./src/distribution/pictures.ts",
     "./proposals": "./src/proposals/index.ts",
     "./proposals/db": "./src/proposals/db.ts",
     "./proposals/schema": "./src/proposals/schema.ts",
@@ -244,6 +245,10 @@
       "./distribution/geocode": {
         "types": "./dist/distribution/geocode.d.ts",
         "default": "./dist/distribution/geocode.js"
+      },
+      "./distribution/pictures": {
+        "types": "./dist/distribution/pictures.d.ts",
+        "default": "./dist/distribution/pictures.js"
       },
       "./distribution/types": {
         "types": "./dist/distribution/types.d.ts",

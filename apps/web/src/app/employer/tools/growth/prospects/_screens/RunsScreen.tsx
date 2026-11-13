@@ -127,6 +127,7 @@ export function RunsScreen() {
         () => prospectsApi.runs(segmentId!),
         {
             pollMs: activeRun && runIsLive(activeRun) ? 2000 : null,
+            keepAcrossMounts: true,
         }
     );
     const finished = activeRun?.status === "completed" || activeRun?.status === "stopped";

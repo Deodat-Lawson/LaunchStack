@@ -22,6 +22,10 @@ export interface ScenarioSourcesInput {
     documentIds: number[];
     searchFiles: boolean;
     prospects: boolean;
+    /** Only this Prospects segment's companies; absent or null means all segments. */
+    prospectSegmentId?: string | null;
+    /** Only these companies (Prospects deal ids); absent or empty means the best fits. */
+    prospectIds?: string[];
     brandComments: boolean;
     companyProfile: boolean;
     notes: string;

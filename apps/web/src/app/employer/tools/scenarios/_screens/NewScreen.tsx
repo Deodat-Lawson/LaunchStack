@@ -14,12 +14,19 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { useToolRouter } from "~/components/tool-app/nav";
+import { useToolRouter, useToolSearchParams } from "~/components/tool-app/nav";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
@@ -132,6 +139,28 @@ export function NewScreen() {
     const [pickerOpen, setPickerOpen] = useState(false);
     const [searchFiles, setSearchFiles] = useState(true);
     const [prospects, setProspects] = useState(false);
+    // From Growth › Prospects: one segment's companies, or ones picked there.
+    const [prospectSegment, setProspectSegment] = useState<string>("all");
+    const [prospectIds, setProspectIds] = useState<string[]>([]);
+    const params = useToolSearchParams();
+    const prefilled = useRef(false);
+    useEffect(() => {
+        if (prefilled.current) return;
+        prefilled.current = true;
+        const fromSubject = params.get("subject");
+        const fromSegment = params.get("segment");
+        const fromIds = (params.get("prospects") ?? "")
+            .split(",")
+            .map(id => id.trim())
+            .filter(Boolean)
+            .slice(0, L.prospectsMax);
+        if (fromSubject) setSubject(current => current || fromSubject.slice(0, L.subjectMax));
+        if (fromSegment || fromIds.length > 0) {
+            setProspects(true);
+            if (fromSegment) setProspectSegment(fromSegment);
+            setProspectIds(fromIds);
+        }
+    }, [params]);
     const [brandComments, setBrandComments] = useState(false);
     const [companyProfile, setCompanyProfile] = useState(true);
     const [notes, setNotes] = useState("");
@@ -280,6 +309,8 @@ export function NewScreen() {
                     documentIds: docs,
                     searchFiles,
                     prospects: growthSources && prospects && (offered?.prospects ?? 0) > 0,
+                    prospectSegmentId: prospectSegment === "all" ? null : prospectSegment,
+                    prospectIds,
                     brandComments:
                         growthSources && brandComments && (offered?.brandComments ?? 0) > 0,
                     companyProfile: profileOn,
@@ -321,7 +352,7 @@ export function NewScreen() {
                     e.target.value = "";
                 }}
             />
-            <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_320px] items-start gap-8">
+            <div className="grid grid-cols-[minmax(0,1fr)_320px] items-start gap-8 @max-lg:grid-cols-1">
                 <div className="flex min-w-0 flex-col gap-8">
                     <section className="flex flex-col gap-4" aria-label={t("situationLabel")}>
                         <SituationComposer
@@ -338,7 +369,7 @@ export function NewScreen() {
                             onRemove={id => toggleDoc(id, false)}
                             onDismissUpload={uploader.dismiss}
                         />
-                        <div className="@max-sm:flex-col @max-sm:items-stretch @max-sm:gap-1.5 flex items-center gap-3">
+                        <div className="flex items-center gap-3 @max-sm:flex-col @max-sm:items-stretch @max-sm:gap-1.5">
                             <Label
                                 htmlFor="scenario-title"
                                 className="text-ink-3 w-[110px] shrink-0 text-xs font-normal"
@@ -362,11 +393,66 @@ export function NewScreen() {
                             aside={t("builtFromAside")}
                             className="mb-0"
                         />
-                        <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2 @max-md:grid-cols-1">
                             {switches.map(s => (
                                 <SourceCard key={s.id} source={s} />
                             ))}
                         </div>
+                        {growthSources && prospects && (offered?.prospects ?? 0) > 0 && (
+                            <div className="border-line bg-panel flex flex-wrap items-center gap-2.5 rounded-lg border px-3 py-2.5">
+                                <Users className="text-ink-3 size-4" aria-hidden />
+                                {prospectIds.length > 0 ? (
+                                    <>
+                                        <span className="text-ink-2 text-[13px]">
+                                            {t("prospectsFrom.picked", {
+                                                count: prospectIds.length,
+                                            })}
+                                        </span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="ml-auto h-7 text-xs"
+                                            onClick={() => setProspectIds([])}
+                                        >
+                                            {t("prospectsFrom.clear")}
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Label
+                                            htmlFor="scenario-prospect-segment"
+                                            className="text-ink-2 text-[13px] font-normal"
+                                        >
+                                            {t("prospectsFrom.label")}
+                                        </Label>
+                                        <Select
+                                            value={prospectSegment}
+                                            onValueChange={setProspectSegment}
+                                        >
+                                            <SelectTrigger
+                                                id="scenario-prospect-segment"
+                                                className="ml-auto h-8 w-[220px] text-xs"
+                                            >
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">
+                                                    {t("prospectsFrom.all")}
+                                                </SelectItem>
+                                                {(offered?.prospectSegments ?? []).map(s => (
+                                                    <SelectItem key={s.id} value={s.id}>
+                                                        {t("prospectsFrom.segment", {
+                                                            name: s.name,
+                                                            count: s.companies,
+                                                        })}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </>
+                                )}
+                            </div>
+                        )}
                         <Collapsible
                             open={notesOpen || hasNotes}
                             onOpenChange={setNotesOpen}
@@ -426,7 +512,7 @@ export function NewScreen() {
                                 setRounds(p.rounds);
                             }}
                             aria-label={t("presetsLabel")}
-                            className="@max-sm:grid-cols-1 grid grid-cols-3 gap-2"
+                            className="grid grid-cols-3 gap-2 @max-sm:grid-cols-1"
                         >
                             {SIZE_PRESETS.map(p => (
                                 <ToggleGroupItem
@@ -443,7 +529,7 @@ export function NewScreen() {
                                 </ToggleGroupItem>
                             ))}
                         </ToggleGroup>
-                        <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-x-8 gap-y-5">
+                        <div className="grid grid-cols-2 gap-x-8 gap-y-5 @max-md:grid-cols-1">
                             <SizeSlider
                                 id="people"
                                 label={t("people")}
@@ -466,9 +552,9 @@ export function NewScreen() {
                     </section>
                 </div>
 
-                <aside className="@max-lg:static sticky top-0 flex flex-col gap-3">
+                <aside className="sticky top-0 flex flex-col gap-3 @max-lg:static">
                     <div className="border-line bg-panel overflow-hidden rounded-xl border">
-                        <div className="px-4 pb-3 pt-4">
+                        <div className="px-4 pt-4 pb-3">
                             <span className="text-ink-3 text-xs">{t("summary.title")}</span>
                             <p
                                 className={cn(
@@ -716,7 +802,7 @@ function EstimateBox({
             <span className="text-ink-3 text-xs">{t("estimate")}</span>
             {estimate ? (
                 <div className={cn("transition-opacity", settling && "opacity-60")}>
-                    <div className="text-ink text-lg font-semibold tabular-nums leading-tight">
+                    <div className="text-ink text-lg leading-tight font-semibold tabular-nums">
                         {t.rich("estimateCredits", {
                             credits: estimate.credits,
                             unit: chunks => (

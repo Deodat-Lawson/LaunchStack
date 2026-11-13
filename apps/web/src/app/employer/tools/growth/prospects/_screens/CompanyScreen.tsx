@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { ArrowDown, ArrowUp, ExternalLink, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -36,6 +36,7 @@ import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
 import { useErrorText } from "~/lib/tools/errorText";
 import { neighbours } from "../_lib/listOrder";
+import { simulateHref } from "../_lib/simulate";
 import { useResource } from "~/lib/tools/useResource";
 import { ClaimText, evidenceAnchorId } from "../_components/Citation";
 import { EmailStatus, canOutreach } from "../_components/EmailStatus";
@@ -92,10 +93,12 @@ export function CompanyScreen({ id }: { id: string }) {
     const ts = useTranslations("growth.server");
     const word = useCopyText();
     const errorText = useErrorText();
-    const { href } = useProspects();
+    const { href, segmentId } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
-    const res = useResource(`company:${id}`, () => prospectsApi.company(id));
+    const res = useResource(`company:${id}`, () => prospectsApi.company(id), {
+        keepAcrossMounts: true,
+    });
     const c = res.data?.company ?? null;
     const [outreachOpen, setOutreachOpen] = useState(false);
     const [nextStep, setNextStep] = useState("");
@@ -219,7 +222,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 )}
             </div>
 
-            <header className="border-line @max-md:grid-cols-1 mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5">
+            <header className="border-line mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5 @max-md:grid-cols-1">
                 <div className="min-w-0">
                     <h1 className="text-ink text-[22px] font-semibold tracking-[-0.02em]">
                         {c ? c.name : <Skeleton className="h-6 w-72" />}
@@ -249,7 +252,7 @@ export function CompanyScreen({ id }: { id: string }) {
                     )}
                 </div>
                 {c && (
-                    <div className="@max-md:justify-start flex flex-wrap items-center justify-end gap-2">
+                    <div className="flex flex-wrap items-center justify-end gap-2 @max-md:justify-start">
                         <StageMenu
                             stage={c.deal.stage}
                             moves={c.deal.allowedMoves}
@@ -258,6 +261,19 @@ export function CompanyScreen({ id }: { id: string }) {
                         />
                         <Button variant="outline" size="sm" onClick={() => void toggleExcluded()}>
                             {c.excluded ? t("common.includeAgain") : t("common.exclude")}
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                            <ToolLink
+                                href={simulateHref({
+                                    segmentId,
+                                    companyIds: [id],
+                                    subject: t("company.simulateSubject", { name: c.name }),
+                                })}
+                                title={t("company.simulateHint")}
+                            >
+                                <Sparkles className="size-3.5" aria-hidden />
+                                {t("company.simulate")}
+                            </ToolLink>
                         </Button>
                         <Button
                             size="sm"
@@ -281,7 +297,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 </p>
             )}
 
-            <div className="@max-lg:grid-cols-1 grid grid-cols-[1fr_340px] gap-8">
+            <div className="grid grid-cols-[1fr_340px] gap-8 @max-lg:grid-cols-1">
                 <div className="min-w-0">
                     {!c ? (
                         <>

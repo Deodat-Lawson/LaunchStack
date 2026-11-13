@@ -33,6 +33,10 @@ export interface ReadablePage {
     /** True when the body was cut at `maxBytes`. */
     truncated: boolean;
     fetchedAt: string;
+    /** The page's own share image (`og:image`, `twitter:image`), absolute https; null when none. */
+    image?: string | null;
+    /** The page's own icon (`apple-touch-icon`, then `icon`), absolute https; null when none. */
+    icon?: string | null;
 }
 
 export type HostLookup = (hostname: string) => Promise<string[]>;
@@ -253,6 +257,57 @@ function decodeEntities(text: string): string {
         });
 }
 
+/** An attribute of one tag, unquoted or quoted, case-insensitively. */
+function attr(tag: string, name: string): string | null {
+    const m = new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i").exec(tag);
+    return m ? decodeEntities((m[1] ?? m[2] ?? m[3] ?? "").trim()) || null : null;
+}
+
+/** A URL from the page as an absolute https URL, or null (data:, http:, junk). */
+function absoluteHttps(raw: string | null, base: string): string | null {
+    if (!raw) return null;
+    try {
+        const url = new URL(raw, base);
+        return url.protocol === "https:" ? url.toString() : null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * The pictures a page names for itself in its <head>: its share image and its
+ * icon, resolved against the page's URL. Only https, so a card never loads
+ * mixed content; only what the page declares, never guessed paths.
+ */
+export function pageImages(
+    html: string,
+    pageUrl: string
+): { image: string | null; icon: string | null } {
+    const head = /<head[^>]*>([\s\S]*?)<\/head>/i.exec(html)?.[1] ?? html.slice(0, 20_000);
+    const metas = head.match(/<meta\b[^>]*>/gi) ?? [];
+    const links = head.match(/<link\b[^>]*>/gi) ?? [];
+    const meta = (names: string[]) => {
+        for (const n of names)
+            for (const tag of metas) {
+                const key = (attr(tag, "property") ?? attr(tag, "name") ?? "").toLowerCase();
+                if (key === n) return absoluteHttps(attr(tag, "content"), pageUrl);
+            }
+        return null;
+    };
+    const link = (rels: string[]) => {
+        for (const r of rels)
+            for (const tag of links) {
+                const rel = (attr(tag, "rel") ?? "").toLowerCase().split(/\s+/);
+                if (rel.includes(r)) return absoluteHttps(attr(tag, "href"), pageUrl);
+            }
+        return null;
+    };
+    return {
+        image: meta(["og:image", "og:image:url", "og:image:secure_url", "twitter:image"]),
+        icon: link(["apple-touch-icon", "icon"]),
+    };
+}
+
 /** HTML → { title, text }: drops script/style/noscript/template/svg, keeps block breaks. */
 export function htmlToReadableText(html: string): { title: string | null; text: string } {
     const titleMatch = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(html);
@@ -408,6 +463,7 @@ export async function fetchReadable(
                 text: readable.text,
                 truncated,
                 fetchedAt: new Date().toISOString(),
+                ...(isHtml ? pageImages(raw, current.toString()) : { image: null, icon: null }),
             };
         }
     } finally {

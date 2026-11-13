@@ -18,9 +18,18 @@ import {
     type ScenarioLedger,
 } from "@launchstack/pipelines/scenarios/v2/db";
 
-import { debitTokens, ensureTokenAccount } from "~/lib/credits";
 import { tokenAccounts } from "~/server/db/schema";
 import { isMeteringEnforced } from "~/server/deployment";
+
+/**
+ * The ledger's functions, loaded when first used rather than imported. The
+ * credits module sits in a cycle (credits → db → engine → the engine's
+ * credits port → credits) and is an async module under Turbopack, so a static
+ * import from a module that joins the graph mid-cycle can be left holding an
+ * empty copy of its exports — every debit then fails with "not a function".
+ * By the time a unit settles, the module has finished loading.
+ */
+const ledger = () => import("~/lib/credits/service");
 
 export function createAppScenarioLedger(
     options: { enforced?: () => boolean } = {}
@@ -30,6 +39,7 @@ export function createAppScenarioLedger(
         async lockBalance(tx, companyId) {
             // Creates the account (with the signup grant, where that applies)
             // the first time a workspace meets the ledger, like a debit would.
+            const { ensureTokenAccount } = await ledger();
             await ensureTokenAccount(companyId, tx);
             const [row] = await tx
                 .select({ balance: tokenAccounts.balanceTokens })
@@ -39,6 +49,7 @@ export function createAppScenarioLedger(
             return row?.balance ?? 0;
         },
         async debit(tx, input) {
+            const { debitTokens } = await ledger();
             await debitTokens(
                 {
                     companyId: input.companyId,

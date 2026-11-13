@@ -1,0 +1,2086 @@
+#!/usr/bin/env bash
+# launchstack — operate a self-hosted LaunchStack install.
+#
+# Installed by deploy/install.sh into $LAUNCHSTACK_HOME/bin (default
+# ~/.launchstack/bin) next to compose.yml, docker/, VERSION and the .env that
+# `launchstack setup` writes. Needs only Docker with Compose v2; runs on the
+# bash 3.2 macOS ships and on Linux. Secrets come from openssl when present,
+# /dev/urandom otherwise.
+#
+# Every docker compose call goes through compose() below, which pins the
+# project directory, the compose file and the env file, so the result never
+# depends on the directory you run this from.
+#
+# The whole program is functions plus one call on the last line: `update`
+# replaces this file while it runs, and bash must already hold all of it.
+
+set -euo pipefail
+
+LS_REPO="${LAUNCHSTACK_REPO:-Deodat-Lawson/LaunchStack}"
+LS_INSTALLER_URL="https://raw.githubusercontent.com/${LS_REPO}/main/deploy/install.sh"
+
+# Services and paths this CLI needs to know inside the compose project.
+LS_APP_SERVICE="app"
+LS_DB_SERVICE="db"
+LS_MIGRATE_SERVICE="migrate"
+LS_WORKER_SERVICE="worker"
+LS_STORAGE_SERVICE="${LAUNCHSTACK_STORAGE_SERVICE:-seaweedfs}"
+LS_STORAGE_PATH="${LAUNCHSTACK_STORAGE_PATH:-/data}"
+
+# Embedding indexes registered in packages/llm/src/embeddings/index-registry.ts.
+LS_INDEX_OPENAI="legacy-openai-1536"
+LS_INDEX_GEMINI="gemini-embedding-768"
+LS_GEMINI_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
+LS_OPENAI_BASE_URL="https://api.openai.com/v1"
+LS_GEMINI_EMBEDDING_MODEL="gemini-embedding-001"
+LS_OPENAI_EMBEDDING_MODEL="text-embedding-3-large"
+
+# ── Output ──────────────────────────────────────────────────────────────
+
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
+  C_BOLD=$'\033[1m' C_RED=$'\033[31m' C_GREEN=$'\033[32m' C_YELLOW=$'\033[33m' C_OFF=$'\033[0m'
+else
+  C_BOLD="" C_RED="" C_GREEN="" C_YELLOW="" C_OFF=""
+fi
+
+say() { printf '%s\n' "$*"; }
+step() { printf '%s==>%s %s\n' "$C_BOLD" "$C_OFF" "$*"; }
+ok() { printf '%s ok %s %s\n' "$C_GREEN" "$C_OFF" "$*"; }
+warn() { printf '%swarning:%s %s\n' "$C_YELLOW" "$C_OFF" "$*" >&2; }
+err() { printf '%serror:%s %s\n' "$C_RED" "$C_OFF" "$*" >&2; }
+die() {
+  err "$*"
+  exit 1
+}
+
+# ── Locations ───────────────────────────────────────────────────────────
+
+# Directory holding this script, with symlinks resolved (the installer links
+# ~/.local/bin/launchstack to $LAUNCHSTACK_HOME/bin/launchstack).
+self_dir() {
+  local src="${BASH_SOURCE[0]}" dir target
+  while [ -L "$src" ]; do
+    dir="$(cd -P "$(dirname "$src")" && pwd)"
+    target="$(readlink "$src")"
+    case "$target" in
+      /*) src="$target" ;;
+      *) src="$dir/$target" ;;
+    esac
+  done
+  (cd -P "$(dirname "$src")" && pwd)
+}
+
+init_paths() {
+  local here
+  if [ -z "${LAUNCHSTACK_HOME:-}" ]; then
+    here="$(self_dir)"
+    if [ -f "$here/../compose.yml" ]; then
+      LAUNCHSTACK_HOME="$(cd -P "$here/.." && pwd)"
+    else
+      LAUNCHSTACK_HOME="${HOME}/.launchstack"
+    fi
+  fi
+  ENV_FILE="$LAUNCHSTACK_HOME/.env"
+  COMPOSE_FILE_PATH="$LAUNCHSTACK_HOME/compose.yml"
+  BACKUP_DIR="$LAUNCHSTACK_HOME/backups"
+}
+
+need_install() {
+  [ -f "$COMPOSE_FILE_PATH" ] ||
+    die "No LaunchStack install at $LAUNCHSTACK_HOME (compose.yml is missing). Run the installer first, or set LAUNCHSTACK_HOME."
+}
+
+need_env() {
+  need_install
+  [ -f "$ENV_FILE" ] || die "$ENV_FILE does not exist yet. Run: launchstack setup"
+}
+
+need_docker() {
+  command -v docker >/dev/null 2>&1 ||
+    die "Docker is not installed. Install it from https://docs.docker.com/get-docker/ and run this again."
+  docker compose version >/dev/null 2>&1 ||
+    die "Docker Compose v2 is missing ('docker compose version' failed). See https://docs.docker.com/compose/install/"
+  docker info >/dev/null 2>&1 ||
+    die "Cannot reach the Docker daemon. Start Docker (or add your user to the docker group) and run this again."
+}
+
+# The one place docker compose is invoked.
+compose() {
+  docker compose --project-directory "$LAUNCHSTACK_HOME" -f "$COMPOSE_FILE_PATH" --env-file "$ENV_FILE" "$@"
+}
+
+# Pull every image the stack uses. LAUNCHSTACK_PULL_POLICY=missing pulls only
+# what is not already on the machine, for hosts without registry access that
+# were given the images with `docker load`. The default refreshes them all,
+# which is what moves a `latest` install forward.
+pull_images() {
+  case "${LAUNCHSTACK_PULL_POLICY:-always}" in
+    always | missing) compose pull --policy "${LAUNCHSTACK_PULL_POLICY:-always}" ;;
+    *)
+      err "LAUNCHSTACK_PULL_POLICY must be 'always' or 'missing', not '${LAUNCHSTACK_PULL_POLICY}'."
+      return 1
+      ;;
+  esac
+}
+
+# ── Small helpers ───────────────────────────────────────────────────────
+
+trim() {
+  local s="$1"
+  s="${s#"${s%%[![:space:]]*}"}"
+  s="${s%"${s##*[![:space:]]}"}"
+  printf '%s' "$s"
+}
+
+lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+upper() { printf '%s' "$1" | tr '[:lower:]' '[:upper:]'; }
+
+timestamp() { date +%Y%m%d-%H%M%S; }
+
+has_word() { # has_word <word> <space-or-comma separated list>
+  local w
+  for w in $(printf '%s' "$2" | tr ',' ' '); do
+    [ "$w" = "$1" ] && return 0
+  done
+  return 1
+}
+
+rand_hex() { # rand_hex <bytes>
+  local out=""
+  if command -v openssl >/dev/null 2>&1; then
+    out="$(openssl rand -hex "$1" 2>/dev/null || true)"
+  fi
+  if [ "${#out}" -ne $(($1 * 2)) ]; then
+    [ -r /dev/urandom ] || die "Cannot generate secrets: neither openssl nor /dev/urandom is available."
+    out="$(od -An -tx1 -N "$1" /dev/urandom | tr -d ' \n')"
+  fi
+  [ "${#out}" -eq $(($1 * 2)) ] || die "Secret generation failed."
+  printf '%s' "$out"
+}
+
+rand_b64() { # rand_b64 <bytes>
+  local out=""
+  if command -v openssl >/dev/null 2>&1; then
+    out="$(openssl rand -base64 "$1" 2>/dev/null | tr -d '\n' || true)"
+  fi
+  if [ -z "$out" ]; then
+    [ -r /dev/urandom ] || die "Cannot generate secrets: neither openssl nor /dev/urandom is available."
+    out="$(head -c "$1" /dev/urandom | base64 | tr -d '\n')"
+  fi
+  [ -n "$out" ] || die "Secret generation failed."
+  printf '%s' "$out"
+}
+
+# ── .env reading and writing ────────────────────────────────────────────
+# The file is never sourced: values are data, read and written line by line.
+
+env_get() { # env_get KEY [file]  → value of the last KEY= line, unquoted
+  local key="$1" file="${2:-$ENV_FILE}" line val="" found=0
+  [ -f "$file" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      "$key="*)
+        val="${line#*=}"
+        found=1
+        ;;
+    esac
+  done <"$file"
+  [ "$found" = 1 ] || return 0
+  case "$val" in
+    \'*\')
+      val="${val#\'}"
+      val="${val%\'}"
+      ;;
+    \"*\")
+      val="${val#\"}"
+      val="${val%\"}"
+      ;;
+    *)
+      val="${val%%[[:space:]]#*}"
+      val="$(trim "$val")"
+      ;;
+  esac
+  printf '%s' "$val"
+}
+
+# Compose interpolates $ in unquoted and double-quoted env-file values, so
+# anything outside a plain character set is written single-quoted (literal).
+env_quote() {
+  local v="$1"
+  case "$v" in
+    *$'\n'*) return 1 ;;
+    *\'*) return 1 ;;
+  esac
+  case "$v" in
+    *[!A-Za-z0-9_./:@,+=%~-]*) printf "'%s'" "$v" ;;
+    *) printf '%s' "$v" ;;
+  esac
+}
+
+env_set() { # env_set KEY VALUE [file]  → replace in place, or append
+  local key="$1" value="$2" file="${3:-$ENV_FILE}" tmp line written=0 quoted
+  quoted="$(env_quote "$value")" ||
+    die "$key: the value contains a single quote or a line break, which cannot be stored in .env."
+  tmp="$(mktemp "$file.XXXXXX")"
+  if [ -f "$file" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      case "$line" in
+        "$key="*)
+          if [ "$written" = 0 ]; then
+            printf '%s=%s\n' "$key" "$quoted"
+            written=1
+          fi
+          ;;
+        *) printf '%s\n' "$line" ;;
+      esac
+    done <"$file" >"$tmp"
+  fi
+  if [ "$written" = 0 ]; then
+    printf '%s=%s\n' "$key" "$quoted" >>"$tmp"
+  fi
+  chmod 600 "$tmp"
+  mv "$tmp" "$file"
+}
+
+env_unset() { # env_unset KEY [file]  → drop every KEY= line
+  local key="$1" file="${2:-$ENV_FILE}" tmp line
+  [ -f "$file" ] || return 0
+  grep -q "^$key=" "$file" || return 0
+  tmp="$(mktemp "$file.XXXXXX")"
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      "$key="*) ;;
+      *) printf '%s\n' "$line" ;;
+    esac
+  done <"$file" >"$tmp"
+  chmod 600 "$tmp"
+  mv "$tmp" "$file"
+}
+
+is_secret_name() {
+  case "$(upper "$1")" in
+    *KEY* | *SECRET* | *PASSWORD* | *PASS | *TOKEN* | *WEBHOOK* | *CREDENTIAL*) return 0 ;;
+  esac
+  return 1
+}
+
+redact() { # redact NAME VALUE
+  local name="$1" value="$2"
+  if [ -z "$value" ]; then
+    printf ''
+  elif is_secret_name "$name"; then
+    printf '[redacted, %s chars]' "${#value}"
+  else
+    case "$value" in
+      *://*:*@*) printf '[redacted, contains credentials]' ;;
+      *) printf '%s' "$value" ;;
+    esac
+  fi
+}
+
+# ── Prompts ─────────────────────────────────────────────────────────────
+
+INTERACTIVE=1
+REPLY=""
+ANSWER=""
+NORM=""
+VALID_MSG=""
+
+read_reply() {
+  IFS= read -r REPLY ||
+    die "No more input. Run 'launchstack setup --non-interactive' with LAUNCHSTACK_SETUP_* variables to configure without a terminal."
+  REPLY="$(trim "$REPLY")"
+}
+
+ask() { # ask <prompt> [default]
+  if [ -n "${2:-}" ]; then
+    printf '%s [%s]: ' "$1" "$2"
+  else
+    printf '%s: ' "$1"
+  fi
+  read_reply
+  [ -n "$REPLY" ] || REPLY="${2:-}"
+}
+
+ask_secret() { # ask_secret <prompt> [current]  → input is not echoed
+  if [ -n "${2:-}" ]; then
+    printf '%s (hidden; Enter keeps the current one): ' "$1"
+  else
+    printf '%s (hidden): ' "$1"
+  fi
+  IFS= read -rs REPLY ||
+    die "No more input. Run 'launchstack setup --non-interactive' with LAUNCHSTACK_SETUP_* variables to configure without a terminal."
+  printf '\n'
+  REPLY="$(trim "$REPLY")"
+  [ -n "$REPLY" ] || REPLY="${2:-}"
+}
+
+ask_yes_no() { # ask_yes_no <prompt> <yes|no default>  → returns 0 for yes
+  local hint="y/N"
+  [ "$2" = "yes" ] && hint="Y/n"
+  while :; do
+    printf '%s [%s]: ' "$1" "$hint"
+    read_reply
+    case "$(lower "$REPLY")" in
+      "") [ "$2" = "yes" ] && return 0 || return 1 ;;
+      y | yes) return 0 ;;
+      n | no) return 1 ;;
+    esac
+    say "  Please answer y or n."
+  done
+}
+
+setup_var() { # setup_var NAME → $LAUNCHSTACK_SETUP_NAME
+  local n="LAUNCHSTACK_SETUP_$1"
+  printf '%s' "${!n:-}"
+}
+
+# question <SETUP_NAME> <validator> <prompt> <default> [secret]
+# Result in ANSWER. Non-interactive: the default must validate.
+question() {
+  local name="$1" validator="$2" prompt="$3" def="$4" secret="${5:-}"
+  if [ "$INTERACTIVE" = 0 ]; then
+    "$validator" "$def" || die "LAUNCHSTACK_SETUP_$name: $VALID_MSG"
+    ANSWER="$NORM"
+    return 0
+  fi
+  while :; do
+    if [ -n "$secret" ]; then ask_secret "$prompt" "$def"; else ask "$prompt" "$def"; fi
+    if "$validator" "$REPLY"; then
+      ANSWER="$NORM"
+      return 0
+    fi
+    say "  $VALID_MSG"
+  done
+}
+
+# Validators: return 0 and set NORM (the normalised value), or return 1 and
+# set VALID_MSG.
+
+valid_domain() {
+  local d
+  d="$(lower "$1")"
+  d="${d#http://}"
+  d="${d#https://}"
+  d="${d%%/*}"
+  NORM="$d"
+  VALID_MSG="Enter a host name such as launchstack.example.com (no http://, no path)."
+  [ -n "$d" ] && [ "${#d}" -le 253 ] || return 1
+  printf '%s' "$d" | grep -Eq '^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$'
+}
+
+valid_ipv4() {
+  local ip="$1" o IFS_SAVE="$IFS" n=0
+  NORM="$ip"
+  VALID_MSG="Enter an IPv4 address such as 203.0.113.10."
+  printf '%s' "$ip" | grep -Eq '^[0-9]{1,3}(\.[0-9]{1,3}){3}$' || return 1
+  IFS=.
+  # shellcheck disable=SC2086
+  set -- $ip
+  IFS="$IFS_SAVE"
+  for o in "$@"; do
+    [ "$((10#$o))" -le 255 ] || return 1
+    n=$((n + 1))
+  done
+  [ "$n" -eq 4 ]
+}
+
+is_private_ipv4() {
+  case "$1" in
+    10.* | 127.* | 192.168.* | 169.254.* | 172.1[6-9].* | 172.2[0-9].* | 172.3[01].*) return 0 ;;
+  esac
+  return 1
+}
+
+is_loopback() {
+  case "$1" in 127.* | localhost | ::1) return 0 ;; esac
+  return 1
+}
+
+valid_host_optional() {
+  local h
+  h="$(lower "$1")"
+  h="${h#http://}"
+  h="${h#https://}"
+  h="${h%%/*}"
+  h="${h%%:*}"
+  NORM="$h"
+  VALID_MSG="Enter the IP address or host name other machines use for this one (for example 192.168.1.20), or leave it empty."
+  [ -z "$h" ] && return 0
+  printf '%s' "$h" | grep -Eq '^[a-z0-9]([a-z0-9.-]{0,251}[a-z0-9])?$'
+}
+
+valid_email_optional() {
+  NORM="$1"
+  VALID_MSG="Enter an email address, or leave it empty."
+  [ -z "$1" ] && return 0
+  printf '%s' "$1" | grep -Eq '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$'
+}
+
+valid_port() {
+  NORM="$1"
+  VALID_MSG="Enter a port number between 1 and 65535."
+  printf '%s' "$1" | grep -Eq '^[0-9]{1,5}$' || return 1
+  [ "$((10#$1))" -ge 1 ] && [ "$((10#$1))" -le 65535 ]
+}
+
+valid_bind() {
+  NORM="$1"
+  VALID_MSG="Enter the address to listen on: 127.0.0.1 (this machine only) or 0.0.0.0 (every interface)."
+  valid_ipv4 "$1" || {
+    VALID_MSG="Enter the address to listen on: 127.0.0.1 (this machine only) or 0.0.0.0 (every interface)."
+    return 1
+  }
+}
+
+valid_url() {
+  local u="$1"
+  while [ "${u%/}" != "$u" ]; do u="${u%/}"; done
+  NORM="$u"
+  VALID_MSG="Enter a URL starting with http:// or https://, for example https://api.openai.com/v1."
+  printf '%s' "$u" | grep -Eq '^https?://[^[:space:]/]+[^[:space:]]*$' || return 1
+  case "$u" in *[\'\"\$\`\\]*) return 1 ;; esac
+  return 0
+}
+
+valid_key() {
+  NORM="$1"
+  VALID_MSG="An API key is required: at least 8 characters, with no spaces or quotes."
+  [ "${#1}" -ge 8 ] || return 1
+  case "$1" in *[[:space:]\'\"\$\`\\]*) return 1 ;; esac
+  return 0
+}
+
+valid_key_optional() {
+  NORM="$1"
+  [ -z "$1" ] && return 0
+  valid_key "$1" || {
+    VALID_MSG="The API key must be at least 8 characters with no spaces or quotes (leave it empty for an endpoint without a key)."
+    return 1
+  }
+}
+
+valid_plain() {
+  NORM="$1"
+  VALID_MSG="Use letters, digits and . _ / : - only."
+  [ -n "$1" ] || return 1
+  case "$1" in *[!A-Za-z0-9._/:-]*) return 1 ;; esac
+  return 0
+}
+
+valid_yes_no() {
+  VALID_MSG="Use yes or no."
+  case "$(lower "$1")" in
+    y | yes | true | 1 | on) NORM="yes" ;;
+    n | no | false | 0 | off | "") NORM="no" ;;
+    *) return 1 ;;
+  esac
+  return 0
+}
+
+# ── Version helpers ─────────────────────────────────────────────────────
+
+bundle_version() {
+  if [ -f "$LAUNCHSTACK_HOME/VERSION" ]; then
+    trim "$(head -n 1 "$LAUNCHSTACK_HOME/VERSION")"
+  else
+    printf 'unknown'
+  fi
+}
+
+# The image tag for a bundle version: main publishes `latest`, a release
+# v2.0.0 publishes `2.0.0`.
+image_tag_for() {
+  case "$1" in
+    edge | unknown | "") printf 'latest' ;;
+    v[0-9]*) printf '%s' "${1#v}" ;;
+    *) printf '%s' "$1" ;;
+  esac
+}
+
+# ── Health ──────────────────────────────────────────────────────────────
+
+service_state() { # service_state <service> → "<status> <health> <exit code>" or "missing"
+  local cid
+  cid="$(compose ps -a -q "$1" 2>/dev/null | head -n 1 || true)"
+  if [ -z "$cid" ]; then
+    printf 'missing'
+    return 0
+  fi
+  docker inspect -f '{{.State.Status}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} {{.State.ExitCode}}' "$cid" 2>/dev/null || printf 'missing'
+}
+
+wait_healthy() {
+  local timeout="${LAUNCHSTACK_HEALTH_TIMEOUT:-600}" interval="${LAUNCHSTACK_HEALTH_INTERVAL:-5}"
+  local started now elapsed=0 state="" wstate="" crashes=0 mig last_line=-30
+  started="$(date +%s)"
+  while :; do
+    now="$(date +%s)"
+    elapsed=$((now - started))
+    state="$(service_state "$LS_APP_SERVICE")"
+    wstate="$(service_state "$LS_WORKER_SERVICE")"
+    case "$state" in
+      "running healthy "*)
+        # The worker processes every upload: the stack is not up without it.
+        case "$wstate" in
+          "running healthy "* | "running none "*)
+            [ -t 1 ] && printf '\r\033[K'
+            ok "The app and the worker are healthy (after ${elapsed}s)."
+            return 0
+            ;;
+        esac
+        ;;
+      "running unhealthy "*)
+        # Docker has already retried the health check; waiting longer only hides the cause.
+        [ -t 1 ] && printf '\r\033[K'
+        err "The app started but fails its health check. See: launchstack logs $LS_APP_SERVICE"
+        return 1
+        ;;
+    esac
+    case "$wstate" in
+      restarting* | exited*)
+        crashes=$((crashes + 1))
+        if [ "$crashes" -ge 3 ]; then
+          [ -t 1 ] && printf '\r\033[K'
+          err "The worker keeps crashing on start (${wstate}). See: launchstack logs $LS_WORKER_SERVICE"
+          return 1
+        fi
+        ;;
+    esac
+    mig="$(service_state "$LS_MIGRATE_SERVICE")"
+    case "$mig" in
+      "exited "*" 0" | missing | running* | created*) ;;
+      exited*)
+        [ -t 1 ] && printf '\r\033[K'
+        err "Database migration failed (${mig}). See: launchstack logs $LS_MIGRATE_SERVICE"
+        return 1
+        ;;
+    esac
+    if [ "$elapsed" -ge "$timeout" ]; then
+      [ -t 1 ] && printf '\r\033[K'
+      err "The stack did not become healthy within ${timeout}s (app: ${state}; worker: ${wstate})."
+      return 1
+    fi
+    if [ -t 1 ]; then
+      printf '\r\033[K    waiting for the app and worker to become healthy: %ss of up to %ss (app: %s; worker: %s)' "$elapsed" "$timeout" "$state" "$wstate"
+    elif [ $((elapsed - last_line)) -ge 30 ]; then
+      say "    waiting for the app and worker to become healthy: ${elapsed}s of up to ${timeout}s (app: ${state}; worker: ${wstate})"
+      last_line="$elapsed"
+    fi
+    sleep "$interval"
+  done
+}
+
+# Prints one line per container and returns the number that are not healthy.
+health_summary() {
+  local ids id line svc status health code bad=0 total=0 verdict
+  ids="$(compose ps -a -q 2>/dev/null || true)"
+  if [ -z "$ids" ]; then
+    say "  No containers: the stack is not running."
+    return 1
+  fi
+  for id in $ids; do
+    line="$(docker inspect -f '{{index .Config.Labels "com.docker.compose.service"}} {{.State.Status}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} {{.State.ExitCode}}' "$id" 2>/dev/null || true)"
+    [ -n "$line" ] || continue
+    # shellcheck disable=SC2086
+    set -- $line
+    svc="${1:-?}" status="${2:-?}" health="${3:-none}" code="${4:-0}"
+    total=$((total + 1))
+    case "$status/$health" in
+      running/healthy) verdict="${C_GREEN}healthy${C_OFF}" ;;
+      running/none) verdict="${C_GREEN}running${C_OFF}" ;;
+      running/starting) verdict="${C_YELLOW}starting${C_OFF}" ;;
+      exited/*)
+        if [ "$code" = "0" ]; then
+          verdict="${C_GREEN}finished${C_OFF}"
+        else
+          verdict="${C_RED}exited with code ${code}${C_OFF}"
+          bad=$((bad + 1))
+        fi
+        ;;
+      *)
+        verdict="${C_RED}${status}, ${health}${C_OFF}"
+        bad=$((bad + 1))
+        ;;
+    esac
+    printf '  %-22s %s\n' "$svc" "$verdict"
+  done
+  return "$bad"
+}
+
+public_url() {
+  local url
+  url="$(env_get BETTER_AUTH_URL)"
+  [ -n "$url" ] || url="http://localhost:$(env_get LAUNCHSTACK_HTTP_PORT)"
+  printf '%s' "$url"
+}
+
+run_preflight() { # run_preflight [--probe]
+  compose run --rm --no-deps -T "$LS_MIGRATE_SERVICE" node scripts/deploy-check.mjs "$@"
+}
+
+start_stack() {
+  step "Starting LaunchStack"
+  if ! compose up -d --remove-orphans; then
+    err "Docker could not start every service (its message is above). 'port is already allocated' means another program has that port: pick another with 'launchstack config set LAUNCHSTACK_HTTP_PORT=<port>' (also LAUNCHSTACK_FILES_PORT, LAUNCHSTACK_INNGEST_PORT), then run 'launchstack setup' again so the address it prints matches."
+    return 1
+  fi
+  if ! wait_healthy; then
+    say ""
+    health_summary || true
+    say ""
+    say "Look at the logs with: launchstack logs"
+    return 1
+  fi
+}
+
+print_ready() { # print_ready [fresh]: the owner hint only makes sense on a new install
+  say ""
+  say "${C_BOLD}LaunchStack is running at $(public_url)${C_OFF}"
+  if [ "${1:-}" = "fresh" ]; then say "Open it and create your account: you own the workspace you set up."; fi
+}
+
+# ── setup ───────────────────────────────────────────────────────────────
+
+help_setup() {
+  cat <<'EOF'
+Usage: launchstack setup [--non-interactive] [--no-start]
+
+Asks a few questions, writes .env (mode 600), checks the configuration, pulls
+the images, starts the stack and waits until it is healthy.
+
+Questions:
+  1. How people reach it: this machine only, a domain you own, or a public
+     IP with no domain (served as <ip>.sslip.io with automatic HTTPS).
+  2. Chat: Google Gemini, or any OpenAI-compatible endpoint (base URL + key).
+  3. Embeddings: Gemini, OpenAI, or Azure/another OpenAI-compatible endpoint.
+  4. Extras, one yes/no each: OCR (Docling), Whisper transcription,
+     web search (SearXNG).
+
+Passwords and signing keys are generated, never asked. Running setup again
+keeps every generated secret and offers your earlier answers as defaults.
+
+Options:
+  --non-interactive   Take every answer from LAUNCHSTACK_SETUP_* variables.
+  --no-start          Write .env and stop (no preflight, pull or start).
+
+Variables for --non-interactive (also used as defaults when asking):
+  LAUNCHSTACK_SETUP_ACCESS              local | domain | sslip   (default local)
+  LAUNCHSTACK_SETUP_DOMAIN              host name, for ACCESS=domain
+  LAUNCHSTACK_SETUP_PUBLIC_IP           IPv4 address, for ACCESS=sslip
+  LAUNCHSTACK_SETUP_ACME_EMAIL          optional, for certificate notices
+  LAUNCHSTACK_SETUP_HTTP_PORT           local mode, default 3000
+  LAUNCHSTACK_SETUP_FILES_PORT          local mode, default 8333
+  LAUNCHSTACK_SETUP_BIND                local mode, default 127.0.0.1
+  LAUNCHSTACK_SETUP_LAN_HOST            with BIND=0.0.0.0: the IP or name other
+                                        machines use for this one (sets
+                                        BETTER_AUTH_URL and LAUNCHSTACK_FILES_URL)
+  LAUNCHSTACK_SETUP_CHAT_PROVIDER       gemini | openai-compatible
+  LAUNCHSTACK_SETUP_GOOGLE_AI_API_KEY   for CHAT_PROVIDER=gemini
+  LAUNCHSTACK_SETUP_CHAT_BASE_URL       for CHAT_PROVIDER=openai-compatible
+  LAUNCHSTACK_SETUP_CHAT_API_KEY        empty for an endpoint without a key
+  LAUNCHSTACK_SETUP_CHAT_MODELS_CONFIG  default config/chat-models.yaml
+                                        (config/chat-models.azure.yaml on Azure)
+  LAUNCHSTACK_SETUP_EMBEDDING_PROVIDER  gemini | openai | openai-compatible
+  LAUNCHSTACK_SETUP_EMBEDDING_API_KEY   defaults to the chat key when the
+                                        provider is the same
+  LAUNCHSTACK_SETUP_EMBEDDING_API_BASE_URL  for openai-compatible
+  LAUNCHSTACK_SETUP_EMBEDDING_MODEL     override the provider's model
+  LAUNCHSTACK_SETUP_EMBEDDING_INDEX     override the provider's index
+  LAUNCHSTACK_SETUP_OCR                 yes | no
+  LAUNCHSTACK_SETUP_WHISPER             yes | no
+  LAUNCHSTACK_SETUP_SEARCH              yes | no
+  LAUNCHSTACK_SETUP_VERSION             image tag, default the installed release
+EOF
+}
+
+# Where the next .env line goes: a new file being assembled (S_ENV_OUT set),
+# or the existing .env edited in place.
+S_ENV_OUT=""
+
+put() { # put KEY VALUE
+  local quoted
+  if [ -n "$S_ENV_OUT" ]; then
+    quoted="$(env_quote "$2")" || die "$1: the value contains a single quote or a line break."
+    printf '%s=%s\n' "$1" "$quoted" >>"$S_ENV_OUT"
+  else
+    env_set "$1" "$2"
+  fi
+}
+
+note() {
+  if [ -n "$S_ENV_OUT" ]; then printf '%s\n' "$1" >>"$S_ENV_OUT"; fi
+}
+
+drop() { # drop KEY  → remove it from an existing .env (a new file never has it)
+  if [ -z "$S_ENV_OUT" ]; then env_unset "$1"; fi
+}
+
+put_secret() { # put_secret KEY <hex|b64> <bytes>  → keeps an existing value
+  local cur
+  cur="$(env_get "$1")"
+  if [ -z "$cur" ]; then
+    if [ "$2" = "b64" ]; then cur="$(rand_b64 "$3")"; else cur="$(rand_hex "$3")"; fi
+    S_GENERATED=$((S_GENERATED + 1))
+  else
+    S_KEPT=$((S_KEPT + 1))
+  fi
+  put "$1" "$cur"
+}
+
+describe_key() { # describe_key VALUE
+  if [ -n "$1" ]; then printf 'key set, %s chars' "${#1}"; else printf 'no key'; fi
+}
+
+cmd_setup() {
+  local start=1 arg
+  INTERACTIVE=1
+  for arg in "$@"; do
+    case "$arg" in
+      --non-interactive | -y) INTERACTIVE=0 ;;
+      --no-start) start=0 ;;
+      -h | --help)
+        help_setup
+        return 0
+        ;;
+      *)
+        err "setup: unknown option '$arg'"
+        help_setup >&2
+        return 2
+        ;;
+    esac
+  done
+  need_install
+  mkdir -p "$BACKUP_DIR"
+  chmod 700 "$BACKUP_DIR" 2>/dev/null || true
+
+  local existing=0
+  [ -f "$ENV_FILE" ] && existing=1
+
+  if [ "$INTERACTIVE" = 1 ]; then
+    say "${C_BOLD}LaunchStack setup${C_OFF}  (install: $LAUNCHSTACK_HOME)"
+    if [ "$existing" = 1 ]; then
+      say "An .env already exists: your earlier answers are the defaults and every generated secret is kept."
+    fi
+    say ""
+  fi
+
+  # ── 1. Access ──
+  local cur_domain def_access access domain="" acme="" ip="" http_port files_port bind auth_url
+  local lan_host="" files_url=""
+  cur_domain="$(env_get DOMAIN)"
+  def_access="$(lower "$(setup_var ACCESS)")"
+  if [ -z "$def_access" ]; then
+    if [ -n "$(setup_var DOMAIN)" ]; then
+      def_access="domain"
+    elif [ -n "$(setup_var PUBLIC_IP)" ]; then
+      def_access="sslip"
+    else
+      case "$cur_domain" in
+        "") def_access="local" ;;
+        *.sslip.io) def_access="sslip" ;;
+        *) def_access="domain" ;;
+      esac
+    fi
+  fi
+  case "$def_access" in
+    1) def_access="local" ;;
+    2) def_access="domain" ;;
+    3) def_access="sslip" ;;
+  esac
+  case "$def_access" in
+    local | domain | sslip) ;;
+    *) die "LAUNCHSTACK_SETUP_ACCESS must be local, domain or sslip (got '$def_access')." ;;
+  esac
+  access="$def_access"
+  if [ "$INTERACTIVE" = 1 ]; then
+    local n=1
+    [ "$def_access" = "domain" ] && n=2
+    [ "$def_access" = "sslip" ] && n=3
+    say "How will people reach LaunchStack?"
+    say "  1) This machine only, at http://localhost"
+    say "  2) A domain I own (automatic HTTPS; ports 80 and 443 must be reachable)"
+    say "  3) A public IP with no domain (automatic HTTPS at <ip>.sslip.io)"
+    while :; do
+      ask "Choose 1, 2 or 3" "$n"
+      case "$REPLY" in
+        1) access="local" ;;
+        2) access="domain" ;;
+        3) access="sslip" ;;
+        *)
+          say "  Enter 1, 2 or 3."
+          continue
+          ;;
+      esac
+      break
+    done
+  fi
+
+  http_port="$(setup_var HTTP_PORT)"
+  [ -n "$http_port" ] || http_port="$(env_get LAUNCHSTACK_HTTP_PORT)"
+  [ -n "$http_port" ] || http_port="3000"
+  valid_port "$http_port" || die "LAUNCHSTACK_SETUP_HTTP_PORT: $VALID_MSG"
+  files_port="$(setup_var FILES_PORT)"
+  [ -n "$files_port" ] || files_port="$(env_get LAUNCHSTACK_FILES_PORT)"
+  [ -n "$files_port" ] || files_port="8333"
+  valid_port "$files_port" || die "LAUNCHSTACK_SETUP_FILES_PORT: $VALID_MSG"
+  bind="$(setup_var BIND)"
+  [ -n "$bind" ] || bind="$(env_get LAUNCHSTACK_BIND)"
+  [ -n "$bind" ] || bind="127.0.0.1"
+  valid_bind "$bind" || die "LAUNCHSTACK_SETUP_BIND: $VALID_MSG"
+  [ "$http_port" != "$files_port" ] ||
+    die "LAUNCHSTACK_SETUP_HTTP_PORT and LAUNCHSTACK_SETUP_FILES_PORT are both $http_port; they must differ."
+
+  case "$access" in
+    local)
+      domain=""
+      auth_url="http://localhost:${http_port}"
+      # Listening beyond this machine: links and stored-file URLs must carry
+      # the address other machines use, not localhost.
+      if ! is_loopback "$bind"; then
+        local def_lan
+        def_lan="$(setup_var LAN_HOST)"
+        if [ -z "$def_lan" ]; then
+          def_lan="$(env_get BETTER_AUTH_URL)"
+          def_lan="${def_lan#http://}"
+          def_lan="${def_lan%%[:/]*}"
+          case "$def_lan" in localhost | 127.* | https) def_lan="" ;; esac
+        fi
+        question LAN_HOST valid_host_optional "LAUNCHSTACK_BIND is $bind. Address other machines use to reach this one (empty: this machine only)" "$def_lan"
+        lan_host="$ANSWER"
+        if [ -n "$lan_host" ] && ! is_loopback "$lan_host"; then
+          auth_url="http://${lan_host}:${http_port}"
+          files_url="http://${lan_host}:${files_port}"
+        else
+          warn "LAUNCHSTACK_BIND is $bind but no LAN address was given: the app answers other machines, yet its links say localhost. Set LAUNCHSTACK_SETUP_LAN_HOST to fix that."
+        fi
+      fi
+      ;;
+    domain)
+      local def_domain
+      def_domain="$(setup_var DOMAIN)"
+      if [ -z "$def_domain" ]; then
+        case "$cur_domain" in *.sslip.io) ;; *) def_domain="$cur_domain" ;; esac
+      fi
+      question DOMAIN valid_domain "Domain (its DNS A record, and files.<domain>, must point at this machine)" "$def_domain"
+      domain="$ANSWER"
+      ;;
+    sslip)
+      local def_ip
+      def_ip="$(setup_var PUBLIC_IP)"
+      if [ -z "$def_ip" ]; then
+        case "$cur_domain" in *.sslip.io) def_ip="${cur_domain%.sslip.io}" ;; esac
+      fi
+      question PUBLIC_IP valid_ipv4 "Public IPv4 address of this machine" "$def_ip"
+      ip="$ANSWER"
+      if is_private_ipv4 "$ip"; then
+        warn "$ip is a private address. A certificate can only be issued if the address is reachable from the internet on ports 80 and 443."
+      fi
+      domain="${ip}.sslip.io"
+      ;;
+  esac
+  if [ "$access" != "local" ]; then
+    local def_acme
+    def_acme="$(setup_var ACME_EMAIL)"
+    [ -n "$def_acme" ] || def_acme="$(env_get ACME_EMAIL)"
+    question ACME_EMAIL valid_email_optional "Email for certificate expiry notices (optional)" "$def_acme"
+    acme="$ANSWER"
+    auth_url="https://${domain}"
+  fi
+
+  # ── 2. Chat ──
+  local cur_chat_url chat_provider google_key chat_url="" chat_key="" chat_config=""
+  cur_chat_url="$(env_get CHAT_BASE_URL)"
+  google_key="$(env_get GOOGLE_AI_API_KEY)"
+  chat_provider="$(lower "$(setup_var CHAT_PROVIDER)")"
+  if [ -z "$chat_provider" ]; then
+    if [ -n "$(setup_var CHAT_BASE_URL)" ] || [ -n "$cur_chat_url" ]; then
+      chat_provider="openai-compatible"
+    else
+      chat_provider="gemini"
+    fi
+  fi
+  case "$chat_provider" in
+    gemini | openai-compatible) ;;
+    *) die "LAUNCHSTACK_SETUP_CHAT_PROVIDER must be gemini or openai-compatible (got '$chat_provider')." ;;
+  esac
+  if [ "$INTERACTIVE" = 1 ]; then
+    local n=1
+    [ "$chat_provider" = "openai-compatible" ] && n=2
+    say ""
+    say "Which model provider answers chat?"
+    say "  1) Google Gemini (one key from https://aistudio.google.com/apikey)"
+    say "  2) An OpenAI-compatible endpoint (OpenAI, Azure OpenAI, OpenRouter, Ollama, vLLM...)"
+    while :; do
+      ask "Choose 1 or 2" "$n"
+      case "$REPLY" in
+        1) chat_provider="gemini" ;;
+        2) chat_provider="openai-compatible" ;;
+        *)
+          say "  Enter 1 or 2."
+          continue
+          ;;
+      esac
+      break
+    done
+  fi
+  if [ "$chat_provider" = "gemini" ]; then
+    local def_gkey
+    def_gkey="$(setup_var GOOGLE_AI_API_KEY)"
+    [ -n "$def_gkey" ] || def_gkey="$google_key"
+    question GOOGLE_AI_API_KEY valid_key "Gemini API key" "$def_gkey" secret
+    google_key="$ANSWER"
+  else
+    local def_curl def_ckey def_cfg
+    def_curl="$(setup_var CHAT_BASE_URL)"
+    [ -n "$def_curl" ] || def_curl="$cur_chat_url"
+    question CHAT_BASE_URL valid_url "Chat base URL (for example https://api.openai.com/v1)" "$def_curl"
+    chat_url="$ANSWER"
+    def_ckey="$(setup_var CHAT_API_KEY)"
+    [ -n "$def_ckey" ] || def_ckey="$(env_get CHAT_API_KEY)"
+    question CHAT_API_KEY valid_key_optional "Chat API key (empty for a local endpoint without one)" "$def_ckey" secret
+    chat_key="$ANSWER"
+    def_cfg="$(setup_var CHAT_MODELS_CONFIG)"
+    if [ -z "$def_cfg" ]; then
+      def_cfg="$(env_get CHAT_MODELS_CONFIG)"
+      if [ -z "$def_cfg" ] || [ "$chat_url" != "$cur_chat_url" ]; then
+        case "$chat_url" in
+          *.openai.azure.com*) def_cfg="config/chat-models.azure.yaml" ;;
+          *) def_cfg="config/chat-models.yaml" ;;
+        esac
+      fi
+    fi
+    valid_plain "$def_cfg" || die "LAUNCHSTACK_SETUP_CHAT_MODELS_CONFIG: $VALID_MSG"
+    chat_config="$def_cfg"
+  fi
+
+  # ── 3. Embeddings ──
+  local cur_index cur_emb_url emb_provider emb_url emb_key emb_model emb_index def_ekey
+  cur_index="$(env_get EMBEDDING_INDEX)"
+  cur_emb_url="$(env_get EMBEDDING_API_BASE_URL)"
+  emb_provider="$(lower "$(setup_var EMBEDDING_PROVIDER)")"
+  if [ -z "$emb_provider" ]; then
+    if [ -n "$(setup_var EMBEDDING_API_BASE_URL)" ]; then
+      emb_provider="openai-compatible"
+    elif [ -n "$cur_emb_url" ]; then
+      case "$cur_emb_url" in
+        "$LS_GEMINI_BASE_URL") emb_provider="gemini" ;;
+        "$LS_OPENAI_BASE_URL") emb_provider="openai" ;;
+        *) emb_provider="openai-compatible" ;;
+      esac
+    elif [ "$chat_provider" = "gemini" ]; then
+      emb_provider="gemini"
+    else
+      case "$chat_url" in
+        "$LS_OPENAI_BASE_URL") emb_provider="openai" ;;
+        *.openai.azure.com*) emb_provider="openai-compatible" ;;
+        *) emb_provider="gemini" ;;
+      esac
+    fi
+  fi
+  [ "$emb_provider" = "azure" ] && emb_provider="openai-compatible"
+  case "$emb_provider" in
+    gemini | openai | openai-compatible) ;;
+    *) die "LAUNCHSTACK_SETUP_EMBEDDING_PROVIDER must be gemini, openai or openai-compatible (got '$emb_provider')." ;;
+  esac
+  if [ "$INTERACTIVE" = 1 ]; then
+    local n=1
+    [ "$emb_provider" = "openai" ] && n=2
+    [ "$emb_provider" = "openai-compatible" ] && n=3
+    say ""
+    say "Which provider embeds documents so they become searchable?"
+    say "  1) Google Gemini (gemini-embedding-001)"
+    say "  2) OpenAI (text-embedding-3-large)"
+    say "  3) Azure OpenAI, or another endpoint serving text-embedding-3-large"
+    while :; do
+      ask "Choose 1, 2 or 3" "$n"
+      case "$REPLY" in
+        1) emb_provider="gemini" ;;
+        2) emb_provider="openai" ;;
+        3) emb_provider="openai-compatible" ;;
+        *)
+          say "  Enter 1, 2 or 3."
+          continue
+          ;;
+      esac
+      break
+    done
+  fi
+  def_ekey="$(setup_var EMBEDDING_API_KEY)"
+  case "$emb_provider" in
+    gemini)
+      emb_url="$LS_GEMINI_BASE_URL" emb_model="$LS_GEMINI_EMBEDDING_MODEL" emb_index="$LS_INDEX_GEMINI"
+      if [ -z "$def_ekey" ] && [ "$chat_provider" = "gemini" ]; then
+        emb_key="$google_key"
+        [ "$INTERACTIVE" = 1 ] && say "Using the same Gemini key for embeddings."
+      else
+        if [ -z "$def_ekey" ] && [ "$cur_emb_url" = "$emb_url" ]; then def_ekey="$(env_get EMBEDDING_API_KEY)"; fi
+        question EMBEDDING_API_KEY valid_key "Gemini API key for embeddings" "$def_ekey" secret
+        emb_key="$ANSWER"
+      fi
+      ;;
+    openai)
+      emb_url="$LS_OPENAI_BASE_URL" emb_model="$LS_OPENAI_EMBEDDING_MODEL" emb_index="$LS_INDEX_OPENAI"
+      if [ -z "$def_ekey" ] && [ "$cur_emb_url" = "$emb_url" ]; then def_ekey="$(env_get EMBEDDING_API_KEY)"; fi
+      if [ -z "$def_ekey" ] && [ "$chat_url" = "$emb_url" ]; then def_ekey="$chat_key"; fi
+      question EMBEDDING_API_KEY valid_key "OpenAI API key for embeddings" "$def_ekey" secret
+      emb_key="$ANSWER"
+      ;;
+    openai-compatible)
+      local def_eurl
+      emb_model="$LS_OPENAI_EMBEDDING_MODEL" emb_index="$LS_INDEX_OPENAI"
+      def_eurl="$(setup_var EMBEDDING_API_BASE_URL)"
+      if [ -z "$def_eurl" ]; then
+        case "$cur_emb_url" in "$LS_GEMINI_BASE_URL" | "$LS_OPENAI_BASE_URL") ;; *) def_eurl="$cur_emb_url" ;; esac
+      fi
+      [ -n "$def_eurl" ] || def_eurl="$chat_url"
+      question EMBEDDING_API_BASE_URL valid_url "Embeddings base URL (Azure: https://<resource>.openai.azure.com/openai/v1)" "$def_eurl"
+      emb_url="$ANSWER"
+      if [ -z "$def_ekey" ] && [ "$cur_emb_url" = "$emb_url" ]; then def_ekey="$(env_get EMBEDDING_API_KEY)"; fi
+      if [ -z "$def_ekey" ] && [ "$chat_url" = "$emb_url" ]; then def_ekey="$chat_key"; fi
+      question EMBEDDING_API_KEY valid_key "Embeddings API key" "$def_ekey" secret
+      emb_key="$ANSWER"
+      ;;
+  esac
+  if [ -n "$(setup_var EMBEDDING_MODEL)" ]; then
+    valid_plain "$(setup_var EMBEDDING_MODEL)" || die "LAUNCHSTACK_SETUP_EMBEDDING_MODEL: $VALID_MSG"
+    emb_model="$NORM"
+  fi
+  if [ -n "$(setup_var EMBEDDING_INDEX)" ]; then
+    valid_plain "$(setup_var EMBEDDING_INDEX)" || die "LAUNCHSTACK_SETUP_EMBEDDING_INDEX: $VALID_MSG"
+    emb_index="$NORM"
+    case "$emb_index" in
+      "$LS_INDEX_OPENAI" | "$LS_INDEX_GEMINI") ;;
+      *) warn "EMBEDDING_INDEX '$emb_index' is not one of the built-in indexes ($LS_INDEX_OPENAI, $LS_INDEX_GEMINI)." ;;
+    esac
+  fi
+  if [ -n "$cur_index" ] && [ "$cur_index" != "$emb_index" ]; then
+    warn "This changes the embedding index from $cur_index to $emb_index. Documents already embedded stay in the old index and stop being searchable until they are re-embedded."
+    if [ "$INTERACTIVE" = 1 ]; then
+      ask_yes_no "Change the embedding index anyway?" no || die "Setup cancelled; nothing was written."
+    fi
+  fi
+
+  # ── 4. Extras ──
+  local cur_profiles ocr whisper search extra def p
+  cur_profiles="$(env_get COMPOSE_PROFILES)"
+  for extra in OCR WHISPER SEARCH; do
+    p="$(lower "$extra")"
+    def="$(setup_var "$extra")"
+    if [ -z "$def" ]; then
+      if has_word "$p" "$cur_profiles"; then def="yes"; else def="no"; fi
+    fi
+    valid_yes_no "$def" || die "LAUNCHSTACK_SETUP_$extra: $VALID_MSG"
+    def="$NORM"
+    if [ "$INTERACTIVE" = 1 ]; then
+      [ "$extra" = "OCR" ] && say ""
+      case "$extra" in
+        OCR) ask_yes_no "Read scanned PDFs and Office files with a local OCR engine (Docling, about 1 GB more RAM)?" "$def" && def="yes" || def="no" ;;
+        WHISPER) ask_yes_no "Transcribe audio on this machine with Whisper (otherwise the chat provider's cloud model)?" "$def" && def="yes" || def="no" ;;
+        SEARCH) ask_yes_no "Run a private web search engine (SearXNG) for web search in chat?" "$def" && def="yes" || def="no" ;;
+      esac
+    fi
+    case "$extra" in
+      OCR) ocr="$def" ;;
+      WHISPER) whisper="$def" ;;
+      SEARCH) search="$def" ;;
+    esac
+  done
+
+  local profiles=""
+  [ "$access" != "local" ] && profiles="domain"
+  [ "$ocr" = "yes" ] && profiles="${profiles:+$profiles,}ocr"
+  [ "$whisper" = "yes" ] && profiles="${profiles:+$profiles,}whisper"
+  [ "$search" = "yes" ] && profiles="${profiles:+$profiles,}search"
+  for p in $(printf '%s' "$cur_profiles" | tr ',' ' '); do
+    case "$p" in
+      domain | ocr | whisper | search) ;;
+      *) profiles="${profiles:+$profiles,}$p" ;;
+    esac
+  done
+
+  # ── Version ──
+  local version
+  version="$(setup_var VERSION)"
+  [ -n "$version" ] || version="$(env_get LAUNCHSTACK_VERSION)"
+  [ -n "$version" ] || version="$(bundle_version)"
+  version="$(image_tag_for "$version")"
+  valid_plain "$version" || die "LAUNCHSTACK_SETUP_VERSION: $VALID_MSG"
+
+  # ── Summary ──
+  say ""
+  say "${C_BOLD}Configuration${C_OFF}"
+  case "$access" in
+    local)
+      if [ -n "$files_url" ]; then
+        say "  Access       local network, $auth_url (files at $files_url, plain HTTP)"
+      else
+        say "  Access       this machine only, $auth_url (listening on $bind)"
+      fi
+      ;;
+    domain) say "  Access       $auth_url and https://files.$domain, automatic HTTPS" ;;
+    sslip) say "  Access       $auth_url (public IP $ip), automatic HTTPS" ;;
+  esac
+  if [ "$chat_provider" = "gemini" ]; then
+    say "  Chat         Google Gemini ($(describe_key "$google_key"))"
+  else
+    say "  Chat         $chat_url ($(describe_key "$chat_key")), models from $chat_config"
+  fi
+  say "  Embeddings   $emb_url"
+  say "               model $emb_model, index $emb_index ($(describe_key "$emb_key"))"
+  say "  Extras       OCR: $ocr   Whisper: $whisper   Web search: $search"
+  say "  Version      $version"
+  say "  File         $ENV_FILE (mode 600)"
+  if [ "$INTERACTIVE" = 1 ]; then
+    say ""
+    ask_yes_no "Write this configuration?" yes || die "Setup cancelled; nothing was written."
+  fi
+
+  # ── Write ──
+  S_GENERATED=0
+  S_KEPT=0
+  S_ENV_OUT=""
+  if [ "$existing" = 1 ]; then
+    cp -p "$ENV_FILE" "$ENV_FILE.previous"
+    chmod 600 "$ENV_FILE.previous"
+  else
+    S_ENV_OUT="$(mktemp "$ENV_FILE.XXXXXX")"
+    chmod 600 "$S_ENV_OUT"
+  fi
+  note "# LaunchStack configuration, written by 'launchstack setup'."
+  note "# Change it with 'launchstack config set KEY=VALUE' or 'launchstack config edit',"
+  note "# then 'launchstack restart'. Keep this file private: it holds every secret."
+  note ""
+  note "# Release (image tag) this install runs. 'launchstack update' changes it."
+  put LAUNCHSTACK_VERSION "$version"
+  note ""
+  note "# Access. DOMAIN empty = local mode over plain HTTP on the ports below."
+  note "# DOMAIN set = Caddy serves https://DOMAIN and https://files.DOMAIN."
+  put DOMAIN "$domain"
+  put ACME_EMAIL "$acme"
+  put LAUNCHSTACK_HTTP_PORT "$http_port"
+  put LAUNCHSTACK_FILES_PORT "$files_port"
+  put LAUNCHSTACK_BIND "$bind"
+  if [ -n "$files_url" ]; then
+    note "# Where browsers on other machines load stored files from (LAN install)."
+    put LAUNCHSTACK_FILES_URL "$files_url"
+  else
+    drop LAUNCHSTACK_FILES_URL
+  fi
+  put COMPOSE_PROFILES "$profiles"
+  note "# The public origin: sign-in, links and OAuth redirects are built on it."
+  put BETTER_AUTH_URL "$auth_url"
+  note ""
+  note "# Chat. Gemini needs only GOOGLE_AI_API_KEY with CHAT_BASE_URL empty; any"
+  note "# OpenAI-compatible endpoint uses CHAT_BASE_URL + CHAT_API_KEY, with its model"
+  note "# ids named in the CHAT_MODELS_CONFIG file."
+  put GOOGLE_AI_API_KEY "$google_key"
+  put CHAT_BASE_URL "$chat_url"
+  put CHAT_API_KEY "$chat_key"
+  put CHAT_MODELS_CONFIG "$chat_config"
+  note ""
+  note "# Embeddings. EMBEDDING_INDEX must match the model; changing it later"
+  note "# means re-embedding every document."
+  put EMBEDDING_API_BASE_URL "$emb_url"
+  put EMBEDDING_API_KEY "$emb_key"
+  put EMBEDDING_MODEL "$emb_model"
+  put EMBEDDING_INDEX "$emb_index"
+  note ""
+  note "# Extras (the matching services are switched on by COMPOSE_PROFILES)."
+  note "# ocr: DOCLING_SERVE_URL. whisper: TRANSCRIPTION_PROVIDER=sidecar."
+  note "# search: SEARCH_PROVIDER=searxng + SEARXNG_URL."
+  if [ "$ocr" = "yes" ]; then
+    put DOCLING_SERVE_URL "http://docling-serve:5001"
+  elif [ "$(env_get DOCLING_SERVE_URL)" = "http://docling-serve:5001" ]; then
+    drop DOCLING_SERVE_URL
+  fi
+  if [ "$whisper" = "yes" ]; then
+    put TRANSCRIPTION_PROVIDER "sidecar"
+  elif [ "$(env_get TRANSCRIPTION_PROVIDER)" = "sidecar" ]; then
+    drop TRANSCRIPTION_PROVIDER
+  fi
+  if [ "$search" = "yes" ]; then
+    put SEARCH_PROVIDER "searxng"
+    put SEARXNG_URL "http://searxng:8080"
+  else
+    # Only the bundled engine is ours to switch off; another engine the
+    # operator configured (Exa, Brave...) is left alone.
+    if [ "$(env_get SEARCH_PROVIDER)" = "searxng" ]; then drop SEARCH_PROVIDER; fi
+    if [ "$(env_get SEARXNG_URL)" = "http://searxng:8080" ]; then drop SEARXNG_URL; fi
+  fi
+  note ""
+  note "# Generated secrets. Never change POSTGRES_PASSWORD, S3_* or"
+  note "# EMBEDDING_SECRETS_KEY on an install that holds data."
+  put_secret POSTGRES_PASSWORD hex 24
+  put_secret BETTER_AUTH_SECRET hex 32
+  put_secret FILE_ACCESS_TOKEN_SECRET hex 32
+  put_secret EMBEDDING_SECRETS_KEY b64 32
+  put_secret S3_ACCESS_KEY hex 12
+  put_secret S3_SECRET_KEY hex 24
+  put_secret ADEU_SERVICE_API_KEY hex 24
+  put_secret DOCUMENT_CONVERTER_API_KEY hex 24
+  put_secret TRANSCRIPTION_SERVICE_API_KEY hex 24
+  put_secret GOTENBERG_SERVICE_PASSWORD hex 24
+  put_secret INNGEST_EVENT_KEY hex 32
+  put_secret INNGEST_SIGNING_KEY hex 32
+  put_secret SEARXNG_SECRET hex 32
+  if [ -n "$S_ENV_OUT" ]; then
+    note ""
+    note "# Anything else the app supports (sign-in providers, connectors, email,"
+    note "# other OCR or search engines) goes below. See docs/self-hosting.md."
+    mv "$S_ENV_OUT" "$ENV_FILE"
+    S_ENV_OUT=""
+  fi
+  chmod 600 "$ENV_FILE"
+  ok "Wrote $ENV_FILE (secrets: $S_GENERATED generated, $S_KEPT kept)."
+  if [ "$existing" = 1 ]; then
+    say "    The previous file is saved as $ENV_FILE.previous."
+  fi
+  if [ "$chat_provider" != "gemini" ]; then
+    say "    Chat model ids come from $chat_config inside the app image. The default"
+    say "    file names Gemini models and the Azure file a 'gpt-6-luna' deployment; if"
+    say "    your endpoint serves other ids, see docs/chat-models.md in the repository."
+  fi
+
+  if [ "$start" = 0 ]; then
+    say ""
+    say "Not starting (--no-start). When you are ready: launchstack start"
+    return 0
+  fi
+
+  need_docker
+  say ""
+  step "Checking the configuration"
+  if ! run_preflight; then
+    err "The configuration check failed. Fix the items above ('launchstack config edit' or 'launchstack setup'), then run 'launchstack start'."
+    return 1
+  fi
+  step "Pulling images (the first time takes a few minutes)"
+  if ! pull_images; then
+    err "Could not pull the images. Check the network and that this version exists (LAUNCHSTACK_VERSION in .env), then run 'launchstack start'."
+    return 1
+  fi
+  start_stack || return 1
+  print_ready fresh
+}
+
+# ── start / stop / restart / status / logs ──────────────────────────────
+
+help_start() {
+  cat <<'EOF'
+Usage: launchstack start
+
+Starts every service (creating or updating containers as needed), waits until
+the app is healthy and prints its URL. Safe to run when already running.
+LAUNCHSTACK_HEALTH_TIMEOUT (seconds, default 600) bounds the wait.
+EOF
+}
+
+cmd_start() {
+  need_env
+  need_docker
+  start_stack || return 1
+  print_ready
+}
+
+help_stop() {
+  cat <<'EOF'
+Usage: launchstack stop
+
+Stops and removes the containers. Data is kept: the database, stored files
+and every other volume stay in place. Start again with 'launchstack start'.
+EOF
+}
+
+cmd_stop() {
+  need_env
+  need_docker
+  step "Stopping LaunchStack (volumes are kept)"
+  compose down --remove-orphans
+  ok "Stopped."
+}
+
+help_restart() {
+  cat <<'EOF'
+Usage: launchstack restart
+
+Recreates every container so changes to .env take effect, then waits until
+the app is healthy. Data is kept.
+EOF
+}
+
+cmd_restart() {
+  need_env
+  need_docker
+  step "Restarting LaunchStack"
+  compose up -d --remove-orphans --force-recreate
+  if ! wait_healthy; then
+    health_summary || true
+    say "Look at the logs with: launchstack logs"
+    return 1
+  fi
+  print_ready
+}
+
+help_status() {
+  cat <<'EOF'
+Usage: launchstack status
+
+Shows the installed version, the URL and the state of every container.
+Exits non-zero when a container is unhealthy or the stack is not running.
+EOF
+}
+
+cmd_status() {
+  local rc=0
+  need_env
+  need_docker
+  say "Install   $LAUNCHSTACK_HOME"
+  say "Version   $(env_get LAUNCHSTACK_VERSION) (bundle $(bundle_version))"
+  say "URL       $(public_url)"
+  say ""
+  health_summary || rc=1
+  return "$rc"
+}
+
+help_logs() {
+  cat <<'EOF'
+Usage: launchstack logs [--no-follow] [service...]
+
+Follows the logs of every service, or only the ones named (for example
+'launchstack logs app worker'). Shows the last 200 lines first; set
+LAUNCHSTACK_LOG_TAIL to change that. Ctrl-C stops following.
+EOF
+}
+
+cmd_logs() {
+  local follow="-f"
+  need_env
+  need_docker
+  if [ "${1:-}" = "--no-follow" ]; then
+    follow=""
+    shift
+  fi
+  # shellcheck disable=SC2086
+  compose logs --tail "${LAUNCHSTACK_LOG_TAIL:-200}" $follow "$@"
+}
+
+# ── doctor ──────────────────────────────────────────────────────────────
+
+help_doctor() {
+  cat <<'EOF'
+Usage: launchstack doctor
+
+Checks the configuration (.env) and then probes the running stack from inside
+its network: Postgres and pgvector, object storage with the configured keys,
+each compute service, and the background-job server. Ends with the state of
+every container. Exits non-zero when any check fails.
+EOF
+}
+
+cmd_doctor() {
+  local rc=0 mode
+  need_env
+  need_docker
+  mode="$(stat -f '%Lp' "$ENV_FILE" 2>/dev/null || stat -c '%a' "$ENV_FILE" 2>/dev/null || true)"
+  if [ -n "$mode" ] && [ "$mode" != "600" ]; then
+    warn "$ENV_FILE has mode $mode; it holds secrets and should be 600 (chmod 600 '$ENV_FILE')."
+  fi
+  step "Configuration and live checks"
+  if run_preflight --probe; then
+    ok "Preflight passed."
+  else
+    err "Preflight reported errors (above)."
+    rc=1
+  fi
+  say ""
+  step "Containers"
+  if health_summary; then
+    ok "Every container is healthy."
+  else
+    err "Some containers are not healthy. See: launchstack logs <service>"
+    rc=1
+  fi
+  return "$rc"
+}
+
+# ── backup / restore ────────────────────────────────────────────────────
+
+help_backup() {
+  cat <<'EOF'
+Usage: launchstack backup [file]
+
+Writes one .tar.gz (mode 600) holding everything needed to rebuild this
+install: a dump of every database (pg_dumpall), the object-storage volume,
+and .env. The default file is backups/launchstack-<date>-<time>.tar.gz in the
+install directory. The stack must be running; it stays up during the backup.
+Uploads made while the backup runs may not be included.
+
+The file contains every secret. Store it somewhere private.
+EOF
+}
+
+BACKUP_TMP=""
+cleanup_backup_tmp() {
+  if [ -n "$BACKUP_TMP" ] && [ -d "$BACKUP_TMP" ]; then rm -rf "$BACKUP_TMP"; fi
+  return 0
+}
+
+running_or_die() { # running_or_die <service> <why>
+  case "$(service_state "$1")" in
+    running*) ;;
+    *) die "The '$1' service is not running, and $2 needs it. Run 'launchstack start' first." ;;
+  esac
+}
+
+make_backup() { # make_backup <output file>
+  local out="$1" outdir
+  case "$out" in
+    /*) ;;
+    *) out="$PWD/$out" ;;
+  esac
+  outdir="$(dirname "$out")"
+  mkdir -p "$outdir" "$BACKUP_DIR"
+  chmod 700 "$BACKUP_DIR" 2>/dev/null || true
+  running_or_die "$LS_DB_SERVICE" "a backup"
+  running_or_die "$LS_STORAGE_SERVICE" "a backup"
+
+  BACKUP_TMP="$(mktemp -d "$BACKUP_DIR/.backup.XXXXXX")"
+  trap cleanup_backup_tmp EXIT
+  (
+    umask 077
+    step "Dumping every database"
+    compose exec -T "$LS_DB_SERVICE" pg_dumpall -U postgres --clean --if-exists >"$BACKUP_TMP/db.sql"
+    [ -s "$BACKUP_TMP/db.sql" ] || die "The database dump is empty."
+    step "Copying stored files"
+    compose exec -T "$LS_STORAGE_SERVICE" tar -C "$LS_STORAGE_PATH" -cf - . >"$BACKUP_TMP/storage.tar"
+    cp "$ENV_FILE" "$BACKUP_TMP/env"
+    {
+      printf 'launchstack-backup 1\n'
+      printf 'created %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      printf 'bundle %s\n' "$(bundle_version)"
+      printf 'version %s\n' "$(env_get LAUNCHSTACK_VERSION)"
+    } >"$BACKUP_TMP/manifest.txt"
+    step "Compressing"
+    tar -czf "$out.partial" -C "$BACKUP_TMP" manifest.txt db.sql storage.tar env
+    chmod 600 "$out.partial"
+    mv "$out.partial" "$out"
+  )
+  cleanup_backup_tmp
+  BACKUP_TMP=""
+  trap - EXIT
+  ok "Backup written to $out ($(du -h "$out" | cut -f1 | tr -d ' '))."
+}
+
+cmd_backup() {
+  local out="${1:-}"
+  need_env
+  need_docker
+  [ "$#" -le 1 ] || die "backup takes at most one file name. See: launchstack backup --help"
+  [ -n "$out" ] || out="$BACKUP_DIR/launchstack-$(timestamp).tar.gz"
+  make_backup "$out"
+  say "It contains every secret of this install; keep it private."
+}
+
+help_restore() {
+  cat <<'EOF'
+Usage: launchstack restore <file> [--yes]
+
+Replaces this install's database, stored files and .env with the contents of
+a file made by 'launchstack backup', then starts the stack. Everything
+currently in the install is overwritten, so it asks you to confirm first;
+--yes skips the question. The current .env is kept as .env.before-restore.
+
+Works on a fresh install too: run the installer, then restore (no setup).
+EOF
+}
+
+cmd_restore() {
+  local file="" yes=0 arg listing log errors
+  for arg in "$@"; do
+    case "$arg" in
+      --yes | -y) yes=1 ;;
+      -*) die "restore: unknown option '$arg'. See: launchstack restore --help" ;;
+      *)
+        [ -z "$file" ] || die "restore takes one file. See: launchstack restore --help"
+        file="$arg"
+        ;;
+    esac
+  done
+  [ -n "$file" ] || {
+    err "restore needs the backup file."
+    help_restore >&2
+    return 2
+  }
+  need_install
+  [ -f "$file" ] || die "No such file: $file"
+  listing="$(tar -tzf "$file" 2>/dev/null || true)"
+  for arg in manifest.txt db.sql storage.tar env; do
+    printf '%s\n' "$listing" | grep -qx "\(\./\)\{0,1\}$arg" ||
+      die "$file is not a LaunchStack backup ($arg is missing from it)."
+  done
+  need_docker
+
+  if [ "$yes" = 0 ]; then
+    say "This replaces the database, the stored files and .env of the install at"
+    say "$LAUNCHSTACK_HOME with the contents of $file."
+    say "What is there now will be overwritten."
+    printf "Type 'restore' to continue: "
+    read_reply
+    [ "$REPLY" = "restore" ] || die "Restore cancelled; nothing was changed."
+  fi
+
+  mkdir -p "$BACKUP_DIR"
+  chmod 700 "$BACKUP_DIR" 2>/dev/null || true
+  BACKUP_TMP="$(mktemp -d "$BACKUP_DIR/.restore.XXXXXX")"
+  trap cleanup_backup_tmp EXIT
+  (umask 077 && tar -xzf "$file" -C "$BACKUP_TMP" manifest.txt db.sql storage.tar env 2>/dev/null) ||
+    (umask 077 && tar -xzf "$file" -C "$BACKUP_TMP" ./manifest.txt ./db.sql ./storage.tar ./env)
+
+  if [ -f "$ENV_FILE" ]; then
+    step "Stopping the stack"
+    compose down --remove-orphans
+    cp -p "$ENV_FILE" "$ENV_FILE.before-restore"
+    chmod 600 "$ENV_FILE.before-restore"
+  fi
+  cp "$BACKUP_TMP/env" "$ENV_FILE"
+  chmod 600 "$ENV_FILE"
+
+  step "Starting the database"
+  compose up -d "$LS_DB_SERVICE"
+  local waited=0
+  until compose exec -T "$LS_DB_SERVICE" pg_isready -U postgres >/dev/null 2>&1; do
+    waited=$((waited + 2))
+    [ "$waited" -le 120 ] || die "The database did not accept connections within 120s."
+    sleep "${LAUNCHSTACK_HEALTH_INTERVAL:-2}"
+  done
+
+  step "Restoring every database"
+  log="$BACKUP_DIR/restore-$(timestamp).log"
+  compose exec -T "$LS_DB_SERVICE" psql -U postgres -d postgres -v ON_ERROR_STOP=0 <"$BACKUP_TMP/db.sql" >"$log" 2>&1 ||
+    die "psql failed while restoring; see $log"
+  # pg_dumpall --clean always tries to drop and recreate the role it runs as.
+  errors="$(grep -c 'ERROR:' "$log" || true)"
+  errors=$((errors - $(grep -c -E 'ERROR: +(current user cannot be dropped|role "postgres" already exists)' "$log" || true)))
+  if [ "$errors" -gt 0 ]; then
+    warn "psql reported $errors error(s) during the restore; review $log"
+  fi
+
+  step "Restoring stored files"
+  compose run --rm --no-deps -T --entrypoint sh "$LS_STORAGE_SERVICE" -c \
+    "find '$LS_STORAGE_PATH' -mindepth 1 -delete && tar -C '$LS_STORAGE_PATH' -xf -" <"$BACKUP_TMP/storage.tar"
+
+  cleanup_backup_tmp
+  BACKUP_TMP=""
+  trap - EXIT
+
+  start_stack || return 1
+  ok "Restored from $file."
+  print_ready
+}
+
+# ── update ──────────────────────────────────────────────────────────────
+
+help_update() {
+  cat <<'EOF'
+Usage: launchstack update [version] [--no-backup]
+
+Moves this install to a release (default: the latest one):
+  1. takes a backup (backups/pre-update-<date>-<time>.tar.gz),
+  2. refreshes compose.yml, docker/ and this CLI from that release's bundle,
+  3. sets LAUNCHSTACK_VERSION in .env, pulls the images, runs the database
+     migrations and restarts.
+
+If the new version does not become healthy, the previous bundle files and
+LAUNCHSTACK_VERSION are put back and the old version is started again.
+Migrations are not undone; the backup from step 1 is the way back if the old
+version cannot run on the migrated database.
+
+Files you changed under docker/ are kept; the release's copy is written next
+to them as <file>.new.
+
+  version       a release such as 2.1.0, or 'edge' for the main branch
+  --no-backup   skip step 1
+
+Environment: LAUNCHSTACK_BUNDLE=/path/or/url.tar.gz installs that bundle
+instead of downloading a release (offline use).
+EOF
+}
+
+download_to() { # download_to <url> <file>
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL --retry 2 -o "$2" "$1"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q -O "$2" "$1"
+  else
+    die "Updating needs curl or wget to download the release."
+  fi
+}
+
+UPDATE_TMP=""
+cleanup_update_tmp() {
+  if [ -n "$UPDATE_TMP" ] && [ -d "$UPDATE_TMP" ]; then rm -rf "$UPDATE_TMP"; fi
+  return 0
+}
+
+rollback_update() { # rollback_update <old image tag> <backup file or "">
+  local old_tag="$1" backup="$2"
+  err "Rolling back to $old_tag."
+  if [ -d "$LAUNCHSTACK_HOME/.bundle.previous" ]; then
+    apply_bundle "$LAUNCHSTACK_HOME/.bundle.previous" || warn "Could not put the previous bundle files back."
+  fi
+  env_set LAUNCHSTACK_VERSION "$old_tag"
+  compose up -d --remove-orphans || true
+  if wait_healthy; then
+    say "The previous version ($old_tag) is running again."
+  else
+    err "The previous version did not become healthy either. See: launchstack logs"
+  fi
+  if [ -n "$backup" ]; then
+    say "A backup from before the update is at $backup"
+    say "(launchstack restore '$backup' returns the install to that point)."
+  fi
+}
+
+# Unpack a bundle file and apply it with the CLI it carries (no network).
+apply_local_bundle() { # apply_local_bundle <tarball> <empty work dir>
+  local tarball="$1" dir="$2" bad f
+  mkdir -p "$dir"
+  bad="$(tar -tzf "$tarball" 2>/dev/null | grep -E '(^/|(^|/)\.\.(/|$))' || true)"
+  if [ -n "$bad" ]; then
+    err "The bundle contains unsafe paths; not unpacking it."
+    return 1
+  fi
+  tar -xzf "$tarball" -C "$dir" 2>/dev/null || {
+    err "The bundle is not a readable .tar.gz."
+    return 1
+  }
+  for f in compose.yml VERSION bin/launchstack; do
+    if [ ! -f "$dir/$f" ]; then
+      err "The bundle is incomplete: $f is missing."
+      return 1
+    fi
+  done
+  LAUNCHSTACK_HOME="$LAUNCHSTACK_HOME" bash "$dir/bin/launchstack" _apply-bundle "$dir"
+}
+
+cmd_update() {
+  local target="" backup=1 arg old_tag new_tag new_bundle backup_file="" installer
+  for arg in "$@"; do
+    case "$arg" in
+      --no-backup) backup=0 ;;
+      -*) die "update: unknown option '$arg'. See: launchstack update --help" ;;
+      *)
+        [ -z "$target" ] || die "update takes one version. See: launchstack update --help"
+        target="$arg"
+        ;;
+    esac
+  done
+  need_env
+  need_docker
+  old_tag="$(env_get LAUNCHSTACK_VERSION)"
+  [ -n "$old_tag" ] || old_tag="$(image_tag_for "$(bundle_version)")"
+  if [ -z "$target" ] && [ "$(bundle_version)" = "edge" ] && [ -z "${LAUNCHSTACK_BUNDLE:-}" ]; then
+    target="edge"
+  fi
+
+  if [ "$backup" = 1 ]; then
+    backup_file="$BACKUP_DIR/pre-update-$(timestamp).tar.gz"
+    step "Backing up before the update"
+    make_backup "$backup_file"
+  else
+    warn "Skipping the pre-update backup (--no-backup)."
+  fi
+
+  step "Fetching the release bundle"
+  UPDATE_TMP="$(mktemp -d "${TMPDIR:-/tmp}/launchstack-update.XXXXXX")"
+  trap cleanup_update_tmp EXIT
+  installer="${LAUNCHSTACK_INSTALLER:-}"
+  if [ -z "$installer" ] && [ -n "${LAUNCHSTACK_BUNDLE:-}" ] && [ -f "${LAUNCHSTACK_BUNDLE}" ]; then
+    # A bundle file on this machine needs no network: unpack it and let its
+    # own CLI lay the files down, exactly as the installer would.
+    apply_local_bundle "$LAUNCHSTACK_BUNDLE" "$UPDATE_TMP/bundle" ||
+      die "Could not install the bundle $LAUNCHSTACK_BUNDLE. Nothing was changed; $old_tag is still running."
+  else
+    if [ -z "$installer" ]; then
+      installer="$UPDATE_TMP/install.sh"
+      download_to "$LS_INSTALLER_URL" "$installer" ||
+        die "Could not download the installer from $LS_INSTALLER_URL. Nothing was changed."
+    fi
+    # The installer resolves the version, downloads the bundle and hands it to
+    # the new CLI's bundle step; it leaves .env and backups/ alone.
+    LAUNCHSTACK_HOME="$LAUNCHSTACK_HOME" LAUNCHSTACK_VERSION="$target" LAUNCHSTACK_NO_LINK=1 \
+      LAUNCHSTACK_QUIET=1 bash "$installer" ||
+      die "Could not install the release bundle. Nothing was changed; $old_tag is still running."
+  fi
+  cleanup_update_tmp
+  UPDATE_TMP=""
+  trap - EXIT
+
+  new_bundle="$(bundle_version)"
+  new_tag="$(image_tag_for "$new_bundle")"
+  env_set LAUNCHSTACK_VERSION "$new_tag"
+  step "Updating $old_tag -> $new_tag"
+
+  # Pull first: the configuration check runs inside the new release's own
+  # image, so a release that cannot be downloaded must say so, not look like
+  # a rejected configuration.
+  if ! pull_images; then
+    err "Could not pull the images for $new_tag. Check the network and that this release exists."
+    rollback_update "$old_tag" "$backup_file"
+    return 1
+  fi
+  if ! run_preflight; then
+    err "The new version rejects this configuration (see above)."
+    rollback_update "$old_tag" "$backup_file"
+    return 1
+  fi
+  if ! compose up -d --remove-orphans || ! wait_healthy; then
+    health_summary || true
+    rollback_update "$old_tag" "$backup_file"
+    return 1
+  fi
+  ok "Updated to $new_tag."
+  print_ready
+}
+
+# ── bundle files ────────────────────────────────────────────────────────
+# `_apply-bundle <dir>` is what install.sh calls (on the NEW release's CLI)
+# after unpacking a bundle. It never touches .env or backups/.
+#
+# compose.yml, VERSION and bin/launchstack are always replaced. Files under
+# docker/ are config an operator may have edited (chat-models.yaml), so they
+# are merged like package conffiles: .bundle/ keeps the pristine copy of the
+# installed release, and a live file that differs from it is left alone, with
+# the new release's copy written beside it as <file>.new.
+
+install_file() { # install_file <src> <dest>  → atomic, so a running CLI is safe
+  local tmp
+  mkdir -p "$(dirname "$2")"
+  tmp="$(mktemp "$2.XXXXXX")"
+  cp "$1" "$tmp"
+  if [ -x "$1" ]; then chmod 755 "$tmp"; else chmod 644 "$tmp"; fi
+  mv "$tmp" "$2"
+}
+
+apply_bundle() { # apply_bundle <unpacked bundle dir>
+  local src="$1" pristine="$LAUNCHSTACK_HOME/.bundle" staged="$LAUNCHSTACK_HOME/.bundle.new" f live kept=0
+  for f in compose.yml VERSION bin/launchstack; do
+    [ -f "$src/$f" ] || die "Not a LaunchStack bundle: $f is missing from $src"
+  done
+  mkdir -p "$LAUNCHSTACK_HOME/bin" "$LAUNCHSTACK_HOME/docker" "$LAUNCHSTACK_HOME/backups"
+  chmod 700 "$LAUNCHSTACK_HOME/backups" 2>/dev/null || true
+
+  rm -rf "$staged"
+  mkdir -p "$staged/bin" "$staged/docker"
+  cp "$src/compose.yml" "$src/VERSION" "$staged/"
+  cp "$src/bin/launchstack" "$staged/bin/launchstack"
+  chmod 755 "$staged/bin/launchstack"
+  if [ -d "$src/docker" ]; then cp -R "$src/docker/." "$staged/docker/"; fi
+
+  install_file "$staged/compose.yml" "$LAUNCHSTACK_HOME/compose.yml"
+  install_file "$staged/bin/launchstack" "$LAUNCHSTACK_HOME/bin/launchstack"
+
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    f="${f#./}"
+    live="$LAUNCHSTACK_HOME/docker/$f"
+    if [ ! -e "$live" ]; then
+      install_file "$staged/docker/$f" "$live"
+    elif cmp -s "$staged/docker/$f" "$live"; then
+      rm -f "$live.new"
+    elif [ -f "$pristine/docker/$f" ] && cmp -s "$pristine/docker/$f" "$live"; then
+      install_file "$staged/docker/$f" "$live"
+      rm -f "$live.new"
+    else
+      install_file "$staged/docker/$f" "$live.new"
+      warn "docker/$f has local changes and was kept; the release's version is docker/$f.new"
+      kept=$((kept + 1))
+    fi
+  done <<EOF
+$(cd "$staged/docker" && find . -type f | sort)
+EOF
+
+  # Files the previous release shipped and this one does not: remove them
+  # unless they were edited.
+  if [ -d "$pristine/docker" ]; then
+    while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      f="${f#./}"
+      live="$LAUNCHSTACK_HOME/docker/$f"
+      if [ ! -f "$staged/docker/$f" ] && [ -f "$live" ] && cmp -s "$pristine/docker/$f" "$live"; then
+        rm -f "$live"
+      fi
+    done <<EOF
+$(cd "$pristine/docker" && find . -type f | sort)
+EOF
+  fi
+
+  install_file "$staged/VERSION" "$LAUNCHSTACK_HOME/VERSION"
+  rm -rf "$LAUNCHSTACK_HOME/.bundle.previous"
+  if [ -d "$pristine" ]; then mv "$pristine" "$LAUNCHSTACK_HOME/.bundle.previous"; fi
+  mv "$staged" "$pristine"
+  return 0
+}
+
+cmd_apply_bundle() {
+  [ "$#" -eq 1 ] && [ -d "$1" ] || die "usage: launchstack _apply-bundle <unpacked bundle directory>"
+  apply_bundle "$1"
+}
+
+# ── config ──────────────────────────────────────────────────────────────
+
+help_config() {
+  cat <<'EOF'
+Usage: launchstack config [show]
+       launchstack config get KEY
+       launchstack config set KEY=VALUE [KEY=VALUE...]
+       launchstack config edit
+
+  show   Print .env with every secret redacted (the default).
+  get    Print one value exactly as stored (secrets included).
+  set    Change or add values in place; the rest of the file is untouched.
+  edit   Open .env in $VISUAL, $EDITOR or vi.
+
+Changes take effect after 'launchstack restart'. Any variable the app
+supports can be added here; 'launchstack doctor' checks the result.
+EOF
+}
+
+cmd_config() {
+  local sub="${1:-show}" line key value pair
+  [ "$#" -gt 0 ] && shift
+  case "$sub" in
+    show)
+      need_env
+      say "# $ENV_FILE (secrets redacted)"
+      while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in
+          "" | \#*) continue ;;
+          [A-Za-z_]*=*)
+            key="${line%%=*}"
+            printf '%s=%s\n' "$key" "$(redact "$key" "$(env_get "$key")")"
+            ;;
+        esac
+      done <"$ENV_FILE" | awk '!seen[$0]++'
+      ;;
+    get)
+      need_env
+      [ "$#" -eq 1 ] || die "usage: launchstack config get KEY"
+      env_get "$1"
+      printf '\n'
+      ;;
+    set)
+      need_env
+      [ "$#" -ge 1 ] || die "usage: launchstack config set KEY=VALUE [KEY=VALUE...]"
+      for pair in "$@"; do
+        case "$pair" in
+          *=*) ;;
+          *) die "config set: '$pair' is not KEY=VALUE." ;;
+        esac
+        key="${pair%%=*}"
+        printf '%s' "$key" | grep -Eq '^[A-Za-z_][A-Za-z0-9_]*$' ||
+          die "config set: '$key' is not a valid variable name."
+      done
+      for pair in "$@"; do
+        key="${pair%%=*}"
+        value="${pair#*=}"
+        env_set "$key" "$value"
+        say "$key=$(redact "$key" "$value")"
+      done
+      say "Apply with: launchstack restart"
+      ;;
+    edit)
+      need_env
+      "${VISUAL:-${EDITOR:-vi}}" "$ENV_FILE"
+      chmod 600 "$ENV_FILE"
+      say "Apply with: launchstack restart   (check first with: launchstack doctor)"
+      ;;
+    -h | --help | help) help_config ;;
+    *)
+      err "config: unknown subcommand '$sub'"
+      help_config >&2
+      return 2
+      ;;
+  esac
+}
+
+# ── version / uninstall ─────────────────────────────────────────────────
+
+help_version() {
+  cat <<'EOF'
+Usage: launchstack version
+
+Prints the installed bundle version, the image tag .env selects and the
+install directory.
+EOF
+}
+
+cmd_version() {
+  say "launchstack $(bundle_version)"
+  if [ -f "$ENV_FILE" ]; then
+    say "images      $(env_get LAUNCHSTACK_VERSION)"
+  fi
+  say "install     $LAUNCHSTACK_HOME"
+}
+
+help_uninstall() {
+  cat <<'EOF'
+Usage: launchstack uninstall [--yes] [--purge]
+
+Stops and removes the containers, the 'launchstack' command and the bundle
+files. Your data is kept: the Docker volumes (database, stored files), .env
+and backups/ stay, so running the installer again brings the same install
+back. --yes skips the confirmation.
+
+  --purge   Also delete the volumes and .env: every document, account and
+            setting of this install. Asks you to type a confirmation phrase
+            (--yes does not skip it). backups/ is kept.
+EOF
+}
+
+remove_cli_links() {
+  local dir link
+  for dir in "${LAUNCHSTACK_BIN_DIR:-}" "$HOME/.local/bin" "/usr/local/bin"; do
+    [ -n "$dir" ] || continue
+    link="$dir/launchstack"
+    if [ -L "$link" ] && [ "$(readlink "$link")" = "$LAUNCHSTACK_HOME/bin/launchstack" ]; then
+      rm -f "$link" 2>/dev/null || warn "Could not remove $link; delete it yourself."
+    fi
+  done
+}
+
+cmd_uninstall() {
+  local purge=0 yes=0 arg
+  for arg in "$@"; do
+    case "$arg" in
+      --purge) purge=1 ;;
+      --yes | -y) yes=1 ;;
+      *) die "uninstall: unknown option '$arg'. See: launchstack uninstall --help" ;;
+    esac
+  done
+  need_install
+  case "$LAUNCHSTACK_HOME" in
+    / | "$HOME" | "") die "Refusing to uninstall from '$LAUNCHSTACK_HOME'." ;;
+  esac
+
+  if [ "$purge" = 1 ]; then
+    say "${C_BOLD}This permanently deletes every document, account and setting${C_OFF} of the"
+    say "LaunchStack install at $LAUNCHSTACK_HOME: its Docker volumes and its .env."
+    say "It cannot be undone. Backups in $BACKUP_DIR are kept."
+    printf "Type 'delete everything' to continue: "
+    read_reply
+    [ "$REPLY" = "delete everything" ] || die "Uninstall cancelled; nothing was changed."
+  elif [ "$yes" = 0 ]; then
+    say "This stops LaunchStack and removes its containers, command and bundle files."
+    say "Data is kept: Docker volumes, $ENV_FILE and $BACKUP_DIR."
+    ask_yes_no "Continue?" no || die "Uninstall cancelled; nothing was changed."
+  fi
+
+  if [ -f "$ENV_FILE" ]; then
+    need_docker
+    if [ "$purge" = 1 ]; then
+      step "Removing containers and volumes"
+      compose down --volumes --remove-orphans
+    else
+      step "Removing containers (volumes are kept)"
+      compose down --remove-orphans
+    fi
+  fi
+  remove_cli_links
+  local item
+  for item in compose.yml docker VERSION .bundle .bundle.previous .bundle.new bin; do
+    rm -rf "${LAUNCHSTACK_HOME:?}/$item"
+  done
+  if [ "$purge" = 1 ]; then
+    rm -f "$ENV_FILE" "$ENV_FILE.previous" "$ENV_FILE.before-restore"
+    rmdir "$BACKUP_DIR" 2>/dev/null || true
+    rmdir "$LAUNCHSTACK_HOME" 2>/dev/null || true
+    ok "LaunchStack and its data are removed."
+    if [ -d "$BACKUP_DIR" ]; then say "Backups remain in $BACKUP_DIR."; fi
+  else
+    ok "LaunchStack is uninstalled. Data kept: Docker volumes, $ENV_FILE, $BACKUP_DIR."
+    say "Run the installer again to bring this install back."
+  fi
+}
+
+# ── help and dispatch ───────────────────────────────────────────────────
+
+help_main() {
+  cat <<'EOF'
+launchstack — run a self-hosted LaunchStack
+
+Usage: launchstack <command> [options]
+
+  setup [--non-interactive]   Answer a few questions, write .env, start
+  start | stop | restart      Control the stack (data is always kept)
+  status                      Version, URL and the state of every container
+  logs [service...]           Follow logs
+  doctor                      Check the configuration and the running stack
+  update [version]            Back up, then move to a newer release
+  backup [file]               One .tar.gz: databases, stored files, .env
+  restore <file>              Replace everything from a backup
+  config [show|get|set|edit]  Read or change .env (show redacts secrets)
+  version                     Installed version
+  uninstall [--purge]         Remove LaunchStack (data kept unless --purge)
+
+'launchstack <command> --help' explains each command.
+The install lives in LAUNCHSTACK_HOME (default ~/.launchstack).
+EOF
+}
+
+show_help() {
+  case "${1:-}" in
+    "") help_main ;;
+    setup | start | stop | restart | status | logs | doctor | update | backup | restore | config | version | uninstall)
+      "help_$1"
+      ;;
+    *)
+      err "No such command: $1"
+      help_main >&2
+      return 2
+      ;;
+  esac
+}
+
+wants_help() {
+  local a
+  for a in "$@"; do
+    case "$a" in -h | --help) return 0 ;; esac
+  done
+  return 1
+}
+
+main() {
+  local cmd="${1:-}"
+  [ "$#" -gt 0 ] && shift
+  init_paths
+  case "$cmd" in
+    "" | -h | --help)
+      help_main
+      return 0
+      ;;
+    help)
+      show_help "${1:-}"
+      return $?
+      ;;
+    -v | --version) cmd="version" ;;
+  esac
+  case "$cmd" in
+    setup | start | stop | restart | status | logs | doctor | update | backup | restore | config | version | uninstall)
+      if wants_help "$@"; then
+        "help_$cmd"
+        return 0
+      fi
+      "cmd_$cmd" "$@"
+      ;;
+    _apply-bundle) cmd_apply_bundle "$@" ;;
+    *)
+      err "Unknown command: $cmd"
+      help_main >&2
+      return 2
+      ;;
+  esac
+}
+
+main "$@"

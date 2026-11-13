@@ -757,10 +757,14 @@ test_install_from_bundle() {
   after="$(cd "$home" && find . -type f ! -path './.bundle*' -exec cksum {} + | sort)"
   assert_eq "$after" "$before" "installing the same bundle again changes nothing"
 
-  # Default link location, in the temp HOME.
+  # Default link location, in the temp HOME. ~/.local/bin has to exist first:
+  # the installer prefers an existing writable directory, and where
+  # /usr/local/bin is writable (root, CI runners) it would otherwise link
+  # there, outside this test's sandbox.
+  mkdir -p "$HOME/.local/bin"
   run env LAUNCHSTACK_HOME="$BASE/third" LAUNCHSTACK_BUNDLE="$BASE/b1.tar.gz" "$BASH_BIN" "$INSTALLER"
   assert_rc 0 "install with the default link directory"
-  if [ -L "$HOME/.local/bin/launchstack" ] || [ -L "/usr/local/bin/launchstack" ]; then pass; else fail "no CLI link in ~/.local/bin"; fi
+  if [ ! -e "/usr/local/bin/launchstack" ] || [ "$(readlink /usr/local/bin/launchstack 2>/dev/null)" != "$BASE/third/bin/launchstack" ]; then pass; else fail "the test linked the CLI into /usr/local/bin"; fi
   assert_eq "$(readlink "$HOME/.local/bin/launchstack")" "$BASE/third/bin/launchstack" "linked into ~/.local/bin of the test HOME"
 }
 

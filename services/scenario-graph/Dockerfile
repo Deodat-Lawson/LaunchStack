@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 # LaunchStack scenario graph service: Graphiti (Apache-2.0) behind an
 # authenticated API. Neo4j is NOT in this image — it runs as its own,
 # unmodified neo4j:5.26-community container (see NOTICE).

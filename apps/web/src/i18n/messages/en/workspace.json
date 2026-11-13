@@ -157,6 +157,9 @@
     "scenarios": {
       "description": "Simulate how people built from your records react to a situation"
     },
+    "extract": {
+      "description": "Pull the same fields out of many files into one table"
+    },
     "proposals": {
       "description": "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations"
     },

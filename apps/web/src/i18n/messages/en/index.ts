@@ -26,6 +26,8 @@ import generator from "./generator.json";
 import growth from "./growth.json";
 import vantage from "./vantage.json";
 import scenarios from "./scenarios.json";
+import extract from "./extract.json";
+import extractServer from "./extractServer.json";
 import proposals from "./proposals.json";
 import tools from "./tools.json";
 import notes from "./notes.json";
@@ -57,6 +59,8 @@ const messages = {
     growth,
     vantage,
     scenarios,
+    extract,
+    extractServer,
     proposals,
     tools,
     notes,

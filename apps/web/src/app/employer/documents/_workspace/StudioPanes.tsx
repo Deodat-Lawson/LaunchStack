@@ -94,6 +94,11 @@ const ScenariosTool = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const ExtractTool = dynamic(
+    () => import("~/app/employer/tools/extract/ExtractTool").then(m => m.ExtractTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
     loading: () => <LoadingPage variant="pane" />,
 });
@@ -500,6 +505,8 @@ export function renderStudioPane(
             return <VantageTool host={context?.tool} />;
         case "scenarios":
             return <ScenariosTool host={context?.tool} />;
+        case "extract":
+            return <ExtractTool host={context?.tool} />;
         case "usage":
             return <UsageTool host={context?.tool} />;
         // Yours alone: account, appearance, shortcuts, privacy.

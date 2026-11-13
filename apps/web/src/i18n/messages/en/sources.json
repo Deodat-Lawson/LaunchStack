@@ -56,6 +56,7 @@
     "clearFilters": "Clear filters",
     "selectedCount": "{count} selected",
     "askAboutThese": "Ask about these",
+    "extractFields": "Extract fields",
     "loading": "Loading your knowledge…",
     "gridView": "grid view",
     "listView": "list view",

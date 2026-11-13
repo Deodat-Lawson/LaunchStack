@@ -182,6 +182,7 @@ const MOUNT_ON_FIRST_SHOW = new Set([
     "proposals",
     "vantage",
     "scenarios",
+    "extract",
     "investors",
 ]);
 
@@ -352,6 +353,12 @@ export function WorkspaceShell() {
     const editParam = searchParams.get("edit") === "1";
     /** `&present=1` opens a mindmap's tab straight into the presenter. */
     const presentParam = searchParams.get("present") === "1";
+    /**
+     * `&find=<passage>&page=<n>` opens the source at a quoted passage, the way
+     * a chat citation does: how a tool (an Extract cell) points at its evidence.
+     */
+    const findParam = searchParams.get("find");
+    const findPageParam = searchParams.get("page");
     /** The mindmap `?source=…&edit=1` names, once the list has resolved it. */
     const [editingSource, setEditingSource] = useState<WorkspaceSource | null>(null);
     const editing = editParam && editingSource !== null;
@@ -384,6 +391,8 @@ export function WorkspaceShell() {
             params.delete("source");
             params.delete("edit");
             params.delete("present");
+            params.delete("find");
+            params.delete("page");
             if (id) params.set("source", id);
             if (id && edit) params.set("edit", "1");
             const query = params.toString();
@@ -539,12 +548,28 @@ export function WorkspaceShell() {
             return;
         }
         setEditingSource(null);
-        openSourceTab(found.id, presentParam ? { present: true } : undefined);
+        if (presentParam) {
+            openSourceTab(found.id, { present: true });
+        } else if (findParam) {
+            const page = Number.parseInt(findPageParam ?? "", 10);
+            citationNonce.current += 1;
+            openSourceTab(found.id, {
+                highlight: {
+                    text: findParam,
+                    page: Number.isInteger(page) && page > 0 ? page : null,
+                    nonce: citationNonce.current,
+                },
+            });
+        } else {
+            openSourceTab(found.id);
+        }
         router.replace(sourceUrl(null));
     }, [
         sourceParam,
         editParam,
         presentParam,
+        findParam,
+        findPageParam,
         sources,
         sourcesLoading,
         router,
@@ -3037,6 +3062,10 @@ export function WorkspaceShell() {
                                         setSelected(ids);
                                         setActiveFeatureId("chat");
                                     },
+                                    // Extract's form, with these documents
+                                    // already chosen (it reads "d12" as 12).
+                                    onExtractFields: ids =>
+                                        openTool("extract", `/new?docs=${ids.join(",")}`),
                                     onRenameSource: source => setRenameSource(source),
                                     onDeleteSource: source => requestDelete([source]),
                                     onDeleteSources: requestDelete,

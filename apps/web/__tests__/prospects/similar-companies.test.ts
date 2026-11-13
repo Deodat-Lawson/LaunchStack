@@ -1,4 +1,19 @@
-import { fakeEmbed } from "@launchstack/pipelines/distribution/semantic.fixture";
+import type { EmbedTexts } from "@launchstack/pipelines/distribution";
+
+/** Words hashed into dimensions: texts sharing words point the same way. */
+const fakeEmbed: EmbedTexts = async texts =>
+    texts.map(text => {
+        const v = new Array<number>(256).fill(0);
+        for (const raw of text.toLowerCase().split(/[^\p{L}\p{N}]+/u)) {
+            if (raw.length < 3) continue;
+            const word = raw.replace(/(ies|es|s)$/, "");
+            let h = 0;
+            for (const ch of word) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+            v[h % 256]! += 1;
+        }
+        v[0]! += 1;
+        return v;
+    });
 
 import { SimilarCompaniesError, findSimilarCompanies } from "~/server/prospects/similar";
 

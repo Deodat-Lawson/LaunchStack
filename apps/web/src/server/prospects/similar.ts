@@ -28,6 +28,7 @@ import {
     relevanceOf,
     type EmbedTexts,
     type JudgeFit,
+    type ProgramRecord,
     type Territory,
 } from "@launchstack/pipelines/distribution";
 import {
@@ -60,7 +61,7 @@ export interface SimilarCompany {
     source: "openstreetmap" | "exa";
 }
 
-export interface SimilarCompaniesResult {
+export interface SimilarCompaniesResult extends Record<string, unknown> {
     place: { country: string; region: string | null; label: string };
     matching: "semantic" | "lexical";
     companies: SimilarCompany[];
@@ -125,8 +126,9 @@ export async function findSimilarCompanies(
         constraints: null,
     };
     const brief = buyerBrief(program, []);
+    // Only a segment's offering, categories and constraints are read here.
     const { selectors } = await placeCategoriesFor(
-        { program, partnerKinds: [] },
+        { program: program as ProgramRecord, partnerKinds: [] },
         {
             embed: deps.embed,
             ...(deps.vocabulary ? { vocabulary: deps.vocabulary } : {}),
@@ -182,7 +184,7 @@ export async function findSimilarCompanies(
         seen.add(key);
         const mention = mentionFromCompanyHit(hit, territory, "exa");
         candidates.push({
-            name: mention.name,
+            name: mention.name ?? hit.title,
             website: hit.url,
             address: null,
             country: mention.country ?? null,

@@ -116,7 +116,11 @@ export const findSimilarCompaniesTool = defineTool({
                     judgeFit: await prospectFitJudge(companyId),
                 }
             );
-            return { ok: true, text: JSON.stringify(result), structured: result };
+            return {
+                ok: true,
+                text: JSON.stringify(result),
+                structured: { ...result },
+            };
         } catch (error) {
             if (error instanceof SimilarCompaniesError) throw new McpToolError(error.message);
             throw error;

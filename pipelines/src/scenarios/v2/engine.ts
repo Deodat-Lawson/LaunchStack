@@ -65,6 +65,7 @@ export const RUN_MESSAGES = {
     missingSpec: "The run's request could not be found.",
     unitFailed: "The run failed.",
     stalled: "The run stopped making progress.",
+    budgetExhausted: "The run reached the spending limit it was accepted with.",
 } as const;
 
 // ─── Store ───────────────────────────────────────────────────────────────────
@@ -300,6 +301,19 @@ export async function advanceWithFence(
     // A unit that keeps killing its worker never records an error; its
     // attempt count still climbs, so it cannot loop forever.
     if (unit.attempts >= maxAttempts) return fail(unit.error ?? RUN_MESSAGES.unitFailed, unit.id);
+
+    // The run's own ceiling, frozen at acceptance: a unit that could take the
+    // run past it does not start (design §3.5, "fail when allowance ends").
+    const ceiling = specRow.spec.budget.maxCredits;
+    if (ceiling > 0 && unit.maxCredits > 0 && run.usage.credits + unit.maxCredits > ceiling) {
+        deps.log?.("scenario v2 run stopped: run budget exhausted", {
+            runId: run.id,
+            unit: unit.key,
+            settled: run.usage.credits,
+            ceiling,
+        });
+        return fail(RUN_MESSAGES.budgetExhausted, unit.id);
+    }
 
     const hold = await store.reserve(fence, {
         companyId: run.companyId,

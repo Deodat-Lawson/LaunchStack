@@ -170,17 +170,18 @@ export function ResultsGrid({
                             aria-sort={ariaSort("title")}
                             className="bg-panel-2 border-line sticky left-0 top-0 z-30 h-9 border-b border-r p-0"
                         >
-                            <button
+                            <Button
+                                variant="ghost"
                                 type="button"
                                 onClick={() => onSort("title")}
                                 className={cn(
-                                    "text-ink-2 hover:text-ink flex h-9 w-full items-center gap-1.5 px-3 text-left text-xs font-semibold",
+                                    "text-ink-2 hover:text-ink flex h-9 w-full items-center justify-start gap-1.5 rounded-none px-3 text-left text-xs font-semibold hover:bg-transparent",
                                     FOCUS
                                 )}
                             >
                                 <span className="truncate">{t("documentColumn")}</span>
                                 {sortIcon("title")}
-                            </button>
+                            </Button>
                         </TableHead>
                         {table.fields.map(field => (
                             <TableHead
@@ -189,12 +190,13 @@ export function ResultsGrid({
                                 aria-sort={ariaSort(field.id)}
                                 className="bg-panel-2 border-line border-r-line-2 sticky top-0 z-20 h-9 border-b border-r p-0 last:border-r-0"
                             >
-                                <button
+                                <Button
+                                    variant="ghost"
                                     type="button"
                                     onClick={() => onSort(field.id)}
                                     title={field.instruction}
                                     className={cn(
-                                        "text-ink-2 hover:text-ink flex h-9 w-full items-center gap-1.5 px-3 text-left text-xs font-semibold",
+                                        "text-ink-2 hover:text-ink flex h-9 w-full items-center justify-start gap-1.5 rounded-none px-3 text-left text-xs font-semibold hover:bg-transparent",
                                         field.type === "number" && "justify-end",
                                         FOCUS
                                     )}
@@ -203,7 +205,7 @@ export function ResultsGrid({
                                     <span className="truncate">{field.name}</span>
                                     <span className="sr-only">{tw(`types.${field.type}`)}</span>
                                     {sortIcon(field.id)}
-                                </button>
+                                </Button>
                             </TableHead>
                         ))}
                     </TableRow>
@@ -326,7 +328,8 @@ export function ResultsGrid({
                                                         {t("notFound")}
                                                     </div>
                                                 ) : (
-                                                    <button
+                                                    <Button
+                                                        variant="ghost"
                                                         type="button"
                                                         aria-haspopup="dialog"
                                                         aria-expanded={
@@ -341,7 +344,7 @@ export function ResultsGrid({
                                                             })
                                                         }
                                                         className={cn(
-                                                            "text-ink hover:bg-brand-soft/60 aria-expanded:bg-brand-soft flex h-9 w-full items-center gap-1.5 px-3 text-left",
+                                                            "text-ink hover:bg-brand-soft/60 aria-expanded:bg-brand-soft flex h-9 w-full items-center justify-start gap-1.5 rounded-none px-3 text-left font-normal",
                                                             field.type === "number" &&
                                                                 "justify-end",
                                                             FOCUS
@@ -372,7 +375,7 @@ export function ResultsGrid({
                                                                 </span>
                                                             </span>
                                                         )}
-                                                    </button>
+                                                    </Button>
                                                 )}
                                             </TableCell>
                                         );

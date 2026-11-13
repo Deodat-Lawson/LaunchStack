@@ -21,7 +21,13 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { ExtractionSourceOption } from "~/lib/extraction/types";
 import { cn } from "~/lib/utils";
 
-import { addToSelection, findSources, groupByFolder, removeFromSelection } from "../_lib/documents";
+import {
+    addToSelection,
+    findSources,
+    groupByFolder,
+    removeFromSelection,
+    sourcesUnderFolder,
+} from "../_lib/documents";
 import { KindGlyph } from "./Bits";
 
 type View = "all" | "picked";
@@ -191,7 +197,9 @@ export function DocumentPickerDialog({
                     ) : (
                         groups.map(group => {
                             const name = group.folder ?? t("unfiled");
-                            const can = group.sources.filter(s => s.indexed);
+                            // A folder's button and count cover the folders inside it too.
+                            const under = sourcesUnderFolder(shown, group.folder);
+                            const can = under.filter(s => s.indexed);
                             const on = can.filter(s => pickedSet.has(s.documentId)).length;
                             const allOn = can.length > 0 && on === can.length;
                             return (
@@ -207,7 +215,7 @@ export function DocumentPickerDialog({
                                         <span className="text-ink-3 shrink-0 text-xs tabular-nums">
                                             {t("folderCount", {
                                                 picked: on,
-                                                total: group.sources.length,
+                                                total: under.length,
                                             })}
                                         </span>
                                         <Button

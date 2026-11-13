@@ -2,7 +2,7 @@
 
 import { ArrowDown, ArrowUp, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
@@ -54,6 +54,8 @@ export function FieldsEditor({
     const tw = useTranslations("extract.words");
     const [left, setLeft] = useState<ReadonlySet<string>>(new Set());
     const [pendingStarter, setPendingStarter] = useState<StarterSet | null>(null);
+    /** The key of a field just added with "Add field": its name takes the focus once it mounts. */
+    const focusKey = useRef<string | null>(null);
     const problems = fieldProblems(drafts);
     const max = EXTRACTION_LIMITS.maxFields;
     const full = drafts.length >= max;
@@ -122,6 +124,12 @@ export function FieldsEditor({
                                 className="border-line-2 @max-md:grid-cols-[minmax(0,1fr)_auto] grid grid-cols-[minmax(0,5fr)_9rem_minmax(0,7fr)_6.5rem] items-center gap-2 border-t px-3 py-2 first:border-t-0"
                             >
                                 <Input
+                                    ref={el => {
+                                        if (el && focusKey.current === draft.key) {
+                                            focusKey.current = null;
+                                            el.focus();
+                                        }
+                                    }}
                                     value={draft.name}
                                     onChange={e => patch(draft.key, { name: e.target.value })}
                                     onBlur={() =>
@@ -233,7 +241,11 @@ export function FieldsEditor({
                         variant="ghost"
                         size="sm"
                         disabled={full}
-                        onClick={() => onChange([...drafts, blankField()])}
+                        onClick={() => {
+                            const added = blankField();
+                            focusKey.current = added.key;
+                            onChange([...drafts, added]);
+                        }}
                     >
                         <Plus />
                         {t("addField")}

@@ -90,6 +90,8 @@ export const extractionRows = pgTable(
         uniqueIndex("extraction_rows_table_document_unique").on(table.tableId, table.documentId),
         index("extraction_rows_table_status_idx").on(table.tableId, table.status),
         index("extraction_rows_company_idx").on(table.companyId),
+        // The document foreign key cascades; without this a document delete scans the table.
+        index("extraction_rows_document_idx").on(table.documentId),
     ]
 );
 export type ExtractionRowRow = InferSelectModel<typeof extractionRows>;

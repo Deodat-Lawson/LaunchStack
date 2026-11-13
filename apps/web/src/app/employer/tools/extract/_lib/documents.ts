@@ -47,6 +47,22 @@ export function groupByFolder<T extends ExtractionSourceOption>(
 }
 
 /**
+ * Everything in `folder` and the folders inside it. Folders are paths
+ * ("Clients/Acme/Invoices"), so taking "Clients" takes the whole tree, the
+ * way ticking a folder in the sidebar does. `null` is the unfiled documents.
+ */
+export function sourcesUnderFolder<T extends ExtractionSourceOption>(
+    sources: readonly T[],
+    folder: string | null
+): T[] {
+    if (folder === null) return sources.filter(source => !source.folder?.trim());
+    const prefix = `${folder}/`;
+    return sources.filter(
+        source => source.folder === folder || (source.folder ?? "").startsWith(prefix)
+    );
+}
+
+/**
  * `picked` with `add` chosen too, in the order they were added, never past
  * `max`. Documents still being processed cannot be chosen and are skipped.
  */

@@ -36,5 +36,6 @@ ALTER TABLE "pdr_ai_v2_extraction_tables" ADD CONSTRAINT "pdr_ai_v2_extraction_t
 CREATE UNIQUE INDEX "extraction_rows_table_document_unique" ON "pdr_ai_v2_extraction_rows" USING btree ("table_id","document_id");--> statement-breakpoint
 CREATE INDEX "extraction_rows_table_status_idx" ON "pdr_ai_v2_extraction_rows" USING btree ("table_id","status");--> statement-breakpoint
 CREATE INDEX "extraction_rows_company_idx" ON "pdr_ai_v2_extraction_rows" USING btree ("company_id");--> statement-breakpoint
+CREATE INDEX "extraction_rows_document_idx" ON "pdr_ai_v2_extraction_rows" USING btree ("document_id");--> statement-breakpoint
 CREATE INDEX "extraction_tables_company_creator_idx" ON "pdr_ai_v2_extraction_tables" USING btree ("company_id","created_by_user_id","created_at");--> statement-breakpoint
 CREATE INDEX "extraction_tables_status_idx" ON "pdr_ai_v2_extraction_tables" USING btree ("status");

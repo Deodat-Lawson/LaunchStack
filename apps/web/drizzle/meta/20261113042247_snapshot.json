@@ -1,5 +1,5 @@
 {
-  "id": "af27877b-580a-4f10-aa99-9f88fc3babbf",
+  "id": "9c3f53f1-bef9-4f9f-b0e7-eb0ca25566f3",
   "prevId": "35231a28-543c-4e96-b173-e3030958e690",
   "version": "7",
   "dialect": "postgresql",
@@ -19057,6 +19057,21 @@
           "columns": [
             {
               "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "extraction_rows_document_idx": {
+          "name": "extraction_rows_document_idx",
+          "columns": [
+            {
+              "expression": "document_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

@@ -21,6 +21,7 @@ import {
     groupByFolder,
     reconcileSelection,
     removeFromSelection,
+    sourcesUnderFolder,
 } from "~/app/employer/tools/extract/_lib/documents";
 import {
     STARTER_HINTS,
@@ -410,5 +411,30 @@ describe("extract document picker", () => {
             dropped: 2,
         });
         expect(reconcileSelection([1, 2, 3], sources, 2)).toEqual({ picked: [1, 2], dropped: 1 });
+    });
+});
+
+describe("sourcesUnderFolder", () => {
+    const at = (documentId: number, folder: string | null) => ({
+        documentId,
+        sourceId: `d${documentId}`,
+        title: `doc ${documentId}`,
+        folder,
+        kind: "pdf",
+        indexed: true,
+    });
+    const all = [
+        at(1, "Client intake"),
+        at(2, "Client intake/Invoices"),
+        at(3, "Client intake 2"),
+        at(4, null),
+    ];
+
+    it("takes a folder with the folders inside it, not its look-alike siblings", () => {
+        expect(sourcesUnderFolder(all, "Client intake").map(s => s.documentId)).toEqual([1, 2]);
+        expect(sourcesUnderFolder(all, "Client intake/Invoices").map(s => s.documentId)).toEqual([
+            2,
+        ]);
+        expect(sourcesUnderFolder(all, null).map(s => s.documentId)).toEqual([4]);
     });
 });

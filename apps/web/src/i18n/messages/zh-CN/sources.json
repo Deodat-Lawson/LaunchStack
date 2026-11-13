@@ -56,6 +56,7 @@
     "clearFilters": "清除筛选",
     "selectedCount": "已选择 {count} 个",
     "askAboutThese": "就这些提问",
+    "extractFields": "提取字段",
     "loading": "正在加载你的知识库…",
     "gridView": "网格视图",
     "listView": "列表视图",

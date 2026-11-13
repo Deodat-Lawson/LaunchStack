@@ -31,6 +31,7 @@ import {
     ClipboardList as IconPaste,
     Settings as IconSettings,
     Shield as IconShield,
+    Table2 as IconExtract,
     Users as IconUsers,
     UsersRound as IconTeam,
     Video as IconVideo,
@@ -476,6 +477,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=scenarios",
     },
     {
+        id: "extract",
+        label: "Extract",
+        Icon: IconExtract,
+        desc: "Pull the same fields out of many files into one table",
+        href: "/employer/documents?feature=extract",
+    },
+    {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
@@ -726,6 +734,17 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconScenarios,
                 desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
                 href: "/employer/documents?feature=scenarios",
+            },
+            {
+                // Batch extraction: the same fields read out of many
+                // documents into one table, each value with its quote and
+                // page. The tables, the form and a table are screens inside
+                // its tab.
+                id: "extract",
+                label: "Extract",
+                Icon: IconExtract,
+                desc: "Pull the same fields out of many files into one table",
+                href: "/employer/documents?feature=extract",
             },
         ],
     },
@@ -1007,6 +1026,7 @@ const TOOL_REGISTRY_KEYS = {
     proposals: "proposals",
     vantage: "vantage",
     scenarios: "scenarios",
+    extract: "extract",
 } as const;
 
 const STUDIO_APP_MESSAGE_KEYS = {
@@ -1136,6 +1156,7 @@ const PALETTE_LINK_DESCRIPTION_KEYS = {
     proposals: "proposals",
     vantage: "vantage",
     scenarios: "scenarios",
+    extract: "extract",
 } as const;
 
 /** A ⌘K quick link's name (`DEMOTED_FEATURES`); a tool's row says the tool's own name. */

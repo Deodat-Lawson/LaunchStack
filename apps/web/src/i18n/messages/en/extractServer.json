@@ -1,0 +1,54 @@
+{
+  "errors": {
+    "notFound": "Table not found",
+    "notCreator": "Only the person who made this table can do that.",
+    "roleCantRun": "Your role can't run extractions in this workspace.",
+    "addField": "Add at least one field.",
+    "tooManyFields": "Use at most {max} fields.",
+    "fieldNameEmpty": "Every field needs a name.",
+    "fieldNameTooLong": "Keep field names under {max} characters.",
+    "fieldNameRepeated": "Two fields are called \"{name}\". Give each field its own name.",
+    "fieldTypeInvalid": "The field \"{name}\" has a type that isn't supported.",
+    "instructionTooLong": "Keep each field's instruction under {max} characters.",
+    "pickDocuments": "Pick at least one document.",
+    "tooManyDocuments": "Pick at most {max} documents.",
+    "noReadableDocuments": "None of the documents you picked can be opened. They may have been deleted, or moved somewhere you can't see.",
+    "titleEmpty": "A title can't be empty.",
+    "stillRunning": "This table is still running. Wait for it to finish, or stop it first.",
+    "nothingToRerun": "There are no rows to run again.",
+    "formatInvalid": "Export as csv or xlsx."
+  },
+  "leftWorkspace": "Someone who has left",
+  "withheldTitle": "A file you don't have access to",
+  "defaultTitle": {
+    "separator": ", ",
+    "more": "{fields} and {count} more"
+  },
+  "export": {
+    "results": "Results",
+    "evidence": "Evidence",
+    "document": "Document",
+    "field": "Field",
+    "value": "Value",
+    "quote": "Quote",
+    "page": "Page",
+    "readFrom": "Read from",
+    "yes": "Yes",
+    "no": "No",
+    "text": "text",
+    "image": "image",
+    "fileName": "Extraction"
+  },
+  "rowErrors": {
+    "documentUnavailable": "This file is no longer available.",
+    "couldNotRead": "This file could not be read."
+  },
+  "tableErrors": {
+    "allRowsFailed": "None of the files could be read.",
+    "tableFailed": "The extraction failed"
+  },
+  "toolStatus": {
+    "lookingTables": "Looking through your extraction tables",
+    "readingTable": "Reading an extraction table"
+  }
+}

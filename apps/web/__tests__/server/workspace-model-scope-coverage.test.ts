@@ -298,6 +298,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ],
     [
+        "apps/web/src/server/extraction/documents.ts",
+        {
+            scopedBy: ["apps/web/src/server/extraction/executor.ts", `${JOBS}/extractionRun.ts`],
+            note: "the engine's extract and vision ports: inline tables scope each unit in driveTable (after()); the worker scopes inside each unit step",
+        },
+    ],
+    [
         "pipelines/src/repo-explainer/llm.ts",
         { scopedBy: [`${API}/repo-explainer/route.ts`], note: "POST body after auth" },
     ],

@@ -57,8 +57,18 @@ function toRecord(row: ScenarioRunRow): ScenarioRunRecord {
         startedAt: row.startedAt ?? null,
         finishedAt: row.finishedAt ?? null,
         eventsClosedAt: row.eventsClosedAt ?? null,
+        contractVersion: row.contractVersion,
+        requestSpecId: row.requestSpecId ?? null,
+        worldSpecId: row.worldSpecId ?? null,
+        generation: row.generation,
+        leaseOwner: row.leaseOwner ?? null,
+        leaseEpoch: row.leaseEpoch,
+        contextMode: (row.contextMode as ScenarioRunRecord["contextMode"]) ?? null,
+        flags: row.flags ?? null,
     };
 }
+
+export { toRecord as toRunRecord };
 
 export interface CreateRunInput {
     companyId: bigint;

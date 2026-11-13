@@ -6,7 +6,11 @@
  * shown, `inferred` and `assumed` must say why, `unknown` carries no value,
  * enum fields must be valid, and the name must not be lifted from the
  * evidence. Valid slots are kept; only missing or invalid ones go back to the
- * model, within the repair allowance; the rest are listed as unfilled.
+ * model, within the repair allowance. When the allowance runs out, a field
+ * whose only fault is a missing reason becomes unknown (the claim is dropped,
+ * never given an invented reason) and the person is kept; a slot with any
+ * other fault (a citation outside its evidence, a bad value, a lifted name)
+ * is listed as unfilled.
  *
  * The persona's stance is the slot's target, never the model's. Its wallet
  * comes from the attributed values (an unknown value leaves the field unset).
@@ -67,6 +71,8 @@ const KNOWS_MAX = 5;
 export interface MemberValidation {
     member?: CastMember;
     errors: string[];
+    /** Fields made unknown on the last pass for want of a reason. */
+    dropped?: AttributedField[];
 }
 
 function slugHandle(raw: string, fallbackName: string): string {
@@ -104,7 +110,9 @@ function readAttributed(
     field: AttributedField,
     allowed: Set<string>,
     slotId: string,
-    errors: string[]
+    errors: string[],
+    /** Set on the last pass: an unexplained inference or assumption becomes unknown and is listed here. */
+    dropped?: AttributedField[]
 ): Attributed<string> {
     const unknown: Attributed<string> = { value: null, basis: "unknown", evidenceIds: [] };
     const a = asRecord(raw);
@@ -119,6 +127,11 @@ function readAttributed(
     }
     if (basis === "unknown") return unknown;
 
+    const explanation = clip(cleanProse(asString(a.explanation) ?? ""), 240);
+    if (dropped && (basis === "inferred" || basis === "assumed") && !explanation) {
+        dropped.push(field);
+        return unknown;
+    }
     const value = readValue(a.value, field);
     const ids = [
         ...new Set(
@@ -127,7 +140,6 @@ function readAttributed(
                 .filter(Boolean)
         ),
     ];
-    const explanation = clip(cleanProse(asString(a.explanation) ?? ""), 240);
     const options = ENUMS[field];
     if (!value) errors.push(`${field} is ${basis} but has no value; use basis "unknown" instead.`);
     else if (options && !options.includes(value))
@@ -187,7 +199,8 @@ export function validateMember(
     raw: unknown,
     slot: CastSlot,
     context: ActorContext,
-    index: number
+    index: number,
+    options: { dropUnexplained?: boolean } = {}
 ): MemberValidation {
     const item = asRecord(raw);
     if (!item) return { errors: [`No member came back for ${slot.slotId}.`] };
@@ -201,10 +214,11 @@ export function validateMember(
         );
 
     const allowed = new Set(context.selected.evidenceIds);
+    const dropped: AttributedField[] | undefined = options.dropUnexplained ? [] : undefined;
     const attributes = Object.fromEntries(
         ATTRIBUTED_FIELDS.map(field => [
             field,
-            readAttributed(item[field], field, allowed, slot.slotId, errors),
+            readAttributed(item[field], field, allowed, slot.slotId, errors, dropped),
         ])
     ) as Record<AttributedField, Attributed<string>>;
     if (errors.length > 0) return { errors };
@@ -250,7 +264,11 @@ export function validateMember(
         slotId: slot.slotId,
         ...(knows.length > 0 ? { knows } : {}),
     };
-    return { member: { slotId: slot.slotId, persona, attributes }, errors: [] };
+    return {
+        member: { slotId: slot.slotId, persona, attributes },
+        errors: [],
+        ...(dropped && dropped.length > 0 ? { dropped } : {}),
+    };
 }
 
 /** Members of a GenerateCastBatch reply, by slot id (first one wins). */
@@ -312,6 +330,25 @@ export const castBatchStage: Stage = async ctx => {
         judge(reply.text, retry);
     }
 
+    // Out of repairs: keep a person whose only faults were missing reasons,
+    // with those fields unknown.
+    const dropped: Record<string, AttributedField[]> = {};
+    for (const { slot, context } of slots) {
+        const problem = problems.get(slot.slotId);
+        if (!problem) continue;
+        const result = validateMember(
+            problem.previous,
+            slot,
+            context,
+            order.get(slot.slotId) ?? 0,
+            { dropUnexplained: true }
+        );
+        if (!result.member) continue;
+        accepted.set(slot.slotId, result.member);
+        problems.delete(slot.slotId);
+        if (result.dropped) dropped[slot.slotId] = result.dropped;
+    }
+
     const members = ids.map(id => accepted.get(id)).filter((m): m is CastMember => !!m);
     const unfilled = ids.filter(id => !accepted.has(id));
     if (unfilled.length > 0)
@@ -320,11 +357,21 @@ export const castBatchStage: Stage = async ctx => {
             unit: ctx.unit.key,
             unfilled,
         });
-    const output: CastBatchOutput & { problems: Record<string, string[]> } = {
+    if (Object.keys(dropped).length > 0)
+        ctx.ports.log?.("scenario cast fields dropped for want of a reason", {
+            runId: ctx.run.id,
+            unit: ctx.unit.key,
+            dropped,
+        });
+    const output: CastBatchOutput & {
+        problems: Record<string, string[]>;
+        dropped: Record<string, AttributedField[]>;
+    } = {
         members,
         unfilled,
         repairs,
         problems: Object.fromEntries(unfilled.map(id => [id, problems.get(id)?.errors ?? []])),
+        dropped,
     };
     return { output };
 };

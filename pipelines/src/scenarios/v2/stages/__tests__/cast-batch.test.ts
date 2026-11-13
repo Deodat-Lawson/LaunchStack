@@ -145,6 +145,31 @@ describe("grounded cast fields", () => {
         ]);
     });
 
+    it("on the last pass, makes an unexplained field unknown but still refuses a bad citation", () => {
+        const context = contextFrom(false); // E2 is not in this slot's evidence
+        const unexplained = {
+            ...operationsMember("s01", ["E1"]),
+            objection: { value: "Too slow.", basis: "assumed", evidenceIds: [], explanation: null },
+        };
+        const kept = validateMember(unexplained, operations, context, 0, { dropUnexplained: true });
+        expect(kept.errors).toEqual([]);
+        expect(kept.dropped).toEqual(["objection"]);
+        expect(kept.member!.attributes.objection.basis).toBe("unknown");
+
+        const miscited = {
+            ...unexplained,
+            switchingCost: {
+                value: "high",
+                basis: "inferred",
+                evidenceIds: ["E2"],
+                explanation: "A long migration.",
+            },
+        };
+        const refused = validateMember(miscited, operations, context, 0, { dropUnexplained: true });
+        expect(refused.member).toBeUndefined();
+        expect(refused.errors).toEqual(["switchingCost cites E2, which is not in s01's evidence."]);
+    });
+
     it("nulls unknown values and drops citations from assumptions", () => {
         const context = contextFrom(true);
         const { member } = validateMember(
@@ -271,6 +296,50 @@ describe("the cast batch stage", () => {
         );
         // Too few people to run: world:freeze refuses.
         await expect(runUnit(h, "world:freeze")).rejects.toThrow("Only 0 people");
+    });
+
+    it("keeps a person whose only fault is an unexplained assumption, with that field unknown", async () => {
+        // Live run 6 (qwen3.5:9b): every objection came back assumed with a
+        // null explanation, in the first answer and in the repair.
+        const h = makeHarness();
+        h.model = scriptedModel(request => {
+            if (request.purpose !== "cast_v2") return runScript(request);
+            const reply = runScript(request) as {
+                members: Array<{ slotId: string; objection: Record<string, unknown> }>;
+            };
+            return {
+                members: reply.members.map(m => ({
+                    ...m,
+                    objection: { ...m.objection, basis: "assumed", explanation: null },
+                })),
+            };
+        });
+        await toCastBatch(h);
+        const out = (await runUnit(h, "cast:batch:01")).output as CastBatchOutput & {
+            dropped: Record<string, string[]>;
+        };
+        // The repair was tried first, with the reason it was sent back.
+        const repair = h.model.requests.filter(r => r.purpose === "cast_v2")[1]!;
+        expect(repair.prompt).toContain("objection is assumed but gives no explanation.");
+        expect(out.unfilled).toEqual([]);
+        expect(out.members.map(m => m.slotId)).toEqual(["s01", "s02", "s03", "s04"]);
+        for (const m of out.members) {
+            expect(m.attributes.objection).toEqual({
+                value: null,
+                basis: "unknown",
+                evidenceIds: [],
+            });
+            expect(m.persona.objection).toBeUndefined();
+            // Everything that was explained is kept as it came.
+            expect(m.attributes.buyingRole).toMatchObject({ basis: "source", evidenceIds: ["E1"] });
+        }
+        expect(out.dropped).toEqual({
+            s01: ["objection"],
+            s02: ["objection"],
+            s03: ["objection"],
+            s04: ["objection"],
+        });
+        expect((await runUnit(h, "world:freeze")).output).toBeTruthy();
     });
 
     it("gives each slot its own evidence block, and says displayed people are composites", async () => {

@@ -8,7 +8,7 @@ import type { NextRequest } from "next/server";
 import { ImportPartnersSchema } from "@launchstack/pipelines/distribution/types";
 import { getProgram, importPartners } from "@launchstack/pipelines/distribution/db";
 import { requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 
@@ -17,7 +17,7 @@ const growth = (request: Request) => requestTranslator(request, "growth.server.e
 
 export async function POST(request: NextRequest) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const parsed = ImportPartnersSchema.safeParse(await readJsonBody(request));
         if (!parsed.success)

@@ -63,16 +63,6 @@ export interface StudioPaneContext {
     tool?: ToolHost;
 }
 
-const DraftsTool = dynamic(
-    () => import("~/app/employer/documents/components/DraftsTool").then(m => m.DraftsTool),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-
-const RewriteTool = dynamic(
-    () => import("~/app/employer/documents/components/RewriteTool").then(m => m.RewriteTool),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
     { loading: () => <LoadingPage variant="pane" /> }
@@ -145,7 +135,7 @@ function PaneShell({
 }: {
     title: string;
     body?: string;
-    children: ReactNode;
+    children?: ReactNode;
     footer: ReactNode;
 }) {
     return (
@@ -238,18 +228,9 @@ export function ChatPane(_: PaneProps) {
     );
 }
 
-/**
- * Templated Drafts in the shared tool frame: New document, My documents and
- * the Assistant are screens in its rail, and an open draft is a page under
- * My documents.
- */
-export function DraftPane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return <DraftsTool host={context?.tool} />;
-}
-
 interface ComingSoonPaneProps extends PaneProps {
     title: string;
-    body: string;
+    body?: string;
     bullets: string[];
 }
 
@@ -274,11 +255,6 @@ export function ComingSoonPane({ onClose, title, body, bullets }: ComingSoonPane
             <BulletList items={bullets} />
         </PaneShell>
     );
-}
-
-/** Rewrite in the shared tool frame: New rewrite and My rewrites in its rail. */
-export function RewritePane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return <RewriteTool host={context?.tool} />;
 }
 
 export function CompanySettingsPane({
@@ -378,7 +354,6 @@ export function WorkflowsPane({ onClose }: PaneProps) {
     return (
         <PaneShell
             title={t("workflows.title")}
-            body={t("workflows.body")}
             footer={
                 <>
                     <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
@@ -388,11 +363,7 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                     </Button>
                 </>
             }
-        >
-            <BulletList
-                items={[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")]}
-            />
-        </PaneShell>
+        />
     );
 }
 
@@ -506,10 +477,6 @@ export function renderStudioPane(
             );
         case "feedback":
             return <FeedbackTool host={context?.tool} />;
-        case "draft":
-            return <DraftPane onClose={onClose} context={context} />;
-        case "rewrite":
-            return <RewritePane onClose={onClose} context={context} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
         case "investors":

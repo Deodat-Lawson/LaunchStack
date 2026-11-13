@@ -12,7 +12,6 @@ import { useFormatter, useTranslations } from "next-intl";
 import { folderLeafName, isUnfiledFolder } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
 import {
-    Zap as IconBolt,
     Check as IconCheck,
     Folder as IconFolder,
     Loader2,
@@ -979,7 +978,9 @@ function FileOption({
             aria-busy={busy || undefined}
             className={cn(
                 // A card, not a pill: two lines of text that wrap, aligned left.
-                "border-line h-auto items-start justify-start gap-3 whitespace-normal rounded-[10px] p-3 text-left font-normal",
+                // min-w-0 lets the card shrink to its grid column instead of
+                // spilling out of it when the Google account's address is long.
+                "border-line h-auto min-w-0 items-start justify-start gap-3 whitespace-normal rounded-[10px] p-3 text-left font-normal",
                 "hover:border-brand hover:bg-brand-soft/40",
                 busy ? "bg-brand-soft cursor-wait disabled:opacity-100" : "bg-panel",
                 disabled && !busy && "opacity-60"
@@ -990,7 +991,9 @@ function FileOption({
             </span>
             <span className="min-w-0">
                 <span className="text-ink block text-[13px] font-semibold">{title}</span>
-                <span className="text-ink-3 block text-[11.5px] leading-snug">{desc}</span>
+                <span className="text-ink-3 block text-[11.5px] leading-snug [overflow-wrap:anywhere]">
+                    {desc}
+                </span>
                 {footer}
             </span>
         </Button>
@@ -1188,24 +1191,6 @@ function FilesPanel({ kind, userId, category, onUploaded, onSynced }: FilesPanel
                     onChange={e => addFiles(e.target.files)}
                 />
             </div>
-            {kind === "files" && (
-                <div
-                    style={{
-                        marginTop: 16,
-                        padding: "12px 14px",
-                        background: "var(--line-2)",
-                        borderRadius: 8,
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                    }}
-                >
-                    <IconBolt size={14} />
-                    <span>{t("ocrNote")}</span>
-                </div>
-            )}
 
             {staged.length > 0 && (
                 <div style={{ marginTop: 16 }}>

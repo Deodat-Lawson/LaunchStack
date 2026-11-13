@@ -445,7 +445,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section title={t("pricing.title")} description={t("pricing.description")}>
+            <Section title={t("pricing.title")}>
                 <Card>
                     <SectionRows section="usage" />
                 </Card>

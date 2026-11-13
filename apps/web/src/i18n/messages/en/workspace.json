@@ -79,14 +79,6 @@
       "label": "Investor relations",
       "description": "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources"
     },
-    "draft": {
-      "label": "Templated Drafts",
-      "description": "Generate new docs from templates tuned to your sources"
-    },
-    "rewrite": {
-      "label": "Rewrite",
-      "description": "Improve existing prose with a diff-first rewrite"
-    },
     "settings": {
       "label": "Settings",
       "description": "Your account, appearance, shortcuts and privacy"
@@ -100,8 +92,7 @@
       "description": "Diagrams, mindmaps and flowcharts — sources you draw"
     },
     "workflows": {
-      "label": "Workflows",
-      "description": "Automate recurring tasks across your sources"
+      "label": "Workflows"
     },
     "workspace": {
       "label": "Workspace",
@@ -132,17 +123,8 @@
       "label": "Team",
       "description": "People, groups, and who did what across the workspace"
     },
-    "draft": {
-      "label": "Draft",
-      "description": "Generate a new document with AI"
-    },
-    "rewrite": {
-      "label": "Rewrite",
-      "description": "Improve existing content"
-    },
     "workflows": {
-      "label": "Workflows",
-      "description": "Automate recurring tasks across your sources"
+      "label": "Workflows"
     },
     "mindmap": {
       "label": "New mindmap",
@@ -197,8 +179,7 @@
       "description": "Roles, invitations, join links, audit"
     },
     "profile": {
-      "label": "Company profile",
-      "description": "AI-extracted company intel"
+      "label": "Company profile"
     },
     "agentsNodes": {
       "label": "Agents & nodes",
@@ -296,11 +277,13 @@
   },
   "studioDrawer": {
     "title": "Studio apps",
-    "description": "Open a workspace app — ⌘-click to open it beside what is showing. Your access decides which apps are listed.",
+    "description": "⌘-click an app to open it beside what is showing.",
     "openBeside": "Open beside",
     "comingSoon": "Coming soon",
     "comingSoonReason": "Coming soon.",
-    "soon": "SOON"
+    "soon": "SOON",
+    "beta": "Beta",
+    "betaTitle": "Still being built. Shown because this workspace has beta apps on (Workspace › Labs)."
   },
   "paneLauncher": {
     "allApps": "All apps"
@@ -366,11 +349,7 @@
       "back": "Back to workspace"
     },
     "workflows": {
-      "title": "Workflows (coming soon)",
-      "body": "Chain source-aware steps: ''Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.'' Currently in design.",
-      "scheduled": "Scheduled or event-triggered",
-      "composable": "Composable actions: query, draft, rewrite, export, notify",
-      "dryRun": "Dry-run preview before first run"
+      "title": "Workflows (coming soon)"
     },
     "mindmap": {
       "linkTitle": "Mindmap",
@@ -409,8 +388,8 @@
       "unknownType": "unknown",
       "signIn": "Please sign in and try again.",
       "storageFailed": "Storage upload failed (HTTP {status}).",
-      "invalidStorage": "Invalid storage response.",
-      "noUrl": "Storage did not return a URL.",
+      "invalidStorage": "The upload didn't finish. Try again.",
+      "noUrl": "The upload didn't finish. Try again.",
       "versionFailed": "Version upload failed",
       "timedOut": "Upload timed out.",
       "unavailable": "Storage service unavailable."
@@ -436,7 +415,6 @@
     "versionsTab": "Versions",
     "notesTab": "Notes",
     "versionHistory": "Version history",
-    "uploadedRevisions": "Uploaded revisions of this source.",
     "uploadingPercent": "Uploading {percent}%…",
     "indexingVersion": "Indexing new version…",
     "uploadNewVersion": "Upload new version",
@@ -506,7 +484,7 @@
     "chatRenameFailed": "Couldn't rename that chat",
     "chatDeleteFailed": "Couldn't delete that chat",
     "chatContinued": "Continued in a new chat",
-    "chatContinuedDescription": "This copy is yours and private. The original is unchanged.",
+    "chatContinuedDescription": "This copy is yours and private.",
     "chatContinueFailed": "Couldn't continue that chat",
     "chatNoLongerShared": "That chat is no longer shared with you",
     "runDeleted": "Deleted",
@@ -515,7 +493,6 @@
     "continuationFailed": "Couldn't load the imported session to continue it",
     "queuedEditGone": "That queued message was already sent or removed. Your edits remain in the composer.",
     "forkSaved": "Fork saved as a new chat",
-    "forkSavedDescription": "The turns up to here come along; the original chat is untouched.",
     "recoveryRetryFailed": "Couldn't save prompt recovery. Free browser storage before retrying; the original conversation is intact.",
     "retryFailed": "Couldn't retry this response",
     "recoveryEditFailed": "Couldn't save prompt recovery. Free browser storage before editing; the original conversation is intact.",
@@ -541,6 +518,9 @@
     "folderCreated": "Created “{name}”",
     "folderCreatedDescription": "This workspace already has a folder called “{name}”.",
     "deniedApp": "{app} isn't part of your role",
+    "betaAppOff": "{app} is a beta app",
+    "betaAppOffNote": "Beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
+    "betaAppOffAction": "Open Labs",
     "connectorConnected": "{name} connected",
     "connectorNoChannels": "{name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.",
     "connectorPartial": "{name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.",
@@ -557,7 +537,7 @@
       "titleSplit": "Open something here",
       "titleEmpty": "Your workspace, ready when you are",
       "hintSplit": "Pick an app, or drag a tab or a source from the sidebar here.",
-      "hintEmpty": "Open an app to get started. Later, drag a tab or a source to any edge to split, or ⌘-click one to open it beside."
+      "hintEmpty": "Drag a source or tab to any edge to split, or ⌘-click one to open it beside."
     },
     "actions": {
       "newChat": "New chat",
@@ -603,7 +583,7 @@
     "sendFailed": "Failed to send query"
   },
   "chatRoutes": {
-    "noImages": "The model serving the vision route does not accept images.",
+    "noImages": "This model can't read images.",
     "alwaysReasons": "The model serving the reasoning route always reasons; there is nothing to toggle."
   },
   "server": {

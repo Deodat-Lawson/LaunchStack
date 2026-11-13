@@ -18,7 +18,7 @@
     },
     "guest": {
       "label": "访客",
-      "description": "只能看到自己被添加进的文件夹。"
+      "description": "只能看到共享给自己的内容。"
     }
   },
   "permissions": {
@@ -52,7 +52,7 @@
       "manage": "连接和断开 Google Drive、Slack、GitHub 以及智能体连接器"
     },
     "analytics": {
-      "view": "统计看板和单个文档的统计数据"
+      "view": "工作区的用量和花费，按成员和按文档查看"
     },
     "audit": {
       "view": "查看审计日志"
@@ -135,7 +135,7 @@
     "subFiltered": "{shown} / {count, plural, other {# 个群组}}",
     "filterPlaceholder": "筛选群组",
     "newGroup": "新建群组",
-    "empty": "还没有群组。有了群组，就能一步共享给多个人。",
+    "empty": "还没有群组。",
     "noMatch": "没有与“{query}”匹配的群组。",
     "members": "{count, plural, other {# 名成员}}",
     "madeByYou": "由你创建"
@@ -202,22 +202,23 @@
   },
   "inviteDialog": {
     "invalidEmail": "请输入完整的邮箱地址，例如 ada@example.com。",
-    "sentToast": "已向 {email} 发送邀请",
     "sendError": "邀请未能发送。",
     "sentTitle": "邀请已发送",
-    "sentBody": "已向 {email} 发送了一封含链接的邮件。如果这里未配置邮件服务，请自行把这个链接发给对方。",
+    "sentBody": "已向 {email} 发送了含链接的邮件。",
+    "notEmailedTitle": "邀请已创建",
+    "notEmailedBody": "未发送邮件。请自行把这个链接发给 {email}。",
     "linkLabel": "邀请链接",
     "copyLink": "复制链接",
     "inviteAnother": "再邀请一位",
     "title": "邀请成员",
-    "description": "对方会收到一封邮件，通过其中的链接以你选择的角色加入。",
+    "description": "对方会收到一个链接，以你选择的角色加入。",
     "chooseRole": "选择角色",
     "sending": "正在发送…",
     "send": "发送邀请"
   },
   "tool": {
     "title": "团队",
-    "about": "工作区里有谁、你用来共享的群组，以及大家最近的动态。角色、邀请、加入链接和审计日志在“工作区 › 成员与权限”中。",
+    "about": "角色、邀请、加入链接和审计日志在“工作区 › 成员与权限”中。",
     "nav": {
       "people": "成员",
       "groups": "群组",
@@ -235,7 +236,7 @@
   },
   "activityScreen": {
     "title": "动态",
-    "sub": "谁添加、共享、移动、重命名或删除了什么。这里只显示你能打开的内容。",
+    "sub": "这里只显示你能打开的内容。",
     "filterPlaceholder": "筛选动态",
     "whose": "谁的动态",
     "everyone": "所有人",
@@ -301,7 +302,6 @@
       "title": "共享“{name}”",
       "descriptionFolder": "文件夹内的所有内容都沿用文件夹的共享设置，除非单独设置了共享。",
       "descriptionChat": "你添加的人可以阅读这个对话，并以自己的身份继续对话。",
-      "descriptionDocument": "谁可以打开这个文件。",
       "loading": "正在加载访问权限…",
       "readOnly": "你可以查看谁有访问权限，但不能修改。请联系有管理权限的人。",
       "makeGroup": "将这 {count} 人建为群组…",
@@ -384,14 +384,14 @@
     "copyFailed": "无法复制",
     "find": {
       "title": "寻找投资人",
-      "sub": "正在募集新基金的风投机构——刚完成募资的基金即将开始投资。",
+      "sub": "正在募集新基金的风投机构。",
       "focusPlaceholder": "关注领域——气候、医疗、金融科技…",
       "focusLabel": "关注领域：基金名称中的关键词",
       "stateLabel": "基金所在州",
       "anywhere": "不限地区",
       "withinLabel": "申报时间",
       "spvs": "包括单笔交易 SPV 和联合投资",
-      "sourceNote": "数据来自 SEC Form D 申报——公开信息，无需账号。"
+      "sourceNote": "数据来自 SEC Form D 申报。"
     },
     "draftIntro": "起草介绍信",
     "copyIntro": "复制介绍信提示词",

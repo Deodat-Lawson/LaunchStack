@@ -307,7 +307,10 @@ export function AgentEditor({
 
     return (
         <Dialog open={open} onOpenChange={next => !next && onClose()}>
-            <DialogContent className="flex max-h-[90vh] w-[min(720px,calc(100vw-32px))] max-w-none flex-col gap-0 p-0">
+            <DialogContent
+                className="flex max-h-[90vh] w-[min(720px,calc(100vw-32px))] max-w-none flex-col gap-0 p-0"
+                {...(isNew ? { "aria-describedby": undefined } : {})}
+            >
                 <DialogHeader className="border-line flex-row items-center gap-3 border-b px-5 py-4 text-left">
                     <AgentAvatar
                         agent={{
@@ -322,13 +325,13 @@ export function AgentEditor({
                         <DialogTitle className="display text-ink text-[20px]">
                             {isNew ? t("titleNew") : t("titleEdit", { name: persona.displayName })}
                         </DialogTitle>
-                        <DialogDescription className="mt-0.5">
-                            {isNew
-                                ? t("descriptionNew")
-                                : persona.builtin
-                                  ? t("starterHandle", { handle: persona.id })
-                                  : `@${persona.id}`}
-                        </DialogDescription>
+                        {!isNew && (
+                            <DialogDescription className="mt-0.5">
+                                {persona.builtin
+                                    ? t("starterHandle", { handle: persona.id })
+                                    : `@${persona.id}`}
+                            </DialogDescription>
+                        )}
                     </div>
                 </DialogHeader>
 
@@ -452,10 +455,7 @@ export function AgentEditor({
                                     ))}
                                 </SelectInput>
                             </Field>
-                            <Field
-                                label={t("modelRoute")}
-                                hint={locked ? lockedHint : t("modelRouteHint")}
-                            >
+                            <Field label={t("modelRoute")} hint={locked ? lockedHint : undefined}>
                                 <SelectInput
                                     value={form.route}
                                     onChange={e => update("route", e.target.value)}
@@ -563,11 +563,6 @@ export function AgentEditor({
                                                     <span className="mono text-ink-4 text-[10.5px]">
                                                         {tool.id}
                                                     </span>
-                                                    {tool.perTurnToggle && (
-                                                        <span className="text-ink-3 text-[10.5px]">
-                                                            {t("needsToggle")}
-                                                        </span>
-                                                    )}
                                                 </div>
                                                 <div className="text-ink-3 text-[11.5px]">
                                                     {copy.toolDescription(tool.id)}
@@ -723,17 +718,10 @@ export function AgentEditor({
                 )}
 
                 <DialogFooter className="border-line bg-line-2 flex-row items-center border-t px-5 py-3">
-                    {locked ? (
+                    {!locked && !isNew && persona.builtin && (
                         <span className="text-ink-3 mr-auto text-[11.5px]">
-                            {t("footerLocked")}
+                            {t("footerStarter")}
                         </span>
-                    ) : (
-                        !isNew &&
-                        persona.builtin && (
-                            <span className="text-ink-3 mr-auto text-[11.5px]">
-                                {t("footerStarter")}
-                            </span>
-                        )
                     )}
                     <Button variant="ghost" onClick={onClose}>
                         {tc("actions.cancel")}

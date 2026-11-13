@@ -10,7 +10,7 @@ import {
 } from "@launchstack/pipelines/distribution/types";
 import { listPartners } from "@launchstack/pipelines/distribution/db";
 import { requestTranslator } from "~/i18n/server";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { error, json } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 
@@ -18,7 +18,7 @@ const growth = (request: Request) => requestTranslator(request, "growth.server.e
 
 export async function GET(request: NextRequest) {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const q = request.nextUrl.searchParams;
         const stages = (q.get("stage") ?? "")

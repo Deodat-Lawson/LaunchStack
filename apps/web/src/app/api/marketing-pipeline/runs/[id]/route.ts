@@ -7,7 +7,7 @@ import { getMarketingRun } from "@launchstack/pipelines/marketing/runs";
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { fail, ok } from "~/server/api/responses";
 import { resumeIfStalled } from "~/server/marketing/executor";
 import { toRunView } from "~/server/marketing/run-view";
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const locale = localeOfRequest(request);
     const t = translatorFor(locale, "growth.server.marketing");
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const run = await getMarketingRun(id, ctx.data.companyId);

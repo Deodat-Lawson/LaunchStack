@@ -115,6 +115,16 @@ export const IconGoogle = (p: BrandIconProps) => (
     </Ic>
 );
 
+/** Microsoft's four-square window. */
+export const IconMicrosoft = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <rect x="3" y="3" width="6" height="6" rx="0.5" />
+        <rect x="11" y="3" width="6" height="6" rx="0.5" />
+        <rect x="3" y="11" width="6" height="6" rx="0.5" />
+        <rect x="11" y="11" width="6" height="6" rx="0.5" />
+    </Ic>
+);
+
 export const IconDropbox = (p: BrandIconProps) => (
     <Ic {...p}>
         <path d="m5 4 5 3-5 3-3.5-3Zm10 0 3.5 3L15 10l-5-3Zm-10 9 5 3 5-3-5-3ZM5 10l5 3" />

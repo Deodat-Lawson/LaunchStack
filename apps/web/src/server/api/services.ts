@@ -116,27 +116,6 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Backend and background job complete; no UI exists yet.",
     },
     {
-        id: "legal",
-        tier: "tool",
-        summary: "Generate legal documents from templates and redline existing ones.",
-        scope: "workspace",
-        feature: "@launchstack/pipelines/legal-templates",
-        routes: ["legal"],
-        notes:
-            "The legal-specific half of document-generator (legal-generate, legal-chat) " +
-            "belongs here rather than in the general drafting tool.",
-    },
-    {
-        id: "document-generator",
-        tier: "tool",
-        summary: "Draft, outline, research and export a long-form document.",
-        scope: "workspace",
-        routes: ["document-generator"],
-        notes:
-            "General-purpose drafting. Its legal-* routes are legal's; splitting them is " +
-            "what makes both surfaces coherent.",
-    },
-    {
         id: "predictive-analysis",
         tier: "tool",
         summary: "Identify documents a set of sources implies but does not contain.",

@@ -12,12 +12,13 @@
  *     (or use the lightweight venv: /tmp/sidecar-test-venv/bin/uvicorn ...)
  *
  * Run:
- *   npx tsx scripts/test-adeu-llm-loop.ts
+ *   npx tsx scripts/dev/test-adeu-llm-loop.ts
  */
 
 import "dotenv/config";
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { ChatOpenAI } from "@langchain/openai";
@@ -207,7 +208,10 @@ const tools = [readDocxTool, editDocumentTool, applyEditsTool];
 // ---------------------------------------------------------------------------
 async function main() {
     // 1. Load the SAFE template
-    const templatePath = path.join(process.cwd(), "public/templates/safe-template.docx");
+    const templatePath = path.join(
+        path.dirname(fileURLToPath(import.meta.url)),
+        "fixtures/safe-template.docx"
+    );
     if (!fs.existsSync(templatePath)) {
         console.error(`❌ Template not found at ${templatePath}`);
         process.exit(1);

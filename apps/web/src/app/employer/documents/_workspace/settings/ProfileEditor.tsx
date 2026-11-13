@@ -278,7 +278,7 @@ export function ProfileEditor({
 
     if (!loaded || !data || !draft) {
         return (
-            <Section title={t("section.title")} description={t("section.loadingDescription")}>
+            <Section title={t("section.title")}>
                 <Card>
                     <StatusNote tone={error ? "danger" : "muted"} style={{ marginBottom: 0 }}>
                         {error ?? tc("status.loading")}

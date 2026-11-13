@@ -18,7 +18,7 @@ import type { Messages } from "~/i18n/messages";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { zodIssueText } from "~/i18n/zod";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import type { Permission } from "~/lib/authz/permissions";
 import { error, handleRouteError, json } from "~/server/distribution/http";
 
@@ -33,7 +33,7 @@ export interface VantageCtx {
 export async function vantageContext(): Promise<
     { ok: true; ctx: VantageCtx } | { ok: false; response: NextResponse }
 > {
-    const result = await requireWorkspaceContext();
+    const result = await requireBetaAppContext();
     if (!result.success) return { ok: false, response: result.response };
     return {
         ok: true,

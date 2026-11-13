@@ -359,10 +359,7 @@ export function NewMeetingDialog({
                             {"basis" in words && words.basis && (
                                 <div
                                     className="text-ink-3 mt-2 flex items-start gap-1.5 text-[11.5px] leading-snug"
-                                    title={ts("basisTitle", {
-                                        origin: words.basis.origin,
-                                        usedBy: words.basis.usedBy,
-                                    })}
+                                    title={words.basis.origin}
                                 >
                                     <BookOpen className="mt-px size-3 shrink-0" aria-hidden />
                                     <span>

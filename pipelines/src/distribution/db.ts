@@ -122,6 +122,8 @@ function toOrg(row: PartnerOrgRow): PartnerOrgRecord {
         categories: row.categories ?? [],
         sizeBand: row.sizeBand ?? null,
         description: row.description ?? null,
+        imageUrl: row.imageUrl ?? null,
+        iconUrl: row.iconUrl ?? null,
         kgEntityId: row.kgEntityId ?? null,
         firstSeenRunId: row.firstSeenRunId ?? null,
         lastEnrichedAt: row.lastEnrichedAt ?? null,
@@ -486,6 +488,8 @@ export async function updateOrg(
             InferInsertModel<typeof partnerOrgs>,
             | "sizeBand"
             | "description"
+            | "imageUrl"
+            | "iconUrl"
             | "roles"
             | "categories"
             | "kgEntityId"

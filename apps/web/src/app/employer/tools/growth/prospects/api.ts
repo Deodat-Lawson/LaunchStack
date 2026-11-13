@@ -137,6 +137,9 @@ export interface CompanyRow {
     archetype: string;
     /** The profile's first sentence, for triage without opening. */
     why: string;
+    /** The company's own share image and icon, from its homepage (https); null before research. */
+    imageUrl: string | null;
+    iconUrl: string | null;
     fit: number | null;
     fitThreshold: number;
     stage: SalesStage;

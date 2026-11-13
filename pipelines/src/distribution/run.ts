@@ -592,11 +592,20 @@ export async function enrichCandidate(
     if (!program || !org) throw new Error("Program or organisation not found");
 
     const seedUrls = args.seedUrls ?? (org.domain ? [`https://${org.domain}/`] : []);
+    // The picture for the company's card: what its own site declares on the
+    // first of its pages research reads. No extra request.
+    let pictures: { imageUrl: string | null; iconUrl: string | null } | null = null;
+    const readPage = async (url: string) => {
+        const page = await ports.fetchPage(url, ctx.signal);
+        if (!pictures && (page.image || page.icon) && isOwnSite(page.finalUrl, org.domain))
+            pictures = { imageUrl: page.image ?? null, iconUrl: page.icon ?? null };
+        return page;
+    };
     const research = ports.profile ?? runDossierAgent;
     const agentResult: DossierAgentResult = await research(
         {
             model: ports.model,
-            fetchPage: url => ports.fetchPage(url, ctx.signal),
+            fetchPage: readPage,
             searchWeb: ports.searchWeb
                 ? async q =>
                       ports.searchWeb!([
@@ -642,6 +651,8 @@ export async function enrichCandidate(
             hsCodes: program.hsCodes,
         }
     );
+
+    if (pictures) await db.updateOrg(org.id, ctx.companyId, pictures);
 
     // screen (advisory; degradable)
     let screening: ScreeningState = { status: "not_run" };
@@ -946,3 +957,15 @@ export async function runDistributionPipeline(
 }
 
 export type { RelationshipRecord, ProgramRecord };
+
+/** Whether a page is on the organisation's own domain (or a subdomain of it). */
+function isOwnSite(url: string, domain: string | null): boolean {
+    if (!domain) return false;
+    try {
+        const host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+        const own = domain.toLowerCase().replace(/^www\./, "");
+        return host === own || host.endsWith(`.${own}`);
+    } catch {
+        return false;
+    }
+}

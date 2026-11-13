@@ -305,6 +305,7 @@
       "shortcuts": "<k>j</k> <k>k</k> move · <k>x</k> select · <k>Enter</k> open · <k>o</k> add to outreach · <k>/</k> search",
       "moveToQualified": "Move to Qualified",
       "newBadge": "new",
+      "layout": { "cards": "Cards", "table": "Table", "aria": "How to show companies" },
       "foundInLastRun": "found in the last run"
     },
     "company": {

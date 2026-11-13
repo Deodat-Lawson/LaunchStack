@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { LayoutGrid, Rows3, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -46,6 +46,7 @@ import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { FitMeter } from "~/components/tools/FitMeter";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { CompanyCard, CompanyPicture } from "../_components/CompanyCard";
 import { FoundViaChips } from "../_components/SourceChip";
 import { StagePill } from "../_components/StagePill";
 
@@ -76,6 +77,8 @@ export function CompaniesScreen() {
         ? (params.get("sort") as CompaniesSort)
         : "fit";
     const query = params.get("q") ?? "";
+    // Cards by default, like a directory; the table for dense triage.
+    const layout: "cards" | "table" = params.get("layout") === "table" ? "table" : "cards";
     const [draft, setDraft] = useState(query);
     useEffect(() => setDraft(query), [query]);
 
@@ -87,7 +90,8 @@ export function CompaniesScreen() {
                     v === null ||
                     v === "" ||
                     (k === "view" && v === "all") ||
-                    (k === "sort" && v === "fit")
+                    (k === "sort" && v === "fit") ||
+                    (k === "layout" && v === "cards")
                 )
                     next.delete(k);
                 else next.set(k, v);
@@ -319,6 +323,31 @@ export function CompaniesScreen() {
                     </kbd>
                 </div>
                 <div className="ml-auto flex items-center gap-2 text-xs">
+                    <ToggleGroup
+                        type="single"
+                        value={layout}
+                        onValueChange={v => v && setParam({ layout: v })}
+                        size="sm"
+                        className="border-line bg-panel rounded-md border p-0.5"
+                        aria-label={t("companies.layout.aria")}
+                    >
+                        <ToggleGroupItem
+                            value="cards"
+                            className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2"
+                            aria-label={t("companies.layout.cards")}
+                            title={t("companies.layout.cards")}
+                        >
+                            <LayoutGrid className="size-3.5" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem
+                            value="table"
+                            className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2"
+                            aria-label={t("companies.layout.table")}
+                            title={t("companies.layout.table")}
+                        >
+                            <Rows3 className="size-3.5" />
+                        </ToggleGroupItem>
+                    </ToggleGroup>
                     <span className="text-ink-3">{t("companies.sort")}</span>
                     <Select value={sort} onValueChange={v => setParam({ sort: v })}>
                         <SelectTrigger
@@ -339,7 +368,18 @@ export function CompaniesScreen() {
             {list.error && <InlineError message={list.error} onRetry={() => void list.reload()} />}
 
             {list.loading ? (
-                <SkeletonRows rows={8} height={52} />
+                layout === "cards" ? (
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+                        {Array.from({ length: 8 }, (_, i) => (
+                            <div
+                                key={i}
+                                className="border-line bg-panel h-[300px] animate-pulse rounded-xl border"
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <SkeletonRows rows={8} height={52} />
+                )
             ) : companies.length === 0 ? (
                 <EmptyState
                     title={
@@ -374,6 +414,24 @@ export function CompaniesScreen() {
                         </>
                     }
                 />
+            ) : layout === "cards" ? (
+                <div
+                    ref={tableRef}
+                    className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4"
+                >
+                    {companies.map((c, i) => (
+                        <CompanyCard
+                            key={c.id}
+                            c={c}
+                            index={i}
+                            focused={i === cursor}
+                            checked={selected.has(c.id)}
+                            onToggle={() => toggle(c.id)}
+                            onOpen={() => open(c.id)}
+                            href={href(`/companies/${c.id}`)}
+                        />
+                    ))}
+                </div>
             ) : (
                 <div
                     ref={tableRef}
@@ -502,24 +560,35 @@ function CompanyTableRow({
                 />
             </TableCell>
             <TableCell className="max-w-[300px] min-w-[240px] whitespace-normal">
-                <ToolLink
-                    href={href}
-                    className="text-ink block truncate font-medium hover:underline"
-                    onClick={e => e.stopPropagation()}
-                >
-                    {c.name}
-                    {c.isNew && (
-                        <span className="bg-brand-soft text-brand-ink ml-2 rounded px-1.5 py-px align-middle text-[10.5px] font-medium">
-                            {t("companies.newBadge")}
+                <div className="flex items-start gap-2.5">
+                    <CompanyPicture
+                        c={{ ...c, imageUrl: null }}
+                        className="mt-0.5 size-8 shrink-0 rounded-md"
+                    />
+                    <div className="min-w-0">
+                        <ToolLink
+                            href={href}
+                            className="text-ink block truncate font-medium hover:underline"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            {c.name}
+                            {c.isNew && (
+                                <span className="bg-brand-soft text-brand-ink ml-2 rounded px-1.5 py-px align-middle text-[10.5px] font-medium">
+                                    {t("companies.newBadge")}
+                                </span>
+                            )}
+                        </ToolLink>
+                        <span
+                            className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1"
+                            data-no-open
+                        >
+                            {c.domain && (
+                                <span className="text-ink-3 font-mono text-[11px]">{c.domain}</span>
+                            )}
+                            <FoundViaChips items={c.foundVia} max={2} />
                         </span>
-                    )}
-                </ToolLink>
-                <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1" data-no-open>
-                    {c.domain && (
-                        <span className="text-ink-3 font-mono text-[11px]">{c.domain}</span>
-                    )}
-                    <FoundViaChips items={c.foundVia} max={2} />
-                </span>
+                    </div>
+                </div>
             </TableCell>
             <TableCell className="text-ink-2 max-w-[380px] min-w-[260px] whitespace-normal">
                 <span className="line-clamp-2 leading-snug">{word(c.whyCopy, c.why)}</span>

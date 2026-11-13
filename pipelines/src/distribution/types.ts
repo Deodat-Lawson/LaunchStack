@@ -307,6 +307,9 @@ export interface PartnerOrgRecord {
     categories: string[];
     sizeBand: string | null;
     description: string | null;
+    /** The homepage's own share image and icon; absent before research reads it. */
+    imageUrl?: string | null;
+    iconUrl?: string | null;
     kgEntityId: number | null;
     firstSeenRunId: string | null;
     lastEnrichedAt: Date | null;

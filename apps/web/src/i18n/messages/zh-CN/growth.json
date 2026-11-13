@@ -305,6 +305,7 @@
       "shortcuts": "<k>j</k> <k>k</k> 移动 · <k>x</k> 选择 · <k>Enter</k> 打开 · <k>o</k> 加入外联 · <k>/</k> 搜索",
       "moveToQualified": "移至“已确认”",
       "newBadge": "新",
+      "layout": { "cards": "卡片", "table": "表格", "aria": "公司的显示方式" },
       "foundInLastRun": "在上次运行中发现"
     },
     "company": {

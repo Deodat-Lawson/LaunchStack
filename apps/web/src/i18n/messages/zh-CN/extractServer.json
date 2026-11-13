@@ -1,0 +1,54 @@
+{
+  "errors": {
+    "notFound": "未找到该表格",
+    "notCreator": "只有创建此表格的人可以执行该操作。",
+    "roleCantRun": "你的角色无法在此工作区运行提取。",
+    "addField": "请至少添加一个字段。",
+    "tooManyFields": "最多使用 {max} 个字段。",
+    "fieldNameEmpty": "每个字段都需要名称。",
+    "fieldNameTooLong": "字段名称请控制在 {max} 个字符以内。",
+    "fieldNameRepeated": "有两个字段都叫“{name}”。请为每个字段起不同的名称。",
+    "fieldTypeInvalid": "字段“{name}”的类型不受支持。",
+    "instructionTooLong": "每个字段的说明请控制在 {max} 个字符以内。",
+    "pickDocuments": "请至少选择一份文档。",
+    "tooManyDocuments": "最多选择 {max} 份文档。",
+    "noReadableDocuments": "你选择的文档都无法打开。它们可能已被删除，或被移到了你看不到的位置。",
+    "titleEmpty": "标题不能为空。",
+    "stillRunning": "此表格仍在运行。请等待它完成，或先停止它。",
+    "nothingToRerun": "没有需要重新运行的行。",
+    "formatInvalid": "请导出为 csv 或 xlsx。"
+  },
+  "leftWorkspace": "已离开的成员",
+  "withheldTitle": "你无权访问的文件",
+  "defaultTitle": {
+    "separator": "、",
+    "more": "{fields} 等 {count} 项"
+  },
+  "export": {
+    "results": "结果",
+    "evidence": "依据",
+    "document": "文档",
+    "field": "字段",
+    "value": "值",
+    "quote": "原文引用",
+    "page": "页码",
+    "readFrom": "读取自",
+    "yes": "是",
+    "no": "否",
+    "text": "文本",
+    "image": "图片",
+    "fileName": "提取结果"
+  },
+  "rowErrors": {
+    "documentUnavailable": "该文件已不可用。",
+    "couldNotRead": "未能读取该文件。"
+  },
+  "tableErrors": {
+    "allRowsFailed": "所有文件都未能读取。",
+    "tableFailed": "提取失败"
+  },
+  "toolStatus": {
+    "lookingTables": "正在查看你的提取表格",
+    "readingTable": "正在读取提取表格"
+  }
+}

@@ -218,6 +218,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Runs are private to their creator until shared with the workspace; evidence from files a shared reader can't open is redacted for them. Runs execute after the response in the web process (resuming on poll after a restart) or, with SCENARIOS_EXECUTOR=worker, one Inngest step per round. Brand's /api/brand/post-tests routes use the same service.",
     },
     {
+        id: "extraction",
+        tier: "tool",
+        summary:
+            "Read the same fields out of many documents into one table: a row per document, a cell per field, each value with the sentence and page it came from. Exports to CSV and XLSX; the chat can answer from a saved table.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/extraction",
+        routes: ["extraction"],
+        notes: "Tables are private to their creator until shared with the workspace; a row whose document the reader can't open is withheld. Documents are read under the creator's access, re-checked on every read. Runs execute after the response in the web process (resuming on poll after a restart) or, with EXTRACTION_EXECUTOR=worker, as Inngest steps. Image files whose text lacks a field are read once more by a vision-capable model.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",

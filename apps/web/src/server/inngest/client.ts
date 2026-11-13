@@ -123,6 +123,17 @@ export type ScenarioRunEvent = {
     };
 };
 
+export type ExtractionRunEvent = {
+    name: "extraction/run.requested";
+    data: {
+        tableId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+        /** Auth id of whoever made the table; the usage is counted against them. */
+        userId: string;
+    };
+};
+
 export type MarketingRunEvent = {
     name: "marketing/run.requested";
     data: {
@@ -179,6 +190,7 @@ export type Events =
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent
+    | ExtractionRunEvent
     | MarketingRunEvent;
 
 /**

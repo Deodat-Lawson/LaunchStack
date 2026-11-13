@@ -251,7 +251,7 @@ export function toPeople(world: World, basisBySlot?: BasisBySlot): ScenarioPerso
             firstObjection: a.persona.objection ?? null,
             wouldPay: a.wouldPay ?? null,
             objection: a.objection ?? null,
-            basis: (slotId && basisBySlot?.get(slotId)) || null,
+            basis: (slotId ? basisBySlot?.get(slotId) : undefined) ?? null,
         };
     });
 }

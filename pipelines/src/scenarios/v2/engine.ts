@@ -26,9 +26,9 @@ import type { ScenarioRunRecord } from "../types";
 import { OutOfCreditsError } from "../run";
 import { TERMINAL_STATUSES } from "../types";
 import type { RequestSpecV2, UnitKind, UnitRecord } from "./contracts";
-import { settlementDescription, settlementKey, type ReserveResult } from "./credits";
+import { settlementDescription, type ReserveResult } from "./credits";
 import { hashOf } from "./hash";
-import { createJournaledModel, type CallJournalStore } from "./journal";
+import { classifyFailure, createJournaledModel, type CallJournalStore } from "./journal";
 import { matchesDependency } from "./plan";
 import {
     RetryLaterError,
@@ -66,6 +66,8 @@ export const RUN_MESSAGES = {
     unitFailed: "The run failed.",
     stalled: "The run stopped making progress.",
     budgetExhausted: "The run reached the spending limit it was accepted with.",
+    modelTimedOut: "The run stopped because the model did not answer in time.",
+    modelFailed: "The run stopped because the model kept returning errors.",
 } as const;
 
 // ─── Store ───────────────────────────────────────────────────────────────────
@@ -158,6 +160,8 @@ export interface EngineDeps {
     maxWaitMs?: number;
     /** Ceiling on one wait's backoff (default 60 s). */
     maxBackoffMs?: number;
+    /** Pauses before the journal retries a transient provider failure (default 2 s, then 8 s). */
+    callRetryDelaysMs?: readonly number[];
 }
 
 export const ENGINE_DEFAULTS = {
@@ -190,6 +194,19 @@ export function newLeaseOwner(prefix = "drv"): string {
 function errorMessage(error: unknown): string {
     if (error instanceof Error && error.message) return error.message.slice(0, 2_000);
     return RUN_MESSAGES.unitFailed;
+}
+
+/**
+ * What the run says when a unit runs out of attempts. A provider's own words
+ * ("Request timed out.", a 503 body naming its host) stay on the unit and in
+ * the trace; the run carries a sentence the catalogue can translate. A stage's
+ * own message is kept, since those are written for the reader.
+ */
+export function runMessageFor(error: unknown): string {
+    if (classifyFailure(error) === "unknown") return RUN_MESSAGES.modelTimedOut;
+    const status = (error as { status?: unknown } | null)?.status;
+    if (typeof status === "number") return RUN_MESSAGES.modelFailed;
+    return errorMessage(error);
 }
 
 const satisfied = (u: UnitRecord) => u.status === "committed" || u.status === "skipped";
@@ -351,7 +368,8 @@ export async function advanceWithFence(
         },
         round: unit.kind === "round" ? Number(unit.input.round ?? 0) || null : null,
         versions: specRow.spec.policies.versions,
-        now: deps.now,
+        now: () => deps.now(),
+        retryDelaysMs: deps.callRetryDelaysMs,
     });
     const ctx: StageContext = {
         run,
@@ -439,7 +457,7 @@ export async function advanceWithFence(
             attempt: started.attempts,
             error: message,
         });
-        if (started.attempts >= maxAttempts) return fail(message, started.id);
+        if (started.attempts >= maxAttempts) return fail(runMessageFor(error), started.id);
         throw error;
     }
 }

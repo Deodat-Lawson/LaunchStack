@@ -43,6 +43,7 @@ function setup(
         now: () => clock.now,
         leaseMs: 60_000,
         concurrency: 2,
+        callRetryDelaysMs: [0, 0],
     };
     const advance = (ms: number) => {
         clock.now = new Date(clock.now.getTime() + ms);
@@ -362,6 +363,54 @@ describe("v2 engine", () => {
         // Billed for the accepted attempt only; the lost one stays in the journal.
         expect(store.unit(run.id, "brief").usage.calls).toBe(1);
         expect(store.runs.get(run.id)!.flags?.unknownAttempts).toBe(1);
+    });
+
+    it("retries a busy provider inside the attempt window, one recorded attempt per request", async () => {
+        const { store, provider, deps } = setup();
+        const run = store.seedRun(makeSpec());
+        await stepV2(deps, run.id); // sources
+        let busy = 2;
+        provider.fail = () =>
+            busy-- > 0 ? Object.assign(new Error("Rate limit reached"), { status: 429 }) : null;
+
+        expect((await stepV2(deps, run.id)).state).toBe("advanced");
+        expect(provider.calls).toHaveLength(3);
+        expect(store.attempts.map(a => a.status)).toEqual(["failed", "failed", "succeeded"]);
+        // Definite failures cost nothing: billed for the one accepted reply.
+        expect(store.unit(run.id, "brief").usage.calls).toBe(1);
+        expect(store.runs.get(run.id)!.flags?.unknownAttempts ?? 0).toBe(0);
+    });
+
+    it("leaves a timeout and a refused request to the unit's next execution", async () => {
+        for (const error of [
+            Object.assign(new Error("Request timed out."), { name: "TimeoutError" }),
+            Object.assign(new Error("Invalid schema"), { status: 400 }),
+        ]) {
+            const { store, provider, deps } = setup();
+            const run = store.seedRun(makeSpec());
+            await stepV2(deps, run.id); // sources
+            provider.fail = () => error;
+            await expect(stepV2(deps, run.id)).rejects.toThrow(error.message);
+            // One provider request, not the client's seven: the outcome of a
+            // timeout is unknown, and a 400 would only fail again.
+            expect(provider.calls).toHaveLength(1);
+            expect(store.attempts).toHaveLength(1);
+        }
+    });
+
+    it("fails the run with a sentence it can translate, keeping the provider's words on the unit", async () => {
+        const { store, provider, deps } = setup();
+        const run = store.seedRun(makeSpec());
+        provider.fail = () =>
+            Object.assign(new Error("Request timed out."), { name: "TimeoutError" });
+        expect((await driveV2(deps, run.id, { sleep: noSleep })).last).toEqual({
+            state: "failed",
+        });
+        expect(store.runs.get(run.id)!.error).toBe(RUN_MESSAGES.modelTimedOut);
+        expect(store.unit(run.id, "brief").error).toBe("Request timed out.");
+        // Three executions of the unit, one provider request each.
+        expect(provider.calls).toHaveLength(3);
+        expect(store.attempts.map(a => a.status)).toEqual(["unknown", "unknown", "unknown"]);
     });
 
     it("stops with a generic message when access is revoked", async () => {

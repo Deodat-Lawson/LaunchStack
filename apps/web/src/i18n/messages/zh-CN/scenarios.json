@@ -547,7 +547,9 @@
       "missingSpec": "找不到这次运行的请求。",
       "unitFailed": "运行失败。",
       "stalled": "运行已停止推进。",
-      "budgetExhausted": "运行已达到创建时设定的花费上限。"
+      "budgetExhausted": "运行已达到创建时设定的花费上限。",
+      "modelTimedOut": "模型未能及时作答，运行已停止。",
+      "modelFailed": "模型持续返回错误，运行已停止。"
     }
   }
 }

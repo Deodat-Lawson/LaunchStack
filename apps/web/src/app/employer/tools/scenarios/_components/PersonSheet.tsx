@@ -349,7 +349,7 @@ function Wallet({
                             <dd className="text-ink flex min-w-0 flex-wrap items-baseline gap-x-2">
                                 <span className="min-w-0">{value}</span>
                                 {basis?.[field] && (
-                                    <BasisMark basis={basis[field]!} onSource={onSource} />
+                                    <BasisMark basis={basis[field]} onSource={onSource} />
                                 )}
                             </dd>
                         </Fragment>

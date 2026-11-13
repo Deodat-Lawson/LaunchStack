@@ -5,6 +5,10 @@ import type { ProspectorEventData } from "@launchstack/pipelines/client-prospect
 import type { DistributionRunEventData } from "@launchstack/pipelines/distribution/types";
 import type { ProposalRunEventData } from "@launchstack/pipelines/proposals/types";
 import type { DocumentEdit, ReviewAction } from "@launchstack/editing";
+import type {
+    RepoExplainerJobEventData,
+    RepoWorkspaceSyncEventData,
+} from "@launchstack/pipelines/repo-workspace";
 
 // Retired event types (ADR-003): document/process.requested,
 // company-metadata/extract.requested and notes-anchors/rehydrate.requested
@@ -77,12 +81,12 @@ export type WebsiteCrawlEvent = {
 
 export type RepoWorkspaceSyncEvent = {
     name: "repo-workspace/sync.requested";
-    data: import("@launchstack/pipelines/repo-workspace").RepoWorkspaceSyncEventData;
+    data: RepoWorkspaceSyncEventData;
 };
 
 export type RepoExplainerJobEvent = {
     name: "repo-explainer/job.requested";
-    data: import("@launchstack/pipelines/repo-workspace").RepoExplainerJobEventData;
+    data: RepoExplainerJobEventData;
 };
 
 /** Drains the founder-weekly-review outbox. Carries no run-specific payload. */

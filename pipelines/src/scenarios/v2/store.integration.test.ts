@@ -26,7 +26,6 @@ import {
     driveV2,
     stepV2,
     type EngineDeps,
-    type LeaseFence,
     type UnitCommit,
     type V2Store,
 } from "./engine";
@@ -368,7 +367,7 @@ describe.skipIf(!url)("scenario v2 store (Postgres)", () => {
             "stale:1",
             now,
             new Date(now.getTime() + 60_000)
-        )) as LeaseFence;
+        ))!;
         const pending = advanceWithFence(d, stale);
         // Let the stale worker reach its gate (its provider call is journaled by then).
         for (let i = 0; i < 100 && d.provider.calls.length === 0; i++) await sleep(10);

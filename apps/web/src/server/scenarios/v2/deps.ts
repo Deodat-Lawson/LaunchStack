@@ -7,7 +7,11 @@
  * they read sources through the v2 collector and the graph service when one
  * is configured.
  */
-import { createLlmSimulationModel, type ScenarioRunRecord } from "@launchstack/pipelines/scenarios";
+import {
+    createLlmSimulationModel,
+    V2_MODEL_OPTIONS,
+    type ScenarioRunRecord,
+} from "@launchstack/pipelines/scenarios";
 import { createV2Store, sourceManifestDocumentIds } from "@launchstack/pipelines/scenarios/v2/db";
 import { V2_STAGES } from "@launchstack/pipelines/scenarios/v2/stages";
 import { AccessRevokedError, type EngineDeps } from "@launchstack/pipelines/scenarios/v2/engine";
@@ -48,7 +52,7 @@ export function createEngineDeps(overrides: Partial<EngineDeps> = {}): EngineDep
     const now = () => new Date();
     return {
         store: createV2Store({ credits: createAppScenarioCredits(), log }),
-        model: createLlmSimulationModel(),
+        model: createLlmSimulationModel(V2_MODEL_OPTIONS),
         stages: V2_STAGES,
         stagePorts: {
             collectSources: collectScenarioSources,

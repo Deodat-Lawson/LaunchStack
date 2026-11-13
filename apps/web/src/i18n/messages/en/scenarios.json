@@ -547,7 +547,9 @@
       "missingSpec": "The run's request could not be found.",
       "unitFailed": "The run failed.",
       "stalled": "The run stopped making progress.",
-      "budgetExhausted": "The run reached the spending limit it was accepted with."
+      "budgetExhausted": "The run reached the spending limit it was accepted with.",
+      "modelTimedOut": "The run stopped because the model did not answer in time.",
+      "modelFailed": "The run stopped because the model kept returning errors."
     }
   }
 }

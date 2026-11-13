@@ -189,9 +189,8 @@ export async function createScenarioV2(
         MAX_ROUNDS,
         SCENARIO_LIMITS.rounds.default
     );
-    const requested: ContextMode = MODES.includes(input.contextMode as ContextMode)
-        ? (input.contextMode as ContextMode)
-        : "graph";
+    const asked = input.contextMode;
+    const requested: ContextMode = asked && MODES.includes(asked) ? asked : "graph";
     const titleRaw = typeof input.title === "string" ? input.title.trim() : "";
     const title = titleRaw ? titleRaw.slice(0, 120) : titleFromSubject(subject);
     // The payload a key stands for: what the person asked for, before any

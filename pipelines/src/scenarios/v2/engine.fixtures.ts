@@ -595,7 +595,7 @@ export function memoryStore(): MemoryStore {
                 outputTokens: input.outputTokens,
             });
             const call = [...calls.values()].find(c => c.id === input.callId)!;
-            if (call.acceptedAttemptId === null) call.acceptedAttemptId = row.id;
+            call.acceptedAttemptId ??= row.id;
             const accepted = attempts.find(a => a.id === call.acceptedAttemptId)!;
             return {
                 attemptId: accepted.id,

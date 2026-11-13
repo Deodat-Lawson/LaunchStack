@@ -125,6 +125,27 @@ export function classifyFailure(error: unknown): "failed" | "unknown" {
     return UNKNOWN_PATTERNS.some(p => p.test(text)) ? "unknown" : "failed";
 }
 
+/**
+ * Whether a definite failure is worth trying again at once: the provider was
+ * busy (429) or broken (5xx), or the request never left this host. A 4xx would
+ * fail the same way again, and an attempt whose outcome is unknown is retried
+ * only by a fresh execution of its unit, so a slow provider is never asked the
+ * same question several times inside one attempt window.
+ */
+export function isTransientFailure(error: unknown): boolean {
+    const e = error as { name?: string; message?: string; status?: unknown; code?: unknown };
+    if (typeof e?.status === "number") return e.status === 429 || e.status >= 500;
+    const text = `${e?.name ?? ""} ${e?.message ?? String(error)} ${typeof e?.code === "string" ? e.code : ""}`;
+    return NEVER_SENT_PATTERNS.some(p => p.test(text));
+}
+
+/**
+ * Pauses before each further attempt of a transient failure. The provider
+ * client is built without retries of its own (`maxRetries: 0`), so these are
+ * the only retries and every provider request is one recorded attempt.
+ */
+export const CALL_RETRY_DELAYS_MS: readonly number[] = [2_000, 8_000];
+
 function errorText(error: unknown): string {
     const message = error instanceof Error ? error.message : String(error);
     return message.slice(0, 2_000);
@@ -155,10 +176,15 @@ export function createJournaledModel(args: {
     versions?: Pick<typeof V2_VERSIONS, "modelPolicy" | "prompts">;
     now?: () => Date;
     clock?: () => number;
+    /** Pauses before retrying a transient failure; one entry per retry (default {@link CALL_RETRY_DELAYS_MS}). */
+    retryDelaysMs?: readonly number[];
+    sleep?: (ms: number) => Promise<void>;
 }): JournaledModel {
     const { store, provider, scope } = args;
     const now = args.now ?? (() => new Date());
     const clock = args.clock ?? (() => Date.now());
+    const retryDelays = args.retryDelaysMs ?? CALL_RETRY_DELAYS_MS;
+    const sleep = args.sleep ?? ((ms: number) => new Promise<void>(r => setTimeout(r, ms)));
     const usage: Usage = { calls: 0, inputTokens: 0, outputTokens: 0 };
     const stats: JournalStats = { reused: 0, fresh: 0, failed: 0, unknown: 0 };
     const occurrences = new Map<string, number>();
@@ -198,28 +224,40 @@ export function createJournaledModel(args: {
                     return toReply(accepted);
                 }
 
-                const { attemptId } = await store.startAttempt({
-                    companyId: scope.companyId,
-                    callId,
-                    at: now(),
-                });
-                const started = clock();
+                let attemptId: number;
+                let started: number;
                 let reply: ModelReply;
-                try {
-                    reply = await provider.complete(request);
-                } catch (error) {
-                    const status = classifyFailure(error);
-                    stats[status] += 1;
-                    await store.failAttempt({
-                        runId: scope.runId,
+                for (let retry = 0; ; retry += 1) {
+                    ({ attemptId } = await store.startAttempt({
+                        companyId: scope.companyId,
                         callId,
-                        attemptId,
-                        status,
-                        error: errorText(error),
-                        latencyMs: clock() - started,
                         at: now(),
-                    });
-                    throw error;
+                    }));
+                    started = clock();
+                    try {
+                        reply = await provider.complete(request);
+                        break;
+                    } catch (error) {
+                        const status = classifyFailure(error);
+                        stats[status] += 1;
+                        await store.failAttempt({
+                            runId: scope.runId,
+                            callId,
+                            attemptId,
+                            status,
+                            error: errorText(error),
+                            latencyMs: clock() - started,
+                            at: now(),
+                        });
+                        const delay = retryDelays[retry];
+                        if (
+                            status === "unknown" ||
+                            delay === undefined ||
+                            !isTransientFailure(error)
+                        )
+                            throw error;
+                        await sleep(delay);
+                    }
                 }
                 const kept = await store.acceptAttempt({
                     callId,

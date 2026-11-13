@@ -183,12 +183,57 @@ export const SCENARIO_SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown
     cast_v2: castV2Schema,
 };
 
-export function createLlmSimulationModel(): SimulationModel {
+export interface LlmSimulationModelOptions {
+    /**
+     * Client-side retries per call (the client's own default when unset).
+     * Contract v2 passes 0: its call journal does the retrying, so every
+     * provider request is one recorded attempt.
+     */
+    maxRetries?: number;
+    /**
+     * Stretch a call's timeout to the output it asks for, at this many tokens a
+     * second at worst. A self-hosted model writes a ten-person cast batch
+     * (about 5,000 tokens) at well under the 30 a second a fixed three minutes
+     * assumes. Unset keeps the policy's timeout as it is.
+     */
+    floorTokensPerSecond?: number;
+}
+
+/** Room for reading the prompt and starting to write, on top of the writing itself. */
+const TIMEOUT_HEADROOM_MS = 60_000;
+
+/** The policy's timeout, or longer when the requested output needs it at `floorTokensPerSecond`. */
+export function callTimeoutMs(
+    policyMs: number,
+    maxOutputTokens: number | undefined,
+    floorTokensPerSecond: number | undefined
+): number {
+    if (!floorTokensPerSecond || !maxOutputTokens || maxOutputTokens <= 0) return policyMs;
+    const writing = Math.ceil((maxOutputTokens / floorTokensPerSecond) * 1_000);
+    return Math.max(policyMs, TIMEOUT_HEADROOM_MS + writing);
+}
+
+/**
+ * Contract v2's client: no retries of its own (the journal retries) and
+ * timeouts that stretch for slow, self-hosted models at 12 tokens a second.
+ */
+export const V2_MODEL_OPTIONS = {
+    maxRetries: 0,
+    floorTokensPerSecond: 12,
+} as const satisfies LlmSimulationModelOptions;
+
+export function createLlmSimulationModel(options: LlmSimulationModelOptions = {}): SimulationModel {
     return {
         async complete(request) {
             const policy = SCENARIO_MODELS[request.purpose];
             const resolved = resolveChatModel({
                 ...policy,
+                timeoutMs: callTimeoutMs(
+                    policy.timeoutMs,
+                    request.maxOutputTokens,
+                    options.floorTokensPerSecond
+                ),
+                ...(options.maxRetries !== undefined ? { maxRetries: options.maxRetries } : {}),
                 maxOutputTokens: request.maxOutputTokens,
             });
             const messages = [new SystemMessage(request.system), new HumanMessage(request.prompt)];

@@ -1257,7 +1257,7 @@ export function createV2Store(options: V2StoreOptions): V2Store {
                     )
                     .where(eq(scenarioCalls.id, input.callId))
                     .limit(1);
-                if (!first || first.rawText === null) {
+                if (typeof first?.rawText !== "string") {
                     return {
                         attemptId: input.attemptId,
                         text: input.text,

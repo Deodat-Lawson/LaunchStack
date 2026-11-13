@@ -343,6 +343,13 @@ export async function v2Progress(
     return out;
 }
 
+/** The file a left-out item came from: a picked file or a file-search hit. */
+function omittedFileId(o: { sourceType: string; sourceId: string }): number | null {
+    if (o.sourceType !== "document" && o.sourceType !== "search") return null;
+    const id = Number(o.sourceId);
+    return Number.isInteger(id) ? id : null;
+}
+
 function omissionKind(sourceType: string): ScenarioOmission["kind"] {
     switch (sourceType) {
         case "document":
@@ -401,7 +408,7 @@ export async function v2DetailContext(
     ]);
     const flags = { ...EMPTY_FLAGS, ...(run.flags ?? {}) };
     const omitted: ScenarioOmission[] = (manifest?.omissions ?? []).map(o => {
-        const documentId = o.sourceType === "document" ? Number(o.sourceId) : null;
+        const documentId = omittedFileId(o);
         const redacted = !isCreator && documentId !== null && !visibleDocIds.has(documentId);
         const kind = omissionKind(o.sourceType);
         return {
@@ -481,9 +488,10 @@ export async function getScenarioProvenance(
     );
     // A file left out entirely contributed nothing, so it is not a dependency
     // the reader must be able to open; its name is shown only to those who can.
-    const omittedFiles = (manifest?.omissions ?? []).flatMap(o =>
-        o.sourceType === "document" ? [Number(o.sourceId)] : []
-    );
+    const omittedFiles = (manifest?.omissions ?? []).flatMap(o => {
+        const id = omittedFileId(o);
+        return id === null ? [] : [id];
+    });
     const openable =
         omittedFiles.length > 0
             ? await visibleDocumentIds(ctx.companyId, await ctx.documentScope(), omittedFiles)
@@ -518,7 +526,8 @@ export async function getScenarioProvenance(
         })),
         omitted: (manifest?.omissions ?? []).map(o => {
             const kind = omissionKind(o.sourceType);
-            const redacted = o.sourceType === "document" && !openable.has(Number(o.sourceId));
+            const file = omittedFileId(o);
+            const redacted = file !== null && !openable.has(file);
             return {
                 label: redacted ? "" : sourceLabel(kind, o.label, locale),
                 kind,

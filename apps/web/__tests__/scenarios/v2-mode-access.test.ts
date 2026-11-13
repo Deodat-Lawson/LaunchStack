@@ -236,20 +236,31 @@ describe("reading a v2 run's derived artifacts", () => {
                     label: "Board deck Q3.pdf",
                     reason: "budget",
                 },
+                {
+                    sourceType: "search",
+                    sourceId: "13",
+                    label: "Salary bands 2027.xlsx, page 2",
+                    reason: "budget",
+                },
                 { sourceType: "notes", sourceId: "notes", label: "Notes", reason: "budget" },
             ],
         });
-        // Every file the run read is open to the reader; the left-out deck is not.
+        // Every file the run read is open to the reader; the left-out deck
+        // and the file behind the left-out search hit are not.
         visibleDocumentIds.mockImplementation(
-            async (_c: bigint, _s: unknown, ids: number[]) => new Set(ids.filter(id => id !== 12))
+            async (_c: bigint, _s: unknown, ids: number[]) =>
+                new Set(ids.filter(id => id !== 12 && id !== 13))
         );
         const ctx = makeWorkspaceContext({ authUserId: "reader" });
         const prov = await getScenarioProvenance(ctx, 11, { after: null, limit: null }, "en");
         expect(prov.omitted).toEqual([
             expect.objectContaining({ kind: "document", label: "", redacted: true }),
+            // A file-search hit names its file too.
+            expect.objectContaining({ kind: "search", label: "", redacted: true }),
             expect.objectContaining({ kind: "notes", redacted: false }),
         ]);
         expect(JSON.stringify(prov)).not.toContain("Board deck");
+        expect(JSON.stringify(prov)).not.toContain("Salary bands");
     });
 
     it("finds the list rows whose headline the reader may not see", async () => {

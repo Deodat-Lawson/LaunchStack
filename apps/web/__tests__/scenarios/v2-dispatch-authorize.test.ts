@@ -93,7 +93,7 @@ describe("dispatch", () => {
             { ...dispatch, id: 4, eventId: "scenario-run:9:g1:r1" },
         ]);
         const publish = jest.fn(async () => {});
-        const report = await reconcileScenarioRunsV2({ now, publish, executor: "worker" });
+        const report = await reconcileScenarioRunsV2({ now, publish });
         expect(publish).toHaveBeenCalledTimes(1);
         expect(report).toMatchObject({ redispatched: 1, delivered: 1, stalledFailed: 1 });
         expect(finishRun).toHaveBeenCalledWith(
@@ -108,11 +108,15 @@ describe("dispatch", () => {
         expect(db.purgeRawReplies).toHaveBeenCalledWith(new Date(now.getTime() - 30 * 86_400_000));
     });
 
-    it("never sends runs to a worker when they execute inline", async () => {
-        await reconcileScenarioRunsV2({ now, executor: "inline" });
-        expect(db.redispatchStalledRuns).not.toHaveBeenCalled();
-        expect(db.claimDueDispatches).not.toHaveBeenCalled();
-        expect(db.releaseTerminalHolds).toHaveBeenCalled();
+    it("delivers whatever SCENARIOS_EXECUTOR says (the worker may not carry it)", async () => {
+        const { readScenariosExecutor } = jest.requireMock<{ readScenariosExecutor: jest.Mock }>(
+            "~/server/scenarios/executor"
+        );
+        readScenariosExecutor.mockReturnValue("inline");
+        await reconcileScenarioRunsV2({ now });
+        expect(db.redispatchStalledRuns).toHaveBeenCalled();
+        expect(db.claimDueDispatches).toHaveBeenCalled();
+        readScenariosExecutor.mockReturnValue("worker");
     });
 
     it("reads the raw-reply retention from the environment", () => {

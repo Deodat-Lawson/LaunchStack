@@ -296,6 +296,16 @@ describe("advanceRun", () => {
         expect(store.runs.get(1)!.status).toBe("cancelled");
     });
 
+    it("leaves contract v2 runs to the v2 engine", async () => {
+        const store = memoryStore(baseRun({ contractVersion: 2 }));
+        expect(await advanceRun(ports(store), 1)).toEqual({
+            state: "skipped",
+            reason: "contract_v2",
+        });
+        expect(store.runs.get(1)!.step).toBe(0);
+        expect(store.runs.get(1)!.status).toBe("queued");
+    });
+
     it("applies an injected event in the next round and marks it with that round", async () => {
         const store = memoryStore(baseRun());
         const p = ports(store);

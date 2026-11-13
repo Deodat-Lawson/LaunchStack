@@ -25,7 +25,6 @@ import {
 import { newLeaseOwner, RUN_MESSAGES } from "@launchstack/pipelines/scenarios/v2/engine";
 
 import { inngest } from "~/server/inngest/client";
-import { readScenariosExecutor, type ScenariosExecutor } from "~/server/scenarios/executor";
 
 import { createAppScenarioCredits } from "./credits";
 
@@ -104,12 +103,19 @@ export interface ReconcileReport {
     purgedReplies: number;
 }
 
-/** One reconciler pass (the worker's cron runs it every minute). */
+/**
+ * One reconciler pass (the worker's cron runs it every minute).
+ *
+ * It does not check SCENARIOS_EXECUTOR: that variable is the web process's
+ * choice and the worker may not carry it. Inline runs mark their dispatch
+ * sent before they start, so only a run whose web process died can be
+ * picked up here — and driving it on the worker is exactly the recovery it
+ * needs (the lease fences off a web process that comes back).
+ */
 export async function reconcileScenarioRunsV2(
     options: {
         now?: Date;
         publish?: PublishDispatch;
-        executor?: ScenariosExecutor;
         retentionDays?: number;
     } = {}
 ): Promise<ReconcileReport> {
@@ -125,33 +131,29 @@ export async function reconcileScenarioRunsV2(
         purgedReplies: 0,
     };
 
-    // Inline deployments drive runs in the web process and resume them on
-    // poll; sending them to a worker as well would only add a second driver.
-    if ((options.executor ?? readScenariosExecutor()) === "worker") {
-        const stalled = await redispatchStalledRuns({ now });
-        report.redispatched = stalled.dispatched.length;
-        for (const dispatch of await claimDueDispatches({ now })) {
-            if (await send(dispatch, publish, now)) report.delivered += 1;
-            else report.failedSends += 1;
-        }
-        if (stalled.overCap.length > 0) {
-            const store = createV2Store({ credits: createAppScenarioCredits() });
-            for (const runId of stalled.overCap) {
-                // A fresh lease, so a run someone is still driving is left alone.
-                const fence = await store.claimLease(
-                    runId,
-                    newLeaseOwner("reconciler"),
-                    now,
-                    new Date(now.getTime() + 60_000)
-                );
-                if (!fence) continue;
-                const failed = await store.finishRun(fence, {
-                    status: "failed",
-                    error: RUN_MESSAGES.stalled,
-                    at: now,
-                });
-                if (failed) report.stalledFailed += 1;
-            }
+    const stalled = await redispatchStalledRuns({ now });
+    report.redispatched = stalled.dispatched.length;
+    for (const dispatch of await claimDueDispatches({ now })) {
+        if (await send(dispatch, publish, now)) report.delivered += 1;
+        else report.failedSends += 1;
+    }
+    if (stalled.overCap.length > 0) {
+        const store = createV2Store({ credits: createAppScenarioCredits() });
+        for (const runId of stalled.overCap) {
+            // A fresh lease, so a run someone is still driving is left alone.
+            const fence = await store.claimLease(
+                runId,
+                newLeaseOwner("reconciler"),
+                now,
+                new Date(now.getTime() + 60_000)
+            );
+            if (!fence) continue;
+            const failed = await store.finishRun(fence, {
+                status: "failed",
+                error: RUN_MESSAGES.stalled,
+                at: now,
+            });
+            if (failed) report.stalledFailed += 1;
         }
     }
 

@@ -220,7 +220,6 @@ describeIfDatabase("v2 scenario credits on the workspace ledger", () => {
         const published: string[] = [];
         const report = await reconcileScenarioRunsV2({
             now: new Date(Date.now() + 1_000),
-            executor: "worker",
             publish: async dispatch => {
                 published.push(dispatch.eventId);
             },
@@ -237,7 +236,6 @@ describeIfDatabase("v2 scenario credits on the workspace ledger", () => {
         const again: string[] = [];
         await reconcileScenarioRunsV2({
             now: new Date(Date.now() + 2_000),
-            executor: "worker",
             publish: async dispatch => {
                 again.push(dispatch.eventId);
             },

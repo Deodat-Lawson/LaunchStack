@@ -329,6 +329,10 @@ export async function acceptRun(
                 runId: run.id,
                 generation: 1,
                 eventId: dispatchEventId(run.id, 1),
+                // The app's clock, like every time the claims compare against:
+                // a database clock a few ms ahead would make the publish right
+                // after commit find it "not due" and leave it to the reconciler.
+                nextAttemptAt: new Date(),
             })
             .returning({
                 id: scenarioDispatches.id,

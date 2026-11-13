@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { isModelPick, pickOfModel, requestOfPick } from "~/lib/ai/model-picks";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
 import { conversationContext, priorQuestions } from "~/lib/chat-turns";
@@ -511,6 +512,7 @@ export function useChatRuntime(input: {
                     questionOrigin: send.origin && send.origin !== "user" ? send.origin : undefined,
                     agentKey: send.agentKey,
                     modelRoute: send.modelRoute,
+                    modelKey: send.modelKey,
                     reasoningEffort: send.reasoningEffort,
                     chatMode: send.chatMode,
                     attachments: send.attachments.map(({ url, name, mimeType, kind }) => ({
@@ -609,10 +611,23 @@ export function useChatRuntime(input: {
             send = { ...send, webSearch: true, thinking: true };
             const context = originKey ? contexts.current.get(originKey) : get();
             if (!context) throw new Error(words.current.t("errors.workspaceChangedRetry"));
-            const routes = [...new Set(send.modelRoutes ?? [])];
-            if (routes.length > 1 && !context.busy) {
+            const picks = [...new Set(send.modelRoutes ?? [])];
+            if (picks.length > 1 && !context.busy) {
                 const prior = [...context.messages];
-                const comparisons = routes.slice(1).map(route => {
+                // The pick the reasoning effort was chosen for; the others run on
+                // their own model's default.
+                const picked = send.modelKey ? pickOfModel(send.modelKey) : send.modelRoute;
+                // Each pick answers as its own turn: a tier by its route, an
+                // offered model on the main route with its key. Old saved turns
+                // may still list a route the picker no longer offers.
+                const sendFor = (pick: (typeof picks)[number]): ComposerSend => ({
+                    ...send,
+                    modelKey: undefined,
+                    ...(isModelPick(pick) ? requestOfPick(pick) : { modelRoute: pick }),
+                    modelRoutes: undefined,
+                    reasoningEffort: pick === picked ? send.reasoningEffort : undefined,
+                });
+                const comparisons = picks.slice(1).map(pick => {
                     const sibling: Conversation = {
                         key: `comparison-${crypto.randomUUID()}`,
                         sessionId: null,
@@ -624,27 +639,15 @@ export function useChatRuntime(input: {
                         continuation: context.continuation,
                     };
                     contexts.current.set(sibling.key, sibling);
-                    return runRef.current(sibling, {
-                        ...send,
-                        modelRoute: route,
-                        modelRoutes: undefined,
-                        reasoningEffort:
-                            route === send.modelRoute ? send.reasoningEffort : undefined,
-                    });
+                    return runRef.current(sibling, sendFor(pick));
                 });
-                context.pending = runRef.current(context, {
-                    ...send,
-                    modelRoute: routes[0],
-                    modelRoutes: undefined,
-                    reasoningEffort:
-                        routes[0] === send.modelRoute ? send.reasoningEffort : undefined,
-                });
+                context.pending = runRef.current(context, sendFor(picks[0]!));
                 const results = await Promise.all([context.pending, ...comparisons]);
                 return results.every(Boolean)
                     ? true
                     : {
                           success: false,
-                          failedModelRoutes: routes.filter((_, index) => !results[index]),
+                          failedModelRoutes: picks.filter((_, index) => !results[index]),
                       };
             }
             if (!context.busy && (originKey || !context.held || !context.queue.items.length)) {

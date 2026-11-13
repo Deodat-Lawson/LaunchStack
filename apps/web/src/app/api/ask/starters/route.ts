@@ -38,6 +38,7 @@ export async function GET(request: Request) {
                 getAskStarters({
                     companyId: ctx.data.companyId,
                     scope,
+                    viewerUserPk: ctx.data.userPk,
                     refresh,
                     locale: localeOfRequest(request),
                 })

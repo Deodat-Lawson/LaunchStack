@@ -96,6 +96,41 @@ describe("buildSourceMenuItems", () => {
         expect(del?.type === "item" && del.disabled).toBe(true);
     });
 
+    it("offers to open a file where it came from, after Open in a new tab", () => {
+        const link = { kind: "notion" as const, url: "https://www.notion.so/Plan-0f1e" };
+        const open = jest.fn();
+        const file = source({ externalLink: link });
+        const items = buildSourceMenuItems(t, file, folders, [], {
+            onOpenInNewTab: jest.fn(),
+            onOpenOutside: { label: () => "Open in Notion", open },
+        });
+        const ids = items.map(item => item.id);
+        expect(ids.indexOf("open-outside")).toBe(ids.indexOf("open-tab") + 1);
+        const item = items.find(entry => entry.id === "open-outside");
+        expect(item).toMatchObject({ label: "Open in Notion", icon: "external" });
+        if (item?.type === "item") item.onSelect();
+        expect(open).toHaveBeenCalledWith(link);
+    });
+
+    it("offers no way out for a row without one, or for a mindmap", () => {
+        const handlers = { onOpenOutside: { label: () => "Open file", open: jest.fn() } };
+        expect(
+            buildSourceMenuItems(t, source(), folders, [], handlers).some(
+                item => item.id === "open-outside"
+            )
+        ).toBe(false);
+        const map = source({
+            type: "mindmap",
+            mindmapId: 3,
+            externalLink: { kind: "file", url: "/api/files/9" },
+        });
+        expect(
+            buildSourceMenuItems(t, map, folders, [], handlers).some(
+                item => item.id === "open-outside"
+            )
+        ).toBe(false);
+    });
+
     it("labels context toggle based on current selection", () => {
         const selected = buildSourceMenuItems(t, source(), folders, ["d1"], {
             onToggleContext: jest.fn(),

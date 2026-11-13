@@ -6,9 +6,14 @@
  *
  * - **Basics** — General (the workspace's name, URL, description, industry,
  *   team size and colour), People and access, Company profile.
- * - **Setup** — Bring your own keys, Models, Agents, Integrations.
- * - **Data** — Archive, Labs. (Usage became a tab of its own, `usage/UsageTool`;
- *   `/usage` and its old links open its Spending screen.)
+ * - **Setup** — Agents, Integrations.
+ * - **Data** — Archive, Labs.
+ *
+ * Three screens moved to Models & usage (`usage/UsageTool`): Usage became its
+ * Spending screen in October 2026, and Bring your own keys and Models became
+ * its API keys and Models in November. A link to `/usage`, `/byok` or
+ * `/models` here, or this tab's memory of one, opens the new place
+ * (`movedToolScreen`).
  *
  * Its words are `settings.workspaceTab` (the tab's name, what it is for, its
  * groups and its screens' names) and, inside a screen, `settings.sections`.
@@ -45,9 +50,9 @@ import {
     WORKSPACE_SCREEN_IDS,
     WORKSPACE_TOOL_ID,
     settingsDestination,
-    usageHref,
     workspaceScreenFromPath,
 } from "~/lib/settings/surfaces";
+import { movedToolScreen, toolTabHref } from "~/lib/tool-app/locations";
 import { usePermissions } from "~/lib/use-permissions";
 
 import { SECTION_DEFS, SettingsSectionView } from "./settings/SectionView";
@@ -69,21 +74,23 @@ export function WorkspaceTool({ host }: { host?: ToolHost }) {
 
 function WorkspaceFrame() {
     const t = useTranslations("settings.workspaceTab");
-    const { path, searchParams, navigate } = useToolNav();
+    const { path, search, searchParams, navigate } = useToolNav();
     const { can } = usePermissions();
     const screen = workspaceScreenFromPath(path);
     const focus = searchParams.get("focus");
     useFocusHash(focus);
 
-    // Usage was a screen here until it became a tab of its own. A link the
-    // shell didn't rewrite, or this tab's memory of it, opens it there, and
-    // this tab goes home rather than to a page that no longer exists.
-    const movedToUsage = path === "/usage";
+    // A screen that moved to another tab (Usage, API keys, Models). A link
+    // the shell didn't rewrite, or this tab's memory of it, opens it there,
+    // its focus kept, and this tab goes home rather than to a page that no
+    // longer exists.
+    const moved = movedToolScreen(WORKSPACE_TOOL_ID, `${path}${search}`);
+    const movedHref = moved ? toolTabHref(moved.toolId, moved.at) : null;
     useEffect(() => {
-        if (!movedToUsage) return;
+        if (!movedHref) return;
         navigate(WORKSPACE_HOME, { replace: true });
-        navigate(usageHref(focus));
-    }, [movedToUsage, focus, navigate]);
+        navigate(movedHref);
+    }, [movedHref, navigate]);
 
     // Fails closed: until permissions load, only the ungated screens show.
     const groups = useMemo<ToolNavGroup[]>(
@@ -111,7 +118,7 @@ function WorkspaceFrame() {
             // A section brings its own header and scrolls its own body.
             fill
         >
-            {screen ? (
+            {moved ? null : screen ? (
                 <div data-testid="workspace-tool" className="flex h-full min-h-0 flex-col">
                     {/* Afresh for each thing asked for: the sections read the
                         hash when they mount. */}

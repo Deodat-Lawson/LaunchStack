@@ -13,11 +13,13 @@ import {
     type DriveClient,
     type DriveFile,
 } from "@launchstack/pipelines/connectors/google-drive";
-import type {
-    DiscoveredKnowledgeItem,
-    KnowledgeItem,
-    KnowledgeSink,
-    StoredKnowledgeItem,
+import {
+    DELETED_HERE_DETAIL,
+    SourceDeletedError,
+    type DiscoveredKnowledgeItem,
+    type KnowledgeItem,
+    type KnowledgeSink,
+    type StoredKnowledgeItem,
 } from "@launchstack/pipelines/connectors";
 
 const FOLDER_MIME = "application/vnd.google-apps.folder";
@@ -542,5 +544,115 @@ describe("syncGoogleDrive", () => {
             { folderId: "research", driveId: "drive-1" },
         ]);
         expect(sink.stored.map(item => item.metadata.folderPath)).toEqual([["Research"]]);
+    });
+
+    describe("files deleted here", () => {
+        const files = [
+            { id: "templates", name: "Design templates", mimeType: FOLDER_MIME },
+            pdf("design-template", ["templates"]),
+            pdf("other", ["templates"]),
+        ];
+        const picked = [{ fileId: "templates", kind: "folder" as const }];
+        const dirtyFeed = {
+            "cursor-1": { changes: [{ fileId: "unrelated" }], newStartPageToken: "cursor-2" },
+        };
+
+        it("would come back without the record: the folder walk sees no document for it", async () => {
+            const sink = createRecordingSink();
+            await syncGoogleDrive({
+                client: createFakeDrive({ files }),
+                sink,
+                pickedItems: picked,
+            });
+
+            // What deleting the document does to the sink's view of it.
+            sink.hashes.delete("design-template");
+            const client = createFakeDrive({ files, changes: dirtyFeed });
+            const report = await syncGoogleDrive({
+                client,
+                sink,
+                pickedItems: picked,
+                startPageToken: "cursor-1",
+            });
+
+            expect(report.stored.map(entry => entry.sourceId)).toEqual(["design-template"]);
+        });
+
+        it("leaves a file deleted here out, without downloading it", async () => {
+            const sink = createRecordingSink();
+            await syncGoogleDrive({
+                client: createFakeDrive({ files }),
+                sink,
+                pickedItems: picked,
+            });
+            sink.hashes.delete("design-template");
+            const before = sink.stored.length;
+
+            const client = createFakeDrive({ files, changes: dirtyFeed });
+            const report = await syncGoogleDrive({
+                client,
+                sink,
+                pickedItems: picked,
+                startPageToken: "cursor-1",
+                knownSourceIds: ["other"],
+                deletedSourceIds: ["design-template"],
+            });
+
+            expect(report.stored).toEqual([]);
+            expect(sink.stored).toHaveLength(before);
+            expect(client.downloads).toEqual([]);
+            expect(report.skipped).toEqual(
+                expect.arrayContaining([
+                    {
+                        sourceId: "design-template",
+                        reason: "excluded",
+                        detail: DELETED_HERE_DETAIL,
+                    },
+                    { sourceId: "other", reason: "unchanged" },
+                ])
+            );
+            // Still in Drive and still reached: not reported as gone.
+            expect(report.missingSourceIds).toEqual([]);
+            expect(report.failed).toEqual([]);
+        });
+
+        it("still imports a file deleted here once its record is gone", async () => {
+            const sink = createRecordingSink();
+            const report = await syncGoogleDrive({
+                client: createFakeDrive({ files }),
+                sink,
+                pickedItems: picked,
+                deletedSourceIds: [],
+            });
+            expect(report.stored.map(entry => entry.sourceId).sort()).toEqual([
+                "design-template",
+                "other",
+            ]);
+        });
+
+        it("reports a file deleted mid-run (the sink refuses it) as skipped, not failed", async () => {
+            const base = createRecordingSink();
+            const sink: KnowledgeSink = {
+                lastSyncedHash: item => base.lastSyncedHash!(item),
+                async store(item) {
+                    if (item.sourceId === "design-template") {
+                        throw new SourceDeletedError(item.sourceId);
+                    }
+                    return base.store(item);
+                },
+            };
+
+            const report = await syncGoogleDrive({
+                client: createFakeDrive({ files }),
+                sink,
+                pickedItems: picked,
+            });
+
+            expect(report.stored.map(entry => entry.sourceId)).toEqual(["other"]);
+            expect(report.failed).toEqual([]);
+            expect(report.skipped).toEqual([
+                { sourceId: "design-template", reason: "excluded", detail: DELETED_HERE_DETAIL },
+            ]);
+        });
     });
 });

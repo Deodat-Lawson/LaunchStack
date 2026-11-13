@@ -28,12 +28,15 @@ import generator from "./generator.json";
 import growth from "./growth.json";
 import vantage from "./vantage.json";
 import scenarios from "./scenarios.json";
+import extract from "./extract.json";
+import extractServer from "./extractServer.json";
 import proposals from "./proposals.json";
 import tools from "./tools.json";
 import notes from "./notes.json";
 import processing from "./processing.json";
 import feedback from "./feedback.json";
 import usage from "./usage.json";
+import fileEditing from "./fileEditing.json";
 
 const messages = {
     common,
@@ -59,12 +62,15 @@ const messages = {
     growth,
     vantage,
     scenarios,
+    extract,
+    extractServer,
     proposals,
     tools,
     notes,
     processing,
     feedback,
     usage,
+    fileEditing,
 } satisfies Messages;
 
 export default messages;

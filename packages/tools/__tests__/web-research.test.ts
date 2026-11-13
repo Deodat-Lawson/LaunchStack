@@ -44,19 +44,26 @@ describe("createTtlCache", () => {
 });
 
 describe("executeSearch", () => {
-    const saved = { ...process.env };
     afterEach(() => {
-        process.env.EXA_API_KEY = saved.EXA_API_KEY;
-        process.env.SERPER_API_KEY = saved.SERPER_API_KEY;
-        process.env.SEARCH_PROVIDER = saved.SEARCH_PROVIDER;
+        vi.unstubAllEnvs();
         vi.restoreAllMocks();
     });
 
-    it("reports providerUsed 'none' when no provider key is configured", async () => {
-        delete process.env.EXA_API_KEY;
-        delete process.env.SERPER_API_KEY;
-        delete process.env.SEARCH_PROVIDER;
-        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    beforeEach(() => {
+        for (const name of [
+            "SEARCH_PROVIDER",
+            "EXA_API_KEY",
+            "SERPER_API_KEY",
+            "BRAVE_SEARCH_API_KEY",
+            "TAVILY_API_KEY",
+            "SEARXNG_URL",
+        ]) {
+            vi.stubEnv(name, "");
+        }
+    });
+
+    it("reports providerUsed 'none' when no provider is configured", async () => {
+        const fetchMock = vi.spyOn(globalThis, "fetch");
 
         const result = await executeSearch([
             { searchQuery: "anything", category: "tech", rationale: "test" },
@@ -64,20 +71,19 @@ describe("executeSearch", () => {
 
         expect(result.results).toEqual([]);
         expect(result.providerUsed).toBe("none");
-        expect(warn).toHaveBeenCalled();
+        expect(fetchMock).not.toHaveBeenCalled();
     });
 
-    it("downgrades a serper strategy to exa when SERPER_API_KEY is missing", async () => {
-        delete process.env.EXA_API_KEY;
-        delete process.env.SERPER_API_KEY;
+    it("searches nothing when SEARCH_PROVIDER names a provider without its key", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SEARCH_PROVIDER", "serper");
         const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-        const result = await executeSearch(
-            [{ searchQuery: "anything", category: "business", rationale: "test" }],
-            "serper"
-        );
+        const result = await executeSearch([
+            { searchQuery: "anything", category: "business", rationale: "test" },
+        ]);
 
         expect(result.providerUsed).toBe("none");
-        expect(warn.mock.calls.flat().join(" ")).toContain("downgrading strategy to exa");
+        expect(warn.mock.calls.flat().join(" ")).toContain("needs SERPER_API_KEY");
     });
 });

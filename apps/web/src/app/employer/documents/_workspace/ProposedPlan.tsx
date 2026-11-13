@@ -8,14 +8,17 @@ import { Button } from "~/components/ui/button";
 import { copyText } from "~/lib/context-menu";
 import { downloadTextFile } from "./transcript";
 import { ChatMarkdown } from "./ChatMarkdown";
+import type { ThreadMessage } from "./types";
 
 export function ProposedPlan({
     text,
+    webSources,
     onRefine,
     onImplement,
     active,
 }: {
     text: string;
+    webSources?: ThreadMessage["webSources"];
     onRefine: (text: string) => void;
     onImplement?: (text: string) => void;
     active?: boolean;
@@ -40,7 +43,7 @@ export function ProposedPlan({
             </Button>
             {expanded && (
                 <div className="border-t border-[var(--line)] px-4 py-2">
-                    <ChatMarkdown text={text} />
+                    <ChatMarkdown text={text} webSources={webSources} />
                 </div>
             )}
             <div className="flex flex-wrap gap-2 border-t border-[var(--line)] px-3 py-2 text-xs">

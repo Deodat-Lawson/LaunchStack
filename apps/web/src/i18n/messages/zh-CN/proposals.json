@@ -109,7 +109,7 @@
       "review": "审阅完成"
     },
     "failed": "运行失败",
-    "liveHint": "每个步骤完成后会打勾；你可以关闭此窗口继续工作。",
+    "liveHint": "你可以关闭此窗口继续工作。",
     "stepRunning": "运行中",
     "running": "运行中",
     "credits": "{credits, number} 点额度",
@@ -146,7 +146,7 @@
       "all": "全部"
     },
     "emptyTitle": "还没有申请",
-    "emptyBody": "从找到的资助方开始一个申请，或粘贴你手头已有的征集公告。其中的要求会变成清单，每个章节都可以根据你的来源起草。",
+    "emptyBody": "从找到的资助方开始一个申请，或粘贴你手头已有的征集公告。",
     "emptyViewBody": "切换视图查看其余内容。",
     "columns": {
       "application": "申请",
@@ -173,16 +173,13 @@
     "nothingWaitingBody": "本周的截止日期、高契合度的资助方和未撰写的章节会显示在这里。",
     "buildProfile": "建立档案",
     "deadlines": "截止日期",
-    "nearestFirst": "最近的在前",
     "noDated": "没有设置截止日期的申请",
-    "noDatedBody": "有截止日期的申请会列在这里，最近的在前。",
     "inProgress": "进行中",
     "noDeadlineThisWeek": "本周无截止",
     "nothingElse": "没有其他进行中的申请。",
     "fundersWorth": "值得一看的资助方",
     "strongOf": "已找到 {candidates} 个，其中 {strong} 个高度契合",
     "noFunders": "还没有找到资助方",
-    "noFundersReady": "在 Grants.gov 和网页上搜索契合你档案的征集。",
     "noFundersNoProfile": "请先建立档案；搜索会据此规划。",
     "fit": "契合度 {fit}",
     "profileNote": "每份草稿都从你的档案出发：来自 {documents, plural, other {# 个来源}}的 {facts, plural, other {# 条事实}}，{time}建立。添加报告或提案后，记得<link>复查一下</link>。",
@@ -213,9 +210,9 @@
     "title": "契合你的",
     "accent": "资助方",
     "subGrantsAndWeb": "搜索 Grants.gov 和网页",
-    "subGrantsNoWeb": "搜索 Grants.gov · 网页搜索需要 EXA 或 SERPER 密钥",
-    "subWebOnly": "未接入联邦来源，仅搜索网页",
-    "subNone": "未接入联邦来源 · 网页搜索需要 EXA 或 SERPER 密钥",
+    "subGrantsNoWeb": "搜索 Grants.gov · 网页搜索未开启",
+    "subWebOnly": "搜索网页 · Grants.gov 未开启",
+    "subNone": "Grants.gov 和网页搜索均未开启",
     "addByHand": "手动添加",
     "source": {
       "grants_gov": "Grants.gov",
@@ -263,7 +260,6 @@
     "equity": "想做股权融资而不是申请资助？<link>投资人关系</link>可以找到正在募资的风投基金，并根据同样的来源起草路演材料。",
     "add": {
       "title": "添加资助方",
-      "description": "你从别处得知的征集，会立即保存。",
       "programme": "项目或征集名称",
       "link": "链接",
       "closes": "截止日期",
@@ -286,7 +282,6 @@
     "noMatchBody": "换个关键词试试。",
     "dialog": {
       "editTitle": "编辑回答",
-      "description": "资助方提出同样的问题时，草稿会复用已保存的回答。",
       "answer": "回答",
       "tags": "标签，用逗号分隔",
       "tagsPlaceholder": "使命, 历史",
@@ -334,7 +329,7 @@
     "readRequest": "读取征集要求",
     "addRequest": "添加征集要求",
     "noChecklist": "还没有清单",
-    "noChecklistBody": "清单根据资助方的征集要求生成：申请资格规则、每一个问题、附件和格式。",
+    "noChecklistBody": "清单根据资助方的征集要求生成。",
     "doneOf": "{done}/{total}",
     "openSection": "打开",
     "sectionTicks": "章节获得批准后会自动打勾。",
@@ -385,7 +380,7 @@
       "optional": "可选",
       "previous": "上一节",
       "next": "下一节",
-      "empty": "还没有内容。根据你的来源起草，或直接开始输入。",
+      "empty": "还没有内容。",
       "draft": "根据来源起草",
       "redraft": "根据来源重新起草",
       "byHand": "手动撰写",
@@ -411,7 +406,7 @@
     },
     "rewriteDialog": {
       "title": "按说明改写",
-      "description": "说明需要改动什么。事实仍与证据绑定；说明中需要但来源没有提供的内容会被列为缺口。",
+      "description": "事实仍与证据绑定；说明中需要但来源没有提供的内容会被列为缺口。",
       "placeholder": "先写对家庭的成效，再给出数字。点名提到两所新学校。",
       "aria": "改写说明",
       "submit": "改写"
@@ -431,13 +426,11 @@
       "askBody": "打开工作台，并在输入框中预填关于你的来源的这个问题。"
     },
     "details": {
-      "title": "提案详情",
-      "description": "标题、资助方和截止日期。"
+      "title": "提案详情"
     },
     "preview": {
       "copyFailed": "无法复制",
-      "copyMarkdown": "复制为 Markdown",
-      "hint": "按顺序列出各章节，然后是清单以及草稿引用的证据。"
+      "copyMarkdown": "复制为 Markdown"
     }
   },
   "server": {

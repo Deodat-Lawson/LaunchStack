@@ -201,8 +201,19 @@ const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
  * a redirect to `file:` or any non-http(s) scheme is refused. Throws
  * `UrlGuardError` when any hop fails the policy; otherwise returns the final
  * (non-redirect) response. `init.redirect` is always overridden to "manual".
+ * With `httpsOnly`, the first URL and every redirect target must be https.
  */
-export async function fetchPublicUrl(rawUrl: string, init?: RequestInit): Promise<Response> {
+export async function fetchPublicUrl(
+    rawUrl: string,
+    init?: RequestInit,
+    options: { httpsOnly?: boolean } = {}
+): Promise<Response> {
+    const requireHttps = (url: string) => {
+        if (options.httpsOnly && new URL(url).protocol !== "https:") {
+            throw new UrlGuardError("Only https:// URLs are allowed here");
+        }
+    };
+    requireHttps(rawUrl);
     let currentUrl = (await assertPublicHttpUrl(rawUrl)).href;
 
     for (let hop = 0; hop <= MAX_REDIRECT_HOPS; hop++) {
@@ -233,6 +244,7 @@ export async function fetchPublicUrl(rawUrl: string, init?: RequestInit): Promis
             throw new UrlGuardError("Redirect target uses an unsupported scheme");
         }
 
+        requireHttps(next.href);
         await assertPublicHttpUrl(next.href);
         currentUrl = next.href;
     }

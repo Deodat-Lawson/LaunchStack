@@ -7,7 +7,9 @@
  * opposite job — browsing, auditing, and filling gaps in the corpus. Sources
  * are not a separate concept from knowledge here; a source *is* how knowledge
  * gets in, so uploads, connectors, and indexed documents share one screen and
- * one visual language.
+ * one visual language. That includes files still on their way in: what is
+ * uploading, waiting for a worker or being read sits at the top, stage by
+ * stage (`KnowledgeQueue`), above the library it is about to join.
  */
 
 import React, { useCallback, useMemo, useState } from "react";
@@ -20,13 +22,17 @@ import {
     List as IconList,
     Plus as IconPlus,
     Search as IconSearch,
+    Table2 as IconExtract,
     X as IconX,
 } from "lucide-react";
 import { UNFILED_FOLDER, compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Button } from "~/components/ui/button";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
+import { useOpenOutside } from "./externalLink";
+import { KnowledgeQueue, type KnowledgeQueueProps } from "./processing/KnowledgeQueue";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { DocDomain, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
@@ -69,6 +75,12 @@ export interface KnowledgePaneProps {
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
     onOpenAdd: (tabId?: string) => void;
     onAskAbout: (sourceIds: string[]) => void;
+    /**
+     * "Extract fields": open the Extract tool's form with these documents
+     * chosen. Only uploaded documents ("d12") can be rows of a table, so the
+     * button shows when the selection has at least one and passes just those.
+     */
+    onExtractFields?: (documentSourceIds: string[]) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
     /** Delete several at once — the multi-selection menu's Delete. */
@@ -76,6 +88,8 @@ export interface KnowledgePaneProps {
     /** "Restrict access…" — opens the document's access dialog. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
+    /** Files on their way in, drawn above the library. Left out, there is no queue. */
+    queue?: Omit<KnowledgeQueueProps, "onActiveChange">;
 }
 
 type Layout = "grid" | "list";
@@ -90,21 +104,28 @@ export function KnowledgePane({
     onOpenSourceBeside,
     onOpenAdd,
     onAskAbout,
+    onExtractFields,
     onRenameSource,
     onDeleteSource,
     onDeleteSources,
     onRestrictAccess,
     onMoveToFolder,
+    queue,
 }: KnowledgePaneProps) {
     const t = useTranslations("sources.knowledgePane");
     const tm = useTranslations("sources.contextMenu");
+    const openOutside = useOpenOutside();
     const tr = useTranslations("sources.railCommands");
     const tTypes = useTranslations("sources.sourceTypes");
     const tc = useTranslations("common");
+    /** The uploaded documents in the selection — what a table's rows can be. */
+    const selectedDocuments = useMemo(() => selected.filter(id => /^d\d+$/.test(id)), [selected]);
     const [query, setQuery] = useState("");
     const [folder, setFolder] = useState<string | null>(null);
     const [type, setType] = useState<SourceTypeId | null>(null);
     const [layout, setLayout] = useState<Layout>("grid");
+    /** Whether "In progress" is drawing anything: a first upload is not an empty library. */
+    const [queueActive, setQueueActive] = useState(false);
     /**
      * A source's menu. Inside a multi-selection every verb acts on the whole
      * selection; otherwise on the one card or row.
@@ -141,6 +162,7 @@ export function KnowledgePane({
                         );
                     }
                 },
+                onOpenOutside: openOutside,
                 onRename: onRenameSource,
                 onMoveToFolder,
                 onCopyTitle: s => {
@@ -159,6 +181,7 @@ export function KnowledgePane({
         },
         [
             tm,
+            openOutside,
             sources,
             folders,
             selected,
@@ -381,39 +404,52 @@ export function KnowledgePane({
                     <div style={{ flex: 1 }} />
 
                     {selected.length > 0 && (
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-ink-3 text-[11.5px] tabular-nums">
                                 {t("selectedCount", { count: selected.length })}
                             </span>
-                            <button
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                className="border-brand bg-brand-soft text-brand-ink h-7 px-3 text-xs font-semibold"
                                 onClick={() => onAskAbout(selected)}
-                                style={{
-                                    padding: "6px 12px",
-                                    borderRadius: 7,
-                                    border: "1px solid var(--accent)",
-                                    color: "var(--accent-ink)",
-                                    background: "var(--accent-soft)",
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                }}
                             >
                                 {t("askAboutThese")}
-                            </button>
-                            <button
+                            </Button>
+                            {onExtractFields && selectedDocuments.length > 0 && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 px-3 text-xs"
+                                    onClick={() => onExtractFields(selectedDocuments)}
+                                >
+                                    <IconExtract />
+                                    {t("extractFields")}
+                                </Button>
+                            )}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                className="text-ink-3 h-7 px-2 text-[11.5px] font-normal"
                                 onClick={() => setSelected([])}
-                                style={{ fontSize: 11.5, color: "var(--ink-3)" }}
                             >
                                 {tc("actions.clear")}
-                            </button>
+                            </Button>
                         </div>
                     )}
                 </div>
             </header>
 
             <div style={{ flex: 1, overflowY: "auto", minHeight: 0, padding: "18px 24px 40px" }}>
+                {queue && <KnowledgeQueue {...queue} onActiveChange={setQueueActive} />}
                 {loading && sources.length === 0 ? (
                     <div style={{ fontSize: 13, color: "var(--ink-3)" }}>{t("loading")}</div>
-                ) : filtered.length === 0 ? (
+                ) : filtered.length === 0 &&
+                  queueActive &&
+                  sources.length === 0 ? null : filtered.length === 0 ? (
                     <EmptyState
                         filtersActive={filtersActive}
                         onClear={() => {

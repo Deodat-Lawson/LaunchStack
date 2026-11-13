@@ -31,6 +31,7 @@ import { brandPublishDueCron } from "~/server/inngest/functions/brandPublishDue"
 import { brandSyncInsightsCron } from "~/server/inngest/functions/brandSyncInsights";
 import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { scenarioRunJob } from "~/server/inngest/functions/scenarioRun";
+import { extractionRunJob } from "~/server/inngest/functions/extractionRun";
 import { marketingRunJob } from "~/server/inngest/functions/marketingRun";
 import {
     googleDriveSyncCron,
@@ -38,6 +39,7 @@ import {
 } from "~/server/inngest/functions/googleDriveSync";
 import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
 import { notionSyncCron, notionSyncJob } from "~/server/inngest/functions/notionSync";
+import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
 
 export function createInngestHandler() {
     return serve({
@@ -67,7 +69,9 @@ export function createInngestHandler() {
             brandSyncInsightsCron,
             proposalsRunJob,
             scenarioRunJob,
+            extractionRunJob,
             marketingRunJob,
+            assistantConversationFollowUpJob,
         ],
     });
 }

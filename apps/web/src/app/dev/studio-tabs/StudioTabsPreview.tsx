@@ -19,7 +19,7 @@ import { STUDIO_FEATURES_BY_ID } from "~/app/employer/documents/_workspace/types
  * re-split, which is the whole point of the feature and the easiest thing
  * to break.
  */
-const PREVIEW_IDS = ["chat", "knowledge", "draft", "rewrite", "meetings", "agents"];
+const PREVIEW_IDS = ["chat", "knowledge", "meetings", "agents", "workflows", "usage"];
 
 export function StudioTabsPreview() {
     const {

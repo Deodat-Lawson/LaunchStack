@@ -6,12 +6,14 @@
  * (left out for a role that may not see it, read-only for one that may only
  * read it), the shared chrome gives one primary action owned by the screen on
  * show, a deep link's row or People tab reaches the section through the hash
- * before the section reads it, and General edits the workspace's own details
- * with one Save that is off until something changed.
+ * before the section reads it, a link to a screen that moved to Models &
+ * usage (Usage, Bring your own keys, Models) opens it there, and General
+ * edits the workspace's own details with one Save that is off until
+ * something changed.
  */
 
 import React from "react";
-import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -184,27 +186,26 @@ afterAll(() => {
 });
 
 describe("the Workspace tab", () => {
-    it("opens on General, with nine screens in three groups for an owner", async () => {
+    it("opens on General, with seven screens in one row for an owner, API keys and Models gone", async () => {
         open();
 
         await waitFor(() =>
             expect(heading()).toHaveTextContent("What the workspace is called, and how it is known")
         );
-        // Nine screens are more than a row holds: the bar switches by group.
-        const area = screen.getByRole("radiogroup", { name: "Area" });
-        expect(
-            within(area)
-                .getAllByRole("radio")
-                .map(r => r.textContent)
-        ).toEqual(["Basics", "Setup", "Data"]);
-        expect(tabs()).toEqual(["General", "People and access", "Company profile"]);
-
-        fireEvent.click(within(area).getByRole("radio", { name: "Setup" }));
-        await waitFor(() =>
-            expect(tabs()).toEqual(["Bring your own keys", "Models", "Agents", "Integrations"])
-        );
-        fireEvent.click(within(area).getByRole("radio", { name: "Data" }));
-        await waitFor(() => expect(tabs()).toEqual(["Archive", "Labs"]));
+        // Seven screens fit one row: no switch between groups.
+        expect(screen.queryByRole("radiogroup", { name: "Area" })).not.toBeInTheDocument();
+        expect(tabs()).toEqual([
+            "General",
+            "People and access",
+            "Company profile",
+            "Agents",
+            "Integrations",
+            "Archive",
+            "Labs",
+        ]);
+        for (const gone of ["Bring your own keys", "API keys", "Models", "Usage"]) {
+            expect(within(bar()).queryByRole("link", { name: gone })).not.toBeInTheDocument();
+        }
     });
 
     it("sends its old Usage screen to the Usage tab's Spending screen, and goes home", async () => {
@@ -236,54 +237,56 @@ describe("the Workspace tab", () => {
 
     it("tells a Member who follows a link to an admins' screen why it is empty", async () => {
         as("member");
-        open("/models");
+        open("/agents");
 
-        expect(heading()).toHaveTextContent("Which model serves each kind of request");
-        expect(
-            screen.getByText(
-                "Models and routes isn't part of your role (Member). Ask an admin if you need it."
-            )
-        ).toBeInTheDocument();
-        expect(screen.queryByTestId("body-models")).not.toBeInTheDocument();
-    });
-
-    it("keeps Bring your own keys from a Member, and says why on a link to it", async () => {
-        as("member");
-        open("/byok");
-
-        expect(heading()).toHaveTextContent("Bring your own keys");
-        expect(
-            screen.getByText(
-                "Bring your own keys isn't part of your role (Member). Ask an admin if you need it."
-            )
-        ).toBeInTheDocument();
-        expect(screen.queryByTestId("body-byok")).not.toBeInTheDocument();
-    });
-
-    it("shows an owner Bring your own keys on its own screen", async () => {
-        open("/byok");
-        await screen.findByTestId("body-byok");
-        expect(heading()).toHaveTextContent("Bring your own keys");
-        expect(within(bar()).getByRole("link", { name: "Bring your own keys" })).toHaveAttribute(
-            "aria-current",
-            "page"
+        expect(heading()).toHaveTextContent(
+            "Who shows up to a meeting, and how much they may do alone"
         );
+        expect(
+            screen.getByText(
+                "Agents and autonomy isn't part of your role (Member). Ask an admin if you need it."
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByTestId("body-agents")).not.toBeInTheDocument();
+    });
+
+    it.each([
+        ["/byok", "/keys"],
+        ["/byok?focus=openrouter", "/keys?focus=openrouter"],
+        ["/models", "/models"],
+    ])("sends its old %s screen to Models & usage at %s, and goes home", async (at, location) => {
+        const { host } = open(at);
+        await waitFor(() => expect(host.openTool).toHaveBeenCalledWith("usage", location));
+        await waitFor(() =>
+            expect(heading()).toHaveTextContent("What the workspace is called, and how it is known")
+        );
+        expect(screen.queryByTestId("body-byok")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("body-models")).not.toBeInTheDocument();
+        expect(screen.queryByText("This screen does not exist")).not.toBeInTheDocument();
+    });
+
+    it("sends a Member's old link to Bring your own keys on too, without saying it isn't theirs", async () => {
+        // Models & usage decides where a Member lands (`usageRedirectFor`).
+        as("member");
+        const { host } = open("/byok");
+        await waitFor(() => expect(host.openTool).toHaveBeenCalledWith("usage", "/keys"));
+        expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
     });
 
     it("gives the one primary action to the screen on show", async () => {
         const user = userEvent.setup();
-        open("/models");
-        await screen.findByTestId("body-models");
-        expect(screen.getByRole("button", { name: "Connect a model" })).toBeInTheDocument();
-
-        await user.click(within(bar()).getByRole("link", { name: "Agents" }));
+        open("/agents");
         await screen.findByTestId("body-agents");
         expect(screen.getByRole("button", { name: "New agent" })).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Connect a model" })).not.toBeInTheDocument();
+
+        await user.click(within(bar()).getByRole("link", { name: "People and access" }));
+        await screen.findByTestId("body-people");
+        expect(screen.getByRole("button", { name: "Invite people" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
 
         await user.click(within(bar()).getByRole("link", { name: "Integrations" }));
         await screen.findByTestId("body-integrations");
-        expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Invite people" })).not.toBeInTheDocument();
     });
 
     it("puts a deep link's row in the hash before the section reads it, and takes it away after", async () => {
@@ -293,7 +296,6 @@ describe("the Workspace tab", () => {
         const archive = await screen.findByTestId("body-archive");
         await waitFor(() => expect(archive).toHaveAttribute("data-hash", "#retention.trashDays"));
 
-        fireEvent.click(screen.getByRole("radio", { name: "Basics" }));
         await user.click(within(bar()).getByRole("link", { name: "People and access" }));
         const people = await screen.findByTestId("body-people");
         // People would otherwise open on whatever tab the last hash named.

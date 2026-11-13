@@ -12,7 +12,9 @@
  * callbacks render in a top-level navigation, so JSON errors would strand
  * the user on a blank page. LinkedIn is connected from Growth › Brand, so
  * it returns into that tab's Accounts screen, after its Pages have been
- * read and turned into channels. A Notion connect queues its first sync.
+ * read and turned into channels. A Notion connect is the member's own
+ * (per-user): it is stored with them as owner, refused as `claimed` when
+ * another member already holds that Notion grant, and queues its first sync.
  */
 
 import { NextResponse } from "next/server";
@@ -27,10 +29,14 @@ import {
 } from "~/server/services/connectors/config";
 import { discoverLinkedInChannels } from "~/server/brand/channels";
 import { inngest } from "~/server/inngest/client";
-import { upsertConnection } from "~/server/services/connectors/connection-store";
+import { isPerUserProvider } from "~/server/db/schema/connectors";
+import {
+    ConnectorAccountClaimedError,
+    upsertConnection,
+} from "~/server/services/connectors/connection-store";
 import { ensureSyncState as ensureNotionSyncState } from "~/server/services/connectors/notion/store";
 import { oauthNonceCookieName, verifyState } from "~/server/services/connectors/oauth-state";
-import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { requireConnectorGrantor } from "~/server/services/connectors/workspace-guard";
 import { publicOrigin } from "~/server/public-origin";
 
 export const runtime = "nodejs";
@@ -88,7 +94,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         return backToDocuments(request, provider, "denied");
     }
 
-    const guard = await requireConnectorAdmin();
+    const guard = await requireConnectorGrantor(provider);
     if (!guard.ok) return backToDocuments(request, provider, "error");
 
     const code = searchParams.get("code");
@@ -121,6 +127,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             companyId: guard.ctx.companyId,
             provider,
             grantedByUserId: guard.ctx.userPk,
+            ownerUserId: isPerUserProvider(provider) ? guard.ctx.userPk : null,
             grant,
         });
 
@@ -156,6 +163,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
 
         return backToDocuments(request, provider, "connected");
     } catch (error) {
+        if (error instanceof ConnectorAccountClaimedError) {
+            console.warn(`[connectors] ${error.message}`);
+            return backToDocuments(request, provider, "claimed");
+        }
         console.error(`[connectors] ${provider} OAuth callback failed:`, error);
         return backToDocuments(request, provider, "error");
     }

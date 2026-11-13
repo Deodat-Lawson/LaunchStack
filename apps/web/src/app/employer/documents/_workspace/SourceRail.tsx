@@ -56,6 +56,7 @@ import {
     buildSourceMenuItems,
     canChangeSource,
 } from "./sourceContextMenu";
+import { useOpenOutside } from "./externalLink";
 import {
     RAIL_SECTION_ORDER,
     audienceLabel,
@@ -70,6 +71,7 @@ import {
     type WorkspaceFolder,
     type WorkspaceSource,
 } from "./types";
+import { useFolderCollapse } from "./useFolderCollapse";
 
 /** What is being dragged over the rail: a source into a folder, or a folder into a folder. */
 type RailDrag = { kind: "source"; id: string } | { kind: "folder"; path: string };
@@ -648,6 +650,8 @@ export interface SourceRailProps {
     workspaceName?: string | null;
     /** The signed-in person's auth id: their own files read "Added by you". */
     selfAuthId?: string | null;
+    /** Member + workspace key for remembering which folders are collapsed on this device. */
+    storageScope?: string | null;
     /**
      * The library is still loading: draw no sections yet, so the rail never
      * flashes "Files you add start here" over a library that has files.
@@ -939,17 +943,19 @@ export function SourceRail({
     onRevealed,
     workspaceName,
     selfAuthId,
+    storageScope,
     loading = false,
 }: SourceRailProps) {
     const t = useTranslations("sources.sourceRail");
     const tr = useTranslations("sources.railCommands");
     const tm = useTranslations("sources.contextMenu");
+    const openOutside = useOpenOutside();
     const ta = useTranslations("sources.audience");
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
     const [search, setSearch] = useState("");
     const [searchFocus, setSearchFocus] = useState(false);
-    const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+    const [collapsed, setCollapsed] = useFolderCollapse(storageScope);
     const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
     const [drag, setDrag] = useState<RailDrag | null>(null);
     /** Sources picked up with "Cut", waiting for "Paste" on a folder. */
@@ -1140,6 +1146,7 @@ export function SourceRail({
                         );
                     }
                 },
+                onOpenOutside: openOutside,
                 onShowInKnowledge: onOpenKnowledge ? () => onOpenKnowledge() : undefined,
                 onRename: onRenameSource,
                 onMoveToFolder,
@@ -1159,6 +1166,7 @@ export function SourceRail({
         },
         [
             tm,
+            openOutside,
             sources,
             folders,
             selected,

@@ -18,7 +18,7 @@ import { type NextResponse } from "next/server";
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { isStatusCarryingError } from "~/server/api/responses";
 import { brandReason } from "~/server/brand/words";
 import { error, handleRouteError, json } from "~/server/distribution/http";
@@ -41,7 +41,7 @@ export interface BrandCtx {
 export async function brandContext(): Promise<
     { ok: true; ctx: BrandCtx } | { ok: false; response: NextResponse }
 > {
-    const result = await requireWorkspaceContext();
+    const result = await requireBetaAppContext();
     if (!result.success) return { ok: false, response: result.response };
     return {
         ok: true,

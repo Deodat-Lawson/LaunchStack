@@ -73,6 +73,11 @@ jest.mock("~/server/profile/store", () => ({
 jest.mock("~/lib/credits", () => ({ getBalance: jest.fn(), debitTokens: jest.fn() }));
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn(() => false) }));
 jest.mock("~/server/db", () => ({ db: {} }));
+// Prospects and post comments are Growth's, a beta app.
+const mockBetaAppsOn = jest.fn();
+jest.mock("~/server/beta-apps", () => ({
+    betaAppsOn: (...args: unknown[]) => mockBetaAppsOn(...args),
+}));
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
         fn()
@@ -377,6 +382,30 @@ describe("starting a run", () => {
         expect(input.sources.documentIds).toEqual([7]);
         expect(mockExecutor.dispatchRun).toHaveBeenCalled();
     });
+
+    it.each([
+        [true, true],
+        [false, false],
+    ])(
+        "reads prospects and post comments only while beta apps are on (on: %s)",
+        async (on, kept) => {
+            mockBetaAppsOn.mockResolvedValue(on);
+            mockEvidence.visibleDocumentIds.mockResolvedValue(new Set());
+            await createScenario(as("creator"), {
+                subject: "We raise prices.",
+                sources: {
+                    documentIds: [],
+                    searchFiles: false,
+                    prospects: true,
+                    brandComments: true,
+                    companyProfile: false,
+                    notes: "",
+                },
+            });
+            const input = mockDb.createScenarioRun.mock.calls[0]![0];
+            expect(input.sources).toMatchObject({ prospects: kept, brandComments: kept });
+        }
+    );
 
     it("refuses with 402 when metering is enforced and the balance is short", async () => {
         mockMetering.isMeteringEnforced.mockReturnValue(true);

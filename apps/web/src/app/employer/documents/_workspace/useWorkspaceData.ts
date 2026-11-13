@@ -21,6 +21,7 @@ import {
 } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
 import type { SourceProcessingView } from "~/lib/source-progress";
+import { isSourceExternalLink } from "~/lib/source-external-link";
 import { nextSourcePollDelay, processingActivity } from "./sourcePolling";
 import type {
     ItemAccessView,
@@ -169,6 +170,7 @@ export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): Workspac
         indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
         errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
         processing: mediaOriginal ? undefined : (doc.processing ?? null),
+        externalLink: isSourceExternalLink(doc.externalLink) ? doc.externalLink : null,
     };
 }
 

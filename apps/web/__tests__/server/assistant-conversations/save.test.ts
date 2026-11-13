@@ -3,8 +3,9 @@
  * source-lifecycle seams mocked the way the publish route tests mock them:
  * who may save, what a first save creates (a private Unfiled source with the
  * conversation marker), what a re-save does (a new version of the same
- * document, or nothing for an identical transcript), and when the follow-up
- * is queued.
+ * document, or nothing for an identical transcript), and when and where the
+ * follow-up is queued: after the response by default, as an Inngest event
+ * with ASSISTANT_CONVERSATIONS_EXECUTOR=worker.
  */
 
 import { document } from "@launchstack/store/schema";
@@ -14,6 +15,7 @@ import { writeFollowUp } from "~/server/assistant-conversations/follow-up";
 import { followUpModelUnavailable } from "~/server/assistant-conversations/follow-up-model";
 import { ConversationSaveError } from "~/server/assistant-conversations/types";
 import { assistantConversations } from "~/server/db/schema";
+import { inngest } from "~/server/inngest/client";
 import type { McpPrincipal } from "~/server/mcp/principal";
 import { uploadFile } from "~/lib/storage";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
@@ -57,6 +59,7 @@ jest.mock("~/server/assistant-conversations/after-response", () => ({
 jest.mock("~/server/assistant-conversations/follow-up", () => ({
     writeFollowUp: jest.fn().mockResolvedValue("done"),
 }));
+jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 
 const ORIGIN = "http://localhost:3031";
 
@@ -113,6 +116,7 @@ async function expectRefusal(promise: Promise<unknown>, code: ConversationSaveEr
 beforeEach(() => {
     jest.clearAllMocks();
     fakeDb.reset();
+    delete process.env.ASSISTANT_CONVERSATIONS_EXECUTOR;
     (uploadFile as jest.Mock).mockResolvedValue({ url: "/api/files/9", provider: "database" });
     (processDocumentUpload as jest.Mock).mockResolvedValue(upload());
     (createDocumentVersionLifecycle as jest.Mock).mockResolvedValue({
@@ -238,6 +242,7 @@ describe("first save", () => {
             followUpError: null,
         });
 
+        expect(inngest.send).not.toHaveBeenCalled();
         expect(runAfterResponse).toHaveBeenCalledTimes(1);
         const work = (runAfterResponse as jest.Mock).mock.calls[0][1] as () => Promise<unknown>;
         await work();
@@ -457,5 +462,82 @@ describe("saving again with conversationId", () => {
             "forbidden"
         );
         expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
+    });
+});
+
+describe("on the worker (ASSISTANT_CONVERSATIONS_EXECUTOR=worker)", () => {
+    afterEach(() => {
+        delete process.env.ASSISTANT_CONVERSATIONS_EXECUTOR;
+    });
+
+    it("sends the follow-up event with ids and the hash, never the transcript", async () => {
+        process.env.ASSISTANT_CONVERSATIONS_EXECUTOR = " Worker ";
+        (inngest.send as jest.Mock).mockResolvedValue({ ids: ["evt"] });
+
+        const result = await saveAssistantConversation({
+            principal: principal(),
+            origin: ORIGIN,
+            title: "Pricing",
+            messages: MESSAGES,
+        });
+
+        expect(result.followUp).toBe("queued");
+        const hash = (processDocumentUpload as jest.Mock).mock.calls[0][0].ocrMetadata
+            .contentHash as string;
+        expect(inngest.send).toHaveBeenCalledTimes(1);
+        expect(inngest.send).toHaveBeenCalledWith({
+            name: "assistant-conversations/follow-up.requested",
+            data: {
+                conversationRowId: 1000,
+                documentId: 40,
+                companyId: "5",
+                authUserId: "ada",
+                title: "Pricing",
+                family: "claude",
+                contentHash: hash,
+            },
+        });
+        expect(JSON.stringify((inngest.send as jest.Mock).mock.calls[0][0])).not.toContain(
+            "raise prices"
+        );
+        expect(runAfterResponse).not.toHaveBeenCalled();
+        expect(writeFollowUp).not.toHaveBeenCalled();
+    });
+
+    it("writes the note after the response when the event cannot be sent", async () => {
+        process.env.ASSISTANT_CONVERSATIONS_EXECUTOR = "worker";
+        (inngest.send as jest.Mock).mockRejectedValue(new Error("inngest unreachable"));
+        const consoleError = jest.spyOn(console, "error").mockImplementation(() => undefined);
+
+        const result = await saveAssistantConversation({
+            principal: principal(),
+            origin: ORIGIN,
+            title: "Pricing",
+            messages: MESSAGES,
+        });
+
+        // The save is unaffected; the note falls back to the in-process path.
+        expect(result).toMatchObject({ status: "created", followUp: "queued" });
+        expect(runAfterResponse).toHaveBeenCalledTimes(1);
+        const work = (runAfterResponse as jest.Mock).mock.calls[0][1] as () => Promise<unknown>;
+        await work();
+        expect(writeFollowUp).toHaveBeenCalledWith(
+            expect.objectContaining({ documentId: 40, messages: expect.any(Array) })
+        );
+        consoleError.mockRestore();
+    });
+
+    it("sends nothing when no chat model is configured", async () => {
+        process.env.ASSISTANT_CONVERSATIONS_EXECUTOR = "worker";
+        (followUpModelUnavailable as jest.Mock).mockReturnValue("No chat model is configured");
+        const result = await saveAssistantConversation({
+            principal: principal(),
+            origin: ORIGIN,
+            title: "Pricing",
+            messages: MESSAGES,
+        });
+        expect(result.followUp).toBe("skipped");
+        expect(inngest.send).not.toHaveBeenCalled();
+        expect(runAfterResponse).not.toHaveBeenCalled();
     });
 });

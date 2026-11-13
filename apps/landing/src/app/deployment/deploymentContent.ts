@@ -376,9 +376,9 @@ export const GUIDES: Guide[] = [
         title: "Accounts & access",
         group: "Configure",
         summary:
-            "Configure the built-in Better Auth accounts, public origins, and optional social sign-in.",
+            "Configure the built-in Better Auth accounts, public origins, and optional sign-in with Google, GitHub, Microsoft or your own identity provider.",
         keywords:
-            "authentication better auth secret login signup google github oauth origins clerk",
+            "authentication better auth secret login signup google github microsoft entra azure ad oauth oidc sso single sign-on okta keycloak authentik authelia zitadel origins clerk",
         blocks: [
             {
                 title: "Required account configuration",
@@ -393,10 +393,48 @@ export const GUIDES: Guide[] = [
             {
                 title: "Optional social sign-in",
                 body: [
-                    "AUTH_GOOGLE_CLIENT_ID / AUTH_GOOGLE_CLIENT_SECRET enable Google sign-in. AUTH_GITHUB_CLIENT_ID / AUTH_GITHUB_CLIENT_SECRET enable GitHub sign-in. Register the callback URLs required by the configured Better Auth provider on your public origin.",
+                    "Each provider gets a button on the sign-in, invitation and join pages once both its client ID and secret are set, and appears under Settings › Account so people can connect it to an existing account. Register its callback on BETTER_AUTH_URL.",
                     "Sign-in OAuth and workspace connections use different configuration names. A working Google login does not configure a Google Drive connection.",
                 ],
+                rows: [
+                    {
+                        name: "Google",
+                        detail: "AUTH_GOOGLE_CLIENT_ID / AUTH_GOOGLE_CLIENT_SECRET. Callback: /api/auth/callback/google",
+                    },
+                    {
+                        name: "GitHub",
+                        detail: "AUTH_GITHUB_CLIENT_ID / AUTH_GITHUB_CLIENT_SECRET. Callback: /api/auth/callback/github",
+                    },
+                    {
+                        name: "Microsoft",
+                        detail: "AUTH_MICROSOFT_CLIENT_ID / AUTH_MICROSOFT_CLIENT_SECRET. Callback: /api/auth/callback/microsoft",
+                    },
+                    {
+                        name: "Your identity provider (OIDC)",
+                        detail: "AUTH_OIDC_ISSUER / AUTH_OIDC_CLIENT_ID / AUTH_OIDC_CLIENT_SECRET. Callback: /api/auth/callback/oidc",
+                    },
+                ],
                 links: [guideLink("Workspace connection setup", "connections")],
+            },
+            {
+                title: "Microsoft work, school and personal accounts",
+                body: [
+                    "Register an app in Microsoft Entra ID with a Web redirect URI of BETTER_AUTH_URL/api/auth/callback/microsoft and create a client secret. Sign-in asks only for openid, profile and email: no Microsoft Graph permissions.",
+                    "AUTH_MICROSOFT_TENANT_ID decides who can sign in: common (the default) takes any Microsoft account, organizations only work and school accounts, consumers only personal accounts, and a tenant ID only that organization. Set AUTH_MICROSOFT_AUTHORITY for a national cloud, such as https://login.chinacloudapi.cn or https://login.microsoftonline.us.",
+                ],
+                code: "AUTH_MICROSOFT_CLIENT_ID=00000000-0000-0000-0000-000000000000\nAUTH_MICROSOFT_CLIENT_SECRET=replace-with-the-client-secret-value\nAUTH_MICROSOFT_TENANT_ID=common",
+                file: ".env",
+                note: "Under Token configuration, add the verified_primary_email and verified_secondary_email optional claims to the ID token. Microsoft only confirms an address through them. An unconfirmed address can't join an account that already uses it; the person is told to sign in another way. The claims cover work and school accounts; a personal account Microsoft doesn't confirm can still sign up and sign in, just not join an existing account.",
+            },
+            {
+                title: "Your own identity provider (OIDC)",
+                body: [
+                    "Point LaunchStack at any OpenID Connect provider: Okta, Microsoft Entra ID, Google Workspace, Keycloak, Authentik, Authelia, Zitadel or Pocket ID. Create a confidential web client with the redirect URI BETTER_AUTH_URL/api/auth/callback/oidc and the scopes openid, email and profile.",
+                    "AUTH_OIDC_ISSUER is the issuer URL, the one /.well-known/openid-configuration lives under. AUTH_OIDC_NAME labels the button (Continue with Acme SSO); it defaults to SSO. Sign-in uses PKCE and checks the ID token against the issuer's published keys.",
+                ],
+                code: "AUTH_OIDC_ISSUER=https://id.example.com/realms/acme\nAUTH_OIDC_CLIENT_ID=launchstack\nAUTH_OIDC_CLIENT_SECRET=replace-with-the-client-secret\nAUTH_OIDC_NAME=Acme SSO",
+                file: ".env",
+                note: "LaunchStack trusts the provider's email_verified claim. A sign-in whose address the provider marks verified takes over an unconfirmed LaunchStack account with that address, so connect only a provider that confirms the addresses people sign in with.",
             },
             {
                 title: "Deployment mode",
@@ -612,14 +650,32 @@ export const GUIDES: Guide[] = [
         summary:
             "Enable supporting capabilities as you need them, without treating every integration as a setup requirement.",
         keywords:
-            "optional search exa serper langchain langsmith tracing images campaigns email sending collaboration slack",
+            "optional search web search search_provider exa serper brave tavily searxng company search lookalikes langchain langsmith tracing images campaigns email sending collaboration slack",
         blocks: [
             {
                 title: "Web research",
                 body: [
-                    "EXA_API_KEY is the recommended single key: Exa is the default engine for every web search (Ask's search_web tool, Prospects company search and lookalikes, competitor analysis, grant search, document research, trend search). It costs about $7 per 1,000 searches, and new Exa accounts get $10 of free credit each month.",
-                    "SERPER_API_KEY is an optional fallback for general and trend search; it has no company search or lookalikes. SEARCH_PROVIDER (exa, serper, fallback, or parallel) matters only when both keys are set. Forward settings absent from the Compose allowlist to the processes that use them.",
+                    "One setting, SEARCH_PROVIDER, picks the engine for every web search: Ask's search_web tool, Prospects, competitor analysis, grant search, document research, predictive analysis, and trend search. Each engine needs one credential, listed below. Settings › Models shows the active engine.",
+                    "Leave SEARCH_PROVIDER unset or empty and the first engine with a credential wins, in the order exa, serper, brave, tavily, searxng. Name an engine and only that engine is used: if its credential is missing, web search is off and the reason is logged, never a silent switch to another engine. The old values fallback and parallel are treated as unset.",
+                    "Only Exa has a company index. With Exa active, Prospects searches it for companies and offers lookalikes; with any other engine, Prospects finds companies through ordinary web search and lookalikes are off.",
                 ],
+                rows: [
+                    {
+                        name: "exa",
+                        detail: "EXA_API_KEY. About $7 per 1,000 searches, and new Exa accounts get $10 of free credit each month. The only engine with company search and lookalikes.",
+                    },
+                    {
+                        name: "serper",
+                        detail: "SERPER_API_KEY. Google results through serper.dev.",
+                    },
+                    { name: "brave", detail: "BRAVE_SEARCH_API_KEY. The Brave Search API." },
+                    { name: "tavily", detail: "TAVILY_API_KEY." },
+                    {
+                        name: "searxng",
+                        detail: "SEARXNG_URL, the base URL of a SearXNG instance with JSON output enabled. Free and self-hosted: start the bundled one with --profile search and set SEARXNG_URL=http://searxng:8080. Set SEARXNG_SECRET for production.",
+                    },
+                ],
+                note: "SearXNG asks public search engines from your server's address, and they may rate-limit or CAPTCHA a busy instance, which then returns fewer results or none. Use a keyed engine for steady traffic.",
             },
             {
                 title: "Image generation",

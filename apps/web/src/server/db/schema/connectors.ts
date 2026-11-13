@@ -9,10 +9,13 @@
  * OAuth provider — `provider` discriminates — Google Drive, Slack, GitHub,
  * Gmail, and Notion today.
  *
- * Gmail is the one per-user provider: a mailbox is personal, so its row is
- * owned by a member (`ownerUserId`, one connection per member per
- * workspace) and its synced threads land in a folder only that member can
- * see. Workspace-scoped rows leave `ownerUserId` null.
+ * Gmail and Notion are the per-user providers (PER_USER_CONNECTOR_PROVIDERS):
+ * a mailbox is personal, and so are the Notion pages a person picks on
+ * Notion's consent screen. Their rows are owned by a member (`ownerUserId`)
+ * and what they sync lands in a folder only that member can see until they
+ * share it. A member has at most one Gmail connection per workspace but may
+ * connect several Notion workspaces. Workspace-scoped rows leave
+ * `ownerUserId` null.
  *
  * Token shape varies by provider. Google issues a refresh token and short
  * -lived access tokens (cached in-process by the Drive services); Slack bot
@@ -61,6 +64,24 @@ export type ConnectorProvider = (typeof CONNECTOR_PROVIDERS)[number];
 export function isConnectorProvider(value: string): value is ConnectorProvider {
     return (CONNECTOR_PROVIDERS as readonly string[]).includes(value);
 }
+
+/**
+ * Providers whose connections belong to one member rather than the
+ * workspace. Their rows carry `ownerUserId`, only the owner sees or manages
+ * them, and nothing company-scoped may borrow their tokens.
+ */
+export const PER_USER_CONNECTOR_PROVIDERS: readonly ConnectorProvider[] = ["gmail", "notion"];
+
+export function isPerUserProvider(provider: string): boolean {
+    return (PER_USER_CONNECTOR_PROVIDERS as readonly string[]).includes(provider);
+}
+
+/**
+ * The partial unique index's predicate, shared with the Gmail upsert's
+ * ON CONFLICT clause: Postgres only picks the index as the arbiter when the
+ * clause's WHERE implies it.
+ */
+export const GMAIL_OWNER_INDEX_PREDICATE = sql`owner_user_id is not null and provider = 'gmail'`;
 
 export const connectorConnections = pgTable(
     "connector_connections",
@@ -114,7 +135,7 @@ export const connectorConnections = pgTable(
         /** Null when the stored access token does not expire. */
         accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
         /**
-         * Set only for per-user providers (Gmail): the member this connection
+         * Set only for per-user providers (Gmail, Notion): the member this connection
          * belongs to. Ownership, not attribution — the row dies with the
          * user, unlike `grantedByUserId`, which merely records who clicked.
          * Declared last for the same ADD COLUMN reason as the two above.
@@ -131,12 +152,16 @@ export const connectorConnections = pgTable(
             table.companyId,
             table.provider
         ),
-        /** One per-user connection per member per workspace per provider. */
+        /**
+         * One Gmail connection per member per workspace. Notion is per-user
+         * too, but a member may connect several Notion workspaces; each is
+         * keyed on its own bot id by the account index above.
+         */
         companyProviderOwnerUnique: uniqueIndex(
             "connector_connections_company_provider_owner_unique"
         )
             .on(table.companyId, table.provider, table.ownerUserId)
-            .where(sql`owner_user_id is not null`),
+            .where(GMAIL_OWNER_INDEX_PREDICATE),
     })
 );
 
@@ -361,6 +386,48 @@ export const notionSyncState = pgTable("notion_sync_state", {
     syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
 });
 
+/**
+ * Synced files someone deleted in LaunchStack, so the sync leaves them
+ * deleted. Drive and Notion sync what a pick or a share reaches, not a list
+ * of documents: without this, a deleted file is simply "new" to the next
+ * run and comes straight back. The file in Drive or Notion is never
+ * touched. Deleting the row (Settings › "Sync again", or picking the file or
+ * its folder again) lets the next sync import it like any new file.
+ */
+export const connectorDeletedItem = pgTable(
+    "connector_deleted_item",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** The connector's own id for the file: a Drive file id, a Notion page id. */
+        sourceId: varchar("source_id", { length: 128 }).notNull(),
+        /**
+         * Drive only: the pick that brought the file in. Picking that folder
+         * again brings its deleted files back; a file whose own pick was
+         * removed with it comes back by being picked again.
+         */
+        pickedRootId: varchar("picked_root_id", { length: 128 }),
+        /** The document's title when it was deleted, for Settings to name it. */
+        title: text("title").notNull(),
+        /** Who deleted it. Settings names a file only to whoever deleted it (ADR-014). */
+        deletedByUserPk: bigint("deleted_by_user_pk", { mode: "number" }).references(
+            () => users.id,
+            { onDelete: "set null" }
+        ),
+        deletedAt: timestamp("deleted_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionSourceUnique: uniqueIndex("connector_deleted_item_conn_source_idx").on(
+            table.connectionId,
+            table.sourceId
+        ),
+    })
+);
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -395,3 +462,4 @@ export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedIte
 export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
 export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;
 export type NotionSyncState = InferSelectModel<typeof notionSyncState>;
+export type ConnectorDeletedItem = InferSelectModel<typeof connectorDeletedItem>;

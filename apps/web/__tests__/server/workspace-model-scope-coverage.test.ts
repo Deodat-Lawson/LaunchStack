@@ -115,8 +115,8 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     [
         "apps/web/src/server/assistant-conversations/follow-up-model.ts",
         {
-            scopedBy: [`${API}/mcp/route.ts`],
-            note: "save_conversation over MCP; the follow-up runs in after(), which keeps the scope",
+            scopedBy: [`${API}/mcp/route.ts`, `${JOBS}/assistantConversationFollowUp.ts`],
+            note: "save_conversation over MCP; the follow-up runs in after() (which keeps the scope) or on the worker, scoped inside the generate step",
         },
     ],
 
@@ -134,16 +134,6 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
             note: "route POST; the job's run-analysis step with the document's company",
         },
     ]),
-
-    // --- Document drafting ------------------------------------------------
-    self(`${API}/document-generator/generate/route.ts`, "POST body after auth"),
-    self(`${API}/document-generator/grammar/route.ts`, "POST body after auth"),
-    self(`${API}/document-generator/initialize/route.ts`, "POST body after auth"),
-    self(
-        `${API}/document-generator/legal-chat/route.ts`,
-        "POST: legalChat() in scope, its catch too, so failures are worded for the right endpoint"
-    ),
-    self(`${API}/document-generator/outline/route.ts`, "POST body after auth"),
 
     // --- Notes, meetings, company profile, Vantage --------------------------
     [
@@ -308,6 +298,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ],
     [
+        "apps/web/src/server/extraction/documents.ts",
+        {
+            scopedBy: ["apps/web/src/server/extraction/executor.ts", `${JOBS}/extractionRun.ts`],
+            note: "the engine's extract and vision ports: inline tables scope each unit in driveTable (after()); the worker scopes inside each unit step",
+        },
+    ],
+    [
         "pipelines/src/repo-explainer/llm.ts",
         { scopedBy: [`${API}/repo-explainer/route.ts`], note: "POST body after auth" },
     ],
@@ -325,7 +322,14 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Workspace › Models shows the deployment's default models" },
+        { unscoped: "Models & usage › Models shows the deployment's default models" },
+    ],
+    [
+        "apps/web/src/server/workspace-models/scope.ts",
+        {
+            unscoped:
+                "describes each model a workspace offers in Ask by passing that model's own config (loadWorkspaceOfferedModels); never reads the ambient scope",
+        },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",

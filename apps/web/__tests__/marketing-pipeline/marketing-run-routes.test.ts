@@ -11,6 +11,11 @@ const mockCtx = jest.fn();
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: () => mockCtx(),
 }));
+// Growth (whose campaign writer this is) is a beta app: on unless a test turns it off.
+const mockReadWorkspaceSetting = jest.fn();
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: (...a: unknown[]) => mockReadWorkspaceSetting(...a),
+}));
 const mockCreate = jest.fn();
 const mockGet = jest.fn();
 const mockListActive = jest.fn();
@@ -68,6 +73,22 @@ beforeEach(() => {
     jest.clearAllMocks();
     mockListCompleted.mockResolvedValue([]);
     mockCtx.mockResolvedValue({ success: true, data: { companyId: 42n, authUserId: "u1" } });
+    mockReadWorkspaceSetting.mockResolvedValue(true);
+});
+
+it("POST is refused, and nothing queued, while the workspace has beta apps off", async () => {
+    mockReadWorkspaceSetting.mockResolvedValue(false);
+    const res = await POST(
+        new Request("http://x/api/marketing-pipeline/runs", {
+            method: "POST",
+            body: JSON.stringify({ platform: "linkedin", prompt: "Announce" }),
+        })
+    );
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ code: "beta_apps_off" });
+    expect(mockReadWorkspaceSetting).toHaveBeenCalledWith(42n, "labs.betaApps");
+    expect(mockCreate).not.toHaveBeenCalled();
+    expect(mockDispatch).not.toHaveBeenCalled();
 });
 
 it("POST queues a run and answers 202 without running anything", async () => {

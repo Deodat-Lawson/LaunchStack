@@ -12,7 +12,7 @@
     "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it.",
     "workspacePointer": {
       "label": "Workspace settings",
-      "blurb": "Name, people, your own keys, models, agents and integrations"
+      "blurb": "Name, people, company profile, agents and integrations"
     }
   },
   "groups": {
@@ -29,26 +29,25 @@
     "account": {
       "label": "Account",
       "blurb": "Profile, photo, password, sessions",
-      "title": "Who you are, and where you are signed in",
-      "description": "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session."
+      "title": "Who you are, and where you are signed in"
     },
     "appearance": {
       "label": "Appearance",
       "blurb": "Language, theme, density, motion, answers",
       "title": "How the app looks, and how it answers you",
-      "description": "Five controls, not eleven: four for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme."
+      "description": "Mindmap board colours belong to the map, so the theme doesn't change them."
     },
     "shortcuts": {
       "label": "Shortcuts",
       "blurb": "Every command and its keys",
       "title": "What the keyboard does",
-      "description": "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open."
+      "description": "Yours alone; other members keep their own."
     },
     "people": {
       "label": "People and access",
       "blurb": "Members, roles, folders",
       "title": "Who is in the workspace, and what they can see",
-      "description": "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else."
+      "description": "Who can open a folder is set on the folder itself; roles decide everything else."
     },
     "company": {
       "label": "Company profile",
@@ -57,69 +56,61 @@
       "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
     },
     "byok": {
-      "label": "Bring your own keys",
+      "label": "API keys",
       "blurb": "Your own API key for the workspace's AI",
-      "title": "Bring your own keys",
-      "description": "Your own provider account for the workspace's AI: chat, drafting, meetings and background work. Optional: left empty, the workspace runs on the server's keys."
+      "title": "API keys"
     },
     "models": {
-      "label": "Models and routes",
-      "blurb": "Which model answers what",
+      "label": "Models",
+      "blurb": "Which model answers what, and what people can pick in Ask",
       "title": "Which model serves each kind of request",
       "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
     },
     "agents": {
       "label": "Agents and autonomy",
       "blurb": "The roster, and what it may do",
-      "title": "Who shows up to a meeting, and how much they may do alone",
-      "description": "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect."
+      "title": "Who shows up to a meeting, and how much they may do alone"
     },
     "integrations": {
       "label": "Integrations",
       "blurb": "Connections, Slack, remote nodes",
-      "title": "What this workspace connects to",
-      "description": "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent."
+      "title": "What this workspace connects to"
     },
     "usage": {
       "label": "Spending and limits",
       "blurb": "Balance, pricing, per-person AI limits",
       "title": "What the workspace is spending",
-      "description": "The token balance and what has been drawing on it, each person's AI use this month against their limit, and the two settings the numbers inform. What every AI call used, by feature, model and person, is on the Overview."
+      "description": "What every AI call used, by feature, model and person, is on the Overview."
     },
     "archive": {
       "label": "Archive and retention",
       "blurb": "Trash, retired agents, purge",
-      "title": "What has been put away, and when it goes for good",
-      "description": "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own."
+      "title": "What has been put away, and when it goes for good"
     },
     "privacy": {
       "label": "Data and privacy",
       "blurb": "What leaves the deployment",
-      "title": "What leaves this deployment, and what stays",
-      "description": "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive."
+      "title": "What leaves this deployment, and what stays"
     },
     "labs": {
       "label": "Labs",
       "blurb": "Unfinished, opt-in",
-      "title": "Features that are not finished",
-      "description": "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace."
+      "title": "Features that are not finished"
     },
     "general": {
       "label": "General",
       "blurb": "Name, URL, description, colour",
       "title": "What the workspace is called, and how it is known",
-      "description": "Its name, the URL it is listed under, a line on what it does, and the colour of its mark. Everyone in the workspace sees these; admins change them."
+      "description": "Everyone in the workspace sees these; admins change them."
     }
   },
   "registry": {
     "appearance": {
       "theme": {
         "label": "Theme",
-        "description": "Light, dark, or whatever your system is using.",
         "options": {
           "system": {
-            "label": "System",
-            "description": "Follows your OS setting."
+            "label": "System"
           },
           "light": {
             "label": "Light"
@@ -131,7 +122,7 @@
       },
       "density": {
         "label": "Density",
-        "description": "How much fits on screen. Compact tightens spacing and type in lists.",
+        "description": "Compact tightens spacing and type in lists.",
         "options": {
           "comfortable": {
             "label": "Comfortable"
@@ -143,11 +134,9 @@
       },
       "reducedMotion": {
         "label": "Motion",
-        "description": "Animations and transitions across the app.",
         "options": {
           "system": {
-            "label": "Follow system",
-            "description": "Honours your OS reduce-motion setting."
+            "label": "Follow system"
           },
           "reduce": {
             "label": "Reduce",
@@ -174,13 +163,12 @@
     "privacy": {
       "productAnalytics": {
         "label": "Product analytics",
-        "description": "Whether page views from your browser count toward the hosted product's usage analytics. Off the hosted service nothing is sent regardless."
+        "description": "Whether page views from your browser count toward the hosted product's usage analytics."
       }
     },
     "workspace": {
       "auditRetentionDays": {
         "label": "Keep audit events for",
-        "description": "How long the audit log is kept.",
         "consequence": "Older events are deleted. Export a CSV first if you need a permanent copy.",
         "options": {
           "forever": {
@@ -248,9 +236,14 @@
       }
     },
     "labs": {
+      "betaApps": {
+        "label": "Beta apps",
+        "description": "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
+        "consequence": "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out."
+      },
       "predictiveGaps": {
         "label": "Predictive gaps",
-        "description": "Lists missing exhibits, schedules and compliance gaps across your documents. The analysis exists; the screen that shows it does not yet, so this only surfaces the entry in the palette."
+        "description": "Adds a Predictive gaps entry to ⌘K. Picking it opens nothing yet."
       }
     }
   },
@@ -290,7 +283,8 @@
   },
   "account": {
     "providers": {
-      "credential": "Email and password"
+      "credential": "Email and password",
+      "oidc": "Single sign-on"
     },
     "agent": {
       "unknown": "Unknown browser",
@@ -309,7 +303,6 @@
     "othersEnded": "Every other session ended",
     "signIn": {
       "title": "Sign-in",
-      "description": "How you get in, and any accounts linked to yours.",
       "loadFailed": "Couldn't load how you sign in. Reload the page to try again.",
       "linked": "Linked {when}",
       "couldNotUnlink": "Could not unlink.",
@@ -319,7 +312,7 @@
     },
     "sessions": {
       "title": "Sessions",
-      "description": "Every browser that currently holds a session for you. Ending one signs that browser out on its next request.",
+      "description": "Ending one signs that browser out on its next request.",
       "thisBrowser": "This browser",
       "meta": "last active {active} · expires {expires}",
       "metaWithIp": "{ip} · last active {active} · expires {expires}",
@@ -357,13 +350,18 @@
       "resets": "Resets on {date}.",
       "noLimit": "No limit",
       "noLimitBody": "No limit applies to you in this workspace. You've used {used} tokens this month.",
-      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Usage › Spending.",
-      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Usage › Spending.",
+      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Models & usage › Spending.",
+      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Models & usage › Spending.",
       "sourceServer": "This is the server's limit, counted across all your workspaces. Whoever runs this server can change it.",
       "usedHere": "{used} of it in this workspace.",
       "alsoServer": "The server also caps you at {limit} tokens a month across all your workspaces ({used} used).",
       "alsoWorkspace": "This workspace also limits you to {limit} tokens a month ({used} used).",
       "reached": "You've reached this limit. New AI requests are refused until it resets or the limit is raised."
+    },
+    "signInAgain": {
+      "button": "Sign in again",
+      "unlink": "For your security, unlinking a sign-in needs a recent sign-in. Sign in again, then unlink it.",
+      "password": "For your security, setting a password needs a recent sign-in. Sign in again, then set it."
     }
   },
   "answerStyle": {
@@ -374,11 +372,11 @@
   "appearance": {
     "display": {
       "title": "Display",
-      "description": "Applied to this browser as soon as you change it, and remembered for you everywhere you sign in."
+      "description": "Remembered for you everywhere you sign in."
     },
     "answers": {
       "title": "Answers",
-      "description": "How Launchstack answers you in chat when no agent is picked. Yours alone: nobody else's answers change."
+      "description": "Yours alone: nobody else's answers change."
     }
   },
   "archive": {
@@ -404,7 +402,7 @@
     "purged": "The retention window removed {count, plural, one {# item} other {# items}} older than {days} days when this page loaded.",
     "retention": {
       "title": "Retention",
-      "description": "What the trash empties on its own. Retired agents and archived channels are never removed automatically."
+      "description": "Retired agents and archived channels are never removed automatically."
     },
     "putAway": {
       "title": "Put away",
@@ -413,7 +411,7 @@
     "search": "Search the archive",
     "selected": "{count} selected",
     "deleteForGood": "Delete for good",
-    "needsDelete": "Deleting for good needs documents.delete.",
+    "needsDelete": "Deleting for good takes a role with “Delete documents and versions”.",
     "notDeletable": "Agents and channels cannot be deleted for good.",
     "loading": "Loading the archive…",
     "noMatch": "Nothing matches.",
@@ -439,12 +437,12 @@
     },
     "access": {
       "read": "Search and read",
-      "readWrite": "Search, read and save conversations"
+      "readWrite": "Search, read, save conversations and add documents"
     },
     "copy": "Copy {label}",
     "copyFailed": "Couldn't copy. Select the text and copy it yourself.",
     "badge": {
-      "write": "Read and save",
+      "write": "Read, save and add",
       "read": "Read only"
     },
     "tabs": {
@@ -463,7 +461,7 @@
       "step1": "In Claude (claude.ai or the desktop app), open <menu>Customize › Connectors › Add custom connector</menu> and paste the server URL.",
       "step2": "Choose <menu>Sign in now</menu>, and for the OAuth client pick <menu>Use Claude''s published identity</menu> (<menu>Register automatically</menu> also works).",
       "note1": "Free plans can add one custom connector. On Team and Enterprise, an Owner first adds it under <menu>Organization settings › Connectors › Add › Custom</menu>; then each member connects from Customize › Connectors.",
-      "note2": "For a script or a shared setup, choose No sign-in and add the request header <code>{header}</code> instead. Claude still marks that option beta for some organizations."
+      "note2": "For a script or a shared setup, choose No sign-in and add the request header <code>{header}</code> instead."
     },
     "chatgpt": {
       "step1": "In ChatGPT, open <menu>Settings › Apps & Connectors › Advanced settings</menu> and turn on <menu>Developer mode</menu>.",
@@ -502,8 +500,8 @@
       "whatItCan": "What it can do",
       "whatKeyCan": "What the key can do",
       "readDetail": "Search the workspace and open the documents you can see.",
-      "writeDetail": "Also save an assistant's conversation into the workspace as a document.",
-      "noSave": "Saving conversations needs permission to add documents, which your role doesn't include.",
+      "writeDetail": "Also save an assistant's conversations, and add documents to folders you can edit.",
+      "noSave": "Saving conversations and adding documents need permission to add documents, which your role doesn't include.",
       "submit": "Create key"
     },
     "creating": "Creating…",
@@ -513,14 +511,14 @@
     "disconnectedAssistant": "Disconnected {name}",
     "section": {
       "title": "Assistants (MCP)",
-      "description": "Let Claude, ChatGPT and Gemini search this workspace and save conversations into it. Each connection acts as you, in this workspace only, and sees only what you can."
+      "description": "Let Claude, ChatGPT and Gemini search this workspace, save conversations into it and add documents to folders you can edit. Each connection acts as you, in this workspace only, and sees only what you can."
     },
     "serverUrl": "Server URL",
     "pasteIt": "Paste it into the assistant. It sends you here to sign in and asks which workspace to use.",
     "connectTitle": "Connect an assistant",
     "connected": {
       "title": "Connected assistants",
-      "description": "Assistants you have signed in to this workspace. Revoking one cuts it off at its next request; what it already saved stays.",
+      "description": "Revoking one cuts it off at its next request; what it already saved or added stays.",
       "none": "No assistants connected yet.",
       "connectedAt": "Connected {when}",
       "connected": "Connected",
@@ -541,7 +539,7 @@
       "disconnect": "Disconnect {name}?",
       "thisAssistant": "this assistant",
       "keyBody": "Anything using this key stops working at its next request. This can't be undone.",
-      "connectionBody": "It loses access to this workspace at its next request. Conversations it already saved stay. You can connect it again any time.",
+      "connectionBody": "It loses access to this workspace at its next request. Conversations it saved and documents it added stay. You can connect it again any time.",
       "revokeKeyLabel": "Revoke key"
     }
   },
@@ -553,7 +551,7 @@
     "removing": "Removing…",
     "listSeparator": ", ",
     "drive": {
-      "description": "Files and folders picked from Google Drive in Add source stay in sync; what syncs is listed here. Linking also lets PDFs and Word documents be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs — and settled edits sync back as document versions.",
+      "description": "Files and folders picked from Google Drive in Add source stay in sync. Linked Word files can be edited in Google Docs, and PDFs in any Drive app or Drive for Desktop; settled edits sync back as document versions.",
       "actions": "Google Drive actions",
       "connectMenu": "Connect Google Drive…",
       "linking": "Drive linking",
@@ -581,13 +579,13 @@
     "disconnectFailedToast": "Could not disconnect {label}",
     "connections": {
       "title": "Workspace connections",
-      "description": "Accounts this workspace has connected. Connecting happens in the documents workspace under Add source → Connect; tokens are encrypted at rest and never leave the server.",
+      "description": "Connect accounts from Add source → Connect.",
       "checking": "Checking connections…",
       "noneAvailable": "Nothing connected yet. Available on this server: {list}.",
       "noClients": "No provider OAuth clients are configured. Set the client-id / client-secret pairs described in <code>.env.example</code> (Workspace connections block) plus <code>EMBEDDING_SECRETS_KEY</code>.",
       "actionsFor": "Actions for {label}",
       "connected": "connected",
-      "personal": "your mailbox, private to you",
+      "personal": "yours, private to you",
       "connectedBy": "connected by {who}",
       "confirmTitle": "Disconnect {label} from this workspace?",
       "confirmBody": "The connection is removed and its access revoked. To connect again, use Add source → Connect."
@@ -603,14 +601,13 @@
     },
     "setup": {
       "title": "Slack app setup",
-      "description": "Two things to configure on the Slack side, once per workspace.",
       "step1": "Point <strong>Event Subscriptions</strong> at <code>{url}</code>.",
       "step2": "Subscribe to <code>message.channels</code>, plus <code>message.groups</code> for private channels.",
       "step3": "Invite the bot to the channel, then paste that channel id when starting a meeting."
     },
     "controls": {
       "title": "In-channel controls",
-      "description": "What someone can type in Slack to steer a running meeting. Prefixed with ! rather than / so no extra Slack app configuration is needed."
+      "description": "What someone can type in Slack to steer a running meeting."
     },
     "hub": {
       "title": "Meeting hub",
@@ -649,16 +646,16 @@
     "reading": "Reading…",
     "server": {
       "title": "Server default",
-      "description": "The models this server runs any workspace on that hasn't brought its own. One AI endpoint serves every route; its address and credential stay on the server.",
-      "usesOwn": "This workspace runs on its own model, set up in Bring your own keys, so the server default below isn’t used.",
-      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in Bring your own keys.",
+      "description": "The models this server runs any workspace on that hasn't brought its own.",
+      "usesOwn": "This workspace runs on its own model, set up in API keys, so the server default below isn’t used.",
+      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in API keys.",
       "fixFile": "{error} Fix the file named by <code>CHAT_MODELS_CONFIG</code> and re-read.",
       "readingConfig": "Reading the configuration…",
       "fileNote": "Models are set in the server’s chat model file, named by <code>CHAT_MODELS_CONFIG</code>. Edit that file and restart to change a model; nothing here writes to it."
     },
     "routes": {
       "title": "Routes",
-      "description": "A route is a capability the app asks for. A route with no explicit model inherits default when default can serve it.",
+      "description": "A route with no explicit model inherits default when default can serve it.",
       "route": "Route",
       "model": "Model",
       "assignment": "Assignment",
@@ -668,7 +665,6 @@
     },
     "declared": {
       "title": "Declared models",
-      "description": "What each configured model is declared to do. A preset is a verified catalog entry; an override is the operator's own word, taken as given.",
       "behaviourFrom": "Behaviour from",
       "preset": "a verified preset",
       "override": "the configuration file (operator override)",
@@ -680,6 +676,36 @@
       "limits": "Limits",
       "context": "{count} context",
       "output": "{count} output"
+    },
+    "webSearch": {
+      "title": "Web search",
+      "description": "The engine every feature searches the web with: Ask, competitor analysis, grant search, document research, trend search and Prospects.",
+      "on": "On",
+      "pickedSetting": "Chosen with <code>SEARCH_PROVIDER</code>.",
+      "pickedAuto": "The first configured engine; set <code>SEARCH_PROVIDER</code> to choose.",
+      "pickedRetired": "<code>SEARCH_PROVIDER={requested}</code> is no longer a choice, so this is the first configured engine. Set <code>SEARCH_PROVIDER</code> to an engine below to choose.",
+      "setting": "Setting",
+      "webNews": "Web and news",
+      "webNewsEverywhere": "Web and news search for every feature.",
+      "companies": "Companies",
+      "companiesIndexed": "Company search and lookalikes in Prospects.",
+      "companiesByWebSearch": "Prospects finds companies through ordinary web search; lookalikes need {engines}.",
+      "missingCredentials": "<code>SEARCH_PROVIDER={requested}</code> needs <code>{credential}</code>. Web search is off until it’s set.",
+      "unknownProvider": "<code>SEARCH_PROVIDER={requested}</code> isn’t a search engine, so web search is off. Set it to one of <code>{values}</code>.",
+      "notConfigured": "Web search is off: no engine is configured. To turn it on, set <code>SEARCH_PROVIDER</code> to one of the engines below and give it that engine’s setting on the server, then restart.",
+      "engines": {
+        "title": "Engines",
+        "description": "Set SEARCH_PROVIDER to one of these values in the server’s environment, along with that engine’s setting. Unset, the first configured engine in this order is used.",
+        "engine": "Engine",
+        "needs": "Needs",
+        "status": "On this server",
+        "webNews": "Web and news search",
+        "webNewsCompanies": "Web, news and company search, with lookalikes",
+        "inUse": "In use",
+        "configured": "Configured",
+        "chosenMissing": "Chosen, not set",
+        "notSet": "Not set"
+      }
     }
   },
   "oauthClients": {
@@ -903,7 +929,6 @@
         "title": "The audit log is not part of your role",
         "body": "Ask an admin for the “Read the audit log” permission if you need it."
       },
-      "description": "Who changed what, newest first: roles, memberships, invitations, groups, and folder access. Filter by action or date, or export the current view.",
       "exportCsv": "Export CSV",
       "action": "Action",
       "allActions": "All actions",
@@ -980,7 +1005,7 @@
         "saveFailed": "The group wasn't saved.",
         "newTitle": "New group",
         "renameTitle": "Rename group",
-        "newDescription": "A name, and optionally a line on who belongs in it. Add people after creating it.",
+        "newDescription": "Add people after creating it.",
         "renameDescription": "Folders shared with this group keep their access under the new name.",
         "namePlaceholder": "Finance",
         "description": "Description <optional>(optional)</optional>",
@@ -998,8 +1023,7 @@
         "body": "Ask an admin to invite people or to give your role the “Send invitations” permission."
       },
       "intro": {
-        "title": "Invitations",
-        "description": "Share one invite link to bring people in, or invite someone by email. Both hand out a role you choose. Invitations expire; links can be reset or turned off."
+        "title": "Invitations"
       },
       "loading": "Loading invitations…",
       "form": {
@@ -1167,7 +1191,7 @@
       },
       "intro": {
         "title": "Members",
-        "description": "Everyone in the workspace, with the role that decides what they can do. Approve people who joined with a link, change roles, or suspend access without removing anyone."
+        "description": "Approve people who joined with a link, change roles, or suspend access without removing anyone."
       },
       "counts": {
         "label": "Member counts",
@@ -1212,8 +1236,7 @@
       "deleted": "{name} deleted.",
       "deleteFailed": "The role wasn't deleted.",
       "intro": {
-        "title": "Roles",
-        "description": "A role is a named set of permissions. The built-in ones cover most workspaces; add a custom role when a job needs a different mix — reviewers who can read and upload but never delete, say."
+        "title": "Roles"
       },
       "newRole": "New role",
       "loading": "Loading roles…",
@@ -1254,7 +1277,7 @@
         "newTitle": "New role",
         "editTitle": "Edit {name}",
         "roleFallback": "role",
-        "description": "Tick what people with this role may do. You can only hand out permissions you hold yourself; owner-only ones stay with the Owner.",
+        "description": "You can only hand out permissions you hold yourself; owner-only ones stay with the Owner.",
         "namePlaceholder": "Legal reviewer",
         "descriptionLabel": "Description <optional>(optional)</optional>",
         "descriptionPlaceholder": "Reads and comments, never deletes",
@@ -1278,8 +1301,7 @@
       }
     },
     "settingsCard": {
-      "title": "Workspace settings",
-      "description": "Policy that applies to everyone in this workspace."
+      "title": "Workspace settings"
     },
     "ui": {
       "statusActive": "Active",
@@ -1302,7 +1324,6 @@
     "loadFailed": "Could not load.",
     "outside": {
       "title": "Outside services",
-      "description": "Computed from this deployment's configuration. No credential is read to build this list.",
       "checking": "Checking configuration…",
       "deploymentAnalyticsOn": "This is a <strong>{mode, select, cloud {hosted} other {self-hosted}}</strong> deployment. Page views count toward the hosted product's usage analytics unless you opt out below.",
       "deploymentAnalyticsOff": "This is a <strong>{mode, select, cloud {hosted} other {self-hosted}}</strong> deployment. Nothing phones home: there is no product analytics script on this instance.",
@@ -1337,7 +1358,7 @@
         },
         "engines": {
           "azure": "Azure Document Intelligence",
-          "docling": "Docling on this deployment (when docling-serve is running)",
+          "docling": "Docling on this deployment",
           "landingAi": "Landing AI",
           "datalab": "Datalab"
         },
@@ -1372,7 +1393,6 @@
     },
     "kept": {
       "title": "What is kept",
-      "description": "Retention windows live where they are set; this is the summary.",
       "audit": {
         "label": "Audit log",
         "keptForever": "Kept forever",
@@ -1388,7 +1408,7 @@
       "credentials": {
         "label": "Stored credentials",
         "okLabel": "Encrypted at rest",
-        "detail": "API keys, connector tokens and app passwords a workspace saves are encrypted with EMBEDDING_SECRETS_KEY and never shown in full. Where document text goes for embedding is under Outside services."
+        "detail": "API keys, connector tokens and app passwords a workspace saves are encrypted and never shown in full."
       }
     },
     "choices": {
@@ -1413,7 +1433,6 @@
     "resetFailed": "Could not reset.",
     "section": {
       "title": "Profile",
-      "loadingDescription": "How you appear to the people you work with.",
       "description": "Yours in every workspace you belong to. A workspace can show a different photo, name or title — see below."
     },
     "changePhoto": "Change photo",
@@ -1539,6 +1558,7 @@
         "distribution": "Distribution research",
         "proposals": "Proposals",
         "scenarios": "Scenarios",
+        "extraction": "Extract",
         "trends": "Trend search",
         "predictiveAnalysis": "Predictive analysis",
         "repoExplainer": "Repo explainer",
@@ -1557,7 +1577,7 @@
     },
     "burn": {
       "title": "Burn by day",
-      "description": "Tokens drawn from the balance, by what drew them. Embeddings are charged in chat-token equivalents, like AI usage above. Hover a day for the breakdown; the table below carries the same numbers.",
+      "description": "Tokens drawn from the balance, by what drew them. Embeddings count in chat-token equivalents.",
       "lastDays": "Last {days} days",
       "nothing": "Nothing drew on the balance in this window.",
       "window": "Time window"
@@ -1571,8 +1591,7 @@
       "empty": "Nothing in this window."
     },
     "pricing": {
-      "title": "Pricing and warnings",
-      "description": "The numbers above exist to inform these two."
+      "title": "Pricing and warnings"
     },
     "recent": {
       "title": "Recent ledger entries",
@@ -1584,7 +1603,6 @@
     },
     "members": {
       "title": "AI limits per person",
-      "description": "What each person used of their AI allowance this month, in chat-token equivalents: a token on the standard chat model counts one, other models by their price against it, and embeddings and web searches by what they cost. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
       "serverCap": "This server caps each person at {limit} tokens a month across all their workspaces, on the server's own models. Whoever runs the server sets it; it can't be changed here.",
       "serverCapNotHere": "This server caps each person at {limit} tokens a month on its own models. It doesn't apply here: this workspace runs on its own model.",
       "loadFailed": "Couldn't load the AI limits per person.",
@@ -1610,7 +1628,7 @@
       "unattributed": "Not tied to a person: {tokens} tokens this month, from background work and from before use was counted per person.",
       "dialog": {
         "title": "AI limit for {name}",
-        "description": "The AI they may use in this workspace a month, in chat-token equivalents: a token on the standard chat model counts one, other models by their price against it, and embeddings and web searches by what they cost. Resets on the 1st (UTC).",
+        "description": "What they may use in this workspace a month. Resets on the 1st (UTC).",
         "choiceLabel": "Limit",
         "default": "Workspace default ({limit} tokens)",
         "defaultNone": "Workspace default (no limit)",
@@ -1667,7 +1685,7 @@
         "note": "Uses Anthropic's OpenAI-compatible API. A Claude Pro or Max plan can't be used here; it needs an API key."
       },
       "openrouter": {
-        "note": "One account, hundreds of models, billed to your OpenRouter credits."
+        "note": "Billed to your OpenRouter credits."
       },
       "custom": {
         "label": "Other OpenAI-compatible",
@@ -1690,7 +1708,7 @@
     "disconnectFailed": "Couldn't disconnect.",
     "section": {
       "title": "API key",
-      "description": "Optional. Run this workspace's AI on your own provider account: chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits. Without one, the workspace runs on the server's default models."
+      "description": "Run this workspace's AI on your own provider account: chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits. Without one, the workspace runs on the server's default models."
     },
     "checking": "Checking for a model of your own…",
     "connectOpenRouter": "Connect OpenRouter",
@@ -1765,7 +1783,7 @@
       "listedNone": "The server listed no models. Type the id instead.",
       "listed": "{count} models listed. Pick one as you type, or type any id.",
       "listFailedSuffix": "{message} You can still type a model id.",
-      "listOptional": "Optional: list what your account can reach. Some servers don’t list their models; you can always type an id.",
+      "listOptional": "You can always type a model id instead.",
       "moreModels": "Use different models for some work",
       "moreHint": "Leave one empty and that work uses the main model.",
       "testConnection": "Test connection",
@@ -1787,6 +1805,7 @@
   "server": {
     "errors": {
       "unknownSetting": "Unknown setting \"{key}\"",
+      "betaAppsOff": "This app is still being built, and beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs.",
       "folderScopeNeedsPath": "A folder scope needs a folder path",
       "scopeNotAllowed": "\"{key}\" cannot be set at the {scope} scope",
       "settingNeedsPermission": "Changing \"{label}\" needs {permission}",
@@ -1833,7 +1852,11 @@
       "keyRevokeFailed": "Could not revoke the key.",
       "accessKeyLimit": "You can hold at most {max} access keys in a workspace.",
       "oauthClientLimit": "A workspace can hold at most {max} OAuth clients.",
-      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details."
+      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details.",
+      "listSessionsFailed": "Couldn't load your sessions.",
+      "endCurrentSession": "To end this browser's session, sign out.",
+      "sessionNotFound": "That session has already ended.",
+      "endSessionFailed": "Couldn't end that session."
     },
     "models": {
       "enterAddress": "Enter the address of your model endpoint.",
@@ -1860,7 +1883,12 @@
       "chooseModel": "Choose a model to test.",
       "testFailed": "Couldn't run the test.",
       "enterEndpointFirst": "Enter the endpoint address first.",
-      "listFailed": "Couldn't list the models."
+      "listFailed": "Couldn't list the models.",
+      "offeredTooMany": "Offer at most {max} models in Ask.",
+      "offeredNoName": "Give \"{id}\" a name people will see.",
+      "offeredNameTooLong": "Keep the name for \"{id}\" to {max} characters.",
+      "offeredSameName": "Two models are called \"{label}\". Give each its own name.",
+      "offeredNeedsModel": "Choose the main model in API keys before offering models in Ask."
     },
     "photo": {
       "empty": "That file is empty.",
@@ -1892,7 +1920,7 @@
   },
   "workspaceTab": {
     "title": "Workspace",
-    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs and what it connects to. What it uses and spends is the Usage tab. Your own account, theme and shortcuts are in Settings.",
+    "about": "API keys, models and spending are in Models & usage. Your own account, theme and shortcuts are in Settings.",
     "groups": {
       "basics": "Basics",
       "setup": "Setup",
@@ -1902,8 +1930,6 @@
       "general": "General",
       "people": "People and access",
       "company": "Company profile",
-      "byok": "Bring your own keys",
-      "models": "Models",
       "agents": "Agents",
       "integrations": "Integrations",
       "archive": "Archive",
@@ -1919,7 +1945,7 @@
     "saved": "Workspace details saved",
     "name": {
       "label": "Name",
-      "description": "What everyone in the workspace sees: the sidebar, the workspace picker, invitations.",
+      "description": "Shown in the sidebar, the workspace picker and invitations.",
       "missing": "Give the workspace a name."
     },
     "slug": {
@@ -1932,17 +1958,15 @@
     },
     "description": {
       "label": "Description",
-      "description": "One sentence on what the company does. Optional; it helps the assistant.",
+      "description": "One sentence on what the company does. It helps the assistant.",
       "placeholder": "We turn scattered context into a knowledge graph for AI workflows."
     },
     "industry": {
       "label": "Industry",
-      "description": "The field the company works in. Optional.",
       "placeholder": "e.g. Logistics software"
     },
     "teamSize": {
       "label": "Team size",
-      "description": "Roughly how many people work here.",
       "count": "{count, plural, one {Just one person} other {About # people}}"
     },
     "colour": {

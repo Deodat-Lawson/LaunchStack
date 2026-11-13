@@ -56,6 +56,7 @@
     "clearFilters": "Clear filters",
     "selectedCount": "{count} selected",
     "askAboutThese": "Ask about these",
+    "extractFields": "Extract fields",
     "loading": "Loading your knowledge…",
     "gridView": "grid view",
     "listView": "list view",
@@ -92,9 +93,9 @@
         "label": "Mindmap",
         "desc": "Diagram it, then cite it"
       },
-      "googleDoc": {
-        "label": "Google Doc",
-        "desc": "Write it in Google Docs"
+      "file": {
+        "label": "File",
+        "desc": "Write it here or in Google Docs"
       },
       "paste": {
         "label": "Paste text",
@@ -196,17 +197,26 @@
       "untitled": "Untitled mindmap",
       "openingEditor": "Opening the editor…"
     },
-    "googleDoc": {
-      "connectIntro": "Connect a Google account for this workspace and new documents will be created in its Drive, in a <b>LaunchStack</b> folder.",
-      "connectGoogle": "Connect Google",
-      "created": "Created in Google Docs",
-      "createFailed": "Couldn't create that document",
-      "intro": "Write it in Google Docs. It shows up here right away, and edits sync back as new versions your workspace can cite.",
-      "introAs": "Write it in Google Docs as {email}. It shows up here right away, and edits sync back as new versions your workspace can cite.",
+    "file": {
+      "titleLabel": "Title",
       "untitled": "Untitled document",
-      "blank": "Blank document",
-      "creating": "Creating in Google Docs…",
-      "opensInNewTab": "Opens in a new tab"
+      "intro": "Give it a title, then choose where to write it.",
+      "here": {
+        "title": "Write it here",
+        "desc": "In LaunchStack's editor. Saved as a Markdown file in this folder, and citable once it's read.",
+        "creating": "Opening the editor…",
+        "createFailed": "Couldn't create that file"
+      },
+      "google": {
+        "title": "Write it in Google Docs",
+        "desc": "Opens in a new tab. Edits sync back here as new versions.",
+        "descAs": "As {email}. Opens in a new tab, and edits sync back here as new versions.",
+        "connectDesc": "Connect a Google account for this workspace and new documents will be created in its Drive, in a <b>LaunchStack</b> folder.",
+        "connectGoogle": "Connect Google",
+        "creating": "Creating in Google Docs…",
+        "created": "Created in Google Docs",
+        "createFailed": "Couldn't create that document"
+      }
     },
     "files": {
       "files": {
@@ -229,7 +239,6 @@
     "tooBigMany": "{count} files are over the {max} MB limit",
     "tooBigOneDetail": "It's {size}. Split it or export it at a lower quality.",
     "tooBigItem": "{name} ({size})",
-    "ocrNote": "PDFs and images are read with OCR when the server has an OCR service.",
     "transcribing": "Transcribing {name}… a long recording takes a few minutes; keep this open.",
     "uploadingProgress": "Uploading {current} / {total}…",
     "readyToUpload": "{count, plural, one {# file ready to upload} other {# files ready to upload}}",
@@ -310,8 +319,8 @@
       }
     },
     "handoff": {
-      "followAlong": "follow along in Processing",
-      "followAlongRecording": "recordings are transcribed first; follow along in Processing"
+      "followAlong": "follow along in Knowledge",
+      "followAlongRecording": "recordings are transcribed first; follow along in Knowledge"
     }
   },
   "addDestinationBar": {
@@ -376,6 +385,17 @@
     "syncNow": "Sync now",
     "cardTitle": "Synced from Google Drive",
     "notConnected": "Nothing syncs from Google Drive yet. Pick files from Drive in Add source › Files, or a folder in Add source › Folder, and they’re listed here."
+  },
+  "deletedHere": {
+    "title": "DELETED HERE ({count})",
+    "body": "{provider, select, notion {These pages stay deleted here: syncing leaves them out. Nothing was changed in Notion.} other {These files stay deleted here: syncing leaves them out. Nothing was changed in Google Drive.}}",
+    "syncAgain": "Sync again",
+    "syncAgainAria": "Sync {name} again",
+    "syncAllAgain": "Sync all {count} again",
+    "othersMore": "{count, plural, one {And # more, deleted by someone else.} other {And # more, deleted by other people.}}",
+    "othersOnly": "{count, plural, one {# deleted by someone else.} other {# deleted by other people.}}",
+    "restored": "{provider, select, notion {{count, plural, =0 {Nothing to bring back.} one {# page will sync again.} other {# pages will sync again.}}} other {{count, plural, =0 {Nothing to bring back.} one {# file will sync again.} other {# files will sync again.}}}}",
+    "restoreFailed": "Sync again didn't go through. Try again."
   },
   "driveSource": {
     "chooseFiles": "From Google Drive",
@@ -469,7 +489,6 @@
     "disconnected": "{name} disconnected. Pages already synced were kept.",
     "disconnectFailed": "Could not disconnect {name}",
     "revoked": "Access was revoked — reconnect to keep syncing",
-    "connectedBy": "connected by {name}",
     "reconnect": "Reconnect",
     "syncNow": "Sync now",
     "choosePages": "Choose pages",
@@ -477,10 +496,13 @@
     "connectTitle": "Connect Notion",
     "oneClick": "One-click OAuth, revoke anytime.",
     "checking": "Checking Notion…",
-    "forbidden": "Connecting Notion is for workspace admins. Ask one to connect it; the pages they pick will show up in Sources.",
+    "forbidden": "Connecting Notion needs permission to add files to this workspace. Ask a workspace admin for it.",
     "loadError": "Could not load the Notion connection. Try again in a moment.",
     "notConfigured": "Notion is not configured on this server. Whoever runs LaunchStack needs to add NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in .env.example.",
-    "connectAnother": "Connect another Notion workspace"
+    "connectAnother": "Connect another Notion workspace",
+    "paused": {
+      "noUpload": "Paused: you can no longer add files in this workspace. Ask an admin for upload access."
+    }
   },
   "obsidianImport": {
     "noNotes": "No Markdown notes found in that pick. Choose the vault's own folder.",
@@ -808,6 +830,27 @@
     "deleteSelection": "{count, plural, one {Delete # source…} other {Delete # sources…}}",
     "deleteSelectionSome": "{count, plural, one {Delete {movable} of # source…} other {Delete {movable} of # sources…}}"
   },
+  "externalLink": {
+    "openGoogleDrive": "Open in Google Drive",
+    "openNotion": "Open in Notion",
+    "openGmail": "Open in Gmail",
+    "openObsidian": "Open in Obsidian",
+    "openGithub": "Open on GitHub",
+    "openYoutube": "Open on YouTube",
+    "openClaude": "Open on claude.ai",
+    "openWeb": "Open original",
+    "openFile": "Open file",
+    "hintSite": "Opens {host} in a new tab",
+    "hintObsidian": "Opens this note in your Obsidian vault",
+    "hintFile": "Opens the file itself in a new browser tab",
+    "detailsLabel": "Opens in",
+    "placeGoogleDrive": "Google Drive",
+    "placeNotion": "Notion",
+    "placeGmail": "Gmail",
+    "placeObsidian": "Obsidian",
+    "placeYoutube": "YouTube",
+    "placeFile": "Your browser"
+  },
   "connectorSync": {
     "syncing": "Syncing…",
     "starting": "Starting sync…",
@@ -849,6 +892,7 @@
     "youtube": "YouTube",
     "paste": "Note",
     "mindmap": "Mindmap",
+    "sandboxedPage": "Sandboxed page",
     "artifact": "Claude artifact"
   },
   "domains": {
@@ -1007,7 +1051,9 @@
       "obsidianNeedsUpload": "Importing notes needs permission to add documents.",
       "driveConnectsElsewhere": "Google Drive connects via /api/connectors/google/oauth/start.",
       "gmailConnectsElsewhere": "Gmail connects via /api/connectors/google/oauth/start?provider=gmail.",
-      "unknownProvider": "Unknown connector provider: {provider}"
+      "unknownProvider": "Unknown connector provider: {provider}",
+      "deletedDriveNotionOnly": "Deleted files are tracked only for google-drive and notion.",
+      "deletedRestored": "{count, plural, =0 {Nothing to bring back.} one {# file will come back on the next sync.} other {# files will come back on the next sync.}}"
     },
     "gmail": {
       "notConfigured": "The Gmail connector is not enabled on this server. Set GMAIL_CONNECTOR_ENABLED=true, GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY.",

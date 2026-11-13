@@ -5,14 +5,19 @@
  *
  * Body only. The profile (photo, names, title, the per-workspace look) is
  * `ProfileEditor`; your AI allowance this month is `AiAllowanceCard`. The
- * rest is Better Auth's own data, reached through its
- * client: the credential and linked sign-in accounts, and every session
- * that currently holds a cookie for this person, with the device it came
- * from and a way to end it.
+ * rest is Better Auth's own data: the credential and linked sign-in
+ * accounts (through its client), and every session that currently holds a
+ * cookie for this person, with the device it came from and a way to end it
+ * (through `/api/profile/sessions`, which needs no recent sign-in and never
+ * sends a session's token to the page).
+ *
+ * Unlinking a sign-in and setting a password do need a recent sign-in
+ * (Better Auth's `freshAge`, a day); past that, they say so and offer to
+ * sign in again rather than showing Better Auth's "Session is not fresh".
  *
  * The password forms are the person's own forms for their own password: a
  * change goes to `/api/auth/change-password`, and setting one on an account
- * that has none (made with Google or GitHub) to `/api/profile/sign-in`.
+ * that has none (made with a sign-in provider) to `/api/profile/sign-in`.
  *
  * "Connect" links a provider the deployment offers to this account; the
  * round trip through the provider comes back to `/employer/settings` with
@@ -25,15 +30,14 @@ import { KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
 import { connectErrorMessage } from "~/components/auth/auth-errors";
-import { IconGithub, IconGoogle } from "~/components/icons/brand";
-import type { IconComponent } from "~/components/icons/types";
+import { providerIcon } from "~/components/auth/provider-icons";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { Field, TextInput } from "~/components/field";
-import { authClient, useUser } from "~/lib/auth-client";
+import { authClient, useAuth, useUser } from "~/lib/auth-client";
+import { providerName, type SocialProvider } from "~/lib/auth/providers";
 import { cn } from "~/lib/utils";
-import type { SocialProvider } from "~/server/auth/providers";
 
 import { AiAllowanceCard } from "./AiAllowanceCard";
 import { AssistantsBlock } from "./AssistantsBlock";
@@ -42,15 +46,22 @@ import { useTimeFormat } from "./people/format";
 import { ProfileEditor } from "./ProfileEditor";
 import { StatusNote } from "./ui";
 
+/** A row from `/api/profile/sessions`: no token, the current one marked. */
 interface SessionRow {
     id: string;
-    token: string;
-    createdAt: Date | string;
-    updatedAt: Date | string;
-    expiresAt: Date | string;
-    ipAddress?: string | null;
-    userAgent?: string | null;
+    current: boolean;
+    createdAt: string;
+    updatedAt: string;
+    expiresAt: string;
+    ipAddress: string | null;
+    userAgent: string | null;
 }
+
+/** Better Auth's code for a sign-in older than `freshAge`; our routes answer with it too. */
+const SESSION_NOT_FRESH = "SESSION_NOT_FRESH";
+
+/** Back here after signing in again, opened on the Sign-in block. */
+const SIGN_IN_AGAIN_RETURN = "/employer/settings?show=sign-in";
 
 interface AccountRow {
     id: string;
@@ -62,26 +73,57 @@ interface AccountRow {
 /** `useTranslations("settings.account")`. */
 type AccountT = ReturnType<typeof useTranslations<"settings.account">>;
 
-/** Brand names stay as they are; the password is said in the reader's language. */
-const PROVIDER_BRAND: Record<string, string> = {
-    google: "Google",
-    github: "GitHub",
-};
-
-function providerLabel(t: AccountT, providerId: string): string | undefined {
+/**
+ * Brand names stay as they are; the password is said in the reader's
+ * language. The deployment's OIDC provider is named by the deployment (the
+ * offered list carries AUTH_OIDC_NAME); a linked one the deployment no longer
+ * offers is just "Single sign-on".
+ */
+function providerLabel(
+    t: AccountT,
+    providerId: string,
+    offered: readonly SocialProvider[]
+): string | undefined {
     if (providerId === "credential") return t("providers.credential");
-    return PROVIDER_BRAND[providerId];
+    return (
+        providerName(providerId, offered) ??
+        (providerId === "oidc" ? t("providers.oidc") : undefined)
+    );
 }
 
-const PROVIDER_ICON: Record<string, IconComponent> = {
-    credential: KeyRound,
-    google: IconGoogle,
-    github: IconGithub,
-};
+/**
+ * "For your security, sign in again to …" with the button that does it:
+ * signs out, then the sign-in page brings the person back here.
+ */
+function SignInAgainNote({ message }: { message: string }) {
+    const t = useTranslations("settings.account");
+    const { signOut } = useAuth();
+    const [leaving, setLeaving] = useState(false);
+    return (
+        <StatusNote tone="warn">
+            <div className="flex flex-wrap items-center gap-3">
+                <span className="min-w-0 flex-1">{message}</span>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={leaving}
+                    onClick={() => {
+                        setLeaving(true);
+                        void signOut({
+                            redirectUrl: `/signin?next=${encodeURIComponent(SIGN_IN_AGAIN_RETURN)}`,
+                        });
+                    }}
+                >
+                    {t("signInAgain.button")}
+                </Button>
+            </div>
+        </StatusNote>
+    );
+}
 
 /** Where a "Connect" round trip lands, success or failure. */
 function connectReturnPath(provider: SocialProvider): string {
-    return `/employer/settings?connect=${provider}#account`;
+    return `/employer/settings?connect=${provider.id}#account`;
 }
 
 interface Arrival {
@@ -149,8 +191,6 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     const tAuthErrors = useTranslations("auth.errors");
     const time = useTimeFormat();
     const { user } = useUser();
-    const session = authClient.useSession();
-    const currentToken = session.data?.session.token ?? null;
 
     const [sessions, setSessions] = useState<SessionRow[] | null>(null);
     const [accounts, setAccounts] = useState<AccountRow[] | null>(null);
@@ -163,14 +203,28 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         provider: string;
         error: string;
     } | null>(null);
+    // Back from a successful "Connect": toasted once the offered list has
+    // loaded, since only that list can name the deployment's OIDC provider.
+    const [connectedArrival, setConnectedArrival] = useState<string | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
     const signInRef = useRef<HTMLDivElement>(null);
     const [showSignIn, setShowSignIn] = useState(false);
+    // Unlink was refused because the sign-in is more than a day old.
+    const [unlinkNeedsSignIn, setUnlinkNeedsSignIn] = useState(false);
 
     const refresh = useCallback(async () => {
         try {
             const [list, linked, signIn] = await Promise.all([
-                authClient.listSessions(),
+                fetch("/api/profile/sessions", { credentials: "same-origin" }).then(async res => {
+                    const body = (await res.json().catch(() => null)) as {
+                        sessions?: SessionRow[];
+                        error?: string;
+                    } | null;
+                    if (!res.ok || !body?.sessions) {
+                        return { data: null, error: { message: body?.error } };
+                    }
+                    return { data: body.sessions, error: null };
+                }),
                 authClient.listAccounts(),
                 fetch("/api/profile/sign-in", { credentials: "same-origin" })
                     .then(res =>
@@ -182,7 +236,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             if (!linked.error) setAccounts((linked.data ?? []) as AccountRow[]);
             setOffered(signIn?.providers ?? []);
             if (list.error) throw new Error(list.error.message ?? t("couldNotListSessions"));
-            setSessions((list.data ?? []) as SessionRow[]);
+            setSessions(list.data ?? []);
             setError(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : t("couldNotLoad"));
@@ -205,15 +259,19 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         if (connected.error) {
             setConnectFailure({ provider: connected.provider, error: connected.error });
         } else {
-            toast.success(
-                t("connected", {
-                    provider: providerLabel(t, connected.provider) ?? t("accountFallback"),
-                })
-            );
+            setConnectedArrival(connected.provider);
         }
-        // Once, on arrival; `t` changing would replay the toast.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (connectedArrival === null || accounts === null) return;
+        toast.success(
+            t("connected", {
+                provider: providerLabel(t, connectedArrival, offered) ?? t("accountFallback"),
+            })
+        );
+        setConnectedArrival(null);
+    }, [connectedArrival, accounts, offered, t]);
 
     // Once the block has its rows, so it doesn't move after the jump.
     useEffect(() => {
@@ -223,37 +281,44 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     }, [showSignIn, accounts]);
 
     const connect = async (provider: SocialProvider) => {
-        setBusy(`connect:${provider}`);
+        setBusy(`connect:${provider.id}`);
         setConnectFailure(null);
         try {
             // Leaves the page for the provider on success; Better Auth's client
             // follows the redirect it answers with.
             const result = await authClient.linkSocial({
-                provider,
+                provider: provider.id,
                 callbackURL: connectReturnPath(provider),
                 errorCallbackURL: connectReturnPath(provider),
             });
             if (result.error) {
                 throw new Error(
-                    result.error.message ??
-                        t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
+                    result.error.message ?? t("couldNotConnect", { provider: provider.name })
                 );
             }
         } catch (err) {
             toast.error(
                 err instanceof Error
                     ? err.message
-                    : t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
+                    : t("couldNotConnect", { provider: provider.name })
             );
             setBusy(null);
         }
     };
 
-    const revoke = async (token: string) => {
-        setBusy(token);
+    const revoke = async (id: string) => {
+        setBusy(id);
         try {
-            const result = await authClient.revokeSession({ token });
-            if (result.error) throw new Error(result.error.message ?? t("couldNotEndSession"));
+            const res = await fetch("/api/profile/sessions", {
+                method: "DELETE",
+                credentials: "same-origin",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                throw new Error(body?.error ?? t("couldNotEndSession"));
+            }
             toast.success(t("sessionEnded"));
             await refresh();
         } catch (err) {
@@ -279,9 +344,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
     const hasPassword = accounts?.some(account => account.providerId === "credential") ?? false;
     const unlinked = offered.filter(
-        provider => !accounts?.some(account => account.providerId === provider)
+        provider => !accounts?.some(account => account.providerId === provider.id)
     );
-    const others = (sessions ?? []).filter(row => row.token !== currentToken);
+    const others = (sessions ?? []).filter(row => !row.current);
 
     return (
         <>
@@ -292,17 +357,19 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             <AiAllowanceCard />
 
             <div ref={signInRef} className="scroll-mt-4" />
-            <Section title={t("signIn.title")} description={t("signIn.description")}>
+            <Section title={t("signIn.title")}>
                 {connectFailure && (
                     <StatusNote tone="danger">
                         {connectErrorMessage(
                             connectFailure.error,
-                            connectFailure.provider,
+                            offered.find(provider => provider.id === connectFailure.provider) ??
+                                connectFailure.provider,
                             user?.email,
                             tAuthErrors
                         )}
                     </StatusNote>
                 )}
+                {unlinkNeedsSignIn && <SignInAgainNote message={t("signInAgain.unlink")} />}
                 <Card>
                     {accountsFailed ? (
                         <StatusNote tone="danger" style={{ marginBottom: 0 }}>
@@ -325,7 +392,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     <ProviderMark providerId={account.providerId} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {providerLabel(t, account.providerId) ??
+                                            {providerLabel(t, account.providerId, offered) ??
                                                 account.providerId}
                                         </div>
                                         <div className="text-ink-3 text-[12px]">
@@ -341,10 +408,17 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                             disabled={busy === account.id}
                                             onClick={async () => {
                                                 setBusy(account.id);
+                                                setUnlinkNeedsSignIn(false);
                                                 try {
+                                                    // Better Auth's own row id, not the
+                                                    // provider's subject (accountId).
                                                     const result = await authClient.unlinkAccount({
-                                                        accountId: account.accountId,
+                                                        accountId: account.id,
                                                     });
+                                                    if (result.error?.code === SESSION_NOT_FRESH) {
+                                                        setUnlinkNeedsSignIn(true);
+                                                        return;
+                                                    }
                                                     if (result.error) {
                                                         throw new Error(
                                                             result.error.message ??
@@ -371,16 +445,16 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                             ))}
                             {unlinked.map((provider, index) => (
                                 <li
-                                    key={provider}
+                                    key={provider.id}
                                     className={cn(
                                         "flex items-center gap-3 py-2.5",
                                         (accounts.length > 0 || index > 0) && "border-line border-t"
                                     )}
                                 >
-                                    <ProviderMark providerId={provider} />
+                                    <ProviderMark providerId={provider.id} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {providerLabel(t, provider) ?? provider}
+                                            {provider.name}
                                         </div>
                                         <div className="text-ink-3 text-[12px]">
                                             {tc("status.notConnected")}
@@ -392,7 +466,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                         disabled={busy?.startsWith("connect:") ?? false}
                                         onClick={() => void connect(provider)}
                                     >
-                                        {busy === `connect:${provider}`
+                                        {busy === `connect:${provider.id}`
                                             ? t("signIn.connecting")
                                             : tc("actions.connect")}
                                     </Button>
@@ -413,64 +487,56 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                             {tc("status.loading")}
                         </div>
                     ) : (
-                        sessions
-                            .slice()
-                            .sort((a, b) =>
-                                a.token === currentToken ? -1 : b.token === currentToken ? 1 : 0
-                            )
-                            .map((row, index) => {
-                                const current = row.token === currentToken;
-                                return (
-                                    <div
-                                        key={row.id}
-                                        className={cn(
-                                            "flex items-center gap-3 px-5 py-3",
-                                            index > 0 && "border-line border-t"
-                                        )}
-                                    >
-                                        <div className="min-w-0 flex-1">
-                                            <div className="text-ink flex items-center gap-2 text-[13px] font-semibold">
-                                                {describeAgent(t, row.userAgent)}
-                                                {current && (
-                                                    <Badge variant="success">
-                                                        {t("sessions.thisBrowser")}
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                            {/* An IPv6 address has no break opportunities of its
-                                                own; without this it widens a narrow pane. */}
-                                            <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
-                                                {row.ipAddress
-                                                    ? t("sessions.metaWithIp", {
-                                                          ip: row.ipAddress,
-                                                          active: time.relative(iso(row.updatedAt)),
-                                                          expires: time.relative(
-                                                              iso(row.expiresAt)
-                                                          ),
-                                                      })
-                                                    : t("sessions.meta", {
-                                                          active: time.relative(iso(row.updatedAt)),
-                                                          expires: time.relative(
-                                                              iso(row.expiresAt)
-                                                          ),
-                                                      })}
-                                            </div>
+                        // The route sorts: this browser first, then by last activity.
+                        sessions.map((row, index) => {
+                            const current = row.current;
+                            return (
+                                <div
+                                    key={row.id}
+                                    className={cn(
+                                        "flex items-center gap-3 px-5 py-3",
+                                        index > 0 && "border-line border-t"
+                                    )}
+                                >
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-ink flex items-center gap-2 text-[13px] font-semibold">
+                                            {describeAgent(t, row.userAgent)}
+                                            {current && (
+                                                <Badge variant="success">
+                                                    {t("sessions.thisBrowser")}
+                                                </Badge>
+                                            )}
                                         </div>
-                                        {!current && (
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                disabled={busy === row.token}
-                                                onClick={() => void revoke(row.token)}
-                                            >
-                                                {busy === row.token
-                                                    ? t("sessions.ending")
-                                                    : t("sessions.end")}
-                                            </Button>
-                                        )}
+                                        {/* An IPv6 address has no break opportunities of its
+                                                own; without this it widens a narrow pane. */}
+                                        <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
+                                            {row.ipAddress
+                                                ? t("sessions.metaWithIp", {
+                                                      ip: row.ipAddress,
+                                                      active: time.relative(row.updatedAt),
+                                                      expires: time.until(row.expiresAt),
+                                                  })
+                                                : t("sessions.meta", {
+                                                      active: time.relative(row.updatedAt),
+                                                      expires: time.until(row.expiresAt),
+                                                  })}
+                                        </div>
                                     </div>
-                                );
-                            })
+                                    {!current && (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            disabled={busy === row.id}
+                                            onClick={() => void revoke(row.id)}
+                                        >
+                                            {busy === row.id
+                                                ? t("sessions.ending")
+                                                : t("sessions.end")}
+                                        </Button>
+                                    )}
+                                </div>
+                            );
+                        })
                     )}
                 </Card>
                 {others.length > 0 && (
@@ -495,7 +561,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 }
 
 function ProviderMark({ providerId }: { providerId: string }) {
-    const Icon = PROVIDER_ICON[providerId] ?? KeyRound;
+    const Icon = providerId === "credential" ? KeyRound : providerIcon(providerId);
     return (
         <span
             aria-hidden
@@ -507,16 +573,18 @@ function ProviderMark({ providerId }: { providerId: string }) {
 }
 
 /**
- * For an account with no password: one made with Google or GitHub, or one
+ * For an account with no password: one made with a sign-in provider, or one
  * whose unconfirmed password a provider sign-in removed. No current password
  * to ask for, so the session is the proof (see /api/profile/sign-in).
  */
 function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
     const t = useTranslations("settings.account.password");
+    const tAccount = useTranslations("settings.account");
     const [next, setNext] = useState("");
     const [confirm, setConfirm] = useState("");
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [needsSignIn, setNeedsSignIn] = useState(false);
 
     const canSave = next.length >= 8 && next.length <= 128 && next === confirm;
 
@@ -525,6 +593,7 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
         if (!canSave) return;
         setSaving(true);
         setError(null);
+        setNeedsSignIn(false);
         try {
             const res = await fetch("/api/profile/sign-in", {
                 method: "POST",
@@ -533,7 +602,14 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                 body: JSON.stringify({ newPassword: next }),
             });
             if (!res.ok) {
-                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                const body = (await res.json().catch(() => null)) as {
+                    error?: string;
+                    code?: string;
+                } | null;
+                if (body?.code === SESSION_NOT_FRESH) {
+                    setNeedsSignIn(true);
+                    return;
+                }
                 throw new Error(body?.error ?? t("couldNotSet"));
             }
             toast.success(t("passwordSet"));
@@ -578,6 +654,11 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                         <StatusNote tone="danger" style={{ marginBottom: 0 }}>
                             {error}
                         </StatusNote>
+                    </div>
+                )}
+                {needsSignIn && (
+                    <div className="mt-3 [&>div]:mb-0">
+                        <SignInAgainNote message={tAccount("signInAgain.password")} />
                     </div>
                 )}
                 <div className="mt-4 flex justify-end">

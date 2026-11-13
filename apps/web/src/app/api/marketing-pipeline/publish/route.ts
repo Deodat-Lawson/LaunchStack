@@ -2,7 +2,7 @@ import { z } from "zod";
 import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
 import { markContentPublished } from "@launchstack/pipelines/marketing";
 import { createBrandPosts, publishBrandPost } from "@launchstack/pipelines/marketing/posts";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 import { defaultChannelFor, NETWORK_LABELS } from "~/server/brand/accounts";
@@ -29,7 +29,7 @@ const PublishSchema = z.object({
 export async function POST(request: Request) {
     try {
         const t = requestTranslator(request, "growth.server.marketing");
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("social.publish")) {
             return fail(t("publishForbidden"), 403);

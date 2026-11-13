@@ -1,9 +1,12 @@
 /**
- * Shared guard for every connector route: verified workspace context +
- * `connectors.manage`. Connecting a provider hands its data to the shared
- * company knowledge base (or speaks for the company, in Slack's case), so it
- * is a workspace-administration action — same posture as the agent-knowledge
- * connector.
+ * Shared guards for the connector routes. A workspace connection (Drive,
+ * Slack, GitHub, LinkedIn) hands its data to the shared company knowledge
+ * base, or speaks for the company, so connecting one is a
+ * workspace-administration action: verified workspace context +
+ * `connectors.manage`, the same posture as the agent-knowledge connector. A
+ * per-user connection (Notion here; Gmail has its own guard) only fills the
+ * member's own folder, which is what uploading does, so it asks for
+ * `documents.upload` instead — see `requireConnectorGrantor`.
  */
 
 import type { NextResponse } from "next/server";
@@ -12,8 +15,12 @@ import type { Locale } from "~/i18n/locales";
 import { requestLocaleOrDefault } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { createForbiddenError } from "~/lib/api-utils";
-import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
-import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+    type WorkspaceContext,
+} from "~/lib/require-workspace-context";
+import { isPerUserProvider, type ConnectorProvider } from "~/server/db/schema/connectors";
 
 export type ConnectorAdminResult =
     | { readonly ok: true; readonly ctx: WorkspaceContext }
@@ -26,6 +33,20 @@ export async function requireConnectorAdmin(): Promise<ConnectorAdminResult> {
         const t = translatorFor(await requestLocaleOrDefault(), "sources.server.connectors");
         return { ok: false, response: createForbiddenError(t("manageRequired")) };
     }
+    return { ok: true, ctx: context.data };
+}
+
+/**
+ * Who may connect, sync and see `provider` connections: `documents.upload`
+ * for a per-user provider, whose connection is the caller's own;
+ * `connectors.manage` for a workspace connection.
+ */
+export async function requireConnectorGrantor(
+    provider: ConnectorProvider
+): Promise<ConnectorAdminResult> {
+    if (!isPerUserProvider(provider)) return requireConnectorAdmin();
+    const context = await requireWorkspacePermission("documents.upload");
+    if (!context.success) return { ok: false, response: context.response };
     return { ok: true, ctx: context.data };
 }
 

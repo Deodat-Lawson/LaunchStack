@@ -39,6 +39,7 @@ interface HarnessProps {
     onMoveFolder?: (path: string, target: string | null) => void;
     onDeleteFolder?: (folder: WorkspaceFolder) => void;
     onMoveToFolder?: (id: string, name: string) => void;
+    storageScope?: string | null;
 }
 
 function Harness(props: HarnessProps) {
@@ -62,6 +63,7 @@ function Harness(props: HarnessProps) {
                 setActiveFolder={setActiveFolder}
                 activeTag={activeTag}
                 setActiveTag={setActiveTag}
+                storageScope={props.storageScope}
             />
         </ContextMenuProvider>
     );
@@ -158,5 +160,48 @@ describe("SourceRail folder tree", () => {
         expect(screen.queryByTestId("source-row-d3")).not.toBeInTheDocument();
         expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
         expect(screen.getByTestId("folder-row-Contracts/2026")).toBeInTheDocument();
+    });
+});
+
+describe("SourceRail folder collapse memory", () => {
+    beforeEach(() => localStorage.clear());
+
+    function toggle(path: string) {
+        const row = screen.getByTestId(`folder-row-${path}`);
+        fireEvent.click(within(row).getByText(path.split("/").pop()!));
+    }
+
+    it("remembers a collapsed folder across remounts, per member and workspace", () => {
+        const first = render(<Harness storageScope="u1:5" />);
+        expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
+        toggle("Contracts");
+        expect(screen.queryByTestId("source-row-d1")).not.toBeInTheDocument();
+        first.unmount();
+
+        const again = render(<Harness storageScope="u1:5" />);
+        expect(screen.queryByTestId("source-row-d1")).not.toBeInTheDocument();
+        again.unmount();
+
+        // Another workspace has its own memory: everything starts open.
+        const other = render(<Harness storageScope="u1:6" />);
+        expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
+        other.unmount();
+
+        // Re-opening the folder clears the entry.
+        render(<Harness storageScope="u1:5" />);
+        toggle("Contracts");
+        expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
+        expect(localStorage.getItem("workspace.railFolders.v1:u1:5")).toBeNull();
+    });
+
+    it("keeps nothing without a scope", () => {
+        const first = render(<Harness />);
+        toggle("Contracts");
+        first.unmount();
+        render(<Harness />);
+        expect(screen.getByTestId("source-row-d1")).toBeInTheDocument();
+        expect(Object.keys(localStorage).some(k => k.startsWith("workspace.railFolders"))).toBe(
+            false
+        );
     });
 });

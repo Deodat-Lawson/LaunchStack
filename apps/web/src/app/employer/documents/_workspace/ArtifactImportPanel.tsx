@@ -21,6 +21,7 @@ import {
     ARTIFACT_TYPES,
     MAX_ARTIFACT_BYTES,
     artifactFileExtension,
+    artifactIngestMimeType,
     deriveArtifactTitle,
     detectArtifactType,
     type ArtifactType,
@@ -31,18 +32,6 @@ type ArtifactTranslator = ReturnType<typeof useTranslations<"sources.artifactImp
 
 /** What a file picked here may be: the formats a Claude artifact is saved as. */
 const ACCEPT = ".html,.htm,.svg,.md,.markdown,.mmd,.jsx,.tsx,.js,.ts,.txt";
-
-/**
- * How ingestion reads each type. The stored file is always text/plain — an
- * artifact is untrusted code, and a stored HTML or SVG file opened directly
- * would run on this origin — but HTML and Markdown are read as what they are,
- * so search and citations see their text rather than their markup.
- */
-function ingestMimeFor(type: ArtifactType): string {
-    if (type === "html") return "text/html";
-    if (type === "markdown") return "text/markdown";
-    return "text/plain";
-}
 
 function isHttpUrl(value: string): boolean {
     try {
@@ -88,7 +77,7 @@ export async function addArtifactSource(input: {
         provider: stored.provider,
         category: input.category,
         documentName: input.title,
-        mimeType: ingestMimeFor(input.type),
+        mimeType: artifactIngestMimeType(input.type),
         artifact: {
             artifactType: input.type,
             sourceUrl: input.sourceUrl && isHttpUrl(input.sourceUrl) ? input.sourceUrl : null,

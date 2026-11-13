@@ -109,7 +109,7 @@
       "review": "Review done"
     },
     "failed": "The run failed",
-    "liveHint": "Steps tick as they finish; you can close this and keep working.",
+    "liveHint": "You can close this and keep working.",
     "stepRunning": "Running",
     "running": "running",
     "credits": "{credits, number} credits",
@@ -146,7 +146,7 @@
       "all": "All"
     },
     "emptyTitle": "No applications yet",
-    "emptyBody": "Start one from a funder you found, or paste a call you already have. Its requirements become a checklist and every section can be drafted from your sources.",
+    "emptyBody": "Start one from a funder you found, or paste a call you already have.",
     "emptyViewBody": "Change the view to see the rest.",
     "columns": {
       "application": "Application",
@@ -173,16 +173,13 @@
     "nothingWaitingBody": "Deadlines this week, strong-fit funders and unwritten sections show up here.",
     "buildProfile": "Build profile",
     "deadlines": "Deadlines",
-    "nearestFirst": "nearest first",
     "noDated": "No dated applications",
-    "noDatedBody": "An application with a deadline lists here, nearest first.",
     "inProgress": "In progress",
     "noDeadlineThisWeek": "no deadline this week",
     "nothingElse": "Nothing else in flight.",
     "fundersWorth": "Funders worth a look",
     "strongOf": "{strong} strong of {candidates} found",
     "noFunders": "No funders found yet",
-    "noFundersReady": "Search Grants.gov and the web for calls that fit your profile.",
     "noFundersNoProfile": "Build your profile first; the search is planned from it.",
     "fit": "fit {fit}",
     "profileNote": "Every draft starts from your profile: {facts, plural, one {# fact} other {# facts}} from {documents, plural, one {# source} other {# sources}}, built {time}. <link>Review it</link> after you add reports or proposals.",
@@ -213,9 +210,9 @@
     "title": "Funders that",
     "accent": "fit",
     "subGrantsAndWeb": "Searches Grants.gov and the web",
-    "subGrantsNoWeb": "Searches Grants.gov · web search needs an EXA or SERPER key",
-    "subWebOnly": "Searches no federal source and the web",
-    "subNone": "Searches no federal source · web search needs an EXA or SERPER key",
+    "subGrantsNoWeb": "Searches Grants.gov · web search is off",
+    "subWebOnly": "Searches the web · Grants.gov is off",
+    "subNone": "Grants.gov and web search are both off",
     "addByHand": "Add by hand",
     "source": {
       "grants_gov": "Grants.gov",
@@ -263,7 +260,6 @@
     "equity": "Raising equity instead of grants? <link>Investor relations</link> finds the venture funds raising now and drafts the pitch from the same sources.",
     "add": {
       "title": "Add a funder",
-      "description": "A call you heard about elsewhere. It is saved straight away.",
       "programme": "Programme or call",
       "link": "Link",
       "closes": "Closes",
@@ -286,7 +282,6 @@
     "noMatchBody": "Try other words.",
     "dialog": {
       "editTitle": "Edit answer",
-      "description": "Drafts reuse a saved answer when a funder asks the same question.",
       "answer": "Answer",
       "tags": "Tags, comma-separated",
       "tagsPlaceholder": "mission, history",
@@ -334,7 +329,7 @@
     "readRequest": "Read the request",
     "addRequest": "Add the request",
     "noChecklist": "No checklist yet",
-    "noChecklistBody": "It is built from the funder's request: eligibility rules, every question, attachments and format.",
+    "noChecklistBody": "It is built from the funder's request.",
     "doneOf": "{done} of {total}",
     "openSection": "open",
     "sectionTicks": "A section ticks itself when it is approved.",
@@ -385,7 +380,7 @@
       "optional": "optional",
       "previous": "Previous section",
       "next": "Next section",
-      "empty": "Nothing written yet. Draft it from your sources, or start typing.",
+      "empty": "Nothing written yet.",
       "draft": "Draft from sources",
       "redraft": "Redraft from sources",
       "byHand": "Write it by hand",
@@ -411,7 +406,7 @@
     },
     "rewriteDialog": {
       "title": "Rewrite with instructions",
-      "description": "Say what should change. Facts stay tied to the evidence; anything the instruction needs that the sources do not give is listed as a gap.",
+      "description": "Facts stay tied to the evidence; anything the instruction needs that the sources do not give is listed as a gap.",
       "placeholder": "Open with the outcome for families, then the numbers. Mention the two new schools by name.",
       "aria": "Rewrite instruction",
       "submit": "Rewrite"
@@ -431,13 +426,11 @@
       "askBody": "Open the Studio with this question about your sources in the composer."
     },
     "details": {
-      "title": "Proposal details",
-      "description": "Title, funder and the date it is due."
+      "title": "Proposal details"
     },
     "preview": {
       "copyFailed": "Could not copy",
-      "copyMarkdown": "Copy as markdown",
-      "hint": "Sections in order, then the checklist and the evidence the drafts cite."
+      "copyMarkdown": "Copy as markdown"
     }
   },
   "server": {

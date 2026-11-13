@@ -91,6 +91,7 @@ describe("GET /api/ask/starters", () => {
         expect(getAskStarters).toHaveBeenCalledWith({
             companyId: BigInt(42),
             scope: { kind: "everything" },
+            viewerUserPk: BigInt(1),
             refresh: false,
             locale: "en",
         });
@@ -112,6 +113,7 @@ describe("GET /api/ask/starters", () => {
         expect(getAskStarters).toHaveBeenCalledWith({
             companyId: BigInt(42),
             scope: { kind: "everything" },
+            viewerUserPk: BigInt(1),
             refresh: true,
             locale: "zh-CN",
         });

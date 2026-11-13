@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import type {
-    DiscoveredKnowledgeItem,
-    KnowledgeItem,
-    KnowledgeSink,
-    StoredKnowledgeItem,
+import {
+    DELETED_HERE_DETAIL,
+    SourceDeletedError,
+    type DiscoveredKnowledgeItem,
+    type KnowledgeItem,
+    type KnowledgeSink,
+    type StoredKnowledgeItem,
 } from "../types";
 import {
     createNotionClient,
@@ -461,5 +463,67 @@ describe("syncNotion when the token dies mid-run", () => {
         ).rejects.toBeInstanceOf(NotionAuthError);
         // One worker: p-0 succeeded, p-1 hit the 401, nothing after it started.
         expect(reads).toEqual(["p-0", "p-1"]);
+    });
+});
+
+describe("syncNotion and pages deleted here", () => {
+    const workspace = () => ({
+        pages: [page({ id: "p-1", title: "Roadmap" }), page({ id: "p-2", title: "Hiring" })],
+        bodies: { "p-1": body("p-1", "Roadmap"), "p-2": body("p-2", "Hiring") },
+    });
+
+    it("re-imports a deleted page when nothing remembers the delete", async () => {
+        const sink = memorySink();
+        await syncNotion({ client: fakeClient(workspace()), sink });
+        // What deleting the document does to the sink's view of it.
+        sink.items.delete("p-1");
+
+        const report = await syncNotion({ client: fakeClient(workspace()), sink });
+        expect(report.stored.map(item => item.sourceId)).toEqual(["p-1"]);
+    });
+
+    it("leaves a page deleted here out, without fetching its content", async () => {
+        const sink = memorySink();
+        await syncNotion({ client: fakeClient(workspace()), sink });
+        sink.items.delete("p-1");
+
+        const client = fakeClient(workspace());
+        const report = await syncNotion({
+            client,
+            sink,
+            knownSourceIds: ["p-2"],
+            deletedSourceIds: ["p-1"],
+        });
+
+        expect(report.stored).toEqual([]);
+        expect(client.markdownCalls).toEqual([]);
+        expect(sink.items.has("p-1")).toBe(false);
+        expect(report.skipped).toEqual(
+            expect.arrayContaining([
+                { sourceId: "p-1", reason: "excluded", detail: DELETED_HERE_DETAIL },
+                { sourceId: "p-2", reason: "unchanged" },
+            ])
+        );
+        expect(report.missingSourceIds).toEqual([]);
+        expect(report.failed).toEqual([]);
+    });
+
+    it("reports a page deleted mid-run (the sink refuses it) as skipped, not failed", async () => {
+        const base = memorySink();
+        const sink: KnowledgeSink = {
+            lastSyncedHash: item => base.lastSyncedHash!(item),
+            async store(item) {
+                if (item.sourceId === "p-1") throw new SourceDeletedError(item.sourceId);
+                return base.store(item);
+            },
+        };
+
+        const report = await syncNotion({ client: fakeClient(workspace()), sink });
+
+        expect(report.stored.map(item => item.sourceId)).toEqual(["p-2"]);
+        expect(report.failed).toEqual([]);
+        expect(report.skipped).toEqual([
+            { sourceId: "p-1", reason: "excluded", detail: DELETED_HERE_DETAIL },
+        ]);
     });
 });

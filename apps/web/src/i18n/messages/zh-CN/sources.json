@@ -56,6 +56,7 @@
     "clearFilters": "清除筛选",
     "selectedCount": "已选择 {count} 个",
     "askAboutThese": "就这些提问",
+    "extractFields": "提取字段",
     "loading": "正在加载你的知识库…",
     "gridView": "网格视图",
     "listView": "列表视图",
@@ -92,9 +93,9 @@
         "label": "思维导图",
         "desc": "先画出来，再引用它"
       },
-      "googleDoc": {
-        "label": "Google 文档",
-        "desc": "在 Google 文档中撰写"
+      "file": {
+        "label": "文件",
+        "desc": "在这里或在 Google 文档中撰写"
       },
       "paste": {
         "label": "粘贴文本",
@@ -196,17 +197,26 @@
       "untitled": "未命名思维导图",
       "openingEditor": "正在打开编辑器…"
     },
-    "googleDoc": {
-      "connectIntro": "为此工作区连接一个 Google 账号后，新文档会创建在它的 Drive 中的 <b>LaunchStack</b> 文件夹里。",
-      "connectGoogle": "连接 Google",
-      "created": "已在 Google 文档中创建",
-      "createFailed": "无法创建该文档",
-      "intro": "在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
-      "introAs": "以 {email} 的身份在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
+    "file": {
+      "titleLabel": "标题",
       "untitled": "未命名文档",
-      "blank": "空白文档",
-      "creating": "正在 Google 文档中创建…",
-      "opensInNewTab": "在新标签页中打开"
+      "intro": "先起个标题，再选择在哪里撰写。",
+      "here": {
+        "title": "在这里撰写",
+        "desc": "使用 LaunchStack 的编辑器。保存为此文件夹中的 Markdown 文件，读取完成后即可引用。",
+        "creating": "正在打开编辑器…",
+        "createFailed": "无法创建该文件"
+      },
+      "google": {
+        "title": "在 Google 文档中撰写",
+        "desc": "在新标签页中打开。之后的编辑会作为新版本同步回来。",
+        "descAs": "以 {email} 的身份。在新标签页中打开，之后的编辑会作为新版本同步回来。",
+        "connectDesc": "为此工作区连接一个 Google 账号后，新文档会创建在它的 Drive 中的 <b>LaunchStack</b> 文件夹里。",
+        "connectGoogle": "连接 Google",
+        "creating": "正在 Google 文档中创建…",
+        "created": "已在 Google 文档中创建",
+        "createFailed": "无法创建该文档"
+      }
     },
     "files": {
       "files": {
@@ -229,7 +239,6 @@
     "tooBigMany": "{count} 个文件超过了 {max} MB 的上限",
     "tooBigOneDetail": "该文件大小为 {size}。请拆分文件，或以较低质量导出。",
     "tooBigItem": "{name}（{size}）",
-    "ocrNote": "服务器配置了 OCR 服务时，PDF 和图片都会用 OCR 读取。",
     "transcribing": "正在转录“{name}”…较长的录音需要几分钟，请不要关闭此窗口。",
     "uploadingProgress": "正在上传 {current} / {total}…",
     "readyToUpload": "{count, plural, other {# 个文件待上传}}",
@@ -310,8 +319,8 @@
       }
     },
     "handoff": {
-      "followAlong": "可在“处理队列”中查看进度",
-      "followAlongRecording": "录音会先转写；可在“处理队列”中查看进度"
+      "followAlong": "可在“知识库”中查看进度",
+      "followAlongRecording": "录音会先转写；可在“知识库”中查看进度"
     }
   },
   "addDestinationBar": {
@@ -376,6 +385,17 @@
     "syncNow": "立即同步",
     "cardTitle": "从 Google Drive 同步的内容",
     "notConnected": "目前没有从 Google Drive 同步任何内容。在“添加来源 › 文件”中从 Drive 选择文件，或在“添加来源 › 文件夹”中选择文件夹，它们就会列在这里。"
+  },
+  "deletedHere": {
+    "title": "已在此处删除（{count}）",
+    "body": "{provider, select, notion {这些页面在此处保持删除状态：同步时会跳过它们。Notion 中的内容没有任何改动。} other {这些文件在此处保持删除状态：同步时会跳过它们。Google Drive 中的内容没有任何改动。}}",
+    "syncAgain": "重新同步",
+    "syncAgainAria": "重新同步“{name}”",
+    "syncAllAgain": "全部 {count} 项重新同步",
+    "othersMore": "{count, plural, other {另有 # 项由其他人删除。}}",
+    "othersOnly": "{count, plural, other {# 项由其他人删除。}}",
+    "restored": "{provider, select, notion {{count, plural, =0 {没有需要恢复的内容。} other {# 个页面将重新同步。}}} other {{count, plural, =0 {没有需要恢复的内容。} other {# 个文件将重新同步。}}}}",
+    "restoreFailed": "重新同步未能完成，请重试。"
   },
   "driveSource": {
     "chooseFiles": "从 Google Drive 选择",
@@ -469,7 +489,6 @@
     "disconnected": "已断开“{name}”。已同步的页面已保留。",
     "disconnectFailed": "无法断开“{name}”",
     "revoked": "访问权限已被撤销，重新连接即可继续同步",
-    "connectedBy": "由 {name} 连接",
     "reconnect": "重新连接",
     "syncNow": "立即同步",
     "choosePages": "选择页面",
@@ -477,10 +496,13 @@
     "connectTitle": "连接 Notion",
     "oneClick": "一键 OAuth 授权，可随时撤销。",
     "checking": "正在检查 Notion…",
-    "forbidden": "只有工作区管理员可以连接 Notion。请让管理员连接，他们选择的页面会出现在来源中。",
+    "forbidden": "连接 Notion 需要向此工作区添加文件的权限。请向工作区管理员申请。",
     "loadError": "无法加载 Notion 连接，请稍后再试。",
     "notConfigured": "此服务器尚未配置 Notion。LaunchStack 的运维人员需要添加 NOTION_OAUTH_CLIENT_ID 和 NOTION_OAUTH_CLIENT_SECRET，具体步骤见 .env.example。",
-    "connectAnother": "连接另一个 Notion 工作区"
+    "connectAnother": "连接另一个 Notion 工作区",
+    "paused": {
+      "noUpload": "已暂停：你已无法在此工作区添加文件。请向管理员申请上传权限。"
+    }
   },
   "obsidianImport": {
     "noNotes": "所选内容中没有找到 Markdown 笔记。请选择仓库本身的文件夹。",
@@ -808,6 +830,27 @@
     "deleteSelection": "{count, plural, other {删除 # 个来源…}}",
     "deleteSelectionSome": "{count, plural, other {删除 # 个来源中的 {movable} 个…}}"
   },
+  "externalLink": {
+    "openGoogleDrive": "在 Google Drive 中打开",
+    "openNotion": "在 Notion 中打开",
+    "openGmail": "在 Gmail 中打开",
+    "openObsidian": "在 Obsidian 中打开",
+    "openGithub": "在 GitHub 上打开",
+    "openYoutube": "在 YouTube 上打开",
+    "openClaude": "在 claude.ai 上打开",
+    "openWeb": "打开原始页面",
+    "openFile": "打开文件",
+    "hintSite": "在新标签页中打开 {host}",
+    "hintObsidian": "在你的 Obsidian 仓库中打开此笔记",
+    "hintFile": "在新的浏览器标签页中打开文件本身",
+    "detailsLabel": "打开位置",
+    "placeGoogleDrive": "Google Drive",
+    "placeNotion": "Notion",
+    "placeGmail": "Gmail",
+    "placeObsidian": "Obsidian",
+    "placeYoutube": "YouTube",
+    "placeFile": "你的浏览器"
+  },
   "connectorSync": {
     "syncing": "正在同步…",
     "starting": "正在启动同步…",
@@ -849,6 +892,7 @@
     "youtube": "YouTube",
     "paste": "笔记",
     "mindmap": "思维导图",
+    "sandboxedPage": "沙盒页面",
     "artifact": "Claude 工件"
   },
   "domains": {
@@ -1007,7 +1051,9 @@
       "obsidianNeedsUpload": "导入笔记需要添加文档的权限。",
       "driveConnectsElsewhere": "Google Drive 需通过 /api/connectors/google/oauth/start 连接。",
       "gmailConnectsElsewhere": "Gmail 需通过 /api/connectors/google/oauth/start?provider=gmail 连接。",
-      "unknownProvider": "未知的连接器提供方：{provider}"
+      "unknownProvider": "未知的连接器提供方：{provider}",
+      "deletedDriveNotionOnly": "只有 google-drive 和 notion 会记录已删除的文件。",
+      "deletedRestored": "{count, plural, =0 {没有需要恢复的内容。} other {# 个文件将在下次同步时恢复。}}"
     },
     "gmail": {
       "notConfigured": "此服务器未启用 Gmail 连接器。请设置 GMAIL_CONNECTOR_ENABLED=true、GOOGLE_OAUTH_CLIENT_ID、GOOGLE_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。",

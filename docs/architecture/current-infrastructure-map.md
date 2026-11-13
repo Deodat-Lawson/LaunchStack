@@ -140,7 +140,7 @@ configuration and HMR lifecycle, not a second composition tier.
 
 ### `@launchstack/pipelines`
 
-`pipelines/` is one package containing 13 vertical compositions:
+`pipelines/` is one package containing 12 vertical compositions:
 
 - client prospector
 - company metadata
@@ -148,7 +148,6 @@ configuration and HMR lifecycle, not a second composition tier.
 - distribution
 - email
 - founder weekly review
-- legal templates
 - marketing
 - proposals
 - repository explainer

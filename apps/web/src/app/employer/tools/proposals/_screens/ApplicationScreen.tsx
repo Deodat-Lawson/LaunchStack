@@ -733,10 +733,9 @@ function DetailsDialog({
     };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md" aria-describedby={undefined}>
                 <DialogHeader>
                     <DialogTitle>{t("details.title")}</DialogTitle>
-                    <DialogDescription>{t("details.description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -837,7 +836,6 @@ function PreviewTab({
                 <Button size="sm" variant="outline" onClick={onExport}>
                     {tp("exportToSources")}
                 </Button>
-                <span className="text-ink-3 text-xs">{t("hint")}</span>
             </div>
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
             {res.loading || !res.data ? (
@@ -926,7 +924,7 @@ export function ApplicationScreen({ id }: { id: string }) {
     const selectedIndex = selected ? sections.findIndex(s => s.id === selected.id) : -1;
 
     const setApp = (next: ApplicationDetail) => res.mutate(() => ({ application: next }));
-    const setSection = (next: SectionDto) =>
+    const setSection = (next: SectionDto) => {
         res.mutate(current => ({
             application: {
                 ...current.application,
@@ -935,6 +933,8 @@ export function ApplicationScreen({ id }: { id: string }) {
                 ),
             },
         }));
+        void reload();
+    };
 
     const run = async (start: () => Promise<{ run: RunDto }>, what: RunWhat) => {
         try {

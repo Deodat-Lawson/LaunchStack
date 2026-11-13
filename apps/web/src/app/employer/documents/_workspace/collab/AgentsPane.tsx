@@ -574,11 +574,7 @@ function AgentDetail({
                         ) : (
                             <>
                                 {onUseInChat && (
-                                    <Button
-                                        size="sm"
-                                        onClick={onUseInChat}
-                                        title={t("useInChatTitle")}
-                                    >
+                                    <Button size="sm" onClick={onUseInChat}>
                                         <MessageSquare className="size-3.5" /> {t("useInChat")}
                                     </Button>
                                 )}
@@ -751,9 +747,6 @@ function AgentDetail({
                             </p>
                         </div>
                     )}
-                    <div className="text-ink-3 mt-4 max-w-[760px] text-[12px] leading-relaxed">
-                        {t("instructionsNote", { style: persona.style ?? "none" })}
-                    </div>
                 </TabsContent>
                 <TabsContent value="file" className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
                     <DefinitionFile
@@ -927,9 +920,6 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                             <div className="text-ink text-[14px] font-medium">
                                 {t("tryTitle", { name: persona.displayName })}
                             </div>
-                            <p className="m-0 max-w-[560px] text-[12.5px] leading-relaxed">
-                                {t("tryBody")}
-                            </p>
                             <div className="flex flex-wrap gap-2">
                                 {suggestions.map(s => (
                                     <button

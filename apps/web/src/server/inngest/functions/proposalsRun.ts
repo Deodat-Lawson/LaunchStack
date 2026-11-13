@@ -4,13 +4,10 @@
  * after a response; here it runs under Inngest's retries, and a run that
  * fails for good is marked failed so the run sheet never spins forever.
  */
-import {
-    ProposalRunEventDataSchema,
-    executeProposalRun,
-    failProposalRun,
-} from "@launchstack/pipelines/proposals";
+import { ProposalRunEventDataSchema, failProposalRun } from "@launchstack/pipelines/proposals";
+import { getRun } from "@launchstack/pipelines/proposals/db";
 
-import { createProposalPorts } from "~/server/proposals/ports";
+import { executeProposalRunForMember } from "~/server/proposals/executor";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { inngest } from "../client";
@@ -38,7 +35,6 @@ export const proposalsRunJob = inngest.createFunction(
                     {
                         runId: parsed.data.runId,
                         companyId: BigInt(parsed.data.companyId),
-                        userId: parsed.data.userId,
                     },
                     toErrorMessage(error)
                 );
@@ -52,15 +48,13 @@ export const proposalsRunJob = inngest.createFunction(
         const data = ProposalRunEventDataSchema.parse(event.data);
         const companyId = BigInt(data.companyId);
         const result = await step.run("execute", async () => {
-            // A step body runs outside the handler's async context, so the
-            // workspace's models are entered here rather than around the handler.
-            // Counted against whoever started the run, never stopped midway.
-            const aiUse = { feature: "proposals", userId: data.userId, enforce: false } as const;
+            // Keep both scopes inside the step. Event identity must not replace
+            // the persisted writer for either document access or usage accounting.
+            const queued = await getRun(data.runId, companyId);
+            if (!queued) throw new Error("Run not found");
+            const aiUse = { feature: "proposals", userId: queued.userId, enforce: false } as const;
             const run = await withWorkspaceChatModels(companyId, aiUse, () =>
-                executeProposalRun(
-                    { runId: data.runId, companyId, userId: data.userId },
-                    createProposalPorts(companyId)
-                )
+                executeProposalRunForMember(data.runId, companyId)
             );
             return { status: run.status, headline: run.summary?.headline ?? null };
         });

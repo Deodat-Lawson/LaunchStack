@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useChangeLocale } from "~/i18n/client";
 import { LOCALES } from "~/i18n/locales";
 import { canSeeSettingsSection } from "~/lib/settings/sections";
-import { isPersonalSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
+import { isPersonalSection, isUsageSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
 import { useSettingCopier, useSettingsSearch, useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Languages, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -26,6 +26,7 @@ import {
     type WorkspaceSource,
 } from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
+import { studioAppFor, useStudioAccess } from "./studioAccess";
 import {
     HISTORY_KIND_META,
     type HistoryEntry,
@@ -144,6 +145,7 @@ export function CommandPalette({
     // Settings rows in the reader's language, found by either language.
     const searchSettings = useSettingsSearch();
     const settingCopy = useSettingCopier();
+    const tSections = useTranslations("settings.sections");
     const studio = useStudioText();
     const tSourceTypes = useTranslations("sources.sourceTypes");
     const th = useTranslations("workspace.history");
@@ -153,6 +155,9 @@ export function CommandPalette({
     // The one lab that only surfaces a palette entry: hidden until it is on.
     const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
     const { can } = usePermissions();
+    // Brand and Prospects rows are Growth's, so they go with it while the
+    // workspace's beta switch is off.
+    const { canOpen } = useStudioAccess();
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -199,14 +204,19 @@ export function CommandPalette({
         }
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked. Anyone may open Settings and the
-            // Workspace tab, so a row for one of their screens ("Agents &
-            // nodes") carries that screen's gate instead: picked without it,
-            // the row would land on a screen that only says it isn't theirs.
+            // would do nothing when picked. Anyone may open Settings, the
+            // Workspace tab and Models & usage, so a row for one of their
+            // screens ("Agents & nodes", "API keys") carries that screen's
+            // gate instead: picked without it, the row would land on a
+            // screen that only says it isn't theirs, or be sent elsewhere.
             .filter(f => {
                 if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
-                if (app) return can(app.requires);
+                if (app) return canOpen(app);
+                // A row for a place inside a beta app (Brand, Prospects) goes
+                // with the app while the workspace has beta apps off.
+                const host = studioAppFor(f.id);
+                if (host?.beta && !canOpen(host)) return false;
                 const section = settingsSectionOfHref(f.href);
                 return section ? canSeeSettingsSection(section, can) : true;
             })
@@ -218,7 +228,7 @@ export function CommandPalette({
                     sub: demotedFeatureDescription(studio, f),
                     // The English name still finds it in any language, and so
                     // does its id ("byok").
-                    keywords: `${f.id} ${f.label} ${f.desc}`,
+                    keywords: `${f.id} ${f.label} ${f.desc ?? ""}`,
                     Icon: f.Icon,
                     onRun: () => {
                         if (onPickFeature) onPickFeature(f.id);
@@ -315,12 +325,16 @@ export function CommandPalette({
                 kind: "setting",
                 id: definition.key,
                 label: copy.label,
-                // Where picking it goes: Settings, or the Workspace tab.
+                // Where picking it goes: Settings, the Workspace tab, or
+                // Models & usage (Spending's rows).
                 sub: t(
-                    isPersonalSection(definition.section) ? "settingSub" : "workspaceSettingSub",
-                    {
-                        description: copy.description,
-                    }
+                    isPersonalSection(definition.section)
+                        ? "settingSub"
+                        : isUsageSection(definition.section)
+                          ? "usageSettingSub"
+                          : "workspaceSettingSub",
+                    // A row with no description of its own names its section.
+                    { description: copy.description ?? tSections(`${definition.section}.label`) }
                 ),
                 Icon: Settings,
                 onRun: () => {
@@ -347,6 +361,7 @@ export function CommandPalette({
         predictiveGaps,
         people,
         can,
+        canOpen,
         t,
         studio,
         tSourceTypes,
@@ -355,6 +370,7 @@ export function CommandPalette({
         changeLocale,
         searchSettings,
         settingCopy,
+        tSections,
     ]);
 
     useEffect(() => {

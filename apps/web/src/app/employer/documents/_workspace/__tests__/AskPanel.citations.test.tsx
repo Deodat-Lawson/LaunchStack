@@ -60,13 +60,13 @@ const THREAD: ThreadMessage[] = [
     { role: "assistant", text: "Recall improved after the reranker.", citations: [CITATION] },
 ];
 
-function renderPanel(onOpenCitation: (c: ThreadReference) => void) {
+function renderPanel(onOpenCitation: (c: ThreadReference) => void, thread = THREAD) {
     return render(
         <AskPanel
             sources={SOURCES}
             selected={[]}
             setSelected={jest.fn()}
-            thread={THREAD}
+            thread={thread}
             sendMessage={jest.fn()}
             isSending={false}
             onOpenCitation={onOpenCitation}
@@ -104,5 +104,71 @@ describe("AskPanel citations", () => {
 
         expect(onOpenCitation).toHaveBeenCalledTimes(1);
         expect(onOpenCitation).toHaveBeenCalledWith(CITATION);
+    });
+
+    it.each([undefined, "complete", "stopped", "error"] as const)(
+        "links web citations in saved answers with status %s using each answer's own sources",
+        async status => {
+            const onOpenCitation = jest.fn();
+            const urls = ["https://docs.example.com/docker", "https://docs.example.com/models"];
+            renderPanel(onOpenCitation, [
+                { role: "user", text: "Are model weights bundled?" },
+                {
+                    role: "assistant",
+                    text: "The runtime is bundled [Source 1].",
+                    status,
+                    webSources: [{ title: "Docker deployment", url: urls[0]! }],
+                    citations: [CITATION],
+                },
+                { role: "user", text: "Which models work?" },
+                {
+                    role: "assistant",
+                    text: "These models are supported [Source 1].",
+                    webSources: [{ title: "Supported models", url: urls[1]! }],
+                },
+            ]);
+
+            const links = await screen.findAllByRole("link", { name: "[Source 1]" });
+            expect(links.map(link => link.getAttribute("href"))).toEqual(urls);
+            for (const link of links) {
+                expect(link).toHaveAttribute("target", "_blank");
+                expect(link).toHaveAttribute("rel", "noopener noreferrer");
+            }
+            await userEvent.click(
+                screen.getByRole("button", {
+                    name: "Open Q3 Retrieval Plan.pdf at the cited passage",
+                })
+            );
+            expect(onOpenCitation).toHaveBeenCalledWith(CITATION);
+        }
+    );
+
+    it("links web citations inside a proposed plan", async () => {
+        renderPanel(jest.fn(), [
+            {
+                role: "user",
+                text: "Plan the deployment",
+                send: {
+                    text: "Plan the deployment",
+                    refs: [],
+                    attachments: [],
+                    webSearch: true,
+                    thinking: true,
+                    agentKey: null,
+                    chatMode: "plan",
+                },
+            },
+            {
+                role: "assistant",
+                text: "Use this deployment guide [Source 1].",
+                webSources: [
+                    { title: "Docker deployment", url: "https://docs.example.com/docker" },
+                ],
+            },
+        ]);
+        expect(await screen.findByRole("link", { name: "[Source 1]" })).toHaveAttribute(
+            "href",
+            "https://docs.example.com/docker"
+        );
     });
 });

@@ -6,7 +6,9 @@
  * needs no tool costs what it cost before tools existed. When it does call
  * one, the tool runs, its result joins the conversation and the model goes
  * again — at most `maxToolRounds` times, then once more with tools switched
- * off (`tool_choice: "none"`), so every turn ends in an answer.
+ * off (`tool_choice: "none"`), so every turn ends in an answer. An endpoint
+ * that refuses that switch (Meta's accepts only `"auto"`) is asked again with
+ * the tools withdrawn, then with them left on auto, before the turn fails.
  *
  * Tools travel as standard Chat Completions function definitions, so any
  * OpenAI-compatible endpoint can host them — no vendor-hosted tool, nothing
@@ -61,6 +63,8 @@ export interface AnswerWithToolsOptions {
     tools: readonly ChatTool[];
     /** Retrieved passages or attachments were supplied before any tool call. */
     hasInitialEvidence?: boolean;
+    /** Said after the conversation until the model calls a tool (e.g. partial coverage). */
+    beforeFirstTool?: string | null;
     signal: AbortSignal;
     /** Present when the answer streams. */
     stream?: {
@@ -98,6 +102,7 @@ const EVIDENCE_TOOLS = new Set([
     "search_sources",
     "read_source",
     "ask_each",
+    "read_extraction_table",
     "search_web",
     "fetch_page",
 ]);
@@ -236,6 +241,32 @@ export async function answerWithTools(
     /** Set when a round after a tool call came back with no text: one more, tools off. */
     let mustAnswer = false;
 
+    /**
+     * The forced last round on an endpoint that refuses `tool_choice: "none"`
+     * (Meta's accepts only "auto" and answers HTTP 400). Asked again with the
+     * tools withdrawn, so the model cannot call one, and, should the endpoint
+     * also refuse tool results without their tools, once more with the tools
+     * on auto and the reminder to answer doing the work. A refusal arrives
+     * before the first chunk, so nothing streamed is repeated.
+     */
+    const answerWithoutToolChoice = async () => {
+        console.warn(
+            '[chat-tools] The endpoint refused tool_choice "none"; answering with the tools withdrawn.'
+        );
+        const streamedBefore = streamedText;
+        try {
+            return await callModel(chat);
+        } catch (error) {
+            throwIfChatAborted(signal);
+            if (!withTools || !isRequestRefusal(error) || streamedText !== streamedBefore)
+                throw error;
+            console.warn(
+                "[chat-tools] The endpoint refused the request without its tools; answering with them on auto."
+            );
+            return callModel(withTools);
+        }
+    };
+
     /** One model call; text and reasoning stream out as they arrive. */
     const callModel = async (
         model: Pick<BaseChatModel, "stream" | "invoke">
@@ -245,6 +276,8 @@ export async function answerWithTools(
         // fresh copy stays nearest generation even across later write calls.
         const requestMessages = [...conversation];
         if (reviewEvidence) requestMessages.push(new HumanMessage(EVIDENCE_REVIEW_REMINDER));
+        if (options.beforeFirstTool && withTools && toolCalls.length === 0 && !answerNow)
+            requestMessages.push(new HumanMessage(options.beforeFirstTool));
         if (toolsUnavailable) requestMessages.push(new HumanMessage(TOOLS_UNAVAILABLE_REMINDER));
         if (answerNow) requestMessages.push(new HumanMessage(OUT_OF_TOOL_ROUNDS));
         if (!stream) {
@@ -293,6 +326,7 @@ export async function answerWithTools(
         // Out of tool rounds: say so. `tool_choice: "none"` alone is not
         // enough for every endpoint — some ignore it, the model calls a tool
         // anyway, and with that call dropped the answer comes back empty.
+        // Others refuse it outright; `answerWithoutToolChoice` handles those.
         answerNow = Boolean(withTools) && !mayCall;
         // After the last tool round the tools stay declared (the history
         // holds tool messages) but the model may not call them.
@@ -304,16 +338,26 @@ export async function answerWithTools(
 
         let message: AIMessageChunk | AIMessage;
         let roundText: string;
+        const streamedBefore = streamedText;
         try {
             ({ message, roundText } = await callModel(model));
         } catch (error) {
             throwIfChatAborted(signal);
-            if (!(round === 0 && withTools && !streamedText && isRequestRefusal(error)))
+            // A refusal is the request itself turned down, before anything
+            // streamed; a request that failed mid-answer is not asked again.
+            const refused = isRequestRefusal(error) && streamedText === streamedBefore;
+            if (refused && round === 0 && withTools) {
+                console.warn(
+                    "[chat-tools] The endpoint refused the tools; answering without them."
+                );
+                withTools = null;
+                toolsUnavailable = true;
+                ({ message, roundText } = await callModel(chat));
+            } else if (refused && answerNow) {
+                ({ message, roundText } = await answerWithoutToolChoice());
+            } else {
                 throw error;
-            console.warn("[chat-tools] The endpoint refused the tools; answering without them.");
-            withTools = null;
-            toolsUnavailable = true;
-            ({ message, roundText } = await callModel(chat));
+            }
         }
         throwIfChatAborted(signal);
         usage = addTokenUsage(usage, normalizeTokenUsage(message));

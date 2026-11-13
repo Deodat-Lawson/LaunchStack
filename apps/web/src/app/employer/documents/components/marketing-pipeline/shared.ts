@@ -1,4 +1,4 @@
-import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/generator/RewriteWorkflow";
+import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/marketing-pipeline/RewriteWorkflow";
 
 export type MarketingPlatform = "x" | "linkedin" | "reddit" | "bluesky";
 
@@ -229,7 +229,6 @@ export interface MarketingSession {
     contentType?: ContentType;
 }
 
-export const PENDING_REWRITE_STORAGE_KEY = "pdr.pendingRewriteDraft";
 export const MARKETING_SESSIONS_STORAGE_KEY = "pdr.marketingPipeline.sessions";
 export const MARKETING_ACTIVE_SESSION_KEY = "pdr.marketingPipeline.activeSessionId";
 export const MAX_MARKETING_SESSIONS = 25;

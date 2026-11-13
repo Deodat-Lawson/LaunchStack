@@ -7,12 +7,14 @@
  * ingested) is how deletions are noticed.
  */
 
-import type {
-    FailedKnowledgeItem,
-    KnowledgeSink,
-    KnowledgeSyncReport,
-    SkippedKnowledgeItem,
-    StoredKnowledgeItem,
+import {
+    DELETED_HERE_DETAIL,
+    SourceDeletedError,
+    type FailedKnowledgeItem,
+    type KnowledgeSink,
+    type KnowledgeSyncReport,
+    type SkippedKnowledgeItem,
+    type StoredKnowledgeItem,
 } from "../types";
 import type { DriveClient } from "./client";
 import { collectDriveItem, DEFAULT_MAX_ITEM_BYTES } from "./collect";
@@ -38,6 +40,12 @@ export interface GoogleDriveSyncOptions {
     readonly startPageToken?: string;
     /** Source ids the host has already ingested; absent ones are reported missing. */
     readonly knownSourceIds?: readonly string[];
+    /**
+     * Files someone deleted in the host. A picked folder still reaches them,
+     * so without this every run would import them again; they are skipped
+     * before anything is downloaded.
+     */
+    readonly deletedSourceIds?: readonly string[];
     readonly force?: boolean;
     readonly maxItemBytes?: number;
     readonly maxItems?: number;
@@ -106,6 +114,10 @@ async function checkChangesFeed(client: DriveClient, startPageToken: string): Pr
     return { dirty, nextStartPageToken };
 }
 
+function deletedHereSkip(sourceId: string): SkippedKnowledgeItem {
+    return { sourceId, reason: "excluded", detail: DELETED_HERE_DETAIL };
+}
+
 type ItemOutcome =
     | { readonly kind: "stored"; readonly value: StoredKnowledgeItem }
     | { readonly kind: "skipped"; readonly value: SkippedKnowledgeItem }
@@ -135,6 +147,9 @@ async function processItem(
 
         return { kind: "stored", value: await sink.store(collected.value) };
     } catch (error) {
+        if (error instanceof SourceDeletedError) {
+            return { kind: "skipped", value: deletedHereSkip(item.sourceId) };
+        }
         return {
             kind: "failed",
             value: { sourceId: item.sourceId, error: describeError(error) },
@@ -193,8 +208,15 @@ export async function syncGoogleDrive(
         maxItems: options.maxItems,
     });
 
+    // Deleted here: still in Drive, still reached by a pick, left out.
+    const deleted = new Set(options.deletedSourceIds ?? []);
+    const toSync = discovery.items.filter(item => !deleted.has(item.sourceId));
+    const deletedHere = discovery.items
+        .filter(item => deleted.has(item.sourceId))
+        .map(item => deletedHereSkip(item.sourceId));
+
     const outcomes = await runWithConcurrency(
-        discovery.items.map(
+        toSync.map(
             item => () =>
                 processItem(
                     client,
@@ -208,7 +230,7 @@ export async function syncGoogleDrive(
     );
 
     const stored: StoredKnowledgeItem[] = [];
-    const skipped: SkippedKnowledgeItem[] = [...discovery.skipped];
+    const skipped: SkippedKnowledgeItem[] = [...discovery.skipped, ...deletedHere];
     const failed: FailedKnowledgeItem[] = [];
     const accessLost = new Set<string>(discovery.accessLost);
 

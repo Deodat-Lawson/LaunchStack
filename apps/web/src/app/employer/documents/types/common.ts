@@ -10,8 +10,6 @@ export type ViewMode =
     | "with-ai-qa"
     | "with-ai-qa-history"
     | "predictive-analysis"
-    | "generator"
-    | "rewrite"
     | "upload"
     | "dashboard"
     | "analytics"

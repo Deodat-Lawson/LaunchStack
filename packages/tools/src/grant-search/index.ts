@@ -3,20 +3,21 @@
  *
  * Two sources behind one result: Grants.gov (federal, keyless, always
  * available) and the web (foundations, state programmes, corporate giving)
- * through the web-research tool's general search (Exa first, Serper as the
- * fallback) when a search key is configured. Results
+ * through the web-research tool's general search (the server's engine,
+ * SEARCH_PROVIDER) when one is configured. Results
  * are listings — a title, a funder, dates and amounts where the source has
  * them — for a caller to score against what it knows about the applicant.
  * Nothing here calls a model.
  */
 import { createTtlCache } from "../web-research/cache";
 import {
+    configuredWebSearchProvider,
     searchWeb as searchGeneralWeb,
     type RawSearchResult,
     type SearchWebOptions,
 } from "../web-research";
 
-import { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
+import { getGrantsGovApiUrl, isGrantsGovEnabled } from "./config";
 import { DEFAULT_LIMIT, MAX_LIMIT, searchGrantsGov, type GrantsGovOptions } from "./grants-gov";
 import type {
     GrantOpportunity,
@@ -37,7 +38,12 @@ export {
     toIsoDay,
     type GrantsGovOptions,
 } from "./grants-gov";
-export { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
+export { getGrantsGovApiUrl, isGrantsGovEnabled } from "./config";
+
+/** Whether the web source can run: the server's search provider is configured. */
+export function hasWebSearchKey(): boolean {
+    return configuredWebSearchProvider() !== null;
+}
 
 export interface FindGrantsOptions {
     /** Injectable for tests (Grants.gov and the default web search); defaults to global fetch. */

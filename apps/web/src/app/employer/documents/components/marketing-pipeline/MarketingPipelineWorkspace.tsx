@@ -41,7 +41,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
+import { RewriteWorkflow } from "~/app/employer/documents/components/marketing-pipeline/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
     PIPELINE_STEP_KEY,
@@ -1171,7 +1171,6 @@ export function MarketingPipelineWorkspace({
         handleRewriteComplete,
         handleRewriteWorkflowStateChange,
         refineWithCompanyContext,
-        handlePushToRewriteDocument,
         handleCopy,
         runPipeline,
         cancelPipeline,
@@ -1753,20 +1752,6 @@ export function MarketingPipelineWorkspace({
                                                                 </button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="start">
-                                                                <DropdownMenuItem
-                                                                    onSelect={
-                                                                        handlePushToRewriteDocument
-                                                                    }
-                                                                    disabled={
-                                                                        !editableMessage.trim()
-                                                                    }
-                                                                >
-                                                                    <FileText
-                                                                        size={14}
-                                                                        aria-hidden="true"
-                                                                    />
-                                                                    {t("workspace.saveAsDoc")}
-                                                                </DropdownMenuItem>
                                                                 <DropdownMenuItem
                                                                     onSelect={() =>
                                                                         void evaluatePost()

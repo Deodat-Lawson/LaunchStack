@@ -1,10 +1,12 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
+import type { OfferedModelPick } from "~/lib/ai/model-picks";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
 import type { ChatCreatedSource, ChatTurnStep } from "~/lib/chat-turns";
 import type { SourceProcessingView } from "~/lib/source-progress";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -17,20 +19,19 @@ import {
     Building2 as IconBuilding,
     ChartColumn as IconChart,
     File as IconFile,
+    FilePen as IconFilePen,
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
     KeyRound as IconKey,
-    Layers as IconProcessing,
     PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
     MessageSquareText as IconFeedback,
     ClipboardList as IconPaste,
-    Pen as IconPen,
     Settings as IconSettings,
     Shield as IconShield,
-    Sparkles as IconSparkle,
+    Table2 as IconExtract,
     Users as IconUsers,
     UsersRound as IconTeam,
     Video as IconVideo,
@@ -38,7 +39,6 @@ import {
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
-    IconGoogleDocs,
     IconDropbox,
     IconDrive,
     IconGithub,
@@ -204,6 +204,12 @@ export interface WorkspaceSource {
     access?: ItemAccessView;
     /** Who added it, when a person did. */
     addedBy?: SourceAddedBy | null;
+    /**
+     * Where it opens outside LaunchStack: its origin (Drive, Notion, the
+     * website…) or the stored file in a browser tab. Absent for mindmaps,
+     * staged uploads and rows from an older server.
+     */
+    externalLink?: SourceExternalLink | null;
 }
 
 export interface WorkspaceFolder {
@@ -324,10 +330,13 @@ export interface ComposerSend {
     /** The agent this turn is addressed to; null = the workspace's default assistant. */
     agentKey: string | null;
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    /** An offered workspace model answering on the main route (`~/lib/ai/model-picks`). */
+    modelKey?: string;
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     followUp?: "queue" | "interrupt";
-    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    /** Compare mode: routes, and `model:<key>` picks, answered side by side. */
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision" | OfferedModelPick)[];
     threadRefs?: string[];
     /** Passages selected in a document and asked about; never pasted into `text`. */
     passages?: ChatPassage[];
@@ -361,14 +370,15 @@ export interface DemotedFeature {
     label: string;
     Icon: ComponentType<IconProps>;
     kbd?: string;
-    desc: string;
+    /** The row's second line; left out where it would only repeat the label. */
+    desc?: string;
     href: string;
     /** Permission the row's action needs; without it the row is left out. */
     requires?: Permission;
 }
 
 /**
- * Quick links for the ⌘K command palette (draft, rewrite, notebooks, etc.).
+ * Quick links for the ⌘K command palette (knowledge, workflows, notebooks, etc.).
  * Each links to a real employer route.
  */
 export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
@@ -378,13 +388,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconFolder,
         desc: "Browse and grow everything the workspace can cite",
         href: "/employer/documents?feature=knowledge",
-    },
-    {
-        id: "processing",
-        label: "Processing queue",
-        Icon: IconProcessing,
-        desc: "Files being read and indexed, stage by stage",
-        href: "/employer/documents?feature=processing",
     },
     {
         id: "meetings",
@@ -408,27 +411,11 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=team",
     },
     {
-        id: "draft",
-        label: "Draft",
-        Icon: IconPen,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.draft")!.defaultKeys),
-        desc: "Generate a new document with AI",
-        href: "/employer/documents?feature=draft",
-    },
-    {
-        id: "rewrite",
-        label: "Rewrite",
-        Icon: IconSparkle,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.rewrite")!.defaultKeys),
-        desc: "Improve existing content",
-        href: "/employer/documents?feature=rewrite",
-    },
-    {
+        // A "coming soon" pane: nothing to describe yet.
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
         kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.workflows")!.defaultKeys),
-        desc: "Automate recurring tasks across your sources",
         href: "/employer/documents?feature=workflows",
     },
     {
@@ -490,6 +477,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=scenarios",
     },
     {
+        id: "extract",
+        label: "Extract",
+        Icon: IconExtract,
+        desc: "Pull the same fields out of many files into one table",
+        href: "/employer/documents?feature=extract",
+    },
+    {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
@@ -512,13 +506,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     },
     {
         id: "usage",
-        label: "Usage",
+        label: "Models & usage",
         Icon: IconChart,
-        desc: "Your numbers, and for admins the workspace's and each person's",
+        desc: "Your numbers, and for admins the workspace's and each person's, its models and API keys",
         href: "/employer/documents?feature=usage",
     },
     {
-        // A screen of the Usage tab (`TOOL_ALIASES`): balance, pricing and limits.
+        // A screen of Models & usage (`TOOL_ALIASES`): balance, pricing and limits.
         id: "spending",
         label: "Spending and limits",
         Icon: IconChart,
@@ -533,7 +527,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "workspace",
         label: "Workspace",
         Icon: IconWorkspace,
-        desc: "Its name and URL, people and access, your own keys, models, agents, integrations and usage",
+        desc: "Its name and URL, people and access, company profile, agents and integrations",
         href: "/employer/documents?feature=workspace",
     },
     {
@@ -566,7 +560,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "profile",
         label: "Company profile",
         Icon: IconBuilding,
-        desc: "AI-extracted company intel",
         href: "/employer/documents?feature=workspace&at=%2Fcompany",
     },
     {
@@ -579,12 +572,15 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=workspace&at=%2Fagents",
     },
     {
-        // The palette also finds a row by its id, so "byok" finds this one.
+        // A screen of Models & usage (`TOOL_ALIASES`), offered to whoever may
+        // see the `byok` section (`models.manage`). The palette also finds a
+        // row by its id, so "byok" finds this one, and its English
+        // description keeps the old name findable.
         id: "byok",
-        label: "Bring your own keys",
+        label: "API keys",
         Icon: IconKey,
-        desc: "Your own API key or OpenRouter account for the workspace's AI",
-        href: "/employer/documents?feature=workspace&at=%2Fbyok",
+        desc: "Bring your own keys: an API key or OpenRouter account for the workspace's AI, in Models & usage",
+        href: "/employer/documents?feature=usage&at=%2Fkeys",
     },
 ] as const;
 
@@ -598,7 +594,8 @@ export interface StudioFeature {
     id: string;
     label: string;
     Icon: ComponentType<IconProps>;
-    desc: string;
+    /** What the app is for: the picker's second line, a tab's tooltip. */
+    desc?: string;
     /**
      * The link that opens this app's tab — "Open in a new browser tab" uses
      * it. Always `/employer/documents?feature=<id>` (or a deep link into the
@@ -620,6 +617,13 @@ export interface StudioFeature {
      * Unset, nothing is said.
      */
     deniedNote?: string;
+    /**
+     * Still being built. Shown only while the workspace's beta switch
+     * (`labs.betaApps`, Workspace › Labs) is on, and drawn with a Beta badge
+     * then; its APIs refuse while it is off (`~/server/beta-apps`). Checked
+     * with the permission through `useStudioAccess().canOpen`.
+     */
+    beta?: boolean;
 }
 
 export interface StudioGroup {
@@ -643,17 +647,10 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "knowledge",
                 label: "Knowledge",
                 Icon: IconFolder,
-                desc: "Browse, filter, and grow everything the workspace can cite",
-            },
-            {
-                // Where each file you add is on its way in: uploading,
-                // waiting for a worker, reading the text, splitting,
-                // indexing. Opens by itself when you add something.
-                id: "processing",
-                label: "Processing",
-                Icon: IconProcessing,
-                desc: "Watch files being read and indexed — what is running, what is waiting, and what needs a retry",
-                href: "/employer/documents?feature=processing",
+                // Files still on their way in (uploading, waiting, being
+                // read and indexed) sit at the top. Opens by itself when you
+                // add something.
+                desc: "Browse, filter, and grow everything the workspace can cite — and watch new files being read and indexed",
             },
             {
                 id: "meetings",
@@ -696,6 +693,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconGrowth,
                 desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
                 href: "/employer/documents?feature=growth",
+                beta: true,
             },
             {
                 // A writing app: the proposal is the unit of work, and every
@@ -725,6 +723,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconVantage,
                 desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
                 href: "/employer/documents?feature=vantage",
+                beta: true,
             },
             {
                 // A simulated social network: people built from the
@@ -737,16 +736,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 href: "/employer/documents?feature=scenarios",
             },
             {
-                id: "draft",
-                label: "Templated Drafts",
-                Icon: IconPen,
-                desc: "Generate new docs from templates tuned to your sources",
-            },
-            {
-                id: "rewrite",
-                label: "Rewrite",
-                Icon: IconSparkle,
-                desc: "Improve existing prose with a diff-first rewrite",
+                // Batch extraction: the same fields read out of many
+                // documents into one table, each value with its quote and
+                // page. The tables, the form and a table are screens inside
+                // its tab.
+                id: "extract",
+                label: "Extract",
+                Icon: IconExtract,
+                desc: "Pull the same fields out of many files into one table",
+                href: "/employer/documents?feature=extract",
             },
         ],
     },
@@ -768,7 +766,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "workspace",
                 label: "Workspace",
                 Icon: IconWorkspace,
-                desc: "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations and archive",
+                desc: "The workspace's name and details, its people and access, company profile, agents, integrations and archive",
                 href: "/employer/documents?feature=workspace",
             },
             {
@@ -778,13 +776,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Your account, appearance, shortcuts and privacy",
             },
             {
-                // Cursor's team dashboard for a workspace: your own numbers
-                // for everyone; the workspace's and each person's for
-                // `analytics.view`. Its screens are across the top (`UsageTool`).
+                // Models & usage — Cursor's team dashboard for a workspace:
+                // your own numbers and the models you can pick for everyone;
+                // the workspace's and each person's for `analytics.view`; the
+                // API keys for `models.manage`. Its screens are across the
+                // top (`UsageTool`).
                 id: "usage",
-                label: "Usage",
+                label: "Models & usage",
                 Icon: IconChart,
-                desc: "Who is active, what they ask and add, the AI it takes and what it costs — and your own numbers",
+                desc: "The workspace's API keys and the models people can pick, who is active, what they ask and add, the AI it takes and what it costs — and your own numbers",
             },
         ],
     },
@@ -825,7 +825,6 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
-        desc: "Automate recurring tasks across your sources",
     },
     // Bug reports and feature requests while the product is in testing. Not
     // a picker tile: whether an instance takes reports at all is the
@@ -882,8 +881,9 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         // Authoring, not ingesting: these hand the user somewhere to write
         // rather than asking for a file. A mindmap becomes citable once it is
-        // published back here; a Google Doc is citable from the moment it is
-        // created and re-syncs as it is edited; pasted text is a note.
+        // published back here; a File is written in LaunchStack's editor or
+        // in Google Docs, and is citable from the moment it is created and
+        // re-reads as it is edited; pasted text is a note.
         group: "Create",
         items: [
             {
@@ -893,10 +893,10 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 desc: "Diagram it, then cite it",
             },
             {
-                id: "google-doc",
-                label: "Google Doc",
-                Icon: IconGoogleDocs,
-                desc: "Write it in Google Docs",
+                id: "file",
+                label: "File",
+                Icon: IconFilePen,
+                desc: "Write it here or in Google Docs",
             },
             {
                 id: "paste",
@@ -1026,23 +1026,36 @@ const TOOL_REGISTRY_KEYS = {
     proposals: "proposals",
     vantage: "vantage",
     scenarios: "scenarios",
+    extract: "extract",
 } as const;
 
 const STUDIO_APP_MESSAGE_KEYS = {
     chat: "chat",
     knowledge: "knowledge",
-    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",
     investors: "investors",
-    draft: "draft",
-    rewrite: "rewrite",
     workspace: "workspace",
     settings: "settings",
     usage: "usage",
     mindmap: "mindmap",
     workflows: "workflows",
+    feedback: "feedback",
+} as const;
+
+/** Workflows has a name but nothing to describe: its pane is a placeholder. */
+const STUDIO_APP_DESCRIPTION_KEYS = {
+    chat: "chat",
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    investors: "investors",
+    workspace: "workspace",
+    settings: "settings",
+    usage: "usage",
+    mindmap: "mindmap",
     feedback: "feedback",
 } as const;
 
@@ -1063,10 +1076,10 @@ export function studioFeatureLabel(
 export function studioFeatureDescription(
     text: StudioText,
     feature: Pick<StudioFeature, "id" | "desc">
-): string {
+): string | undefined {
     const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
     if (tool) return text.tools(`${tool}.description`);
-    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    const key = lookup(STUDIO_APP_DESCRIPTION_KEYS, feature.id);
     return key ? text.workspace(`studioApps.${key}.description`) : feature.desc;
 }
 
@@ -1092,12 +1105,9 @@ export function localizedStudioFeature<F extends StudioFeature>(text: StudioText
 
 const PALETTE_LINK_LABEL_KEYS = {
     knowledge: "knowledge",
-    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",
-    draft: "draft",
-    rewrite: "rewrite",
     workflows: "workflows",
     mindmap: "mindmap",
     artifacts: "artifacts",
@@ -1117,13 +1127,36 @@ const PALETTE_LINK_LABEL_KEYS = {
     byok: "byok",
 } as const;
 
-/** Every palette row has a description of its own — the tools' rows included. */
+/**
+ * The rows with a second line, the tools' rows included. Draft, Rewrite and
+ * Company profile have none (theirs only repeated the name), nor does
+ * Workflows, whose pane is a placeholder.
+ */
 const PALETTE_LINK_DESCRIPTION_KEYS = {
-    ...PALETTE_LINK_LABEL_KEYS,
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    mindmap: "mindmap",
+    artifacts: "artifacts",
+    "agent-sessions": "agentSessions",
+    brand: "brand",
+    prospects: "prospects",
+    investors: "investors",
+    audit: "audit",
+    usage: "usage",
+    spending: "spending",
+    workspace: "workspace",
+    "workspace-general": "workspaceGeneral",
+    settings: "settings",
+    "people-access": "peopleAccess",
+    "agents-nodes": "agentsNodes",
+    byok: "byok",
     growth: "growth",
     proposals: "proposals",
     vantage: "vantage",
     scenarios: "scenarios",
+    extract: "extract",
 } as const;
 
 /** A ⌘K quick link's name (`DEMOTED_FEATURES`); a tool's row says the tool's own name. */
@@ -1141,7 +1174,7 @@ export function demotedFeatureLabel(
 export function demotedFeatureDescription(
     text: StudioText,
     feature: Pick<DemotedFeature, "id" | "desc">
-): string {
+): string | undefined {
     const key = lookup(PALETTE_LINK_DESCRIPTION_KEYS, feature.id);
     return key ? text.workspace(`paletteLinks.${key}.description`) : feature.desc;
 }

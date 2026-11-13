@@ -22,6 +22,7 @@ export const PERMISSIONS = [
     "groups.manage",
     "roles.manage",
     "settings.manage",
+    "models.manage",
     "connectors.manage",
     "analytics.view",
     "audit.view",
@@ -48,6 +49,8 @@ export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "roles.manage": "Create and edit custom roles",
     "settings.manage":
         "Workspace settings, processing, company profile, and the agent roster (adding, retiring, autonomy, tools, nodes)",
+    "models.manage":
+        "Bring the workspace's own API keys, choose its models and what people can pick in Ask, and see what each model used",
     "connectors.manage": "Connect and disconnect Google Drive, Slack, GitHub, and agent connectors",
     "analytics.view": "The statistics dashboard and per-document stats",
     "audit.view": "Read the audit log",

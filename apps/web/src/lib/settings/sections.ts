@@ -5,8 +5,9 @@
  * whatever their role. The Workspace tab is open to everyone too, and each of
  * its screens carries its own gate instead of the whole tab carrying one: the
  * Settings app used to require `settings.manage`, so a Member who picked
- * "Settings" got nothing at all. Which surface draws which section is
- * `./surfaces`.
+ * "Settings" got nothing at all. The Usage tab (Models & usage) draws three
+ * sections — Spending, API keys, Models — and applies the same gates. Which
+ * surface draws which section is `./surfaces`.
  *
  * Two gates per section, both optional:
  *
@@ -18,8 +19,8 @@
  *   read-only: shown, and labelled so, never hidden.
  *
  * Also the one map from a URL hash (`#byok`, `#appearance.theme`) to a
- * section, so a link into Settings or the Workspace tab and a palette row
- * agree on where it goes.
+ * section, so a link into Settings, the Workspace tab or the Usage tab and a
+ * palette row agree on where it goes.
  *
  * Dependency-free apart from the registry, so the hub, the command palette
  * and their tests share it without the palette loading the hub.
@@ -82,13 +83,16 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
     // Everyone reads the profile (agents cite it to everyone) and may rebuild
     // it; the body says so, and withholds the curation actions.
     company: { edit: "settings.manage", aliases: ["company", "metadata", "profile"] },
-    // The workspace's own model: an endpoint and API key, or OpenRouter. The
-    // form would take edits it can never save. `processing` was this
-    // section's name once, and `embedding` the key it also held; both hashes
-    // still land here so old links keep working.
+    // API keys (Models & usage › API keys; Workspace › Bring your own keys
+    // until November 2026): the workspace's own model, an endpoint and API
+    // key, or OpenRouter. Its read is refused without `models.manage`, the
+    // same gate as `/api/settings/models/**`, and the form would take edits
+    // it can never save. `processing` was this section's name once, and
+    // `embedding` the key it also held; both hashes still land here so old
+    // links keep working.
     byok: {
-        view: "settings.manage",
-        edit: "settings.manage",
+        view: "models.manage",
+        edit: "models.manage",
         aliases: [
             "byok",
             "keys",
@@ -101,10 +105,12 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
             "processing",
         ],
     },
-    // Its read is refused outright.
+    // The server default (Models & usage › Models, which shows everyone else
+    // what they can pick instead). Its read is refused without
+    // `models.manage`.
     models: {
-        view: "settings.manage",
-        edit: "settings.manage",
+        view: "models.manage",
+        edit: "models.manage",
         aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone

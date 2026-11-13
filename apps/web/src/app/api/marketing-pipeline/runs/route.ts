@@ -12,7 +12,7 @@ import {
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { fail, ok, readJson } from "~/server/api/responses";
 import { dispatchMarketingRun } from "~/server/marketing/executor";
@@ -23,7 +23,7 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
     const locale = localeOfRequest(request);
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const refused = await refuseAtAiAllowance(ctx.data.companyId, ctx.data.authUserId, locale);
         if (refused) return refused;
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
     const locale = localeOfRequest(request);
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireBetaAppContext();
         if (!ctx.success) return ctx.response;
         const [runs, completedRuns] = await Promise.all([
             listActiveMarketingRuns(ctx.data.companyId, ctx.data.authUserId),

@@ -14,6 +14,7 @@ import { mediaMimeFromName } from "~/lib/media-document";
 import { accessSubject } from "~/server/workspace/item-access";
 import { describeDocumentAccess } from "~/server/workspace/source-access";
 import { loadSourceProcessing } from "~/server/workspace/source-processing";
+import { loadExternalLinkResolver } from "~/server/workspace/source-external-links";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -159,10 +160,15 @@ export async function POST(request: Request) {
             if (processed === true) return null;
             return versioned ? doc.currentVersionOcrJobId : doc.ocrJobId;
         };
-        const processing = await loadSourceProcessing(
-            companyId,
-            docs.map(pendingJobId).filter((id): id is string => id !== null)
-        );
+        const [processing, externalLinks] = await Promise.all([
+            loadSourceProcessing(
+                companyId,
+                docs.map(pendingJobId).filter((id): id is string => id !== null)
+            ),
+            // Where each one opens outside LaunchStack: its origin, or the
+            // stored file at the address the preview loads.
+            loadExternalLinkResolver(companyId, ctx.data.userPk),
+        ]);
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
         const serializedDocs = docs.map(doc => {
@@ -175,7 +181,16 @@ export async function POST(request: Request) {
                 inferMimeFromName(doc.url);
             const needsProxy =
                 isPrivateBlobUrl(doc.url) || (isS3Storage() && doc.url.startsWith("http"));
-            const url = needsProxy ? `/api/documents/${Number(doc.id)}/content` : doc.url;
+            // The proxy answers with whatever version is current, and the
+            // browser keeps it for an hour. Naming the version in the address
+            // makes a new one (an edit, a Drive sync, an upload) a new URL:
+            // the cache cannot hand back the old file, and an open preview
+            // sees its address change and loads again.
+            const url = needsProxy
+                ? `/api/documents/${Number(doc.id)}/content${
+                      doc.currentVersionId !== null ? `?v=${Number(doc.currentVersionId)}` : ""
+                  }`
+                : doc.url;
 
             return {
                 ...doc,
@@ -191,6 +206,11 @@ export async function POST(request: Request) {
                 access: described.access.get(Number(doc.id)) ?? null,
                 addedBy: described.addedBy.get(Number(doc.id)) ?? null,
                 processing: processing.get(pendingJobId(doc) ?? "") ?? null,
+                externalLink: externalLinks.linkFor({
+                    id: Number(doc.id),
+                    ocrMetadata: doc.ocrMetadata,
+                    fileUrl: url,
+                }),
                 ...(mimeType && { mimeType }),
             };
         });

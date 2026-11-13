@@ -14,7 +14,9 @@ import { ADD_TABS } from "../types";
 /**
  * The Notion panel: one consent on Notion's screen connects a workspace, its
  * picked pages sync into Sources, and every connected workspace gets Sync
- * now, Choose pages (the same consent again) and Disconnect.
+ * now, Choose pages (the same consent again) and Disconnect, plus Sync again
+ * for a page deleted here. Connections are per-user, so the panel only ever
+ * lists the caller's own.
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
@@ -39,7 +41,6 @@ function connection(overrides: Record<string, unknown> = {}) {
         workspaceName: "Acme HQ",
         status: "active",
         statusDetail: null,
-        connectedBy: "Ada Admin",
         folderPath: "Notion/Acme HQ",
         lastSyncAt: "2026-10-22T12:00:00.000Z",
         lastSyncStatus: "ok",
@@ -59,6 +60,9 @@ beforeEach(() => {
     fetchMock.mockImplementation((url: string, init?: RequestInit) => {
         if (url.endsWith("/status")) return respond({ data: statusBody }, statusCode);
         if (url.includes("/sync")) return respond({ data: { queued: 1 } }, 202);
+        if (url.endsWith("/deleted") && init?.method === "DELETE") {
+            return respond({ data: { restored: 1 } });
+        }
         if (url.startsWith("/api/connectors/connections/") && init?.method === "DELETE") {
             return respond({ data: { deleted: true } });
         }
@@ -84,12 +88,13 @@ describe("NotionConnectPanel", () => {
         expect(screen.queryByRole("link", { name: /connect notion/i })).not.toBeInTheDocument();
     });
 
-    it("tells a member that connecting is for admins", async () => {
+    it("tells someone who cannot add files that connecting needs that permission", async () => {
         statusCode = 403;
         statusBody = null;
         render(<NotionConnectPanel tab={notionTab} />);
 
-        expect(await screen.findByText(/for workspace admins/i)).toBeInTheDocument();
+        expect(await screen.findByText(/needs permission to add files/i)).toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /connect notion/i })).not.toBeInTheDocument();
     });
 
     it("shows a connected workspace with its folder and last sync", async () => {
@@ -99,6 +104,8 @@ describe("NotionConnectPanel", () => {
         expect(await screen.findByText("Acme HQ")).toBeInTheDocument();
         expect(screen.getByText("Notion/Acme HQ")).toBeInTheDocument();
         expect(screen.getByText("12 pages · 3 updated")).toBeInTheDocument();
+        // The connection is the caller's own; there is no one else to credit.
+        expect(screen.queryByText(/connected by/i)).not.toBeInTheDocument();
         expect(screen.getByRole("link", { name: /choose pages/i })).toHaveAttribute(
             "href",
             NOTION_CONNECT_URL
@@ -138,6 +145,38 @@ describe("NotionConnectPanel", () => {
         expect(await screen.findByRole("link", { name: /connect notion/i })).toBeInTheDocument();
     });
 
+    it("leaves someone without upload access only Disconnect on their own cards", async () => {
+        statusBody = { configured: true, canConnect: false, connections: [connection()] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(await screen.findByText("Acme HQ")).toBeInTheDocument();
+        expect(screen.getByText(/needs permission to add files/i)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /^disconnect$/i })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /sync now/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /choose pages/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /connect/i })).not.toBeInTheDocument();
+    });
+
+    it("words a paused sync from the catalogue, not the stored English", async () => {
+        statusBody = {
+            configured: true,
+            canConnect: false,
+            connections: [
+                connection({
+                    lastSyncStatus: "error",
+                    lastSyncError: "stored text the card should not show",
+                    paused: "noUpload",
+                }),
+            ],
+        };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(
+            await screen.findByText(/^Paused: you can no longer add files in this workspace/)
+        ).toBeInTheDocument();
+        expect(screen.queryByText("stored text the card should not show")).not.toBeInTheDocument();
+    });
+
     it("offers reconnect for a revoked connection", async () => {
         statusBody = { configured: true, connections: [connection({ status: "revoked" })] };
         render(<NotionConnectPanel tab={notionTab} />);
@@ -163,5 +202,60 @@ describe("syncSummary", () => {
             "1 page · 2 failed · page limit reached"
         );
         expect(syncSummary(t, null)).toBeNull();
+    });
+});
+
+describe("NotionConnectPanel pages deleted here", () => {
+    const deletedHere = {
+        items: [{ sourceId: "page-1", title: "Roadmap", deletedAt: "2026-11-07T00:00:00Z" }],
+        others: 0,
+    };
+
+    it("names the page you deleted and says Notion was not touched", async () => {
+        statusBody = { configured: true, connections: [connection({ deletedHere })] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(await screen.findByText("DELETED HERE (1)")).toBeInTheDocument();
+        expect(screen.getByText("Roadmap")).toBeInTheDocument();
+        expect(screen.getByText(/Nothing was changed in Notion/)).toBeInTheDocument();
+        // One file: no "Sync all" next to its own button.
+        expect(screen.queryByRole("button", { name: /Sync all/ })).not.toBeInTheDocument();
+    });
+
+    it("forgets the delete on that connection, then syncs it", async () => {
+        const user = userEvent.setup();
+        statusBody = { configured: true, connections: [connection({ deletedHere })] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        await user.click(await screen.findByRole("button", { name: "Sync Roadmap again" }));
+
+        await waitFor(() =>
+            expect(
+                fetchMock.mock.calls.some(([url]) =>
+                    String(url).startsWith("/api/connectors/notion/sync?connectionId=41")
+                )
+            ).toBe(true)
+        );
+        const call = fetchMock.mock.calls.find(([url]) =>
+            String(url).endsWith("/api/connectors/notion/deleted")
+        ) as [string, RequestInit];
+        expect(call[1].method).toBe("DELETE");
+        expect(JSON.parse(call[1].body as string)).toEqual({
+            connectionId: "41",
+            sourceIds: ["page-1"],
+        });
+    });
+
+    it("shows nothing for a revoked connection or when nothing was deleted", async () => {
+        statusBody = {
+            configured: true,
+            connections: [
+                connection({ connectionId: "41", deletedHere: { items: [], others: 0 } }),
+                connection({ connectionId: "42", status: "revoked", deletedHere }),
+            ],
+        };
+        render(<NotionConnectPanel tab={notionTab} />);
+        await screen.findAllByText("Acme HQ");
+        expect(screen.queryByText(/DELETED HERE/)).not.toBeInTheDocument();
     });
 });

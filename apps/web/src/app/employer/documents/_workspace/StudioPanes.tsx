@@ -9,7 +9,6 @@ import { Button } from "~/components/ui/button";
 import type { ToolHost } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
 import type { KnowledgePaneProps } from "./KnowledgePane";
-import type { ProcessingQueuePaneProps } from "./processing/ProcessingQueuePane";
 import type { PersonalSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
 import type { TeamToolProps } from "./team/TeamTool";
@@ -57,11 +56,6 @@ export interface StudioPaneContext {
      */
     team?: Pick<TeamToolProps, "onOpenTarget" | "onShare">;
     /**
-     * The Processing queue opens a finished file in its own tab, opens Add a
-     * source, and tells the sidebar when a file settles — all the shell's.
-     */
-    processing?: Omit<ProcessingQueuePaneProps, "host">;
-    /**
      * For tools with screens of their own: whether this tab is the focused
      * one, a location to show, where to remember the last one, and how to
      * reach other tabs. See `components/tool-app`.
@@ -69,30 +63,12 @@ export interface StudioPaneContext {
     tool?: ToolHost;
 }
 
-const DraftsTool = dynamic(
-    () => import("~/app/employer/documents/components/DraftsTool").then(m => m.DraftsTool),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-
-const RewriteTool = dynamic(
-    () => import("~/app/employer/documents/components/RewriteTool").then(m => m.RewriteTool),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-
 const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
 const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), {
-    loading: () => <LoadingPage variant="pane" />,
-});
-
-const ProcessingQueuePane = dynamic(
-    () => import("./processing/ProcessingQueuePane").then(m => m.ProcessingQueuePane),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
-const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
     loading: () => <LoadingPage variant="pane" />,
 });
 
@@ -118,6 +94,11 @@ const ScenariosTool = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const ExtractTool = dynamic(
+    () => import("~/app/employer/tools/extract/ExtractTool").then(m => m.ExtractTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
     loading: () => <LoadingPage variant="pane" />,
 });
@@ -140,6 +121,9 @@ const MeetingsPane = dynamic(() => import("./collab/MeetingsPane").then(m => m.M
     loading: () => <LoadingPage variant="pane" />,
 });
 
+const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
 const KnowledgePane = dynamic(() => import("./KnowledgePane").then(m => m.KnowledgePane), {
     loading: () => <LoadingPage variant="pane" />,
 });
@@ -156,7 +140,7 @@ function PaneShell({
 }: {
     title: string;
     body?: string;
-    children: ReactNode;
+    children?: ReactNode;
     footer: ReactNode;
 }) {
     return (
@@ -249,18 +233,9 @@ export function ChatPane(_: PaneProps) {
     );
 }
 
-/**
- * Templated Drafts in the shared tool frame: New document, My documents and
- * the Assistant are screens in its rail, and an open draft is a page under
- * My documents.
- */
-export function DraftPane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return <DraftsTool host={context?.tool} />;
-}
-
 interface ComingSoonPaneProps extends PaneProps {
     title: string;
-    body: string;
+    body?: string;
     bullets: string[];
 }
 
@@ -285,11 +260,6 @@ export function ComingSoonPane({ onClose, title, body, bullets }: ComingSoonPane
             <BulletList items={bullets} />
         </PaneShell>
     );
-}
-
-/** Rewrite in the shared tool frame: New rewrite and My rewrites in its rail. */
-export function RewritePane({ context }: PaneProps & { context?: StudioPaneContext }) {
-    return <RewriteTool host={context?.tool} />;
 }
 
 export function CompanySettingsPane({
@@ -351,7 +321,12 @@ export function KnowledgeStudioPane({
     }
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-            <KnowledgePane {...context.knowledge} />
+            <KnowledgePane
+                {...context.knowledge}
+                queue={
+                    context.knowledge.queue && { ...context.knowledge.queue, host: context.tool }
+                }
+            />
         </div>
     );
 }
@@ -384,7 +359,6 @@ export function WorkflowsPane({ onClose }: PaneProps) {
     return (
         <PaneShell
             title={t("workflows.title")}
-            body={t("workflows.body")}
             footer={
                 <>
                     <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
@@ -394,11 +368,7 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                     </Button>
                 </>
             }
-        >
-            <BulletList
-                items={[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")]}
-            />
-        </PaneShell>
+        />
     );
 }
 
@@ -510,23 +480,8 @@ export function renderStudioPane(
                     onShare={context?.team?.onShare}
                 />
             );
-        case "processing":
-            return (
-                <ProcessingQueuePane
-                    host={context?.tool}
-                    viewerId={context?.processing?.viewerId ?? null}
-                    storageScope={context?.processing?.storageScope}
-                    onOpenDocument={context?.processing?.onOpenDocument}
-                    onAddSource={context?.processing?.onAddSource}
-                    onSettled={context?.processing?.onSettled}
-                />
-            );
         case "feedback":
             return <FeedbackTool host={context?.tool} />;
-        case "draft":
-            return <DraftPane onClose={onClose} context={context} />;
-        case "rewrite":
-            return <RewritePane onClose={onClose} context={context} />;
         case "workflows":
             return <WorkflowsPane onClose={onClose} />;
         case "investors":
@@ -545,6 +500,8 @@ export function renderStudioPane(
             return <VantageTool host={context?.tool} />;
         case "scenarios":
             return <ScenariosTool host={context?.tool} />;
+        case "extract":
+            return <ExtractTool host={context?.tool} />;
         case "usage":
             return <UsageTool host={context?.tool} />;
         // Yours alone: account, appearance, shortcuts, privacy.

@@ -21,7 +21,7 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { copy, type Copy } from "~/i18n/copy";
 import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { englishCopy } from "~/i18n/translate";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireBetaAppContext } from "~/server/beta-apps";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { error, json, readJsonBody } from "~/server/distribution/http";
@@ -39,7 +39,7 @@ const OutreachSchema = z.object({
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireBetaAppContext();
     if (!ctx.success) return ctx.response;
     const aiUse = { feature: "distribution", userId: ctx.data.authUserId } as const;
     const refused = await refuseAtAiAllowance(

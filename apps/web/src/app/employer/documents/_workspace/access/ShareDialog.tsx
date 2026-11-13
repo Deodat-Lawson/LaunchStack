@@ -455,18 +455,23 @@ export function ShareDialog({
                 if (!next && !saving) onClose();
             }}
         >
-            <DialogContent className="max-h-[90vh] grid-cols-[minmax(0,1fr)] overflow-y-auto sm:max-w-lg">
+            <DialogContent
+                className="max-h-[90vh] grid-cols-[minmax(0,1fr)] overflow-y-auto sm:max-w-lg"
+                {...(target?.kind === "folder" || target?.kind === "chat"
+                    ? {}
+                    : { "aria-describedby": undefined })}
+            >
                 <DialogHeader>
                     <DialogTitle className="truncate pr-6">
                         {t("share.title", { name: target?.name ?? "" })}
                     </DialogTitle>
-                    <DialogDescription>
-                        {target?.kind === "folder"
-                            ? t("share.descriptionFolder")
-                            : target?.kind === "chat"
-                              ? t("share.descriptionChat")
-                              : t("share.descriptionDocument")}
-                    </DialogDescription>
+                    {target?.kind === "folder" || target?.kind === "chat" ? (
+                        <DialogDescription>
+                            {target.kind === "folder"
+                                ? t("share.descriptionFolder")
+                                : t("share.descriptionChat")}
+                        </DialogDescription>
+                    ) : null}
                 </DialogHeader>
 
                 {loading ? (

@@ -3,9 +3,10 @@
  * only in the worker (ADR-003: apps/web hosts no durable work); the UI polls
  * the status route while lastSyncStatus is "running".
  *
- * Google Drive syncs the workspace's primary Drive connection. Notion syncs
- * the connection named by `?connectionId=`, or every active Notion
- * connection when none is named.
+ * Google Drive syncs the workspace's primary Drive connection (admins).
+ * Notion syncs the caller's own connection named by `?connectionId=`, or
+ * every active Notion connection of theirs when none is named; Notion
+ * connections are per-user, so another member's is never touched.
  */
 
 import { z } from "zod";
@@ -22,10 +23,13 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
 import { isConnectorConfigured } from "~/server/services/connectors/config";
-import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import {
+    listConnectionsForCompany,
+    listConnectionsForOwner,
+} from "~/server/services/connectors/connection-store";
 import {
     notConfiguredResponse,
-    requireConnectorAdmin,
+    requireConnectorGrantor,
 } from "~/server/services/connectors/workspace-guard";
 
 export const runtime = "nodejs";
@@ -54,7 +58,7 @@ export async function POST(
                 return createValidationError(t("syncDriveNotionOnly"));
             }
 
-            const guard = await requireConnectorAdmin();
+            const guard = await requireConnectorGrantor(provider);
             if (!guard.ok) return guard.response;
             if (!isConnectorConfigured(provider)) {
                 return notConfiguredResponse(provider, locale);
@@ -65,9 +69,13 @@ export async function POST(
             if (!parsed.success) return createValidationError(t("invalidBody"));
 
             const companyId = guard.ctx.companyId.toString();
-            const connections = await listConnectionsForCompany(guard.ctx.companyId, provider);
 
             if (provider === "notion") {
+                const connections = await listConnectionsForOwner(
+                    guard.ctx.companyId,
+                    provider,
+                    guard.ctx.userPk
+                );
                 const wanted = new URL(request.url).searchParams.get("connectionId");
                 const targets = connections.filter(
                     row => row.status === "active" && (!wanted || String(row.id) === wanted)
@@ -86,7 +94,7 @@ export async function POST(
                 return createSuccessResponse({ queued: targets.length }, t("syncStarted"), 202);
             }
 
-            const [connection] = connections;
+            const [connection] = await listConnectionsForCompany(guard.ctx.companyId, provider);
             if (!connection) return createNotFoundError(t("connectDriveFirst"));
             if (connection.status !== "active") {
                 return createValidationError(t("googleRevoked"));

@@ -24,6 +24,7 @@ function stubApi() {
     configureScenariosSim({
         empty: params.get("empty") === "1",
         credits: credits === "short" || credits === "race" ? credits : "ok",
+        betaApps: params.get("beta") !== "0",
     });
     const real = window.fetch.bind(window);
     window.fetch = async (input, init) => {

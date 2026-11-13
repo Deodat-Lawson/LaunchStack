@@ -191,7 +191,7 @@ export function EvidenceDialog({
                         </div>
                     </Field>
                     <div className="grid gap-3.5 sm:grid-cols-2">
-                        <Field label={t("source")} htmlFor="ev-source" hint={t("sourceHint")}>
+                        <Field label={t("source")} htmlFor="ev-source">
                             <Input
                                 id="ev-source"
                                 value={source}

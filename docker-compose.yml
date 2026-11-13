@@ -21,6 +21,9 @@
 #                    returns a typed 503 and text-file ingestion still works.
 #   --profile backfill — on-demand data backfills
 #   --profile seed — fixed development accounts (see the `seed` service)
+#   --profile search — SearXNG, a free self-hosted web search engine. Pair it
+#                    with SEARCH_PROVIDER=searxng and
+#                    SEARXNG_URL=http://searxng:8080 (see the `searxng` service)
 
 # Environment shared by the app (command acceptance + reads) and the worker
 # (durable execution). One authority so the two processes can never disagree
@@ -74,9 +77,9 @@ x-shared-env: &shared-env
   NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
   INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
   INNGEST_DEV: http://inngest-dev:8288
-  EXA_API_KEY: ${EXA_API_KEY:-}
   MARKETING_EXECUTOR: ${MARKETING_EXECUTOR:-}
   PROSPECTS_EXECUTOR: ${PROSPECTS_EXECUTOR:-}
+  ASSISTANT_CONVERSATIONS_EXECUTOR: ${ASSISTANT_CONVERSATIONS_EXECUTOR:-}
   DATALAB_API_KEY: ${DATALAB_API_KEY:-}
   AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
   AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
@@ -163,13 +166,22 @@ x-shared-env: &shared-env
   # .env (or synced from Key Vault) is invisible to the container unless it is
   # listed here. Every one is optional and unset by default; a feature stays
   # off until its credentials are present. Deliberately NOT listed because an
-  # empty string is not "unset" for them: SEARCH_PROVIDER (strict enum) and
-  # GOOGLE_DOCS_SETTLE_MINUTES (Number("") is 0, not the default).
-  # Sign in with Google / GitHub (better-auth callbacks under /api/auth).
+  # empty string is not "unset" for it: GOOGLE_DOCS_SETTLE_MINUTES (Number("")
+  # is 0, not the default).
+  # Sign in with Google / GitHub / Microsoft / your own OIDC identity provider
+  # (better-auth callbacks under /api/auth).
   AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
   AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
   AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
   AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
+  AUTH_MICROSOFT_CLIENT_ID: ${AUTH_MICROSOFT_CLIENT_ID:-}
+  AUTH_MICROSOFT_CLIENT_SECRET: ${AUTH_MICROSOFT_CLIENT_SECRET:-}
+  AUTH_MICROSOFT_TENANT_ID: ${AUTH_MICROSOFT_TENANT_ID:-}
+  AUTH_MICROSOFT_AUTHORITY: ${AUTH_MICROSOFT_AUTHORITY:-}
+  AUTH_OIDC_ISSUER: ${AUTH_OIDC_ISSUER:-}
+  AUTH_OIDC_CLIENT_ID: ${AUTH_OIDC_CLIENT_ID:-}
+  AUTH_OIDC_CLIENT_SECRET: ${AUTH_OIDC_CLIENT_SECRET:-}
+  AUTH_OIDC_NAME: ${AUTH_OIDC_NAME:-}
   # Workspace connectors: Google Drive + Gmail, GitHub, Slack, Notion.
   GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
   GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
@@ -220,7 +232,20 @@ x-shared-env: &shared-env
   # Slack/Discord webhook told about each new report.
   FEEDBACK_ADMIN_EMAILS: ${FEEDBACK_ADMIN_EMAILS:-}
   FEEDBACK_WEBHOOK_URL: ${FEEDBACK_WEBHOOK_URL:-}
+  # Web search: one engine for every feature. SEARCH_PROVIDER picks it
+  # (exa | serper | brave | tavily | searxng); empty means the first engine
+  # below with a credential, in that order. A named engine without its
+  # credential turns web search off rather than switching engines. Only Exa
+  # has a company index (Prospects company search + lookalikes).
+  SEARCH_PROVIDER: ${SEARCH_PROVIDER:-}
+  EXA_API_KEY: ${EXA_API_KEY:-}
   SERPER_API_KEY: ${SERPER_API_KEY:-}
+  BRAVE_SEARCH_API_KEY: ${BRAVE_SEARCH_API_KEY:-}
+  TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+  # Base URL of a SearXNG instance with JSON output on — the bundled one is
+  # http://searxng:8080 (`--profile search`). Empty by default: the URL counts
+  # as a credential, so set it only when an instance is actually running.
+  SEARXNG_URL: ${SEARXNG_URL:-}
 
 services:
   db:
@@ -389,6 +414,33 @@ services:
       retries: 5
       start_period: 120s
 
+  # Optional: SearXNG, a free self-hosted metasearch engine — the keyless
+  # choice for web search. Start it with `--profile search` and set
+  # SEARCH_PROVIDER=searxng and SEARXNG_URL=http://searxng:8080. No published
+  # port: only the app and worker reach it, over the Compose network, which is
+  # why docker/searxng/settings.yml turns its bot limiter off. It queries public
+  # engines (Google, Bing, DuckDuckGo, …) from this host's IP, and they may
+  # rate-limit or CAPTCHA a busy instance, which then returns fewer results or
+  # none.
+  searxng:
+    image: searxng/searxng:latest
+    profiles: ["search"]
+    restart: unless-stopped
+    environment:
+      # Signs SearXNG's cookies; overrides server.secret_key in the settings
+      # file. The local default keeps `--profile search` working without a
+      # configured .env — override it in production.
+      SEARXNG_SECRET: ${SEARXNG_SECRET:-pdr_local_searxng_secret}
+    volumes:
+      - ./docker/searxng/settings.yml:/etc/searxng/settings.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      # Loading its engine list can take about a minute.
+      start_period: 60s
+
   # Gotenberg PDF rendering (ADR-009): DOCX/Office → PDF via LibreOffice,
   # HTML/Markdown → PDF via Chromium. Off-the-shelf image, like docling-serve.
   # Auth fails closed (--api-enable-basic-auth + the shared-env pair), and the
@@ -409,7 +461,7 @@ services:
       # First alternative is Gotenberg's own default (block file: outside its
       # /tmp working dir) — overriding the flag replaces it, so it is repeated.
       - >-
-        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|inngest|inngest-redis|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|searxng|inngest-dev|inngest|inngest-redis|gotenberg)(?::[0-9]+)?(?:/.*)?$$
     environment:
       GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
       GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}

@@ -184,7 +184,10 @@ export function NewScreen() {
         );
     };
 
-    const switches: SourceSwitch[] = [
+    // Prospects and post comments come from Growth, a beta app: no switch
+    // for either while the workspace has its beta apps off.
+    const growthSources = offered?.betaApps !== false;
+    const allSwitches: SourceSwitch[] = [
         {
             id: "profile",
             icon: Building2,
@@ -236,6 +239,9 @@ export function NewScreen() {
             disabled: offered ? offered.brandComments === 0 : true,
         },
     ];
+    const switches = growthSources
+        ? allSwitches
+        : allSwitches.filter(s => s.id !== "prospects" && s.id !== "comments");
 
     const hasNotes = notes.trim().length > 0;
     const builtFrom = [
@@ -273,8 +279,9 @@ export function NewScreen() {
                 sources: {
                     documentIds: docs,
                     searchFiles,
-                    prospects: prospects && (offered?.prospects ?? 0) > 0,
-                    brandComments: brandComments && (offered?.brandComments ?? 0) > 0,
+                    prospects: growthSources && prospects && (offered?.prospects ?? 0) > 0,
+                    brandComments:
+                        growthSources && brandComments && (offered?.brandComments ?? 0) > 0,
                     companyProfile: profileOn,
                     notes: notes.trim(),
                 },
@@ -300,7 +307,7 @@ export function NewScreen() {
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-            <PageHeader size="md" title={t("title")} accent={t("accent")} sub={t("sub")} />
+            <PageHeader size="md" title={t("title")} accent={t("accent")} />
             <input
                 ref={fileInput}
                 type="file"

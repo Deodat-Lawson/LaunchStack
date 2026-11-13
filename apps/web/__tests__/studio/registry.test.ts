@@ -277,9 +277,17 @@ describe("studio registry", () => {
             ].sort()
         );
         // The old "Self-host / BYOK" row (Vercel, Docker, your own keys) is
-        // Bring your own keys now, and says nothing about embeddings.
-        expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || /vercel/i.test(f.desc))).toBe(false);
-        expect(DEMOTED_FEATURES.some(f => /embedding/i.test(`${f.label} ${f.desc}`))).toBe(false);
+        // Models & usage › API keys now, and says nothing about embeddings.
+        const keys = DEMOTED_FEATURES.find(f => f.id === "byok")!;
+        expect(keys.label).toBe("API keys");
+        expect(keys.href).toBe("/employer/documents?feature=usage&at=%2Fkeys");
+        expect(settingsSectionOfHref(keys.href)).toBe("byok");
+        expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || /vercel/i.test(f.desc ?? ""))).toBe(
+            false
+        );
+        expect(DEMOTED_FEATURES.some(f => /embedding/i.test(`${f.label} ${f.desc ?? ""}`))).toBe(
+            false
+        );
         const owner = (p: Permission | undefined) =>
             p === undefined || BUILTIN_ROLE_PERMISSIONS.owner.has(p);
         for (const row of intoSettings) {

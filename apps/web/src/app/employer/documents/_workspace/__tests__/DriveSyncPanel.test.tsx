@@ -14,7 +14,7 @@ import { DriveSyncPanel } from "../settings/DriveSyncPanel";
  * folder can bring its contents is decided by the grant, and the card must
  * say which case this is instead of letting a folder import nothing in
  * silence; each pick says where its files are; Stop syncing and Sync now
- * work from here.
+ * work from here, and so does Sync again for a file deleted here.
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
@@ -57,6 +57,7 @@ beforeEach(() => {
     fetchMock.mockImplementation((url: string) => {
         if (url.endsWith("/status")) return respond({ data: status });
         if (url.endsWith("/items")) return respond({ data: { removed: 1 } });
+        if (url.endsWith("/deleted")) return respond({ data: { restored: 1 } });
         if (url.endsWith("/sync")) return respond({ data: { queued: true } }, 202);
         return respond({}, 404);
     });
@@ -203,5 +204,70 @@ describe("DriveSyncPanel picked list", () => {
         await waitFor(() =>
             expect(fetchMock.mock.calls.some(([url]) => String(url).endsWith("/sync"))).toBe(true)
         );
+    });
+});
+
+describe("DriveSyncPanel files deleted here", () => {
+    it("lists nothing when nothing was deleted", async () => {
+        status = connected({ deletedHere: { items: [], others: 0 } });
+        render(<DriveSyncPanel />);
+        await screen.findByText("alex.rivera@example.com");
+        expect(screen.queryByText(/DELETED HERE/)).not.toBeInTheDocument();
+    });
+
+    it("names what you deleted, counts the rest, and says Drive was not touched", async () => {
+        status = connected({
+            deletedHere: {
+                items: [
+                    {
+                        sourceId: "tpl-1",
+                        title: "Design template",
+                        deletedAt: "2026-11-07T00:00:00Z",
+                    },
+                ],
+                others: 2,
+            },
+        });
+        render(<DriveSyncPanel />);
+
+        expect(await screen.findByText("DELETED HERE (3)")).toBeInTheDocument();
+        expect(screen.getByText("Design template")).toBeInTheDocument();
+        expect(screen.getByText("And 2 more, deleted by other people.")).toBeInTheDocument();
+        expect(screen.getByText(/Nothing was changed in Google Drive/)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Sync all 3 again" })).toBeInTheDocument();
+    });
+
+    it("forgets the delete, then starts a sync", async () => {
+        const user = userEvent.setup();
+        status = connected({
+            deletedHere: {
+                items: [
+                    {
+                        sourceId: "tpl-1",
+                        title: "Design template",
+                        deletedAt: "2026-11-07T00:00:00Z",
+                    },
+                ],
+                others: 0,
+            },
+        });
+        render(<DriveSyncPanel />);
+
+        await user.click(await screen.findByRole("button", { name: "Sync Design template again" }));
+
+        await waitFor(() =>
+            expect(fetchMock.mock.calls.some(([url]) => String(url).endsWith("/sync"))).toBe(true)
+        );
+        const urls = fetchMock.mock.calls.map(([url]) => String(url));
+        const restoreAt = urls.findIndex(url => url.endsWith("/deleted"));
+        expect(restoreAt).toBeGreaterThanOrEqual(0);
+        expect(urls.findIndex(url => url.endsWith("/sync"))).toBeGreaterThan(restoreAt);
+        const [, init] = fetchMock.mock.calls[restoreAt] as [string, RequestInit];
+        expect(urls[restoreAt]).toBe("/api/connectors/google-drive/deleted");
+        expect(init.method).toBe("DELETE");
+        expect(JSON.parse(init.body as string)).toEqual({
+            connectionId: "7",
+            sourceIds: ["tpl-1"],
+        });
     });
 });

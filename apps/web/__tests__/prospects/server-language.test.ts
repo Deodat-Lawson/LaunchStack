@@ -193,14 +193,29 @@ describe("adapter copies say their English field exactly", () => {
             ],
             countries: ["NL", "DE", "GB"],
         });
-        for (const row of sourceRows(
-            { web: true, lookalike: true, place: false, trade: false, screening: true },
-            null
-        )) {
-            expect(en(row.labelCopy)).toBe(row.label);
-            expect(en(row.descriptionCopy)).toBe(row.description);
-            expect(en(row.costCopy)).toBe(row.cost);
-        }
+        // Every engine state words the same in English as the row's own text.
+        for (const [web, lookalike, engine] of [
+            [true, true, "Exa"],
+            [true, false, "SearXNG"],
+            [false, false, null],
+        ] as const)
+            for (const row of sourceRows(
+                {
+                    web,
+                    lookalike,
+                    engine,
+                    webRequires: "SEARCH_PROVIDER",
+                    lookalikeRequires: "EXA_API_KEY",
+                    place: false,
+                    trade: false,
+                    screening: true,
+                },
+                null
+            )) {
+                expect(en(row.labelCopy)).toBe(row.label);
+                expect(en(row.descriptionCopy)).toBe(row.description);
+                expect(en(row.costCopy)).toBe(row.cost);
+            }
     });
 
     it("for timeline lines, why-fit lines and people", () => {
@@ -309,7 +324,7 @@ describe("in Chinese", () => {
         expect(dto.summary!.sources[0]!.sourceId).toBe("live:lookalike");
 
         for (const detail of [
-            "needs EXA_API_KEY",
+            "needs Exa as the search engine",
             "no customers yet",
             "from 1 customer",
             "from 3 customers",
@@ -317,16 +332,29 @@ describe("in Chinese", () => {
         ]) {
             expect(en(sourceDetailCopy(detail))).toBe(detail);
         }
-        expect(zh(sourceDetailCopy("needs EXA_API_KEY"))).toBe("需要 EXA_API_KEY");
+        expect(zh(sourceDetailCopy("needs Exa as the search engine"))).toBe(
+            "需要将搜索引擎设为 Exa"
+        );
+        // Runs recorded before the engine became a setting read the same way.
+        expect(en(sourceDetailCopy("needs EXA_API_KEY"))).toBe("needs Exa as the search engine");
         expect(zh(sourceDetailCopy("no customers yet"))).toBe("还没有客户");
         expect(zh(sourceDetailCopy("2 of 5 customers failed"))).toBe("5 个客户中有 2 个查询失败");
 
         const rows = sourceRows(
-            { web: true, lookalike: true, place: false, trade: false, screening: false },
+            {
+                web: true,
+                lookalike: true,
+                engine: "Exa",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "EXA_API_KEY",
+                place: false,
+                trade: false,
+                screening: false,
+            },
             null
         );
         const byId = Object.fromEntries(rows.map(r => [r.id, r]));
-        expect(zh(byId.web!.labelCopy)).toBe("Exa 公司搜索");
+        expect(zh(byId.web!.labelCopy)).toBe("公司搜索（Exa）");
         expect(zh(byId.lookalike!.labelCopy)).toBe("相似公司");
     });
 

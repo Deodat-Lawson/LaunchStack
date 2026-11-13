@@ -59,6 +59,7 @@ export function orgProfileFromView(view: ProfileView, builtAt: Date): OrgProfile
         geography: view.geography.slice(0, 8),
         facts: facts.slice(0, MAX_FACTS),
         evidence: view.evidence.map(e => ({ ...e, url: null })),
+        sourceDocumentIds: view.sourceDocumentIds,
         builtFrom: { documents: view.documents, snippets: view.evidence.length },
         builtAt: builtAt.toISOString(),
         promptVersion: READER_VERSION,

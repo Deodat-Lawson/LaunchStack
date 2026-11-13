@@ -399,6 +399,7 @@ const TOOL_REGISTRY_KEYS = {
     proposals: "proposals",
     vantage: "vantage",
     scenarios: "scenarios",
+    extract: "extract",
     "knowledge-graph": "knowledgeGraph",
     "repo-explainer": "repoExplainer",
 } as const;

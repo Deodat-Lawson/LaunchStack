@@ -59,6 +59,7 @@ const VIEW: ProfileView = {
         { n: 2, documentId: 12, title: "Team", page: null, quote: "Ana Ruiz, Executive Director" },
     ],
     documents: 2,
+    sourceDocumentIds: [11, 12],
 };
 
 describe("orgProfileFromView", () => {
@@ -77,6 +78,7 @@ describe("orgProfileFromView", () => {
             [2, null],
         ]);
         expect(profile.builtFrom).toEqual({ documents: 2, snippets: 2 });
+        expect(profile.sourceDocumentIds).toEqual([11, 12]);
         expect(formatProfileBlock(profile)).toContain("- Team: Ana Ruiz — Executive Director");
     });
 

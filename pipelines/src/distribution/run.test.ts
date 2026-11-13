@@ -342,7 +342,7 @@ describe("prepareRun discovery", () => {
         expect(bySource.web!.status).toBe("ok");
         expect(bySource.lookalike).toMatchObject({
             status: "skipped",
-            detail: "needs EXA_API_KEY",
+            detail: "needs Exa as the search engine",
         });
         expect(store.upserted.some(o => o.domain !== null && NEVER.includes(o.domain))).toBe(false);
     });

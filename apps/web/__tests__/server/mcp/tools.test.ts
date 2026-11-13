@@ -10,7 +10,12 @@
 import type { Permission } from "~/lib/authz/permissions";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import type { McpPrincipal } from "~/server/mcp/principal";
-import { handleMcpPost, type McpToolOutcome } from "~/server/mcp/protocol";
+import {
+    handleMcpPost,
+    isInputRequired,
+    type McpToolAnswer,
+    type McpToolOutcome,
+} from "~/server/mcp/protocol";
 import { MCP_TOOLS } from "~/server/mcp/tools";
 import { FETCH_MAX_CHARS, fetchTool, joinChunkText } from "~/server/mcp/tools/fetch";
 import {
@@ -103,17 +108,30 @@ function principal(
 }
 
 function run(tool: typeof searchTool, args: unknown, who = principal()) {
-    return tool.call(args, { principal: who, origin: ORIGIN });
+    return tool.call(args, {
+        principal: who,
+        origin: ORIGIN,
+        client: { era: "legacy", formElicitation: false },
+        roundTrip: null,
+        rawArguments: (args ?? {}) as Record<string, unknown>,
+    });
 }
 
-function okOf(outcome: McpToolOutcome) {
-    if (!outcome.ok) throw new Error(`expected success, got: ${outcome.message}`);
+function answerOf(outcome: McpToolOutcome): McpToolAnswer {
+    if (isInputRequired(outcome)) throw new Error("expected an answer, got input_required");
     return outcome;
 }
 
+function okOf(outcome: McpToolOutcome) {
+    const answer = answerOf(outcome);
+    if (!answer.ok) throw new Error(`expected success, got: ${answer.message}`);
+    return answer;
+}
+
 function messageOf(outcome: McpToolOutcome): string {
-    if (outcome.ok) throw new Error(`expected an error, got: ${outcome.text}`);
-    return outcome.message;
+    const answer = answerOf(outcome);
+    if (answer.ok) throw new Error(`expected an error, got: ${answer.text}`);
+    return answer.message;
 }
 
 beforeEach(() => {
@@ -145,16 +163,18 @@ describe("the tool registry", () => {
         return body.result.tools;
     }
 
-    it("offers search, fetch, list_sources and save_conversation", () => {
+    it("offers the read tools, save_conversation, add_document and start_upload", () => {
         expect(MCP_TOOLS.map(tool => tool.name)).toEqual([
             "search",
             "fetch",
             "list_sources",
             "save_conversation",
+            "add_document",
+            "start_upload",
         ]);
     });
 
-    it("lists the read tools to a read-only key and all four to a read-write key of a member", async () => {
+    it("lists the read tools to a read-only key and every tool to a read-write key of a member", async () => {
         expect(
             (await listed(principal({ scopes: ["launchstack:read"] }))).map(t => t.name)
         ).toEqual(["search", "fetch", "list_sources"]);
@@ -163,10 +183,12 @@ describe("the tool registry", () => {
             "fetch",
             "list_sources",
             "save_conversation",
+            "add_document",
+            "start_upload",
         ]);
     });
 
-    it("keeps save_conversation from a read-write key whose person cannot upload", async () => {
+    it("keeps the write tools from a read-write key whose person cannot upload", async () => {
         expect((await listed(principal({ role: "viewer" }))).map(t => t.name)).toEqual([
             "search",
             "fetch",
@@ -192,7 +214,9 @@ describe("the tool registry", () => {
             const annotations = tool.annotations as Record<string, boolean>;
             expect(annotations.destructiveHint).toBe(false);
             expect(annotations.openWorldHint).toBe(false);
-            expect(annotations.readOnlyHint).toBe(tool.name !== "save_conversation");
+            expect(annotations.readOnlyHint).toBe(
+                !["save_conversation", "add_document", "start_upload"].includes(tool.name as string)
+            );
         }
     });
 });

@@ -62,6 +62,15 @@ jest.mock("~/server/workspace/source-access", () => ({
     describeDocumentAccess: (...args: unknown[]) => mockDescribe(...args),
 }));
 
+// Where each row opens outside LaunchStack. The resolver is pure and tested in
+// source-external-link.test; the route has to ask it once for the list, with
+// the address it serves the file at, and attach the answer row by row.
+const mockLinkFor = jest.fn();
+const mockLoadExternalLinkResolver = jest.fn();
+jest.mock("~/server/workspace/source-external-links", () => ({
+    loadExternalLinkResolver: (...args: unknown[]) => mockLoadExternalLinkResolver(...args),
+}));
+
 import { POST } from "~/app/api/fetchDocument/route";
 import {
     mapDocument as mapDocumentWith,
@@ -128,6 +137,39 @@ describe("POST /api/fetchDocument", () => {
         jest.clearAllMocks();
         mockScopedDocumentWhere.mockReturnValue(SCOPE_MARKER);
         mockDescribe.mockResolvedValue({ access: new Map(), addedBy: new Map() });
+        mockLinkFor.mockReturnValue(null);
+        mockLoadExternalLinkResolver.mockResolvedValue({ linkFor: mockLinkFor });
+    });
+
+    it("says where each document opens outside LaunchStack", async () => {
+        mockAuthenticated(BigInt(1));
+        const notion = { connector: "notion", notionUrl: "https://www.notion.so/Plan" };
+        mockDocumentQuery([docRow(1, { ocrMetadata: notion }), docRow(2)]);
+        mockLinkFor.mockImplementation((doc: { id: number }) =>
+            doc.id === 1 ? { kind: "notion", url: "https://www.notion.so/Plan" } : null
+        );
+
+        const response = await POST(
+            new Request("http://localhost/api/fetchDocument", { method: "POST" })
+        );
+        const json = await response.json();
+
+        // Read once for the whole list, as the reader.
+        expect(mockLoadExternalLinkResolver).toHaveBeenCalledTimes(1);
+        expect(mockLoadExternalLinkResolver.mock.calls[0]?.[0]).toBe(BigInt(1));
+        // Each row is asked with the address the list serves its file at.
+        expect(mockLinkFor).toHaveBeenCalledWith({
+            id: 1,
+            ocrMetadata: notion,
+            fileUrl: "https://example.com/1.pdf",
+        });
+        expect(json[0].externalLink).toEqual({ kind: "notion", url: "https://www.notion.so/Plan" });
+        expect(json[1].externalLink).toBeNull();
+        // And the rail's row carries it.
+        expect(mapDocument(json[0] as Parameters<typeof mapDocument>[0]).externalLink).toEqual({
+            kind: "notion",
+            url: "https://www.notion.so/Plan",
+        });
     });
 
     it("says, per document, who can see it, what the caller may do, and who added it", async () => {
@@ -159,6 +201,30 @@ describe("POST /api/fetchDocument", () => {
         // A row the classifier had nothing for stays backward compatible.
         expect(json[1].access).toBeNull();
         expect(json[1].addedBy).toBeNull();
+    });
+
+    it("names the current version in a proxied file's address, so a new version is a new URL", async () => {
+        const storage = jest.requireMock<{ isS3Storage: jest.Mock }>("~/lib/storage");
+        storage.isS3Storage.mockReturnValue(true);
+        try {
+            mockAuthenticated();
+            mockDocumentQuery([
+                docRow(1, { url: "http://seaweedfs:8333/b/1.docx", currentVersionId: BigInt(22) }),
+                docRow(2, { url: "http://seaweedfs:8333/b/2.pdf", currentVersionId: null }),
+            ]);
+
+            const response = await POST(
+                new Request("http://localhost/api/fetchDocument", { method: "POST" })
+            );
+            const [versioned, legacy] = (await response.json()) as { url: string }[];
+
+            // The proxy is cached for an hour: without the version in the
+            // address, an edited file would keep showing the old bytes.
+            expect(versioned!.url).toBe("/api/documents/1/content?v=22");
+            expect(legacy!.url).toBe("/api/documents/2/content");
+        } finally {
+            storage.isS3Storage.mockReturnValue(false);
+        }
     });
 
     it("should successfully fetch documents for authenticated user", async () => {

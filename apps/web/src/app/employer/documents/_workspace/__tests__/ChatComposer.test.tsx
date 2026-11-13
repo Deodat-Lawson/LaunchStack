@@ -30,9 +30,20 @@ jest.mock("../AskPanel", () => ({
         </span>
     ),
 }));
+/**
+ * What the workspace offers beside Standard and Fast, and whether the menu is
+ * still loading. Tests that need offered models set these and reset them after.
+ */
+const mockChatRoutes: { loading: boolean; failed: boolean; offeredModels: unknown[] } = {
+    loading: false,
+    failed: false,
+    offeredModels: [],
+};
 jest.mock("../../hooks/useChatRoutes", () => ({
     useChatRoutes: () => ({
-        loading: false,
+        loading: mockChatRoutes.loading,
+        failed: mockChatRoutes.failed,
+        offeredModels: mockChatRoutes.offeredModels,
         visionEnabled: true,
         reasoningEnabled: true,
         config: {
@@ -690,8 +701,8 @@ describe("Composer uploads and completion", () => {
         fireEvent.keyDown(box, { key: "Enter" });
         expect(box.value).toContain("Revenue planning");
         fireEvent.click(screen.getByRole("button", { name: "Choose model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare default model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare fast model" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Standard" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
         fireEvent.change(box, { target: { value: "Compare this question" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
@@ -994,6 +1005,259 @@ describe("Composer uploads and completion", () => {
         expect(
             JSON.parse(localStorage.getItem("launchstack:composer:origin:stashes")!)[0].text
         ).toBe("Failed original");
+    });
+});
+
+describe("Composer offered workspace models", () => {
+    // Fixtures carry a provider id the way an older server might have sent
+    // one: the composer must never put it on screen.
+    const teamWriter = {
+        key: "team-writer",
+        label: "Team writer",
+        available: true,
+        model: "acme/secret-writer-70b",
+        vision: { supported: false },
+        reasoning: { mode: "effort", controllable: true, efforts: ["low", "medium", "high"] },
+    };
+    const chartReader = {
+        key: "chart-reader",
+        label: "Chart reader",
+        available: true,
+        model: "acme/secret-vision-8b",
+        vision: { supported: true, mimeTypes: ["image/png"], maxImages: 4 },
+        reasoning: { mode: "none", controllable: false },
+    };
+    const offered = [teamWriter, chartReader];
+    const trigger = () => screen.getByRole("button", { name: "Choose model" });
+    const optionTexts = (scope: HTMLElement) =>
+        within(scope)
+            .getAllByRole("option")
+            .map(option => option.textContent);
+    beforeEach(() => {
+        mockChatRoutes.loading = false;
+        mockChatRoutes.failed = false;
+        mockChatRoutes.offeredModels = offered;
+    });
+    afterEach(() => {
+        mockChatRoutes.loading = false;
+        mockChatRoutes.failed = false;
+        mockChatRoutes.offeredModels = [];
+    });
+
+    it("lists Standard and Fast, then the workspace's models under their admin-given names", async () => {
+        const user = userEvent.setup();
+        mount();
+        await user.click(trigger());
+        const listbox = screen.getByRole("listbox", { name: "Configured models" });
+        expect(optionTexts(listbox)).toEqual([
+            expect.stringMatching(/^Standard/),
+            expect.stringMatching(/^Fast/),
+            "Team writerReasons before answering",
+            "Chart readerReads images",
+        ]);
+        const group = within(listbox).getByRole("group", { name: "Your workspace's models" });
+        expect(optionTexts(group)).toEqual([
+            expect.stringMatching(/^Team writer/),
+            expect.stringMatching(/^Chart reader/),
+        ]);
+        expect(document.body.innerHTML).not.toMatch(/secret|acme/);
+    });
+
+    it("sends a picked offered model as the main route plus its key, with its own efforts", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("option", { name: /Team writer/ }));
+        expect(trigger()).toHaveTextContent("Team writer");
+        await user.click(trigger());
+        const effort = screen.getByRole("combobox", { name: "Reasoning effort" });
+        // Standard offers low and high; the offered model's own levels show.
+        expect(within(effort).getAllByRole("option")).toHaveLength(4);
+        await user.selectOptions(effort, "medium");
+        fireEvent.change(box, { target: { value: "Draft the update" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                modelRoute: "default",
+                modelKey: "team-writer",
+                reasoningEffort: "medium",
+            })
+        );
+        expect(JSON.stringify(onSend.mock.calls)).not.toMatch(/secret|acme/);
+    });
+
+    it("picks offered models with Alt+3 onwards, after the two tiers", async () => {
+        const user = userEvent.setup();
+        mount();
+        await user.click(trigger());
+        fireEvent.keyDown(screen.getByRole("listbox", { name: "Configured models" }), {
+            key: "4",
+            code: "Digit4",
+            altKey: true,
+        });
+        expect(trigger()).toHaveTextContent("Chart reader");
+    });
+
+    it("searches offered models by name and puts favourites first", async () => {
+        const user = userEvent.setup();
+        mount({ draftKey: "chat:user-1:company-1:thread-1" });
+        await user.click(trigger());
+        const search = screen.getByRole("textbox", { name: "Search models" });
+        await user.type(search, "chart");
+        const listbox = screen.getByRole("listbox", { name: "Configured models" });
+        expect(optionTexts(listbox)).toEqual([expect.stringMatching(/^Chart reader/)]);
+        await user.clear(search);
+        await user.click(screen.getByRole("button", { name: "Favorite Chart reader" }));
+        expect(
+            optionTexts(within(listbox).getByRole("group", { name: "Your workspace's models" }))
+        ).toEqual([expect.stringMatching(/^Chart reader/), expect.stringMatching(/^Team writer/)]);
+        expect(screen.getByRole("button", { name: "Unfavorite Chart reader" })).toBeVisible();
+        expect(
+            JSON.parse(
+                localStorage.getItem("launchstack:composer-preferences:chat:user-1:company-1")!
+            ).favorites
+        ).toEqual(["model:chart-reader"]);
+    });
+
+    it("compares a tier with an offered model", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
+        await user.click(screen.getByRole("checkbox", { name: "Compare Team writer" }));
+        expect(trigger()).toHaveTextContent("2 models");
+        fireEvent.change(box, { target: { value: "Compare these" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({
+            modelRoute: "default",
+            modelRoutes: ["fast", "model:team-writer"],
+        });
+        expect(sent.modelKey).toBeUndefined();
+    });
+
+    async function sendImageWith(label: RegExp) {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("option", { name: label }));
+        attach(new File(["png"], "chart.png", { type: "image/png" }));
+        await waitFor(() => expect(UploadRequest.requests).toHaveLength(1));
+        act(() => UploadRequest.requests[0]!.complete());
+        fireEvent.change(box, { target: { value: "What does this show?" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        return onSend.mock.calls[0]![0];
+    }
+
+    it("keeps an offered pick that reads images: the server sends them to it", async () => {
+        const sent = await sendImageWith(/Chart reader/);
+        expect(sent).toMatchObject({ modelRoute: "default", modelKey: "chart-reader" });
+    });
+
+    it("hands an image to the vision route when the offered pick can't read it", async () => {
+        const sent = await sendImageWith(/Team writer/);
+        expect(sent.modelRoute).toBe("vision");
+        expect(sent.modelKey).toBeUndefined();
+    });
+
+    it("falls back to Standard once loaded when a draft names a model no longer offered", () => {
+        localStorage.setItem(
+            "launchstack:composer:removed-model",
+            JSON.stringify({
+                text: "Old question",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "default",
+                modelKey: "retired-writer",
+                modelRoutes: ["fast", "model:retired-writer"],
+            })
+        );
+        mockChatRoutes.loading = true;
+        const { box, onSend, props, rerender } = mount({ draftKey: "removed-model" });
+        // While the menu loads nothing is dropped.
+        expect(trigger()).toHaveTextContent("2 models");
+        expect(
+            JSON.parse(localStorage.getItem("launchstack:composer:removed-model")!)
+        ).toMatchObject({
+            modelKey: "retired-writer",
+            modelRoutes: ["fast", "model:retired-writer"],
+        });
+        mockChatRoutes.loading = false;
+        rerender(<Composer {...props} />);
+        expect(trigger()).toHaveTextContent("Standard");
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({ modelRoute: "default", text: "Old question" });
+        expect(sent.modelKey).toBeUndefined();
+        expect(sent).not.toHaveProperty("modelRoutes");
+    });
+
+    it("keeps an offered pick when the model menu couldn't be read", () => {
+        localStorage.setItem(
+            "launchstack:composer:menu-failed",
+            JSON.stringify({
+                text: "Question",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "default",
+                modelKey: "team-writer",
+            })
+        );
+        mockChatRoutes.failed = true;
+        mockChatRoutes.offeredModels = [];
+        const { box, onSend } = mount({ draftKey: "menu-failed" });
+        expect(trigger()).toHaveTextContent("Workspace model");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({ modelRoute: "default", modelKey: "team-writer" })
+        );
+    });
+
+    it("restores a queued turn's offered model from its seed", () => {
+        const { box, props, rerender, onSend } = mount();
+        rerender(
+            <Composer
+                {...props}
+                seed={{
+                    nonce: 77,
+                    text: "Queued question",
+                    mode: "replace",
+                    modelRoute: "default",
+                    modelKey: "chart-reader",
+                }}
+            />
+        );
+        expect(trigger()).toHaveTextContent("Chart reader");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({ modelRoute: "default", modelKey: "chart-reader" })
+        );
+    });
+
+    it("accepts drafts that compare offered models and rejects unknown entries", () => {
+        const draft = {
+            text: "",
+            attachments: [],
+            refs: [],
+            webSearch: true,
+            thinking: true,
+            agentKey: null,
+        };
+        expect(
+            isComposerDraft({
+                ...draft,
+                modelKey: "team-writer",
+                modelRoutes: ["fast", "model:team-writer"],
+            })
+        ).toBe(true);
+        expect(isComposerDraft({ ...draft, modelRoutes: ["model:Not A Key"] })).toBe(false);
+        expect(isComposerDraft({ ...draft, modelKey: 7 })).toBe(false);
     });
 });
 

@@ -1,5 +1,5 @@
 /**
- * What the Processing tab draws, worked out from the server's queue and the
+ * What Knowledge’s In progress section draws, worked out from the server's queue and the
  * adds still in the browser. Pure: no React, no fetch — tested on its own.
  * Every word comes from the `processing` catalogue through `ProcessingText`.
  */

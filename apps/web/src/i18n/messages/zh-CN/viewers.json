@@ -38,6 +38,7 @@
   },
   "artifact": {
     "claudeArtifact": "· Claude Artifact",
+    "sandboxedPage": "· 在沙盒中运行",
     "viewToggle": "显示 Artifact 或其源代码",
     "source": "源代码",
     "original": "原始页面",
@@ -82,12 +83,6 @@
     "renderFailed": "文档渲染失败",
     "loading": "正在加载文档…",
     "header": "Word 文档预览"
-  },
-  "drafts": {
-    "title": "模板草稿",
-    "newDocument": "新建文档",
-    "myDocuments": "我的文档",
-    "assistant": "助手"
   },
   "image": {
     "loadFailed": "图片加载失败",
@@ -144,7 +139,17 @@
     "website": "网站",
     "savedOn": "· 保存于 {date}",
     "openSite": "打开网站",
-    "textNote": "以下是 LaunchStack 从此页面读取的文本，提问和公司资料会引用它。"
+    "textNote": "以下是 LaunchStack 从此页面读取的文本，提问和公司资料会引用它。",
+    "tabText": "页面文本",
+    "previewLoading": "正在生成页面截图…",
+    "previewLoadingHint": "首次生成需要几秒钟。",
+    "previewFailedTitle": "无法显示此页面",
+    "previewUnavailableTitle": "此处尚未配置页面预览",
+    "tryAgain": "重试",
+    "showText": "查看页面文本",
+    "previewAlt": "{host} 保存时的样子",
+    "previewTruncated": "截图到此为止。打开网站查看页面的其余部分。",
+    "viewToggle": "页面显示方式"
   },
   "xlsx": {
     "fetchFailed": "获取电子表格失败（{status}）",
@@ -262,6 +267,63 @@
       "allRejected": "已拒绝全部修订"
     }
   },
+  "fileEditor": {
+    "loading": "正在打开编辑器…",
+    "loadFailed": "无法打开此文件进行编辑",
+    "saveFailed": "无法保存你的更改",
+    "retry": "重试",
+    "documentLabel": "文档正文",
+    "placeholder": "开始撰写…",
+    "toolbar": "格式",
+    "blockType": "文本样式",
+    "paragraph": "正文",
+    "heading1": "标题 1",
+    "heading2": "标题 2",
+    "heading3": "标题 3",
+    "bold": "加粗",
+    "italic": "斜体",
+    "underline": "下划线",
+    "strike": "删除线",
+    "bulletList": "项目符号列表",
+    "orderedList": "编号列表",
+    "quote": "引用",
+    "codeBlock": "代码块",
+    "link": "链接",
+    "linkPlaceholder": "粘贴或输入链接",
+    "linkApply": "应用",
+    "linkRemove": "移除链接",
+    "table": "插入表格",
+    "undo": "撤销",
+    "redo": "重做",
+    "status": {
+      "saved": "已保存",
+      "unsaved": "有未保存的更改",
+      "saving": "正在保存…"
+    },
+    "save": "保存",
+    "saveHint": "保存（{keys}）",
+    "done": "完成",
+    "savedVersion": "已保存为第 {number} 版",
+    "openInGoogleDocs": "在 Google 文档中打开",
+    "conflictTitle": "在你打开后已被修改",
+    "reloadLatest": "重新载入最新版",
+    "discardTitle": "放弃未保存的更改？",
+    "discardBody": "自上次保存以来的编辑将会丢失。",
+    "discardConfirm": "放弃",
+    "reloadTitle": "重新载入最新版本？",
+    "reloadBody": "你未保存的编辑将被最近保存的版本替换。",
+    "reloadConfirm": "重新载入",
+    "savedSyncPending": "已保存到 Google 文档。此处的副本将在几分钟内同步。",
+    "tableAddRow": "在下方添加行",
+    "tableAddColumn": "在右侧添加列",
+    "tableDeleteRow": "删除行",
+    "tableDeleteColumn": "删除列",
+    "tableDelete": "删除表格",
+    "closeTabTitle": "不保存就关闭？",
+    "closeTabBody": "{title} 有尚未保存的修改。现在关闭将丢失这些修改。",
+    "closeTabsBody": "{count, plural, other {# 个打开的文件}}有尚未保存的修改。现在关闭将丢失这些修改。",
+    "closeTabConfirm": "不保存并关闭"
+  },
   "review": {
     "kinds": {
       "replacement": "替换",
@@ -361,7 +423,10 @@
       "transcriptEmpty": "此转录文本为空",
       "translationFailed": "翻译失败",
       "noMedia": "此文档没有音频或视频",
-      "mediaLoadFailed": "媒体加载失败"
+      "mediaLoadFailed": "媒体加载失败",
+      "notWebsite": "此文档不是已保存的网站。",
+      "previewNotConfigured": "页面预览需要渲染服务。请设置 GOTENBERG_SERVICE_URL（及其基本认证用户名和密码），并确保 gotenberg 服务正在运行。",
+      "previewRenderFailed": "渲染服务无法为此页面生成截图。"
     },
     "artifacts": {
       "notFound": "未找到该 Artifact",

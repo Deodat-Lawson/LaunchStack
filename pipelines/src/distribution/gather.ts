@@ -4,10 +4,11 @@
  * all sources failing fails the stage (the caller decides). Output is
  * *mentions* — raw sightings of organisations — for the resolver.
  *
- * The web source prefers Exa's company index (`searchCompanies`): every hit
- * is a company's own homepage, so a key finds companies rather than the
- * publishers that wrote about them. Without it, general web search, and the
- * host of each result stands for the organisation. Lookalikes — companies
+ * The web source prefers the search engine's company index
+ * (`searchCompanies`, Exa's): every hit is a company's own homepage, so it
+ * finds companies rather than the publishers that wrote about them. On an
+ * engine without one, general web search, and the host of each result stands
+ * for the organisation. Lookalikes — companies
  * like the program's customers — need the company index too.
  */
 import type { OrgMention } from "@launchstack/tools/org-resolver";
@@ -360,7 +361,7 @@ export async function gather(
                     queries: 0,
                     results: 0,
                     status: "skipped",
-                    detail: "needs EXA_API_KEY",
+                    detail: "needs Exa as the search engine",
                 });
                 return;
             }

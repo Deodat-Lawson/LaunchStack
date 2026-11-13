@@ -20,14 +20,6 @@
       "label": "Filter the sidebar",
       "description": "Put the cursor in the sidebar's filter, on Sources or History."
     },
-    "featureDraft": {
-      "label": "Open Draft",
-      "description": "Generate a new document with AI."
-    },
-    "featureRewrite": {
-      "label": "Open Rewrite",
-      "description": "Improve existing content."
-    },
     "featureWorkflows": {
       "label": "Open Workflows",
       "description": "Automate recurring tasks across your sources."

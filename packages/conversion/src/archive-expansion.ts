@@ -365,6 +365,71 @@ export interface ExpandArchiveResult {
     };
 }
 
+/**
+ * Where an archive came from, as its importer wrote it on the archive's row
+ * (the GitHub import does): `originUrl` is the whole thing — the repository
+ * — and `originEntryBaseUrl` the address each file sits under. The archive
+ * row is deleted once it is expanded, so both are carried down: every file
+ * opens at its own page there, and the project summary at the repository.
+ * apps/web's `source-external-link` reads the same keys.
+ */
+interface ArchiveOrigin {
+    url: string | null;
+    entryBaseUrl: string | null;
+}
+
+function webAddress(value: unknown): string | null {
+    if (typeof value !== "string") return null;
+    try {
+        const url = new URL(value);
+        return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+    } catch {
+        return null;
+    }
+}
+
+async function readArchiveOrigin(sourceId: number): Promise<ArchiveOrigin> {
+    const [row] = await getDb()
+        .select({ ocrMetadata: document.ocrMetadata })
+        .from(document)
+        .where(eq(document.id, sourceId))
+        .limit(1);
+    const metadata =
+        row?.ocrMetadata && typeof row.ocrMetadata === "object" && !Array.isArray(row.ocrMetadata)
+            ? (row.ocrMetadata as Record<string, unknown>)
+            : {};
+    return {
+        url: webAddress(metadata.originUrl),
+        entryBaseUrl: webAddress(metadata.originEntryBaseUrl),
+    };
+}
+
+/**
+ * The one folder every entry sits in, if there is one — a GitHub zipball
+ * wraps the repository in `<owner>-<repo>-<sha>/`, which is not part of any
+ * file's path in the repository.
+ */
+export function sharedTopFolder(entryPaths: readonly string[]): string | null {
+    const [first] = entryPaths;
+    const top = first?.includes("/") ? first.slice(0, first.indexOf("/") + 1) : null;
+    if (!top) return null;
+    return entryPaths.every(entry => entry.startsWith(top)) ? top : null;
+}
+
+/** `<base>src/app.ts`, each segment encoded; the shared top folder is not part of it. */
+export function archiveEntryOriginUrl(
+    baseUrl: string,
+    entryPath: string,
+    topFolder: string | null
+): string {
+    const inside =
+        topFolder && entryPath.startsWith(topFolder)
+            ? entryPath.slice(topFolder.length)
+            : entryPath;
+    const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+    return `${base}${inside.split("/").map(encodeURIComponent).join("/")}`;
+}
+
 const MAX_EXTRACTED_FILES = 500;
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB per file
 
@@ -469,6 +534,9 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
         }
     }
 
+    const origin = await readArchiveOrigin(input.sourceId);
+    const topFolder = origin.entryBaseUrl ? sharedTopFolder(entries) : null;
+
     let indexed = 0;
 
     for (const entryPath of cappedEntries) {
@@ -525,6 +593,17 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
             mimeType: fileMime ?? null,
             sourceArchiveName: routingName,
             sourceArchiveEntry: entryPath,
+            ...(origin.entryBaseUrl
+                ? {
+                      ocrMetadata: {
+                          originUrl: archiveEntryOriginUrl(
+                              origin.entryBaseUrl,
+                              entryPath,
+                              topFolder
+                          ),
+                      },
+                  }
+                : {}),
             traceId: input.traceId,
             processing: {
                 originalFilename: baseName,
@@ -573,6 +652,7 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
             mimeType: "text/markdown",
             sourceArchiveName: routingName,
             sourceArchiveEntry: null,
+            ...(origin.url ? { ocrMetadata: { originUrl: origin.url } } : {}),
             traceId: input.traceId,
             processing: {
                 originalFilename: `_project_summary.md`,

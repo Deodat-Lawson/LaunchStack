@@ -10,6 +10,7 @@
 import type { SearchResult } from "@launchstack/retrieval/search-types";
 
 import {
+    ROWS_ARE_THE_ANSWER,
     citedPassages,
     createSourceTools,
     loadSourcesOverview,
@@ -17,6 +18,7 @@ import {
     sourceToolsPrompt,
     type SourcesOverview,
 } from "~/server/chat-source-tools";
+import type { ExtractionTableView } from "~/lib/extraction/types";
 import type { WorkspacePassage } from "~/server/mcp/workspace-search";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
@@ -397,6 +399,12 @@ describe("ask_each", () => {
         expect(rows[0]).toBe('- "Resume 100.pdf" (d100): It is Person 100. — “Person 100”');
         expect(text).toContain("Asked 37 sources: 37 answered, 0 had no answer.");
         expect(text).toContain("That covers all 37 in the set.");
+        // The result closes by saying what an answer about the set is made of:
+        // every row, so a model that read 37 rows does not write up 14.
+        expect(text.endsWith(` ${ROWS_ARE_THE_ANSWER}`)).toBe(true);
+        expect(ROWS_ARE_THE_ANSWER).toContain(
+            "name each source whose row answers, with its id, and leave none out"
+        );
         expect(progress).toHaveBeenLastCalledWith("Reading 37 sources… 37 done");
         expect(session.usage()).toEqual({
             inputTokens: 3_700,
@@ -415,6 +423,38 @@ describe("ask_each", () => {
             },
         });
         expect(session.texts).toEqual([text]);
+    });
+
+    it("takes a copied quote as the source's answer when the summary is blank, shown once", async () => {
+        // The model copied the fact and left the summary empty (seen for a
+        // question that said "your education"): the file still said it.
+        const askFile = jest.fn(async () => ({
+            answer: "",
+            quote: "Lakeview University, B.S. Economics, expected May 2029.",
+            usage: {},
+        }));
+        jest.spyOn(console, "log").mockImplementation(() => undefined);
+        const { tool, session } = askWith({ askFile: () => askFile }, ATTACHED.slice(0, 1));
+
+        const text = await tool.run({ question: "Which school does this person attend?" }, signal);
+
+        expect(text).toContain(
+            '- "Resume 100.pdf" (d100): Lakeview University, B.S. Economics, expected May 2029.\n'
+        );
+        expect(text).not.toContain("— “Lakeview");
+        expect(text).toContain("Asked 1 source: 1 answered, 0 had no answer.");
+        expect(session.passages[0]).toEqual(
+            expect.objectContaining({
+                pageContent: "Lakeview University, B.S. Economics, expected May 2029.",
+            })
+        );
+    });
+
+    it("asks the model for a question about the source, in the third person", () => {
+        const { tool } = askWith();
+        expect(tool.description).toContain(
+            'in the third person — "Which school does this person attend?", never "Which school do you attend?"'
+        );
     });
 
     it("words its status line in the interface language", async () => {
@@ -460,6 +500,7 @@ describe("ask_each", () => {
             return { answer: "Someone.", quote: "", usage: {} };
         });
         jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        const log = jest.spyOn(console, "log").mockImplementation(() => undefined);
         const { tool, session } = askWith({ read, askFile: () => askFile }, ATTACHED.slice(0, 5));
 
         const text = await tool.run({ question: "Whose resume is this?" }, signal);
@@ -472,6 +513,13 @@ describe("ask_each", () => {
         expect(text).toContain('- "Resume 103.pdf" (d103): (couldn\'t be read this time)');
         expect(text).toContain('- "Resume 104.pdf" (d104): (no answer in this source)');
         expect(text).toContain("Asked 5 sources: 1 answered, 1 had no answer, 3 couldn't be read.");
+        // The server log says the same, so a short whole-set answer can be
+        // traced to the side that lost the rows.
+        expect(log).toHaveBeenCalledWith(
+            expect.stringMatching(
+                /^\[AIChat\] ask_each: 5 source\(s\) asked \(1–5 of 5\); 1 answered, 1 no answer, 3 failed; \d+ms$/
+            )
+        );
         // An answer without a quote is cited by the source's opening.
         expect(session.passages).toEqual([
             expect.objectContaining({ pageContent: "Person 100 Software engineer" }),
@@ -615,6 +663,15 @@ describe("what the model is told", () => {
         expect(sourceToolsPrompt(DRIVE, true)).toContain(
             "The person attached sources to this message"
         );
+        // Seen live: with 10 passages from 4 of 37 resumes in view, the model
+        // answered "which school does each go to?" from them, without ask_each.
+        expect(sourceToolsPrompt(DRIVE, true)).toContain(
+            "Excerpts never cover a question about every attached source"
+        );
+        expect(sourceToolsPrompt(DRIVE, true)).toContain(
+            "call `ask_each` for it before you answer, even when some excerpts already show part of the answer"
+        );
+        expect(prompt).not.toContain("Excerpts never cover");
         // Search is a sample; a question about every source goes to ask_each.
         expect(prompt).toContain("`ask_each` (one question asked of every source in a set");
         expect(prompt).toContain("Search returns only the best matches, never everything");
@@ -680,5 +737,133 @@ describe("what the model is told", () => {
         expect(empty).toContain("do not imply that their entire Drive is empty or inaccessible");
 
         expect(noSourceToolsPrompt(null)).toContain("No source is attached to this message");
+    });
+});
+
+describe("read_extraction_table", () => {
+    const outline = {
+        id: 7,
+        title: "Supplier contracts",
+        status: "done" as const,
+        fields: ["Supplier", "Annual fee"],
+        counts: { total: 2, pending: 0, running: 0, done: 2, failed: 0 },
+        mine: true,
+        createdByName: "Ana",
+    };
+    const cell = (value: string | number, quote: string) => ({
+        status: "found" as const,
+        value,
+        quote,
+        page: 1,
+        via: "text" as const,
+    });
+    const view: ExtractionTableView = {
+        id: 7,
+        title: "Supplier contracts",
+        status: "done",
+        fieldCount: 2,
+        counts: outline.counts,
+        createdAt: "2026-11-12T08:00:00.000Z",
+        finishedAt: "2026-11-12T08:02:00.000Z",
+        mine: true,
+        shared: false,
+        createdByName: "Ana",
+        fields: [
+            { id: "f1", name: "Supplier", type: "text" },
+            { id: "f2", name: "Annual fee", type: "number" },
+        ],
+        rows: [
+            {
+                id: 1,
+                documentId: 12,
+                sourceId: "d12",
+                title: "Acme MSA.pdf",
+                status: "done",
+                readable: true,
+                error: null,
+                cells: { f1: cell("Acme", "between Acme and"), f2: cell(12500, "fee of $12,500") },
+            },
+            {
+                id: 2,
+                documentId: 13,
+                sourceId: "d13",
+                title: "A file you don't have access to",
+                status: "done",
+                readable: false,
+                error: null,
+                cells: {},
+            },
+        ],
+        usage: { calls: 2, inputTokens: 10, outputTokens: 5 },
+        error: null,
+        canManage: true,
+    };
+
+    function tableTool(tables: { list?: jest.Mock; get?: jest.Mock }) {
+        const session = createSourceTools(ctx, {
+            tables: { list: tables.list ?? jest.fn(), get: tables.get ?? jest.fn() },
+        });
+        return { session, tool: session.tools.find(t => t.name === "read_extraction_table")! };
+    }
+
+    it("lists the tables the person can see when no table is named", async () => {
+        const list = jest.fn(async () => [outline]);
+        const { tool, session } = tableTool({ list });
+
+        const text = await tool.run({ table: null }, signal);
+
+        expect(list).toHaveBeenCalledWith(ctx);
+        expect(text).toContain('- table 7: "Supplier contracts" — done, 2 documents (2 read)');
+        expect(text).toContain("Fields: Supplier; Annual fee");
+        expect(session.texts).toEqual([text]);
+        expect(tool.describe({})).toBe("Looking through your extraction tables");
+        expect(tool.describe({ table: 7 })).toBe("Reading an extraction table");
+    });
+
+    it("reads one table's rows, leaves out what the person cannot open, and keeps the rows for citations", async () => {
+        const get = jest.fn(async () => view);
+        const { tool, session } = tableTool({ get });
+
+        const text = await tool.run({ table: "7" }, signal);
+
+        expect(get).toHaveBeenCalledWith(ctx, 7);
+        expect(text).toContain('- "Acme MSA.pdf" (d12) — Supplier: Acme | Annual fee: 12500');
+        expect(text).not.toContain("d13");
+        expect(text).toContain("1 row is from files this person cannot open and is left out.");
+        expect(session.passages).toEqual([
+            {
+                pageContent: "between Acme and",
+                metadata: {
+                    documentId: 12,
+                    documentTitle: "Acme MSA.pdf",
+                    source: "read_extraction_table",
+                    searchScope: "multi-document",
+                },
+            },
+        ]);
+    });
+
+    it("says the same for a table that does not exist and one the person cannot see", async () => {
+        const { tool } = tableTool({ get: jest.fn(async () => null) });
+        await expect(tool.run({ table: 99 }, signal)).rejects.toThrow(
+            "No extraction table 99 is among the tables the person can see."
+        );
+        await expect(tool.run({ table: "seven" }, signal)).rejects.toThrow("Invalid arguments");
+    });
+
+    it("allows three calls per answer", async () => {
+        const { tool } = tableTool({ list: jest.fn(async () => [outline]) });
+        for (let i = 0; i < 3; i++) await tool.run({}, signal);
+        await expect(tool.run({}, signal)).rejects.toThrow("budget for this answer is used up");
+    });
+
+    it("is described to the model with the other source tools", () => {
+        const overview: SourcesOverview = {
+            inventory: { total: 3, byOrigin: [{ from: null, count: 3 }] },
+            connected: [],
+        };
+        expect(sourceToolsPrompt(overview, false)).toContain(
+            "When they refer to an extraction table, or ask about results that were already extracted, call `read_extraction_table`"
+        );
     });
 });

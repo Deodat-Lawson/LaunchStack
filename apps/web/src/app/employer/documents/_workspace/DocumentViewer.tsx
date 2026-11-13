@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import {
+    ExternalLink,
     Folder as IconFolder,
     PanelRightClose,
     Pencil,
@@ -18,7 +19,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
-import { IconDrive } from "~/components/icons/brand";
+import { GoogleDriveLogo } from "~/components/icons/brand";
 import {
     GoogleDriveBanner,
     setDriveBarHidden,
@@ -33,10 +34,13 @@ import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
+import { canEditFileHere } from "./fileEditing";
+import { hasUnsavedEdits } from "./unsavedEdits";
 import { canChangeSource, canDeleteSource } from "./sourceContextMenu";
 import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
+import { isFromClaude } from "~/lib/artifact-document";
 import {
     buildDocumentMenuItems,
     buildVersionMenuItems,
@@ -51,6 +55,16 @@ import {
     type WorkspaceTranslator,
 } from "./types";
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
+import {
+    downloadStoredFile,
+    driveLinkKey,
+    externalLinkHint,
+    externalLinkLabel,
+    externalLinkPlace,
+    openExternalLink,
+    opensAnApp,
+    useDriveChangedOutsideLink,
+} from "./externalLink";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
@@ -80,6 +94,11 @@ const FullDocumentViewer = dynamic(
     () => import("~/app/employer/documents/components/DocumentViewer").then(m => m.DocumentViewer),
     { ssr: false }
 );
+
+// The editor (TipTap and its tables) loads when someone presses Edit.
+const FileEditor = dynamic(() => import("./FileEditor").then(m => m.FileEditor), {
+    ssr: false,
+});
 
 // The canvas bundle is only worth paying for when a map is actually opened.
 const MindmapPreview = dynamic(
@@ -134,6 +153,12 @@ export interface DocumentViewerProps {
     onReembed?: (source: WorkspaceSource) => Promise<void>;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
+    /**
+     * Open straight into the file editor — a file just made to be written
+     * here. Read once: `onEditRequestHandled` lets the shell forget it.
+     */
+    editRequested?: boolean;
+    onEditRequestHandled?: () => void;
     /** Mindmaps only: the citable copy was created or updated. */
     onPublished?: () => void;
     /** Mindmaps only: open straight into the branch-by-branch presenter. */
@@ -306,6 +331,8 @@ export function DocumentViewer({
     onReembed,
     onEdit,
     onPublished,
+    editRequested = false,
+    onEditRequestHandled,
 }: DocumentViewerProps) {
     const router = useRouter();
     const t = useTranslations("workspace");
@@ -315,6 +342,8 @@ export function DocumentViewer({
     const tSourceMenu = useTranslations("sources.contextMenu");
     const tMindmapErrors = useTranslations("mindmap.errors");
     const tDrive = useTranslations("sources.googleDriveBanner");
+    const tEditor = useTranslations("viewers.fileEditor");
+    const tOutside = useTranslations("sources.externalLink");
     const driveLinkSummary = useDriveLinkSummary();
     /** A new map's starter text, read by the fetch without making it re-run. */
     const starter = useTranslations("mindmap.starter");
@@ -450,6 +479,23 @@ export function DocumentViewer({
     const driveBarHidden = useDriveBarHidden();
     const driveLink = drive.status?.link ?? null;
     /**
+     * Where this opens outside LaunchStack — its origin, or the stored file.
+     * A Drive copy linked or unlinked here changes it, so the server's word
+     * after that comes first; then the fetched row; the rail's row stands
+     * in until that arrives. A map has none: it is drawn here, and its
+     * published copy is a by-product.
+     */
+    const relinkedOutsideLink = useDriveChangedOutsideLink(
+        driveDocumentId,
+        driveLinkKey(drive.status),
+        fullDoc
+    );
+    const outsideLink = isMindmap
+        ? null
+        : relinkedOutsideLink !== undefined
+          ? relinkedOutsideLink
+          : (fullDoc?.externalLink ?? source.externalLink ?? null);
+    /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
      * the reader's own choice stands for the next document.
@@ -480,6 +526,23 @@ export function DocumentViewer({
     const titleInputRef = useRef<HTMLInputElement>(null);
 
     const isPdf = fullDoc !== null && getDocumentDisplayType(fullDoc) === "pdf";
+
+    /**
+     * The file editor, in place of the preview. Markdown, plain text and Word
+     * (a Drive-linked Doc is a Word file here) for whoever can edit the file;
+     * the server converts and writes the new version. A file made to be
+     * written here opens in it before its first read has finished.
+     */
+    const [editingFile, setEditingFile] = useState(false);
+    const canEditFile = canEditFileHere(source, fullDoc);
+    useEffect(() => {
+        setEditingFile(false);
+    }, [source.id]);
+    useEffect(() => {
+        if (!editRequested) return;
+        if (!isMindmap && persisted && editable) setEditingFile(true);
+        onEditRequestHandled?.();
+    }, [editRequested, isMindmap, persisted, editable, onEditRequestHandled]);
 
     // Fetch the underlying document so the inline preview can render PDFs,
     // audio, DOCX, etc. via the full viewer — same endpoint the standalone
@@ -746,9 +809,20 @@ export function DocumentViewer({
         return () => clearTimeout(t);
     }, [dirty, saveTitle]);
 
+    /**
+     * Leaving for the full-page viewer takes an open file editor with it,
+     * and a client-side move never fires beforeunload: with unsaved edits it
+     * stops and asks first.
+     */
+    const [leavingFor, setLeavingFor] = useState<string | null>(null);
+    const leaveFor = (href: string) => {
+        if (hasUnsavedEdits(source.documentId)) setLeavingFor(href);
+        else router.push(href);
+    };
+
     const previewVersion = (versionId: number) => {
         if (!source.documentId) return;
-        router.push(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
+        leaveFor(`/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`);
     };
 
     const refreshVersions = useCallback(async () => {
@@ -940,7 +1014,7 @@ export function DocumentViewer({
             return;
         }
         if (!source.documentId) return;
-        router.push(`/employer/documents/viewer?docId=${source.documentId}`);
+        leaveFor(`/employer/documents/viewer?docId=${source.documentId}`);
     };
 
     const notesAvailable = !isMindmap || Boolean(source.documentId);
@@ -978,6 +1052,9 @@ export function DocumentViewer({
                     persisted,
                     editable,
                     originalUrl: fullDoc?.url ?? null,
+                    outside: outsideLink
+                        ? { link: outsideLink, label: externalLinkLabel(tOutside, outsideLink) }
+                        : null,
                 },
                 {
                     onAskAbout: () => onAskAbout(source),
@@ -993,8 +1070,10 @@ export function DocumentViewer({
                                   "noopener,noreferrer"
                               )
                         : undefined,
+                    onOpenOutside: openExternalLink,
+                    // Saves it: "Open file" is the one that opens it in a tab.
                     onDownload: () => {
-                        if (fullDoc?.url) window.open(fullDoc.url, "_blank", "noopener,noreferrer");
+                        if (fullDoc?.url) downloadStoredFile(fullDoc.url);
                     },
                     onCopyLink: () => {
                         const link = `${window.location.origin}/employer/documents?source=${encodeURIComponent(source.id)}`;
@@ -1042,6 +1121,24 @@ export function DocumentViewer({
 
     /** The header's buttons, in the order they give way when room runs out. */
     const headerActions: HeaderAction[] = [
+        // The file's own words, edited here; while the editor is open its
+        // toolbar has Save and Done, so the header does not repeat it.
+        ...(canEditFile && !editingFile
+            ? [
+                  {
+                      id: "edit-file",
+                      label: tc("actions.edit"),
+                      icon: <Pencil className="size-3.5" />,
+                      onSelect: () => setEditingFile(true),
+                      tone: "primary" as const,
+                      hint:
+                          driveLink?.status === "linked"
+                              ? t("documentViewer.editLinkedHint")
+                              : undefined,
+                      testId: "viewer-edit-file",
+                  },
+              ]
+            : []),
         // A draft someone can only view opens here and nowhere else: its
         // folder gives them no edit, so the editor would refuse every save.
         ...(isMindmap && onEdit && editable
@@ -1104,12 +1201,26 @@ export function DocumentViewer({
                   },
               ]
             : []),
+        ...(outsideLink
+            ? [
+                  {
+                      id: "outside",
+                      label: externalLinkLabel(tOutside, outsideLink),
+                      icon: <ExternalLink className="size-3.5" />,
+                      onSelect: () => openExternalLink(outsideLink),
+                      hint: externalLinkHint(tOutside, outsideLink),
+                      testId: "viewer-open-outside",
+                  },
+              ]
+            : []),
         ...(drive.status?.linkable
             ? [
                   {
                       id: "drive",
                       label: driveBarHidden ? tDrive("show") : tDrive("hide"),
-                      icon: <IconDrive size={14} />,
+                      // Drive's own mark, as on the bar it shows and hides:
+                      // the line glyph read as a hexagon, not as Drive.
+                      icon: <GoogleDriveLogo size={14} />,
                       onSelect: () => setDriveBarHidden(!driveBarHidden),
                       iconOnly: true,
                       tone: driveBarHidden ? undefined : ("on" as const),
@@ -1212,7 +1323,13 @@ export function DocumentViewer({
                 }
                 meta={
                     <>
-                        <span>{sourceTypeLabel(tSourceTypes, sourceType)}</span>
+                        <span>
+                            {sourceType === "artifact" &&
+                            fullDoc &&
+                            !isFromClaude(fullDoc.ocrMetadata)
+                                ? tSourceTypes("sandboxedPage")
+                                : sourceTypeLabel(tSourceTypes, sourceType)}
+                        </span>
                         <span>·</span>
                         {addedLine ? (
                             <span className="truncate" data-testid="viewer-added-by">
@@ -1328,6 +1445,21 @@ export function DocumentViewer({
                                 {t("common.opening")}
                             </div>
                         )
+                    ) : editingFile && source.documentId ? (
+                        <FileEditor
+                            documentId={source.documentId}
+                            onExit={() => setEditingFile(false)}
+                            onSaved={() => {
+                                // The new version moves the preview and the
+                                // rail on; the list re-reads its status. A
+                                // Drive-linked save also synced the link, so
+                                // its line's "last synced" moves on too.
+                                void refreshVersions();
+                                if (driveDocumentId !== null) void drive.refresh();
+                                onVersionChanged?.();
+                            }}
+                            onNewerVersion={() => void refreshVersions()}
+                        />
                     ) : source.pending ? (
                         <div
                             style={{
@@ -1611,19 +1743,10 @@ export function DocumentViewer({
                                         letterSpacing: "0.08em",
                                         color: "var(--ink-3)",
                                         textTransform: "uppercase",
-                                    }}
-                                >
-                                    {t("documentViewer.versionHistory")}
-                                </div>
-                                <div
-                                    style={{
-                                        fontSize: 11,
-                                        color: "var(--ink-3)",
-                                        marginTop: 2,
                                         marginBottom: 10,
                                     }}
                                 >
-                                    {t("documentViewer.uploadedRevisions")}
+                                    {t("documentViewer.versionHistory")}
                                 </div>
 
                                 <input
@@ -1930,6 +2053,30 @@ export function DocumentViewer({
                                         </span>
                                     }
                                 />
+                                {outsideLink && (
+                                    <MetaRow
+                                        label={tOutside("detailsLabel")}
+                                        value={
+                                            <a
+                                                href={outsideLink.url}
+                                                // An app link is handed over in place; a
+                                                // new tab would sit blank behind the app.
+                                                target={
+                                                    opensAnApp(outsideLink) ? undefined : "_blank"
+                                                }
+                                                rel="noopener noreferrer"
+                                                title={externalLinkHint(tOutside, outsideLink)}
+                                                data-testid="viewer-outside-link"
+                                                className="text-brand-ink inline-flex min-w-0 max-w-[200px] items-center gap-1 hover:underline"
+                                            >
+                                                <span className="truncate">
+                                                    {externalLinkPlace(tOutside, outsideLink)}
+                                                </span>
+                                                <ExternalLink className="size-3 shrink-0" />
+                                            </a>
+                                        }
+                                    />
+                                )}
                                 <MetaRow
                                     label={t("documentViewer.metaIndexed")}
                                     value={
@@ -1956,6 +2103,25 @@ export function DocumentViewer({
                 </aside>
             </div>
 
+            <ConfirmDialog
+                open={leavingFor !== null}
+                onOpenChange={next => {
+                    if (next) return;
+                    setLeavingFor(null);
+                    // Staying to edit: the rail goes back to the version the
+                    // editor holds, not the one that was clicked.
+                    void refreshVersions();
+                }}
+                layerClassName="z-[90]"
+                title={tEditor("discardTitle")}
+                description={tEditor("discardBody")}
+                confirmLabel={tEditor("discardConfirm")}
+                onConfirm={() => {
+                    const href = leavingFor;
+                    setLeavingFor(null);
+                    if (href) router.push(href);
+                }}
+            />
             <ConfirmDialog
                 open={confirming !== null}
                 onOpenChange={next => {

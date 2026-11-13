@@ -102,7 +102,7 @@ const railLabels = () =>
 
 describe("settingsSectionFromHash", () => {
     it("maps every documented alias, including the ones that used to be routes", () => {
-        // Processing became Bring your own keys; the embedding key it held is
+        // Processing became Bring your own keys (API keys now); the embedding key it held is
         // gone, and its links land there too.
         expect(settingsSectionFromHash("#byok")).toBe("byok");
         expect(settingsSectionFromHash("#embedding")).toBe("byok");
@@ -155,7 +155,9 @@ describe("SettingsHub", () => {
             "Company profile",
             "Processing",
             "Bring your own keys",
+            "API keys",
             "Models and routes",
+            "Models",
             "Agents and autonomy",
             "Document defaults",
             "Integrations",
@@ -253,11 +255,12 @@ describe("SettingsHub", () => {
         ["#people", "/employer/documents?feature=workspace&at=%2Fpeople"],
         ["#company", "/employer/documents?feature=workspace&at=%2Fcompany"],
         ["#metadata", "/employer/documents?feature=workspace&at=%2Fcompany"],
-        ["#byok", "/employer/documents?feature=workspace&at=%2Fbyok"],
-        ["#processing", "/employer/documents?feature=workspace&at=%2Fbyok"],
-        ["#embedding", "/employer/documents?feature=workspace&at=%2Fbyok"],
-        ["#openrouter", "/employer/documents?feature=workspace&at=%2Fbyok"],
-        ["#models", "/employer/documents?feature=workspace&at=%2Fmodels"],
+        // API keys and Models are screens of Models & usage now.
+        ["#byok", "/employer/documents?feature=usage&at=%2Fkeys"],
+        ["#processing", "/employer/documents?feature=usage&at=%2Fkeys"],
+        ["#embedding", "/employer/documents?feature=usage&at=%2Fkeys"],
+        ["#openrouter", "/employer/documents?feature=usage&at=%2Fkeys"],
+        ["#models", "/employer/documents?feature=usage&at=%2Fmodels"],
         // Document defaults is gone; its links open the Workspace tab.
         ["#documents", "/employer/documents?feature=workspace&at=%2Fgeneral"],
         ["#documents.defaultFolder", "/employer/documents?feature=workspace&at=%2Fgeneral"],
@@ -279,12 +282,12 @@ describe("SettingsHub", () => {
         await waitFor(() => expect(mockReplace).toHaveBeenCalledWith(href));
     });
 
-    it("sends the old OpenRouter return leg to Workspace › Bring your own keys with its outcome", async () => {
+    it("sends the old OpenRouter return leg to Models & usage › API keys with its outcome", async () => {
         setUrl("", "?openrouter=connected");
         render(<SettingsHub />);
         await waitFor(() =>
             expect(mockReplace).toHaveBeenCalledWith(
-                "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=connected"
+                "/employer/documents?feature=usage&at=%2Fkeys&openrouter=connected"
             )
         );
     });

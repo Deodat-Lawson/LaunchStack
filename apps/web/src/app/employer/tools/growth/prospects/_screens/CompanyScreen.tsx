@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { ArrowDown, ArrowUp, ExternalLink, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -36,6 +36,7 @@ import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
 import { useErrorText } from "~/lib/tools/errorText";
 import { neighbours } from "../_lib/listOrder";
+import { simulateHref } from "../_lib/simulate";
 import { useResource } from "~/lib/tools/useResource";
 import { ClaimText, evidenceAnchorId } from "../_components/Citation";
 import { EmailStatus, canOutreach } from "../_components/EmailStatus";
@@ -92,7 +93,7 @@ export function CompanyScreen({ id }: { id: string }) {
     const ts = useTranslations("growth.server");
     const word = useCopyText();
     const errorText = useErrorText();
-    const { href } = useProspects();
+    const { href, segmentId } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
     const res = useResource(`company:${id}`, () => prospectsApi.company(id), {
@@ -260,6 +261,19 @@ export function CompanyScreen({ id }: { id: string }) {
                         />
                         <Button variant="outline" size="sm" onClick={() => void toggleExcluded()}>
                             {c.excluded ? t("common.includeAgain") : t("common.exclude")}
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                            <ToolLink
+                                href={simulateHref({
+                                    segmentId,
+                                    companyIds: [id],
+                                    subject: t("company.simulateSubject", { name: c.name }),
+                                })}
+                                title={t("company.simulateHint")}
+                            >
+                                <Sparkles className="size-3.5" aria-hidden />
+                                {t("company.simulate")}
+                            </ToolLink>
                         </Button>
                         <Button
                             size="sm"

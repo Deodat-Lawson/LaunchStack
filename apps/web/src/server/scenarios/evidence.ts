@@ -20,6 +20,8 @@ import { retrieveCompanySnippets } from "@launchstack/tools/grounded-retrieval";
 
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { SCENARIO_LIMITS } from "~/lib/scenarios/types";
+import { toolTabHref } from "~/lib/tool-app/locations";
 import { resolveMemberContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import { brandComments, companyMetadata } from "~/server/db/schema";
@@ -174,12 +176,28 @@ async function searchDrafts(
         });
 }
 
-async function prospectDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
-    const items = await listPartners(companyId);
+/** A prospect's page in Growth › Prospects, where its source row links. */
+export function prospectHref(dealId: string): string {
+    return toolTabHref("growth", `/prospects/companies/${encodeURIComponent(dealId)}`);
+}
+
+/**
+ * The prospects a run reads: the companies picked, else the best fits of the
+ * segment picked, else the best fits overall. Each links back to its page.
+ */
+async function prospectDrafts(
+    companyId: bigint,
+    pick: { segmentId?: string | null; ids?: string[] } = {}
+): Promise<EvidenceDraft[]> {
+    const items = await listPartners(
+        companyId,
+        pick.segmentId ? { programId: pick.segmentId } : {}
+    );
+    const wanted = new Set(pick.ids ?? []);
     return items
-        .slice()
+        .filter(item => wanted.size === 0 || wanted.has(item.relationship.id))
         .sort((a, b) => (b.relationship.fitScore ?? 0) - (a.relationship.fitScore ?? 0))
-        .slice(0, 12)
+        .slice(0, wanted.size > 0 ? SCENARIO_LIMITS.prospectsMax : 12)
         .map(({ org, relationship }) => ({
             kind: "prospect" as const,
             label: `Prospect: ${org.name}`,
@@ -194,7 +212,7 @@ async function prospectDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
                 .filter(Boolean)
                 .join(" "),
             ref: { type: "prospect", id: org.id },
-            href: null,
+            href: prospectHref(relationship.id),
         }));
 }
 
@@ -297,7 +315,15 @@ export async function gatherScenarioEvidence(run: ScenarioRunRecord): Promise<St
               )
             : [],
         s.searchFiles ? bounded("file search", searchDrafts(run.companyId, scope, query)) : [],
-        s.prospects ? bounded("prospects", prospectDrafts(run.companyId)) : [],
+        s.prospects
+            ? bounded(
+                  "prospects",
+                  prospectDrafts(run.companyId, {
+                      segmentId: s.prospectSegmentId,
+                      ids: s.prospectIds,
+                  })
+              )
+            : [],
         s.brandComments ? bounded("comments", commentDrafts(run.companyId)) : [],
         s.companyProfile
             ? bounded("company profile", profileDrafts(run.companyId, scope, query))

@@ -260,6 +260,13 @@
     "estimateError": "Could not estimate the cost",
     "startError": "Could not start the scenario",
     "addedToast": "{name} was added to your files. Choose it from your files.",
+    "prospectsFrom": {
+      "label": "Which prospects",
+      "all": "Best fits from every segment",
+      "segment": "{name} ({count, plural, one {# company} other {# companies}})",
+      "picked": "{count, plural, one {# company} other {# companies}} picked in Prospects",
+      "clear": "Use a segment instead"
+    },
     "switches": {
       "search": "Search my files",
       "searchShort": "file search",

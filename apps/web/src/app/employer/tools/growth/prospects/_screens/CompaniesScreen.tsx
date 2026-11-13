@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGrid, Rows3, Search } from "lucide-react";
+import { LayoutGrid, Rows3, Search, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -40,6 +40,7 @@ import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
 import { useErrorText } from "~/lib/tools/errorText";
 import { rememberListOrder } from "../_lib/listOrder";
+import { simulateHref } from "../_lib/simulate";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -270,17 +271,36 @@ export function CompaniesScreen() {
                         : undefined
                 }
                 actions={
-                    <Button
-                        size="sm"
-                        onClick={() =>
-                            void startRun().catch((e: unknown) =>
-                                toast.error(errorText(e, t("common.startFailed")))
-                            )
-                        }
-                        disabled={!segmentId}
-                    >
-                        {t("common.findCompanies")}
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {segmentId && companies.length > 0 && (
+                            <Button variant="outline" size="sm" asChild>
+                                <ToolLink
+                                    href={simulateHref({
+                                        segmentId,
+                                        companyIds: [...selected],
+                                        subject: t("companies.simulateSubject"),
+                                    })}
+                                    title={t("companies.simulateHint")}
+                                >
+                                    <Sparkles className="size-3.5" aria-hidden />
+                                    {selected.size > 0
+                                        ? t("companies.simulateSelected", { count: selected.size })
+                                        : t("companies.simulate")}
+                                </ToolLink>
+                            </Button>
+                        )}
+                        <Button
+                            size="sm"
+                            onClick={() =>
+                                void startRun().catch((e: unknown) =>
+                                    toast.error(errorText(e, t("common.startFailed")))
+                                )
+                            }
+                            disabled={!segmentId}
+                        >
+                            {t("common.findCompanies")}
+                        </Button>
+                    </div>
                 }
             />
 

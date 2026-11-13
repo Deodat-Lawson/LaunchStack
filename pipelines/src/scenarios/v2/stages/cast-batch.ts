@@ -6,11 +6,12 @@
  * shown, `inferred` and `assumed` must say why, `unknown` carries no value,
  * enum fields must be valid, and the name must not be lifted from the
  * evidence. Valid slots are kept; only missing or invalid ones go back to the
- * model, within the repair allowance. When the allowance runs out, a field
- * whose only fault is a missing reason becomes unknown (the claim is dropped,
- * never given an invented reason) and the person is kept; a slot with any
- * other fault (a citation outside its evidence, a bad value, a lifted name)
- * is listed as unfilled.
+ * model, within the repair allowance. When the allowance runs out, each
+ * unsupported claim is weakened to what it supports (an inference citing
+ * nothing but saying why becomes an assumption; a claim with no value,
+ * citation or reason becomes unknown; nothing is given an invented reason or
+ * citation) and the person is kept. A slot with any other fault (a citation
+ * outside its evidence, a bad value, a lifted name) is listed as unfilled.
  *
  * The persona's stance is the slot's target, never the model's. Its wallet
  * comes from the attributed values (an unknown value leaves the field unset).
@@ -71,8 +72,8 @@ const KNOWS_MAX = 5;
 export interface MemberValidation {
     member?: CastMember;
     errors: string[];
-    /** Fields made unknown on the last pass for want of a reason. */
-    dropped?: AttributedField[];
+    /** Claims the last pass weakened to what they support. */
+    weakened?: Weakening[];
 }
 
 function slugHandle(raw: string, fallbackName: string): string {
@@ -105,14 +106,43 @@ function readValue(raw: unknown, field: AttributedField): string | null {
     return ENUMS[field] ? text.toLowerCase() : text;
 }
 
+/** A claim the last pass weakened to what it supports. */
+export interface Weakening {
+    field: AttributedField;
+    from: Basis;
+    to: Basis;
+}
+
+/**
+ * The basis a claim actually supports, used once repairs have run out. An
+ * inference that cites nothing but says why is an assumption; a claim left
+ * with no value, no citation or no reason is unknown. A citation to evidence
+ * the slot was not shown is never softened: it stays an error.
+ */
+function supportedBasis(
+    basis: Basis,
+    value: string | null,
+    ids: string[],
+    explanation: string,
+    allowed: Set<string>
+): Basis {
+    if (ids.some(id => !allowed.has(id))) return basis;
+    let b = basis;
+    if ((b === "source" || b === "inferred") && ids.length === 0)
+        b = b === "inferred" && explanation ? "assumed" : "unknown";
+    if ((b === "inferred" || b === "assumed") && !explanation) b = "unknown";
+    if (!value) b = "unknown";
+    return b;
+}
+
 function readAttributed(
     raw: unknown,
     field: AttributedField,
     allowed: Set<string>,
     slotId: string,
     errors: string[],
-    /** Set on the last pass: an unexplained inference or assumption becomes unknown and is listed here. */
-    dropped?: AttributedField[]
+    /** Set on the last pass: unsupported claims are weakened (see supportedBasis) and listed here. */
+    weakened?: Weakening[]
 ): Attributed<string> {
     const unknown: Attributed<string> = { value: null, basis: "unknown", evidenceIds: [] };
     const a = asRecord(raw);
@@ -120,18 +150,14 @@ function readAttributed(
         errors.push(`${field} is missing.`);
         return unknown;
     }
-    const basis = (asString(a.basis) ?? "").trim().toLowerCase() as Basis;
-    if (!BASES.includes(basis)) {
-        errors.push(`${field} has basis "${basis}"; use source, inferred, assumed or unknown.`);
+    const asked = (asString(a.basis) ?? "").trim().toLowerCase() as Basis;
+    if (!BASES.includes(asked)) {
+        errors.push(`${field} has basis "${asked}"; use source, inferred, assumed or unknown.`);
         return unknown;
     }
-    if (basis === "unknown") return unknown;
+    if (asked === "unknown") return unknown;
 
     const explanation = clip(cleanProse(asString(a.explanation) ?? ""), 240);
-    if (dropped && (basis === "inferred" || basis === "assumed") && !explanation) {
-        dropped.push(field);
-        return unknown;
-    }
     const value = readValue(a.value, field);
     const ids = [
         ...new Set(
@@ -140,6 +166,10 @@ function readAttributed(
                 .filter(Boolean)
         ),
     ];
+    const basis = weakened ? supportedBasis(asked, value, ids, explanation, allowed) : asked;
+    if (basis !== asked) weakened?.push({ field, from: asked, to: basis });
+    if (basis === "unknown") return unknown;
+
     const options = ENUMS[field];
     if (!value) errors.push(`${field} is ${basis} but has no value; use basis "unknown" instead.`);
     else if (options && !options.includes(value))
@@ -200,7 +230,7 @@ export function validateMember(
     slot: CastSlot,
     context: ActorContext,
     index: number,
-    options: { dropUnexplained?: boolean } = {}
+    options: { weakenUnsupported?: boolean } = {}
 ): MemberValidation {
     const item = asRecord(raw);
     if (!item) return { errors: [`No member came back for ${slot.slotId}.`] };
@@ -214,11 +244,11 @@ export function validateMember(
         );
 
     const allowed = new Set(context.selected.evidenceIds);
-    const dropped: AttributedField[] | undefined = options.dropUnexplained ? [] : undefined;
+    const weakened: Weakening[] | undefined = options.weakenUnsupported ? [] : undefined;
     const attributes = Object.fromEntries(
         ATTRIBUTED_FIELDS.map(field => [
             field,
-            readAttributed(item[field], field, allowed, slot.slotId, errors, dropped),
+            readAttributed(item[field], field, allowed, slot.slotId, errors, weakened),
         ])
     ) as Record<AttributedField, Attributed<string>>;
     if (errors.length > 0) return { errors };
@@ -267,7 +297,7 @@ export function validateMember(
     return {
         member: { slotId: slot.slotId, persona, attributes },
         errors: [],
-        ...(dropped && dropped.length > 0 ? { dropped } : {}),
+        ...(weakened && weakened.length > 0 ? { weakened } : {}),
     };
 }
 
@@ -330,9 +360,9 @@ export const castBatchStage: Stage = async ctx => {
         judge(reply.text, retry);
     }
 
-    // Out of repairs: keep a person whose only faults were missing reasons,
-    // with those fields unknown.
-    const dropped: Record<string, AttributedField[]> = {};
+    // Out of repairs: keep a person whose only faults were unsupported claims,
+    // with each claim weakened to what it supports.
+    const weakened: Record<string, Weakening[]> = {};
     for (const { slot, context } of slots) {
         const problem = problems.get(slot.slotId);
         if (!problem) continue;
@@ -341,12 +371,12 @@ export const castBatchStage: Stage = async ctx => {
             slot,
             context,
             order.get(slot.slotId) ?? 0,
-            { dropUnexplained: true }
+            { weakenUnsupported: true }
         );
         if (!result.member) continue;
         accepted.set(slot.slotId, result.member);
         problems.delete(slot.slotId);
-        if (result.dropped) dropped[slot.slotId] = result.dropped;
+        if (result.weakened) weakened[slot.slotId] = result.weakened;
     }
 
     const members = ids.map(id => accepted.get(id)).filter((m): m is CastMember => !!m);
@@ -357,21 +387,21 @@ export const castBatchStage: Stage = async ctx => {
             unit: ctx.unit.key,
             unfilled,
         });
-    if (Object.keys(dropped).length > 0)
-        ctx.ports.log?.("scenario cast fields dropped for want of a reason", {
+    if (Object.keys(weakened).length > 0)
+        ctx.ports.log?.("scenario cast claims weakened to what they support", {
             runId: ctx.run.id,
             unit: ctx.unit.key,
-            dropped,
+            slots: Object.keys(weakened).length,
         });
     const output: CastBatchOutput & {
         problems: Record<string, string[]>;
-        dropped: Record<string, AttributedField[]>;
+        weakened: Record<string, Weakening[]>;
     } = {
         members,
         unfilled,
         repairs,
         problems: Object.fromEntries(unfilled.map(id => [id, problems.get(id)?.errors ?? []])),
-        dropped,
+        weakened,
     };
     return { output };
 };

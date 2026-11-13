@@ -145,16 +145,36 @@ describe("grounded cast fields", () => {
         ]);
     });
 
-    it("on the last pass, makes an unexplained field unknown but still refuses a bad citation", () => {
+    it("on the last pass, weakens unsupported claims but still refuses a citation outside the slot", () => {
         const context = contextFrom(false); // E2 is not in this slot's evidence
         const unexplained = {
             ...operationsMember("s01", ["E1"]),
             objection: { value: "Too slow.", basis: "assumed", evidenceIds: [], explanation: null },
         };
-        const kept = validateMember(unexplained, operations, context, 0, { dropUnexplained: true });
+        const kept = validateMember(unexplained, operations, context, 0, {
+            weakenUnsupported: true,
+        });
         expect(kept.errors).toEqual([]);
-        expect(kept.dropped).toEqual(["objection"]);
+        expect(kept.weakened).toEqual([{ field: "objection", from: "assumed", to: "unknown" }]);
         expect(kept.member!.attributes.objection.basis).toBe("unknown");
+
+        // A source with no citation, and an inference with neither citation nor reason.
+        const bare = {
+            ...operationsMember("s01", ["E1"]),
+            role: { value: "Ops lead", basis: "source", evidenceIds: [], explanation: null },
+            buyingRole: { value: "uses", basis: "inferred", evidenceIds: [], explanation: null },
+        };
+        const weakened = validateMember(bare, operations, context, 0, { weakenUnsupported: true });
+        expect(weakened.weakened).toEqual([
+            { field: "role", from: "source", to: "unknown" },
+            { field: "buyingRole", from: "inferred", to: "unknown" },
+        ]);
+        // Without the last-pass flag the same reply is sent back for repair.
+        expect(validateMember(bare, operations, context, 0).errors).toEqual([
+            "role is source but cites no evidence.",
+            "buyingRole is inferred but cites no evidence.",
+            "buyingRole is inferred but gives no explanation.",
+        ]);
 
         const miscited = {
             ...unexplained,
@@ -165,7 +185,9 @@ describe("grounded cast fields", () => {
                 explanation: "A long migration.",
             },
         };
-        const refused = validateMember(miscited, operations, context, 0, { dropUnexplained: true });
+        const refused = validateMember(miscited, operations, context, 0, {
+            weakenUnsupported: true,
+        });
         expect(refused.member).toBeUndefined();
         expect(refused.errors).toEqual(["switchingCost cites E2, which is not in s01's evidence."]);
     });
@@ -298,9 +320,10 @@ describe("the cast batch stage", () => {
         await expect(runUnit(h, "world:freeze")).rejects.toThrow("Only 0 people");
     });
 
-    it("keeps a person whose only fault is an unexplained assumption, with that field unknown", async () => {
-        // Live run 6 (qwen3.5:9b): every objection came back assumed with a
-        // null explanation, in the first answer and in the repair.
+    it("keeps a person whose only faults are unsupported claims, each weakened to what it supports", async () => {
+        // Live runs 6 and 7 (qwen3.5:9b), in the first answer and the repair:
+        // every objection assumed with a null explanation; switching costs
+        // inferred with a reason but no citation.
         const h = makeHarness();
         h.model = scriptedModel(request => {
             if (request.purpose !== "cast_v2") return runScript(request);
@@ -311,12 +334,18 @@ describe("the cast batch stage", () => {
                 members: reply.members.map(m => ({
                     ...m,
                     objection: { ...m.objection, basis: "assumed", explanation: null },
+                    switchingCost: {
+                        value: "high",
+                        basis: "inferred",
+                        evidenceIds: [],
+                        explanation: "Moving off a legacy system takes weeks.",
+                    },
                 })),
             };
         });
         await toCastBatch(h);
         const out = (await runUnit(h, "cast:batch:01")).output as CastBatchOutput & {
-            dropped: Record<string, string[]>;
+            weakened: Record<string, unknown[]>;
         };
         // The repair was tried first, with the reason it was sent back.
         const repair = h.model.requests.filter(r => r.purpose === "cast_v2")[1]!;
@@ -330,15 +359,21 @@ describe("the cast batch stage", () => {
                 evidenceIds: [],
             });
             expect(m.persona.objection).toBeUndefined();
-            // Everything that was explained is kept as it came.
+            // A reason without a citation is an assumption, reason kept.
+            expect(m.attributes.switchingCost).toEqual({
+                value: "high",
+                basis: "assumed",
+                evidenceIds: [],
+                explanation: "Moving off a legacy system takes weeks.",
+            });
+            // Everything that was supported is kept as it came.
             expect(m.attributes.buyingRole).toMatchObject({ basis: "source", evidenceIds: ["E1"] });
         }
-        expect(out.dropped).toEqual({
-            s01: ["objection"],
-            s02: ["objection"],
-            s03: ["objection"],
-            s04: ["objection"],
-        });
+        const each = [
+            { field: "switchingCost", from: "inferred", to: "assumed" },
+            { field: "objection", from: "assumed", to: "unknown" },
+        ];
+        expect(out.weakened).toEqual({ s01: each, s02: each, s03: each, s04: each });
         expect((await runUnit(h, "world:freeze")).output).toBeTruthy();
     });
 

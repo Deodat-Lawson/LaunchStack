@@ -22,11 +22,13 @@ import {
     List as IconList,
     Plus as IconPlus,
     Search as IconSearch,
+    Table2 as IconExtract,
     X as IconX,
 } from "lucide-react";
 import { UNFILED_FOLDER, compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Button } from "~/components/ui/button";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
 import { useOpenOutside } from "./externalLink";
@@ -73,6 +75,12 @@ export interface KnowledgePaneProps {
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
     onOpenAdd: (tabId?: string) => void;
     onAskAbout: (sourceIds: string[]) => void;
+    /**
+     * "Extract fields": open the Extract tool's form with these documents
+     * chosen. Only uploaded documents ("d12") can be rows of a table, so the
+     * button shows when the selection has at least one and passes just those.
+     */
+    onExtractFields?: (documentSourceIds: string[]) => void;
     onRenameSource?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
     /** Delete several at once — the multi-selection menu's Delete. */
@@ -96,6 +104,7 @@ export function KnowledgePane({
     onOpenSourceBeside,
     onOpenAdd,
     onAskAbout,
+    onExtractFields,
     onRenameSource,
     onDeleteSource,
     onDeleteSources,
@@ -109,6 +118,8 @@ export function KnowledgePane({
     const tr = useTranslations("sources.railCommands");
     const tTypes = useTranslations("sources.sourceTypes");
     const tc = useTranslations("common");
+    /** The uploaded documents in the selection — what a table's rows can be. */
+    const selectedDocuments = useMemo(() => selected.filter(id => /^d\d+$/.test(id)), [selected]);
     const [query, setQuery] = useState("");
     const [folder, setFolder] = useState<string | null>(null);
     const [type, setType] = useState<SourceTypeId | null>(null);
@@ -393,30 +404,40 @@ export function KnowledgePane({
                     <div style={{ flex: 1 }} />
 
                     {selected.length > 0 && (
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-ink-3 text-[11.5px] tabular-nums">
                                 {t("selectedCount", { count: selected.length })}
                             </span>
-                            <button
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                className="border-brand bg-brand-soft text-brand-ink h-7 px-3 text-xs font-semibold"
                                 onClick={() => onAskAbout(selected)}
-                                style={{
-                                    padding: "6px 12px",
-                                    borderRadius: 7,
-                                    border: "1px solid var(--accent)",
-                                    color: "var(--accent-ink)",
-                                    background: "var(--accent-soft)",
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                }}
                             >
                                 {t("askAboutThese")}
-                            </button>
-                            <button
+                            </Button>
+                            {onExtractFields && selectedDocuments.length > 0 && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 px-3 text-xs"
+                                    onClick={() => onExtractFields(selectedDocuments)}
+                                >
+                                    <IconExtract />
+                                    {t("extractFields")}
+                                </Button>
+                            )}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                className="text-ink-3 h-7 px-2 text-[11.5px] font-normal"
                                 onClick={() => setSelected([])}
-                                style={{ fontSize: 11.5, color: "var(--ink-3)" }}
                             >
                                 {tc("actions.clear")}
-                            </button>
+                            </Button>
                         </div>
                     )}
                 </div>

@@ -18,6 +18,18 @@
  *   negotiates a version and describes the server.
  * - One message per POST. A JSON array (a 2025-03-26 batch) is refused with
  *   -32600; later revisions removed batching.
+ *
+ * Two eras on one endpoint, told apart by how the client opens:
+ *
+ * - **2026-07-28** (stateless by design): no `initialize`. Every request
+ *   names its version in `_meta` and in the `MCP-Protocol-Version` header
+ *   (they must agree), its method in `Mcp-Method` and, for `tools/call`, the
+ *   tool in `Mcp-Name`. Results carry `resultType`. A tool may answer
+ *   `input_required` with a form for the person (multi round-trip requests):
+ *   the client asks, then retries the same call with `inputResponses` and the
+ *   `requestState` it was given — all plain JSON, no stream.
+ * - **2025-03-26 / 2025-06-18 / 2025-11-25**: `initialize` + `ping` +
+ *   `tools/*`, exactly as before. These clients are never asked anything.
  */
 import type { ZodError, ZodType, ZodTypeDef } from "zod";
 
@@ -28,15 +40,33 @@ import type { McpPrincipal } from "./principal";
 // Versions and error codes
 // ---------------------------------------------------------------------------
 
-/** Newest first; `initialize` answers with the client's pick when it is here. */
+/**
+ * The stateless revision: every request names its version and the client's
+ * capabilities in `_meta`, and results say whether they are complete or need
+ * the person's input.
+ */
+export const MODERN_PROTOCOL_VERSION = "2026-07-28";
+
+/** The handshake revisions, newest first; `initialize` answers with the client's pick when it is here. */
+export const LEGACY_PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26"] as const;
+export type LegacyProtocolVersion = (typeof LEGACY_PROTOCOL_VERSIONS)[number];
+export const LATEST_LEGACY_PROTOCOL_VERSION: LegacyProtocolVersion = LEGACY_PROTOCOL_VERSIONS[0];
+
+/** Every revision served, newest first: `server/discover` lists them and version errors name them. */
 export const SUPPORTED_PROTOCOL_VERSIONS = [
-    "2026-07-28",
-    "2025-11-25",
-    "2025-06-18",
-    "2025-03-26",
+    MODERN_PROTOCOL_VERSION,
+    ...LEGACY_PROTOCOL_VERSIONS,
 ] as const;
 export type ProtocolVersion = (typeof SUPPORTED_PROTOCOL_VERSIONS)[number];
-export const LATEST_PROTOCOL_VERSION: ProtocolVersion = SUPPORTED_PROTOCOL_VERSIONS[0];
+
+/** `_meta` keys of the 2026-07-28 revision. */
+export const META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion";
+export const META_CLIENT_CAPABILITIES = "io.modelcontextprotocol/clientCapabilities";
+export const META_SERVER_INFO = "io.modelcontextprotocol/serverInfo";
+
+/** How long a client may reuse a `server/discover` or `tools/list` answer. */
+export const DISCOVER_TTL_MS = 60 * 60 * 1000;
+export const TOOLS_LIST_TTL_MS = 5 * 60 * 1000;
 
 export const MCP_SERVER_NAME = "launchstack";
 export const MCP_SERVER_TITLE = "LaunchStack";
@@ -53,10 +83,20 @@ export const JSON_RPC = {
     INTERNAL_ERROR: -32603,
     /** Implementation-defined server error (transport-level refusals). */
     SERVER_ERROR: -32000,
+    /** 2026-07-28: a required header is missing or disagrees with the body. */
+    HEADER_MISMATCH: -32020,
+    /** 2026-07-28: the request needs a client capability it did not declare. */
+    MISSING_CLIENT_CAPABILITY: -32021,
+    /** 2026-07-28: the protocol version is not one this server speaks. */
+    UNSUPPORTED_PROTOCOL_VERSION: -32022,
 } as const;
 
 export function isSupportedProtocolVersion(value: string): value is ProtocolVersion {
     return (SUPPORTED_PROTOCOL_VERSIONS as readonly string[]).includes(value);
+}
+
+export function isLegacyProtocolVersion(value: string): value is LegacyProtocolVersion {
+    return (LEGACY_PROTOCOL_VERSIONS as readonly string[]).includes(value);
 }
 
 // ---------------------------------------------------------------------------
@@ -122,16 +162,55 @@ export interface McpToolRateLimit {
     windowMs: number;
 }
 
+/** What the calling client can be asked to show the person (2026-07-28 only). */
+export interface McpClientAbilities {
+    /** The revision the request came in under. Legacy clients are never asked anything. */
+    era: "modern" | "legacy";
+    /** The client declared form-mode elicitation for this request. */
+    formElicitation: boolean;
+}
+
+/** The answers on a multi round-trip retry: the client's input and the state it echoed. */
+export interface McpRoundTrip {
+    inputResponses: Record<string, unknown>;
+    requestState: string | null;
+}
+
 export interface McpToolContext {
     principal: McpPrincipal;
     /** The app's origin, for the absolute links tools hand back. */
     origin: string;
+    client: McpClientAbilities;
+    /** Set when this call is a retry carrying the person's answers. */
+    roundTrip: McpRoundTrip | null;
+    /** The call's arguments after null-stripping, for binding a `requestState`. */
+    rawArguments: Record<string, unknown>;
 }
 
 /** A tool's answer: success with text + structured content, or a message for the model. */
-export type McpToolOutcome =
+export type McpToolAnswer =
     | { ok: true; text: string; structured: Record<string, unknown> }
     | { ok: false; message: string };
+
+/** One thing to ask the person, as a 2026-07-28 `inputRequests` entry. */
+export interface McpInputRequest {
+    method: "elicitation/create";
+    params: Record<string, unknown>;
+}
+
+/** The tool needs the person's answers before it can finish (2026-07-28 clients only). */
+export interface McpInputRequired {
+    inputRequired: {
+        inputRequests: Record<string, McpInputRequest>;
+        requestState: string;
+    };
+}
+
+export type McpToolOutcome = McpToolAnswer | McpInputRequired;
+
+export function isInputRequired(outcome: McpToolOutcome): outcome is McpInputRequired {
+    return "inputRequired" in outcome;
+}
 
 /** What a credential and a membership must both allow before a tool is listed or run. */
 export interface McpToolRequirement {
@@ -152,6 +231,8 @@ export interface McpToolSpec<Args> {
     requires: McpToolRequirement;
     /** A tighter, per-tool budget on top of the server-wide one. */
     rateLimit?: McpToolRateLimit;
+    /** The tool definition's `_meta` (e.g. ChatGPT's `openai/fileParams`). */
+    meta?: Record<string, unknown>;
     /** Validates (and normalises) the arguments; mirrors `inputSchema`. */
     args: ZodType<Args, ZodTypeDef, unknown>;
     run(args: Args, context: McpToolContext): Promise<McpToolOutcome>;
@@ -167,6 +248,7 @@ export interface McpTool {
     readonly annotations: McpToolAnnotations;
     readonly requires: McpToolRequirement;
     readonly rateLimit?: McpToolRateLimit;
+    readonly meta?: Record<string, unknown>;
     /** Validates the raw `arguments`, then runs the tool. */
     call(rawArguments: unknown, context: McpToolContext): Promise<McpToolOutcome>;
 }
@@ -223,6 +305,7 @@ export function defineTool<Args>(spec: McpToolSpec<Args>): McpTool {
         annotations: { title: spec.title, ...spec.annotations },
         requires: spec.requires,
         rateLimit: spec.rateLimit,
+        meta: spec.meta,
         async call(rawArguments, context) {
             const parsed = spec.args.safeParse(withoutNullFields(rawArguments ?? {}));
             if (!parsed.success) {
@@ -252,10 +335,11 @@ function describeTool(tool: McpTool): Record<string, unknown> {
         annotations: tool.annotations,
     };
     if (tool.outputSchema) described.outputSchema = tool.outputSchema;
+    if (tool.meta) described._meta = tool.meta;
     return described;
 }
 
-function toolResult(outcome: McpToolOutcome): Record<string, unknown> {
+function toolResult(outcome: McpToolAnswer): Record<string, unknown> {
     if (outcome.ok) {
         return {
             content: [{ type: "text", text: outcome.text }],
@@ -290,6 +374,10 @@ export interface McpHttpInput {
     accept: string | null;
     /** The `MCP-Protocol-Version` header, when the client sent one. */
     protocolVersion: string | null;
+    /** The `Mcp-Method` header (2026-07-28), when the client sent one. */
+    method?: string | null;
+    /** The `Mcp-Name` header (2026-07-28), when the client sent one. */
+    name?: string | null;
 }
 
 /**
@@ -319,6 +407,27 @@ function isJsonRpcId(value: unknown): value is JsonRpcId {
 /** The id to answer with when a message is malformed: its own, if it has a usable one. */
 function salvageId(message: Record<string, unknown>): JsonRpcId | null {
     return isJsonRpcId(message.id) ? message.id : null;
+}
+
+/**
+ * An `Mcp-Name` header's value. Clients send names that are not plain ASCII
+ * as `=?base64?<base64>?=`; anything else is taken as written.
+ */
+export function decodeMcpNameHeader(raw: string): string | null {
+    const match = /^=\?base64\?([A-Za-z0-9+/=_-]*)\?=$/.exec(raw.trim());
+    if (!match) return raw.trim();
+    try {
+        return Buffer.from(match[1]!, "base64").toString("utf8");
+    } catch {
+        return null;
+    }
+}
+
+/** A request's `_meta`, when it has one. */
+function requestMeta(message: Record<string, unknown>): Record<string, unknown> | null {
+    const params = message.params;
+    if (!isPlainObject(params)) return null;
+    return isPlainObject(params._meta) ? params._meta : null;
 }
 
 /** POST /api/mcp, minus HTTP: one JSON-RPC message in, one answer out. */
@@ -364,13 +473,28 @@ export async function handleMcpPost(
     }
     const message = parsed;
 
-    if (input.protocolVersion !== null && !isSupportedProtocolVersion(input.protocolVersion)) {
+    // Which era: `initialize` is the handshake revisions' opening; a request
+    // naming 2026-07-28 (header) or carrying its `_meta` version is the
+    // stateless revision. Anything else is served as before.
+    const metaVersion = requestMeta(message)?.[META_PROTOCOL_VERSION];
+    const modern =
+        message.method !== "initialize" &&
+        (input.protocolVersion === MODERN_PROTOCOL_VERSION || metaVersion !== undefined);
+
+    if (modern) {
+        const refusal = checkModernEnvelope(message, input, metaVersion);
+        if (refusal) return refusal;
+    } else if (
+        input.protocolVersion !== null &&
+        message.method !== "initialize" &&
+        !isLegacyProtocolVersion(input.protocolVersion)
+    ) {
         return errorAnswer(
             400,
             salvageId(message),
-            JSON_RPC.INVALID_REQUEST,
+            JSON_RPC.UNSUPPORTED_PROTOCOL_VERSION,
             `Unsupported MCP-Protocol-Version "${input.protocolVersion}"`,
-            { supported: SUPPORTED_PROTOCOL_VERSIONS }
+            { supported: SUPPORTED_PROTOCOL_VERSIONS, requested: input.protocolVersion }
         );
     }
 
@@ -422,14 +546,126 @@ export async function handleMcpPost(
     const id = message.id;
 
     if ("params" in message && message.params !== undefined && !isPlainObject(message.params)) {
-        return errorAnswer(200, id, JSON_RPC.INVALID_PARAMS, '"params" must be an object');
+        return errorAnswer(
+            modern ? 400 : 200,
+            id,
+            JSON_RPC.INVALID_PARAMS,
+            '"params" must be an object'
+        );
     }
     const params = isPlainObject(message.params) ? message.params : {};
 
-    return dispatchRequest(id, message.method, params, options);
+    return modern
+        ? dispatchModern(id, message.method, params, options)
+        : dispatchLegacy(id, message.method, params, options);
 }
 
-async function dispatchRequest(
+/**
+ * The 2026-07-28 envelope: the version in the header and in `_meta` agree
+ * and are supported, `Mcp-Method` names the method, and `_meta` carries the
+ * client's capabilities. Null when the request may proceed.
+ */
+function checkModernEnvelope(
+    message: Record<string, unknown>,
+    input: McpHttpInput,
+    metaVersion: unknown
+): McpHttpAnswer | null {
+    const id = salvageId(message);
+    const header = input.protocolVersion;
+    if (header === null) {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.HEADER_MISMATCH,
+            "The MCP-Protocol-Version header is required and must match _meta's protocol version"
+        );
+    }
+    if (typeof metaVersion === "string" && metaVersion !== header) {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.HEADER_MISMATCH,
+            `MCP-Protocol-Version "${header}" does not match _meta's "${metaVersion}"`
+        );
+    }
+    const requested = typeof metaVersion === "string" ? metaVersion : header;
+    if (requested !== MODERN_PROTOCOL_VERSION) {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.UNSUPPORTED_PROTOCOL_VERSION,
+            `Unsupported protocol version "${requested}"`,
+            { supported: SUPPORTED_PROTOCOL_VERSIONS, requested }
+        );
+    }
+    const method = typeof message.method === "string" ? message.method : null;
+    if (method !== null && (input.method ?? null) !== method) {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.HEADER_MISMATCH,
+            `The Mcp-Method header must be "${method}"`
+        );
+    }
+    // Notifications carry no params to check; requests must carry `_meta`.
+    if (!("id" in message)) return null;
+    const meta = requestMeta(message);
+    if (!meta || typeof metaVersion !== "string") {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.INVALID_PARAMS,
+            `params._meta must carry "${META_PROTOCOL_VERSION}" and "${META_CLIENT_CAPABILITIES}"`
+        );
+    }
+    if (!isPlainObject(meta[META_CLIENT_CAPABILITIES])) {
+        return errorAnswer(
+            400,
+            id,
+            JSON_RPC.INVALID_PARAMS,
+            `params._meta["${META_CLIENT_CAPABILITIES}"] must be an object`
+        );
+    }
+    if (method === "tools/call") {
+        const params = message.params as Record<string, unknown>;
+        const headerName = input.name ? decodeMcpNameHeader(input.name) : null;
+        if (typeof params.name !== "string" || headerName !== params.name) {
+            return errorAnswer(
+                400,
+                id,
+                JSON_RPC.HEADER_MISMATCH,
+                "The Mcp-Name header must name the tool being called"
+            );
+        }
+    }
+    return null;
+}
+
+/** What a 2026-07-28 client declared it can show the person, for this request only. */
+function modernAbilities(params: Record<string, unknown>): McpClientAbilities {
+    const meta = isPlainObject(params._meta) ? params._meta : {};
+    const capabilities = isPlainObject(meta[META_CLIENT_CAPABILITIES])
+        ? meta[META_CLIENT_CAPABILITIES]
+        : {};
+    const elicitation = capabilities.elicitation;
+    // `{}` means form mode; otherwise the client lists the modes it supports.
+    const form =
+        isPlainObject(elicitation) &&
+        (Object.keys(elicitation).length === 0 || "form" in elicitation);
+    return { era: "modern", formElicitation: form };
+}
+
+const LEGACY_ABILITIES: McpClientAbilities = { era: "legacy", formElicitation: false };
+
+function serverInfo() {
+    return { name: MCP_SERVER_NAME, title: MCP_SERVER_TITLE, version: MCP_SERVER_VERSION };
+}
+
+function listedTools(options: McpServerOptions) {
+    return options.tools.filter(tool => toolAllowed(tool, options.principal)).map(describeTool);
+}
+
+async function dispatchLegacy(
     id: JsonRpcId,
     method: string,
     params: Record<string, unknown>,
@@ -452,15 +688,11 @@ async function dispatchRequest(
                 );
             }
             return ok({
-                protocolVersion: isSupportedProtocolVersion(requested)
+                protocolVersion: isLegacyProtocolVersion(requested)
                     ? requested
-                    : LATEST_PROTOCOL_VERSION,
+                    : LATEST_LEGACY_PROTOCOL_VERSION,
                 capabilities: { tools: { listChanged: false } },
-                serverInfo: {
-                    name: MCP_SERVER_NAME,
-                    title: MCP_SERVER_TITLE,
-                    version: MCP_SERVER_VERSION,
-                },
+                serverInfo: serverInfo(),
                 instructions: options.instructions,
             });
         }
@@ -469,14 +701,10 @@ async function dispatchRequest(
             return ok({});
 
         case "tools/list":
-            return ok({
-                tools: options.tools
-                    .filter(tool => toolAllowed(tool, options.principal))
-                    .map(describeTool),
-            });
+            return ok({ tools: listedTools(options) });
 
         case "tools/call":
-            return callTool(id, params, options);
+            return callTool(id, params, options, LEGACY_ABILITIES);
 
         // `ping` aside, nothing else is declared in `capabilities`, so a client
         // asking for resources, prompts, logging or completions is told so.
@@ -486,11 +714,63 @@ async function dispatchRequest(
     }
 }
 
-async function callTool(
+async function dispatchModern(
     id: JsonRpcId,
+    method: string,
     params: Record<string, unknown>,
     options: McpServerOptions
 ): Promise<McpHttpAnswer> {
+    const complete = (result: Record<string, unknown>): McpHttpAnswer => ({
+        status: 200,
+        body: { jsonrpc: "2.0", id, result: { resultType: "complete", ...result } },
+    });
+
+    switch (method) {
+        case "server/discover":
+            return complete({
+                supportedVersions: SUPPORTED_PROTOCOL_VERSIONS,
+                capabilities: { tools: {} },
+                instructions: options.instructions,
+                ttlMs: DISCOVER_TTL_MS,
+                cacheScope: "public",
+                _meta: { [META_SERVER_INFO]: serverInfo() },
+            });
+
+        case "tools/list":
+            return complete({
+                tools: listedTools(options),
+                ttlMs: TOOLS_LIST_TTL_MS,
+                // Which tools show depends on the caller's grant and role.
+                cacheScope: "private",
+            });
+
+        case "tools/call":
+            return callTool(id, params, options, modernAbilities(params));
+
+        default:
+            // 2026-07-28 has no `initialize`/`ping`; anything not served is a 404.
+            return errorAnswer(404, id, JSON_RPC.METHOD_NOT_FOUND, `Method not found: ${method}`);
+    }
+}
+
+/** The answers on a 2026-07-28 retry, when the call carries any. */
+function roundTripOf(params: Record<string, unknown>): McpRoundTrip | null {
+    const responses = params.inputResponses;
+    const state = params.requestState;
+    if (responses === undefined && state === undefined) return null;
+    return {
+        inputResponses: isPlainObject(responses) ? responses : {},
+        requestState: typeof state === "string" ? state : null,
+    };
+}
+
+async function callTool(
+    id: JsonRpcId,
+    params: Record<string, unknown>,
+    options: McpServerOptions,
+    client: McpClientAbilities
+): Promise<McpHttpAnswer> {
+    const modern = client.era === "modern";
     const name = params.name;
     if (typeof name !== "string" || name === "") {
         return errorAnswer(200, id, JSON_RPC.INVALID_PARAMS, "tools/call needs params.name");
@@ -512,11 +792,19 @@ async function callTool(
     if (rawArguments !== undefined && rawArguments !== null && !isPlainObject(rawArguments)) {
         return errorAnswer(200, id, JSON_RPC.INVALID_PARAMS, "params.arguments must be an object");
     }
+    const roundTrip = modern ? roundTripOf(params) : null;
 
-    const answer = (outcome: McpToolOutcome): McpHttpAnswer => ({
-        status: 200,
-        body: { jsonrpc: "2.0", id, result: toolResult(outcome) },
-    });
+    const answer = (outcome: McpToolAnswer): McpHttpAnswer => {
+        const result = toolResult(outcome);
+        return {
+            status: 200,
+            body: {
+                jsonrpc: "2.0",
+                id,
+                result: modern ? { resultType: "complete", ...result } : result,
+            },
+        };
+    };
 
     if (tool.rateLimit && options.chargeToolCall) {
         const budget = await options.chargeToolCall(tool);
@@ -531,7 +819,13 @@ async function callTool(
     const started = Date.now();
     let outcome: McpToolOutcome;
     try {
-        outcome = await tool.call(rawArguments ?? {}, { principal, origin: options.origin });
+        outcome = await tool.call(rawArguments ?? {}, {
+            principal,
+            origin: options.origin,
+            client,
+            roundTrip,
+            rawArguments: (withoutNullFields(rawArguments ?? {}) ?? {}) as Record<string, unknown>,
+        });
     } catch (error) {
         if (error instanceof McpToolError) {
             outcome = { ok: false, message: error.message };
@@ -548,13 +842,41 @@ async function callTool(
             };
         }
     }
+
+    if (isInputRequired(outcome) && !(modern && client.formElicitation)) {
+        // A tool only asks a client that declared it can show a form; one
+        // that asks anyway is a bug, reported as such rather than sent on.
+        console.error("[mcp] tool asked a client that cannot be asked", { tool: tool.name });
+        outcome = {
+            ok: false,
+            message: `${tool.title} failed because of a problem on LaunchStack's side.`,
+        };
+    }
+
     console.info("[mcp] tools/call", {
         tool: tool.name,
         client: principal.label,
         family: principal.family,
         credential: principal.credential.kind,
-        ok: outcome.ok,
+        era: client.era,
+        result: isInputRequired(outcome) ? "input_required" : outcome.ok ? "ok" : "error",
+        roundTrip: roundTrip !== null,
         ms: Date.now() - started,
     });
+
+    if (isInputRequired(outcome)) {
+        return {
+            status: 200,
+            body: {
+                jsonrpc: "2.0",
+                id,
+                result: {
+                    resultType: "input_required",
+                    inputRequests: outcome.inputRequired.inputRequests,
+                    requestState: outcome.inputRequired.requestState,
+                },
+            },
+        };
+    }
     return answer(outcome);
 }

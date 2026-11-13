@@ -32,7 +32,7 @@ import {
     users,
 } from "~/server/db/schema";
 import type { McpPrincipal } from "~/server/mcp/principal";
-import type { McpTool, McpToolOutcome } from "~/server/mcp/protocol";
+import { isInputRequired, type McpTool, type McpToolAnswer } from "~/server/mcp/protocol";
 import { fetchTool } from "~/server/mcp/tools/fetch";
 import { listSourcesTool } from "~/server/mcp/tools/list-sources";
 import { searchTool } from "~/server/mcp/tools/search";
@@ -108,10 +108,18 @@ describeDb("MCP read tools respect the person's document scope (integration)", (
     }
 
     async function call(tool: McpTool, name: Person, args: unknown) {
-        return tool.call(args, { principal: principal(name), origin: ORIGIN });
+        const outcome = await tool.call(args, {
+            principal: principal(name),
+            origin: ORIGIN,
+            client: { era: "legacy", formElicitation: false },
+            roundTrip: null,
+            rawArguments: (args ?? {}) as Record<string, unknown>,
+        });
+        if (isInputRequired(outcome)) throw new Error("expected an answer, got input_required");
+        return outcome;
     }
 
-    function ok(outcome: McpToolOutcome) {
+    function ok(outcome: McpToolAnswer) {
         if (!outcome.ok) throw new Error(`expected success, got: ${outcome.message}`);
         return outcome.structured;
     }

@@ -18,6 +18,7 @@ import {
     sourceToolsPrompt,
     type SourcesOverview,
 } from "~/server/chat-source-tools";
+import type { ExtractionTableView } from "~/lib/extraction/types";
 import type { WorkspacePassage } from "~/server/mcp/workspace-search";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
@@ -736,5 +737,133 @@ describe("what the model is told", () => {
         expect(empty).toContain("do not imply that their entire Drive is empty or inaccessible");
 
         expect(noSourceToolsPrompt(null)).toContain("No source is attached to this message");
+    });
+});
+
+describe("read_extraction_table", () => {
+    const outline = {
+        id: 7,
+        title: "Supplier contracts",
+        status: "done" as const,
+        fields: ["Supplier", "Annual fee"],
+        counts: { total: 2, pending: 0, running: 0, done: 2, failed: 0 },
+        mine: true,
+        createdByName: "Ana",
+    };
+    const cell = (value: string | number, quote: string) => ({
+        status: "found" as const,
+        value,
+        quote,
+        page: 1,
+        via: "text" as const,
+    });
+    const view: ExtractionTableView = {
+        id: 7,
+        title: "Supplier contracts",
+        status: "done",
+        fieldCount: 2,
+        counts: outline.counts,
+        createdAt: "2026-11-12T08:00:00.000Z",
+        finishedAt: "2026-11-12T08:02:00.000Z",
+        mine: true,
+        shared: false,
+        createdByName: "Ana",
+        fields: [
+            { id: "f1", name: "Supplier", type: "text" },
+            { id: "f2", name: "Annual fee", type: "number" },
+        ],
+        rows: [
+            {
+                id: 1,
+                documentId: 12,
+                sourceId: "d12",
+                title: "Acme MSA.pdf",
+                status: "done",
+                readable: true,
+                error: null,
+                cells: { f1: cell("Acme", "between Acme and"), f2: cell(12500, "fee of $12,500") },
+            },
+            {
+                id: 2,
+                documentId: 13,
+                sourceId: "d13",
+                title: "A file you don't have access to",
+                status: "done",
+                readable: false,
+                error: null,
+                cells: {},
+            },
+        ],
+        usage: { calls: 2, inputTokens: 10, outputTokens: 5 },
+        error: null,
+        canManage: true,
+    };
+
+    function tableTool(tables: { list?: jest.Mock; get?: jest.Mock }) {
+        const session = createSourceTools(ctx, {
+            tables: { list: tables.list ?? jest.fn(), get: tables.get ?? jest.fn() },
+        });
+        return { session, tool: session.tools.find(t => t.name === "read_extraction_table")! };
+    }
+
+    it("lists the tables the person can see when no table is named", async () => {
+        const list = jest.fn(async () => [outline]);
+        const { tool, session } = tableTool({ list });
+
+        const text = await tool.run({ table: null }, signal);
+
+        expect(list).toHaveBeenCalledWith(ctx);
+        expect(text).toContain('- table 7: "Supplier contracts" — done, 2 documents (2 read)');
+        expect(text).toContain("Fields: Supplier; Annual fee");
+        expect(session.texts).toEqual([text]);
+        expect(tool.describe({})).toBe("Looking through your extraction tables");
+        expect(tool.describe({ table: 7 })).toBe("Reading an extraction table");
+    });
+
+    it("reads one table's rows, leaves out what the person cannot open, and keeps the rows for citations", async () => {
+        const get = jest.fn(async () => view);
+        const { tool, session } = tableTool({ get });
+
+        const text = await tool.run({ table: "7" }, signal);
+
+        expect(get).toHaveBeenCalledWith(ctx, 7);
+        expect(text).toContain('- "Acme MSA.pdf" (d12) — Supplier: Acme | Annual fee: 12500');
+        expect(text).not.toContain("d13");
+        expect(text).toContain("1 row is from files this person cannot open and is left out.");
+        expect(session.passages).toEqual([
+            {
+                pageContent: "between Acme and",
+                metadata: {
+                    documentId: 12,
+                    documentTitle: "Acme MSA.pdf",
+                    source: "read_extraction_table",
+                    searchScope: "multi-document",
+                },
+            },
+        ]);
+    });
+
+    it("says the same for a table that does not exist and one the person cannot see", async () => {
+        const { tool } = tableTool({ get: jest.fn(async () => null) });
+        await expect(tool.run({ table: 99 }, signal)).rejects.toThrow(
+            "No extraction table 99 is among the tables the person can see."
+        );
+        await expect(tool.run({ table: "seven" }, signal)).rejects.toThrow("Invalid arguments");
+    });
+
+    it("allows three calls per answer", async () => {
+        const { tool } = tableTool({ list: jest.fn(async () => [outline]) });
+        for (let i = 0; i < 3; i++) await tool.run({}, signal);
+        await expect(tool.run({}, signal)).rejects.toThrow("budget for this answer is used up");
+    });
+
+    it("is described to the model with the other source tools", () => {
+        const overview: SourcesOverview = {
+            inventory: { total: 3, byOrigin: [{ from: null, count: 3 }] },
+            connected: [],
+        };
+        expect(sourceToolsPrompt(overview, false)).toContain(
+            "When they refer to an extraction table, or ask about results that were already extracted, call `read_extraction_table`"
+        );
     });
 });

@@ -35,6 +35,7 @@ import {
     scenarioRunV2Job,
     scenarioRunV2Reconciler,
 } from "~/server/inngest/functions/scenarioRunV2";
+import { extractionRunJob } from "~/server/inngest/functions/extractionRun";
 import { marketingRunJob } from "~/server/inngest/functions/marketingRun";
 import {
     googleDriveSyncCron,
@@ -42,6 +43,7 @@ import {
 } from "~/server/inngest/functions/googleDriveSync";
 import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
 import { notionSyncCron, notionSyncJob } from "~/server/inngest/functions/notionSync";
+import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
 
 export function createInngestHandler() {
     return serve({
@@ -73,7 +75,9 @@ export function createInngestHandler() {
             scenarioRunJob,
             scenarioRunV2Job,
             scenarioRunV2Reconciler,
+            extractionRunJob,
             marketingRunJob,
+            assistantConversationFollowUpJob,
         ],
     });
 }

@@ -203,6 +203,30 @@ describe("POST /api/fetchDocument", () => {
         expect(json[1].addedBy).toBeNull();
     });
 
+    it("names the current version in a proxied file's address, so a new version is a new URL", async () => {
+        const storage = jest.requireMock<{ isS3Storage: jest.Mock }>("~/lib/storage");
+        storage.isS3Storage.mockReturnValue(true);
+        try {
+            mockAuthenticated();
+            mockDocumentQuery([
+                docRow(1, { url: "http://seaweedfs:8333/b/1.docx", currentVersionId: BigInt(22) }),
+                docRow(2, { url: "http://seaweedfs:8333/b/2.pdf", currentVersionId: null }),
+            ]);
+
+            const response = await POST(
+                new Request("http://localhost/api/fetchDocument", { method: "POST" })
+            );
+            const [versioned, legacy] = (await response.json()) as { url: string }[];
+
+            // The proxy is cached for an hour: without the version in the
+            // address, an edited file would keep showing the old bytes.
+            expect(versioned!.url).toBe("/api/documents/1/content?v=22");
+            expect(legacy!.url).toBe("/api/documents/2/content");
+        } finally {
+            storage.isS3Storage.mockReturnValue(false);
+        }
+    });
+
     it("should successfully fetch documents for authenticated user", async () => {
         mockAuthenticated(BigInt(1));
         mockDocumentQuery([docRow(1), docRow(2)]);

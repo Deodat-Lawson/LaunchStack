@@ -1,0 +1,174 @@
+/*
+ * The file editor's page: the same reading column as the Markdown viewer
+ * (MarkdownViewer's .md-doc), so a file looks like itself while it is being
+ * edited. Colours are design tokens only; dark mode follows them.
+ */
+.file-editor-page {
+    min-height: 100%;
+}
+
+.file-editor-doc {
+    max-width: 760px;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 40px 48px 96px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-2);
+    overflow-wrap: break-word;
+    outline: none;
+    caret-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .file-editor-doc {
+        padding: 24px 16px 72px;
+    }
+}
+
+.file-editor-doc > * + * {
+    margin-top: 0;
+}
+
+.file-editor-doc p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--ink-4);
+}
+
+.file-editor-doc h1,
+.file-editor-doc h2,
+.file-editor-doc h3,
+.file-editor-doc h4,
+.file-editor-doc h5,
+.file-editor-doc h6 {
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 1.6em 0 0.6em;
+}
+.file-editor-doc h1 {
+    font-size: 28px;
+    margin-top: 0.2em;
+}
+.file-editor-doc h2 {
+    font-size: 22px;
+}
+.file-editor-doc h3 {
+    font-size: 18px;
+}
+.file-editor-doc h4 {
+    font-size: 16px;
+}
+
+.file-editor-doc p {
+    margin: 0 0 1em;
+}
+
+.file-editor-doc a {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.file-editor-doc strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.file-editor-doc ul,
+.file-editor-doc ol {
+    margin: 0 0 1em;
+    padding-left: 1.6em;
+}
+.file-editor-doc ul {
+    list-style: disc;
+}
+.file-editor-doc ol {
+    list-style: decimal;
+}
+.file-editor-doc li {
+    margin: 0.2em 0;
+}
+.file-editor-doc li > p {
+    margin: 0;
+}
+
+.file-editor-doc blockquote {
+    margin: 0 0 1em;
+    padding: 2px 0 2px 16px;
+    border-left: 2px solid var(--line);
+    color: var(--ink-3);
+}
+
+.file-editor-doc hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 2em 0;
+}
+
+.file-editor-doc img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+.file-editor-doc img.ProseMirror-selectednode {
+    outline: 2px solid var(--accent);
+}
+
+.file-editor-doc code {
+    font-family: var(--font-mono);
+}
+.file-editor-doc :not(pre) > code {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 0.85em;
+    color: var(--ink);
+}
+.file-editor-doc pre {
+    margin: 0 0 1em;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+
+.file-editor-doc table {
+    width: 100%;
+    margin: 0 0 1em;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 13.5px;
+}
+.file-editor-doc th,
+.file-editor-doc td {
+    position: relative;
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+    vertical-align: top;
+    min-width: 2em;
+}
+.file-editor-doc th {
+    background: var(--panel-2);
+    color: var(--ink);
+    font-weight: 600;
+    text-align: left;
+}
+.file-editor-doc .selectedCell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent-soft);
+    pointer-events: none;
+}
+.file-editor-doc .tableWrapper {
+    overflow-x: auto;
+}

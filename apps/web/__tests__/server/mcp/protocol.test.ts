@@ -9,14 +9,18 @@ import type { Permission } from "~/lib/authz/permissions";
 import type { McpPrincipal } from "~/server/mcp/principal";
 import {
     JSON_RPC,
-    LATEST_PROTOCOL_VERSION,
+    LATEST_LEGACY_PROTOCOL_VERSION,
+    LEGACY_PROTOCOL_VERSIONS,
     McpToolError,
+    MODERN_PROTOCOL_VERSION,
     SUPPORTED_PROTOCOL_VERSIONS,
     acceptsJson,
+    decodeMcpNameHeader,
     defineTool,
     handleMcpPost,
     type McpServerOptions,
     type McpTool,
+    type McpToolContext,
     type ToolCallBudget,
 } from "~/server/mcp/protocol";
 
@@ -117,7 +121,10 @@ interface PostOptions {
     raw?: string;
     accept?: string | null;
     protocolVersion?: string | null;
+    method?: string | null;
+    name?: string | null;
     principal?: McpPrincipal;
+    tools?: readonly McpTool[];
     chargeToolCall?: McpServerOptions["chargeToolCall"];
 }
 
@@ -130,11 +137,13 @@ function post(message: unknown, options: PostOptions = {}) {
                     ? "application/json, text/event-stream"
                     : options.accept,
             protocolVersion: options.protocolVersion ?? null,
+            method: options.method ?? null,
+            name: options.name ?? null,
         },
         {
             principal: options.principal ?? principal(),
             origin: "https://launchstack.test",
-            tools: TOOLS,
+            tools: options.tools ?? TOOLS,
             instructions: "Search, then fetch.",
             chargeToolCall: options.chargeToolCall,
         }
@@ -159,7 +168,7 @@ function errorOf(answer: Awaited<ReturnType<typeof post>>) {
 }
 
 describe("initialize", () => {
-    it.each(SUPPORTED_PROTOCOL_VERSIONS)("echoes the supported version %s", async version => {
+    it.each(LEGACY_PROTOCOL_VERSIONS)("echoes the supported version %s", async version => {
         const result = resultOf(
             await post(
                 request("initialize", {
@@ -176,8 +185,16 @@ describe("initialize", () => {
         const result = resultOf(
             await post(request("initialize", { protocolVersion: "2024-11-05", capabilities: {} }))
         );
-        expect(result.protocolVersion).toBe(LATEST_PROTOCOL_VERSION);
-        expect(LATEST_PROTOCOL_VERSION).toBe("2026-07-28");
+        expect(result.protocolVersion).toBe(LATEST_LEGACY_PROTOCOL_VERSION);
+        expect(LATEST_LEGACY_PROTOCOL_VERSION).toBe("2025-11-25");
+    });
+
+    it("never negotiates 2026-07-28 through initialize (that revision has no handshake)", async () => {
+        const result = resultOf(
+            await post(request("initialize", { protocolVersion: "2026-07-28", capabilities: {} }))
+        );
+        expect(result.protocolVersion).toBe("2025-11-25");
+        expect(result).not.toHaveProperty("resultType");
     });
 
     it("describes the server: tools only, no list changes, name, title, version, instructions", async () => {
@@ -210,13 +227,17 @@ describe("transport rules", () => {
         expect(errorOf(answer)).toMatchObject({
             jsonrpc: "2.0",
             id: 7,
-            error: { code: JSON_RPC.INVALID_REQUEST },
+            error: { code: JSON_RPC.UNSUPPORTED_PROTOCOL_VERSION },
         });
         expect(errorOf(answer).error.message).toContain("2099-01-01");
+        expect((answer.body as { error: { data: unknown } }).error.data).toEqual({
+            supported: [...SUPPORTED_PROTOCOL_VERSIONS],
+            requested: "2099-01-01",
+        });
     });
 
-    it("accepts every supported MCP-Protocol-Version header", async () => {
-        for (const version of SUPPORTED_PROTOCOL_VERSIONS) {
+    it("accepts every handshake-era MCP-Protocol-Version header", async () => {
+        for (const version of LEGACY_PROTOCOL_VERSIONS) {
             expect(resultOf(await post(request("ping"), { protocolVersion: version }))).toEqual({});
         }
     });
@@ -469,5 +490,316 @@ describe("tools/call", () => {
         charge.mockClear();
         resultOf(await call("echo", { text: "a" }, { chargeToolCall: charge }));
         expect(charge).not.toHaveBeenCalled();
+    });
+});
+
+describe("2026-07-28 (stateless revision)", () => {
+    /** Answers with a form when the client can show one, otherwise with text; echoes answers back. */
+    const askingTool = defineTool({
+        name: "asking",
+        title: "Asking",
+        description: "Asks the person something.",
+        inputSchema: { type: "object", properties: { topic: { type: "string" } } },
+        annotations: { ...READ_ONLY, readOnlyHint: false },
+        requires: { scope: "launchstack:read", permission: "documents.read" },
+        args: z.object({ topic: z.string().default("x") }),
+        async run({ topic }, context: McpToolContext) {
+            if (context.roundTrip) {
+                const structured = {
+                    answers: context.roundTrip.inputResponses,
+                    state: context.roundTrip.requestState,
+                    topic,
+                };
+                return { ok: true, text: "answered", structured };
+            }
+            if (context.client.formElicitation) {
+                return {
+                    inputRequired: {
+                        inputRequests: {
+                            where: {
+                                method: "elicitation/create",
+                                params: {
+                                    mode: "form",
+                                    message: "Where?",
+                                    requestedSchema: {
+                                        type: "object",
+                                        properties: { folder: { type: "string" } },
+                                    },
+                                },
+                            },
+                        },
+                        requestState: "state-1",
+                    },
+                };
+            }
+            return { ok: true, text: "ask them in words", structured: { asked: "text" } };
+        },
+    });
+
+    /** Always asks, even clients that cannot be asked: the server must not pass that on. */
+    const pushyTool = defineTool({
+        name: "pushy",
+        title: "Pushy",
+        description: "Asks regardless.",
+        inputSchema: { type: "object", properties: {} },
+        annotations: READ_ONLY,
+        requires: { scope: "launchstack:read", permission: "documents.read" },
+        args: z.object({}),
+        async run() {
+            return {
+                inputRequired: {
+                    inputRequests: {
+                        q: { method: "elicitation/create", params: { message: "?" } },
+                    },
+                    requestState: "s",
+                },
+            };
+        },
+    });
+
+    const MODERN_TOOLS: readonly McpTool[] = [echoTool, askingTool, pushyTool];
+
+    function meta(capabilities: Record<string, unknown> = {}) {
+        return {
+            "io.modelcontextprotocol/protocolVersion": MODERN_PROTOCOL_VERSION,
+            "io.modelcontextprotocol/clientCapabilities": capabilities,
+        };
+    }
+
+    function modern(
+        method: string,
+        params: Record<string, unknown> = {},
+        options: { capabilities?: Record<string, unknown>; id?: number | string } = {}
+    ) {
+        return {
+            jsonrpc: "2.0",
+            id: options.id ?? 1,
+            method,
+            params: { ...params, _meta: meta(options.capabilities) },
+        };
+    }
+
+    function postModern(message: ReturnType<typeof modern>, options: PostOptions = {}) {
+        const name = (message.params as { name?: unknown }).name;
+        return post(message, {
+            protocolVersion: MODERN_PROTOCOL_VERSION,
+            method: message.method,
+            name: typeof name === "string" ? name : null,
+            tools: MODERN_TOOLS,
+            ...options,
+        });
+    }
+
+    it("answers server/discover with versions, capabilities, instructions and caching", async () => {
+        const result = resultOf(await postModern(modern("server/discover")));
+        expect(result).toEqual({
+            resultType: "complete",
+            supportedVersions: [...SUPPORTED_PROTOCOL_VERSIONS],
+            capabilities: { tools: {} },
+            instructions: "Search, then fetch.",
+            ttlMs: expect.any(Number),
+            cacheScope: "public",
+            _meta: {
+                "io.modelcontextprotocol/serverInfo": {
+                    name: "launchstack",
+                    title: "LaunchStack",
+                    version: expect.any(String),
+                },
+            },
+        });
+        expect(result.supportedVersions).toEqual(
+            expect.arrayContaining(["2026-07-28", "2025-11-25", "2025-03-26"])
+        );
+    });
+
+    it("lists tools with resultType, ttlMs and a private cache scope", async () => {
+        const result = resultOf(await postModern(modern("tools/list")));
+        expect(result.resultType).toBe("complete");
+        expect(result.cacheScope).toBe("private");
+        expect(typeof result.ttlMs).toBe("number");
+        expect((result.tools as { name: string }[]).map(tool => tool.name)).toEqual([
+            "echo",
+            "asking",
+            "pushy",
+        ]);
+    });
+
+    it("marks a tool result complete", async () => {
+        const result = resultOf(
+            await postModern(modern("tools/call", { name: "echo", arguments: { text: "hi" } }))
+        );
+        expect(result).toEqual({
+            resultType: "complete",
+            content: [{ type: "text", text: '{"echo":"hi"}' }],
+            structuredContent: { echo: "hi" },
+        });
+    });
+
+    it("requires the MCP-Protocol-Version header and refuses one that disagrees with _meta", async () => {
+        const missing = await postModern(modern("tools/list"), { protocolVersion: null });
+        expect(missing.status).toBe(400);
+        expect(errorOf(missing).error.code).toBe(JSON_RPC.HEADER_MISMATCH);
+
+        const disagree = await postModern(modern("tools/list"), { protocolVersion: "2025-11-25" });
+        expect(disagree.status).toBe(400);
+        expect(errorOf(disagree).error.code).toBe(JSON_RPC.HEADER_MISMATCH);
+    });
+
+    it("refuses a version it does not speak with -32022 and the supported list", async () => {
+        const message = {
+            ...modern("tools/list"),
+            params: {
+                _meta: {
+                    "io.modelcontextprotocol/protocolVersion": "2027-01-01",
+                    "io.modelcontextprotocol/clientCapabilities": {},
+                },
+            },
+        };
+        const answer = await postModern(message, { protocolVersion: "2027-01-01" });
+        expect(answer.status).toBe(400);
+        expect(errorOf(answer).error.code).toBe(JSON_RPC.UNSUPPORTED_PROTOCOL_VERSION);
+        expect((answer.body as { error: { data: unknown } }).error.data).toEqual({
+            supported: [...SUPPORTED_PROTOCOL_VERSIONS],
+            requested: "2027-01-01",
+        });
+    });
+
+    it("requires Mcp-Method to match the method, and Mcp-Name to match the tool", async () => {
+        const noMethod = await postModern(modern("tools/list"), { method: null });
+        expect(errorOf(noMethod).error.code).toBe(JSON_RPC.HEADER_MISMATCH);
+        const wrongMethod = await postModern(modern("tools/list"), { method: "tools/call" });
+        expect(wrongMethod.status).toBe(400);
+        expect(errorOf(wrongMethod).error.code).toBe(JSON_RPC.HEADER_MISMATCH);
+
+        const call = modern("tools/call", { name: "echo", arguments: { text: "a" } });
+        const wrongName = await postModern(call, { name: "asking" });
+        expect(wrongName.status).toBe(400);
+        expect(errorOf(wrongName).error.code).toBe(JSON_RPC.HEADER_MISMATCH);
+
+        const encoded = `=?base64?${Buffer.from("echo").toString("base64")}?=`;
+        expect(decodeMcpNameHeader(encoded)).toBe("echo");
+        expect(resultOf(await postModern(call, { name: encoded })).resultType).toBe("complete");
+    });
+
+    it("requires _meta with the client's capabilities on every request", async () => {
+        const message = {
+            jsonrpc: "2.0",
+            id: 2,
+            method: "tools/list",
+            params: { _meta: { "io.modelcontextprotocol/protocolVersion": "2026-07-28" } },
+        };
+        const answer = await post(message, {
+            protocolVersion: "2026-07-28",
+            method: "tools/list",
+            tools: MODERN_TOOLS,
+        });
+        expect(answer.status).toBe(400);
+        expect(errorOf(answer).error.code).toBe(JSON_RPC.INVALID_PARAMS);
+    });
+
+    it("answers methods this revision does not have (ping, unknown) with 404 and -32601", async () => {
+        for (const method of ["ping", "resources/list"]) {
+            const answer = await postModern(modern(method));
+            expect(answer.status).toBe(404);
+            expect(errorOf(answer).error.code).toBe(JSON_RPC.METHOD_NOT_FOUND);
+        }
+    });
+
+    it("returns input_required with a form when the client declared elicitation", async () => {
+        const result = resultOf(
+            await postModern(
+                modern(
+                    "tools/call",
+                    { name: "asking", arguments: {} },
+                    {
+                        capabilities: { elicitation: {} },
+                    }
+                )
+            )
+        );
+        expect(result).toEqual({
+            resultType: "input_required",
+            inputRequests: {
+                where: expect.objectContaining({ method: "elicitation/create" }),
+            },
+            requestState: "state-1",
+        });
+    });
+
+    it("lets the tool ask in words when the client declared no elicitation, or only URL mode", async () => {
+        for (const capabilities of [{}, { elicitation: { url: {} } }]) {
+            const result = resultOf(
+                await postModern(
+                    modern("tools/call", { name: "asking", arguments: {} }, { capabilities })
+                )
+            );
+            expect(result.resultType).toBe("complete");
+            expect(result.structuredContent).toEqual({ asked: "text" });
+        }
+    });
+
+    it("hands the retry's inputResponses and requestState to the tool", async () => {
+        const result = resultOf(
+            await postModern(
+                modern(
+                    "tools/call",
+                    {
+                        name: "asking",
+                        arguments: { topic: "plan" },
+                        inputResponses: { where: { action: "accept", content: { folder: "Q3" } } },
+                        requestState: "state-1",
+                    },
+                    { capabilities: { elicitation: {} }, id: 2 }
+                )
+            )
+        );
+        expect(result.resultType).toBe("complete");
+        expect(result.structuredContent).toEqual({
+            answers: { where: { action: "accept", content: { folder: "Q3" } } },
+            state: "state-1",
+            topic: "plan",
+        });
+    });
+
+    it("never sends input_required to a client that cannot answer it", async () => {
+        const logged = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        const modernNoForm = resultOf(
+            await postModern(modern("tools/call", { name: "pushy", arguments: {} }))
+        );
+        expect(modernNoForm.resultType).toBe("complete");
+        expect(modernNoForm.isError).toBe(true);
+
+        const legacy = resultOf(
+            await post(request("tools/call", { name: "pushy", arguments: {} }), {
+                tools: MODERN_TOOLS,
+            })
+        );
+        expect(legacy).not.toHaveProperty("resultType");
+        expect(legacy.isError).toBe(true);
+        logged.mockRestore();
+    });
+
+    it("ignores inputResponses from a handshake-era client and adds no resultType", async () => {
+        const result = resultOf(
+            await post(
+                request("tools/call", {
+                    name: "asking",
+                    arguments: {},
+                    inputResponses: { where: { action: "accept" } },
+                    requestState: "state-1",
+                }),
+                { tools: MODERN_TOOLS }
+            )
+        );
+        expect(result).not.toHaveProperty("resultType");
+        expect(result.structuredContent).toEqual({ asked: "text" });
+    });
+
+    it("still answers 202 to notifications", async () => {
+        const answer = await post(
+            { jsonrpc: "2.0", method: "notifications/cancelled", params: { requestId: 1 } },
+            { protocolVersion: "2026-07-28", method: "notifications/cancelled" }
+        );
+        expect(answer).toEqual({ status: 202, body: null });
     });
 });

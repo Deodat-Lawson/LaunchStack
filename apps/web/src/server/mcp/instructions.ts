@@ -2,8 +2,8 @@
  * The `instructions` the MCP server sends in its `initialize` result. Clients
  * (Claude, ChatGPT, Gemini) add it to the model's context, so it is written
  * for the model: what LaunchStack is, when to reach for which tool, how to
- * cite, and the one rule that matters most — never save a conversation the
- * person did not ask to save.
+ * cite, and the rules that matter most — never save a conversation or add a
+ * document the person did not ask for, and ask where a document goes.
  */
 export const MCP_INSTRUCTIONS = `LaunchStack is this person's company workspace: the documents their team has uploaded, written or connected (plans, specs, research, contracts, meeting notes, saved assistant conversations), organised in folders. Every tool acts as this person, in one workspace, and only ever sees what they are allowed to open there.
 
@@ -16,4 +16,10 @@ Reading the workspace
 Saving conversations
 - Call \`save_conversation\` only when the person asks you to save, sync or log this conversation to LaunchStack, or has told you earlier to do it automatically. Never save on your own initiative.
 - Send the whole conversation so far: every user and assistant turn, verbatim and in order (no summaries, no tool output), with a short descriptive title.
-- The result gives a \`conversationId\`. When you save the same chat again later, pass that \`conversationId\` so LaunchStack updates the saved conversation instead of creating a duplicate.`;
+- The result gives a \`conversationId\`. When you save the same chat again later, pass that \`conversationId\` so LaunchStack updates the saved conversation instead of creating a duplicate.
+
+Adding documents
+- Call \`add_document\` only when the person asks to add, save, upload or put something into LaunchStack: an artifact, a document, a file.
+- The folder decides who can see it. Unless the person named a folder, leave \`folder\` out: LaunchStack keeps the content as a draft and either shows the person a form or lists the folders for you to offer. Ask them, then call again with the \`draftId\` and their answer; never send the content twice.
+- Send content exactly as it is; never summarise or shorten it. For a file on the person's computer, call \`start_upload\`, run the curl command it gives, then call \`add_document\` with the \`uploadId\`.
+- Tell the person where it went, who can see it, and the link.`;

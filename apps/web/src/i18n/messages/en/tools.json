@@ -16,6 +16,10 @@
       "name": "Scenarios",
       "description": "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast"
     },
+    "extract": {
+      "name": "Extract",
+      "description": "Pull the same fields out of many files into one table"
+    },
     "knowledgeGraph": {
       "name": "Knowledge graph",
       "description": "Index health — entities extracted at upload, joined by co-occurrence. Chat answers entity questions from company facts, not from this graph."

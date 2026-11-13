@@ -13,6 +13,7 @@ import { eventIds } from "../src/pipeline-events";
 import {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,
+    StaleDocumentVersionError,
 } from "../src/source-lifecycle/lifecycle";
 
 const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL;
@@ -203,5 +204,54 @@ describe.skipIf(!url)("source lifecycle + outbox (integration)", () => {
             eventIds.sourceVersionCreated(v1.jobId!),
             eventIds.sourceVersionCreated(v2.jobId),
         ]);
+    });
+    it("refuses a new version made from a version that is no longer current (compare-and-set)", async () => {
+        const v1 = await createDocumentLifecycle({
+            companyId,
+            userId: "user_test",
+            title: "notes.md",
+            category: "General",
+            url: "/api/files/7",
+            creationKey: "upload:/api/files/7",
+            mimeType: "text/markdown",
+            processing: { originalFilename: "notes.md" },
+        });
+        const base = {
+            documentId: v1.documentId,
+            companyId,
+            userId: "user_test",
+            title: "notes.md",
+            category: "General",
+            mimeType: "text/markdown",
+            expectedCurrentVersionId: BigInt(v1.versionId),
+        };
+
+        // Two saves from v1: the first lands, the second is stale.
+        const a = await createDocumentVersionLifecycle({
+            ...base,
+            url: "/api/files/7-a",
+            creationKey: "edit:a",
+        });
+        await expect(
+            createDocumentVersionLifecycle({
+                ...base,
+                url: "/api/files/7-b",
+                creationKey: "edit:b",
+            })
+        ).rejects.toBeInstanceOf(StaleDocumentVersionError);
+
+        // A retry of the save that landed converges on its own version.
+        const retry = await createDocumentVersionLifecycle({
+            ...base,
+            url: "/api/files/7-a",
+            creationKey: "edit:a",
+        });
+        expect(retry.versionId).toBe(a.versionId);
+
+        const versions = await handle.client`
+      SELECT version_number FROM pdr_ai_v2_document_versions
+      WHERE document_id = ${v1.documentId} ORDER BY version_number
+    `;
+        expect(versions.map(r => Number(r.version_number))).toEqual([1, 2]);
     });
 });

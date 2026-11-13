@@ -67,6 +67,10 @@
     "./scenarios/v2/stages": "./src/scenarios/v2/stages/index.ts",
     "./scenarios/v2/graph-http": "./src/scenarios/v2/graph-http.ts",
     "./scenarios/v2/read": "./src/scenarios/v2/read.ts",
+    "./extraction": "./src/extraction/index.ts",
+    "./extraction/db": "./src/extraction/db.ts",
+    "./extraction/schema": "./src/extraction/schema.ts",
+    "./extraction/types": "./src/extraction/types.ts",
     "./vantage": "./src/vantage/index.ts",
     "./vantage/schema": "./src/vantage/schema.ts",
     "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
@@ -302,6 +306,22 @@
       "./scenarios/v2/read": {
         "types": "./dist/scenarios/v2/read.d.ts",
         "default": "./dist/scenarios/v2/read.js"
+      },
+      "./extraction": {
+        "types": "./dist/extraction/index.d.ts",
+        "default": "./dist/extraction/index.js"
+      },
+      "./extraction/db": {
+        "types": "./dist/extraction/db.d.ts",
+        "default": "./dist/extraction/db.js"
+      },
+      "./extraction/schema": {
+        "types": "./dist/extraction/schema.d.ts",
+        "default": "./dist/extraction/schema.js"
+      },
+      "./extraction/types": {
+        "types": "./dist/extraction/types.d.ts",
+        "default": "./dist/extraction/types.js"
       },
       "./vantage": {
         "types": "./dist/vantage/index.d.ts",

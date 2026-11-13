@@ -125,8 +125,9 @@ function toUnit(row: ScenarioUnitRow): UnitRecord {
     };
 }
 
-function toBuild(row: ScenarioGraphBuildRow): GraphBuildRecord {
+function toBuild(row: ScenarioGraphBuildRow, ownerLive?: boolean): GraphBuildRecord {
     return {
+        ...(ownerLive === undefined ? {} : { ownerLive }),
         id: row.id,
         companyId: row.companyId,
         buildKey: row.buildKey,
@@ -355,6 +356,24 @@ function likePrefix(prefix: string): string {
 }
 
 /** Committed artifacts of `run` (and its company's graph builds). */
+/**
+ * Whether a build's owner run is still going. A deleted owner counts as
+ * finished (builds outlive runs), so the next run with the key takes over
+ * instead of waiting on nobody.
+ */
+async function ownerLiveOf(
+    db: DbClient,
+    row: Pick<ScenarioGraphBuildRow, "ownerRunId">
+): Promise<boolean> {
+    if (row.ownerRunId === null) return false;
+    const [owner] = await db
+        .select({ status: scenarioRuns.status })
+        .from(scenarioRuns)
+        .where(eq(scenarioRuns.id, row.ownerRunId))
+        .limit(1);
+    return Boolean(owner && !TERMINAL_STATUSES.includes(owner.status));
+}
+
 export function createArtifactReader(
     run: Pick<ScenarioRunRecord, "id" | "companyId" | "generation">,
     db: DbClient = getDb()
@@ -364,6 +383,7 @@ export function createArtifactReader(
             eq(t.runId as typeof scenarioUnits.runId, run.id),
             eq(t.generation as typeof scenarioUnits.generation, run.generation)
         );
+    const ownerIsLive = (row: Pick<ScenarioGraphBuildRow, "ownerRunId">) => ownerLiveOf(db, row);
     return {
         async unitOutput<T>(key: string) {
             const [row] = await db
@@ -430,7 +450,7 @@ export function createArtifactReader(
                     )
                 )
                 .limit(1);
-            return row ? toBuild(row) : undefined;
+            return row ? toBuild(row, await ownerIsLive(row)) : undefined;
         },
         async graphBuildById(id) {
             const [row] = await db
@@ -443,7 +463,7 @@ export function createArtifactReader(
                     )
                 )
                 .limit(1);
-            return row ? toBuild(row) : undefined;
+            return row ? toBuild(row, await ownerIsLive(row)) : undefined;
         },
         async graphIngestions(buildId) {
             const rows = await db

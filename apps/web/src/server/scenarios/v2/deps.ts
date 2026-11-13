@@ -3,11 +3,13 @@
  * workspace ledger behind its holds, the scenario model over
  * `@launchstack/llm`, and the access recheck every unit starts with.
  *
- * `stages` and `stagePorts` are placeholders until the generation stages are
- * merged; a unit with no stage fails its attempts and then the run.
+ * The stages are the generation pipeline (pipelines/src/scenarios/v2/stages);
+ * they read sources through the v2 collector and the graph service when one
+ * is configured.
  */
 import { createLlmSimulationModel, type ScenarioRunRecord } from "@launchstack/pipelines/scenarios";
 import { createV2Store, sourceManifestDocumentIds } from "@launchstack/pipelines/scenarios/v2/db";
+import { V2_STAGES } from "@launchstack/pipelines/scenarios/v2/stages";
 import { AccessRevokedError, type EngineDeps } from "@launchstack/pipelines/scenarios/v2/engine";
 
 import { resolveMemberContext } from "~/lib/require-workspace-context";
@@ -15,6 +17,8 @@ import { visibleDocumentIds } from "~/server/scenarios/evidence";
 import { readScenariosConcurrency } from "~/server/scenarios/executor";
 
 import { createAppScenarioCredits } from "./credits";
+import { scenarioGraphPort } from "./graph";
+import { collectScenarioSources } from "./sources";
 
 /**
  * Recheck, before every unit, that the run's creator is still an active
@@ -45,12 +49,10 @@ export function createEngineDeps(overrides: Partial<EngineDeps> = {}): EngineDep
     return {
         store: createV2Store({ credits: createAppScenarioCredits(), log }),
         model: createLlmSimulationModel(),
-        stages: {},
+        stages: V2_STAGES,
         stagePorts: {
-            collectSources: async () => {
-                throw new Error("Scenario v2 source collection is not wired in this build");
-            },
-            graph: null,
+            collectSources: collectScenarioSources,
+            graph: scenarioGraphPort(),
             now,
             log,
         },

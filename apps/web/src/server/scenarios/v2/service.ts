@@ -34,7 +34,6 @@ import {
     InsufficientCreditsError,
     acceptRun,
 } from "@launchstack/pipelines/scenarios/v2/db";
-import { createGraphitiHttpPort } from "@launchstack/pipelines/scenarios/v2/graph-http";
 import {
     readActorContexts,
     readAttemptCounts,
@@ -89,23 +88,13 @@ import {
 } from "../views";
 import { createAppScenarioCredits } from "./credits";
 import { startV2Run } from "./executor";
+import { scenarioGraphPort } from "./graph";
 
 type Ctx = Pick<WorkspaceContext, "authUserId" | "companyId" | "can" | "documentScope">;
 
 const notFound = () => new ScenarioError(scenarioErrorCopy("notFound"), 404, "not_found");
 
 // ─── Context mode ────────────────────────────────────────────────────────────
-
-/** The graph service, when this deployment has one. */
-export function scenarioGraphPort() {
-    const baseUrl = process.env.SCENARIOS_GRAPH_URL?.trim();
-    if (!baseUrl) return null;
-    return createGraphitiHttpPort({
-        baseUrl,
-        token: process.env.SCENARIO_GRAPH_TOKEN?.trim() ?? "",
-        timeoutMs: 120_000,
-    });
-}
 
 /**
  * The mode a new run gets. Graph is the default where the service is set up

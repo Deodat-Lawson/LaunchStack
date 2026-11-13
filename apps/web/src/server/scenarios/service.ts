@@ -88,7 +88,28 @@ import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
 import { cancelV2, resumeV2IfStalled } from "./v2/executor";
 import { assertV2Readable, v2DetailContext, v2Progress } from "./v2/service";
-import { leftWorkspaceName, recordSummary, toDetail, toPostTest, toSummary } from "./views";
+import {
+    leftWorkspaceName,
+    recordSummary,
+    toDetail,
+    toPostTest,
+    toSummary,
+    type V2Progress,
+} from "./views";
+
+/** A v2 run's stage comes from its units, not the v1 step counter. */
+async function progressOf(run: ScenarioRunRecord): Promise<V2Progress | undefined> {
+    if (run.contractVersion !== 2) return undefined;
+    const progress = await v2Progress([
+        {
+            id: run.id,
+            generation: run.generation,
+            status: run.status,
+            worldRound: run.world?.round ?? 0,
+        },
+    ]);
+    return progress.get(run.id);
+}
 
 /**
  * An expected failure with its status and machine `code`. The sentence is a
@@ -524,7 +545,8 @@ export async function updateScenario(
     return recordSummary(
         run,
         ctx.authUserId,
-        await namesFor(ctx.companyId, [run.createdByUserId], locale)
+        await namesFor(ctx.companyId, [run.createdByUserId], locale),
+        await progressOf(run)
     );
 }
 
@@ -554,7 +576,8 @@ export async function cancelScenario(
     return recordSummary(
         fresh,
         ctx.authUserId,
-        await namesFor(ctx.companyId, [fresh.createdByUserId], locale)
+        await namesFor(ctx.companyId, [fresh.createdByUserId], locale),
+        await progressOf(fresh)
     );
 }
 

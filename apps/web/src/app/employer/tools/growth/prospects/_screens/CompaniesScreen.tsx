@@ -107,7 +107,8 @@ export function CompaniesScreen() {
 
     const list = useResource(
         segmentId ? `companies:${segmentId}:${view}:${sort}:${query}` : null,
-        () => prospectsApi.companies({ segmentId: segmentId!, view, sort, q: query })
+        () => prospectsApi.companies({ segmentId: segmentId!, view, sort, q: query }),
+        { keepAcrossMounts: true }
     );
     const finished = activeRun?.status === "completed";
     const reload = list.reload;
@@ -304,16 +305,16 @@ export function CompaniesScreen() {
                     ))}
                 </ToggleGroup>
                 <div className="relative">
-                    <Search className="text-ink-3 pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
+                    <Search className="text-ink-3 pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
                     <Input
                         ref={searchRef}
                         value={draft}
                         onChange={e => setDraft(e.target.value)}
                         placeholder={t("companies.search")}
                         aria-label={t("companies.search")}
-                        className="h-8 w-[240px] pl-8 pr-8 text-[13px]"
+                        className="h-8 w-[240px] pr-8 pl-8 text-[13px]"
                     />
-                    <kbd className="text-ink-4 border-line pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border px-1 font-mono text-[10px]">
+                    <kbd className="text-ink-4 border-line pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border px-1 font-mono text-[10px]">
                         /
                     </kbd>
                 </div>
@@ -500,7 +501,7 @@ function CompanyTableRow({
                     onCheckedChange={onToggle}
                 />
             </TableCell>
-            <TableCell className="min-w-[240px] max-w-[300px] whitespace-normal">
+            <TableCell className="max-w-[300px] min-w-[240px] whitespace-normal">
                 <ToolLink
                     href={href}
                     className="text-ink block truncate font-medium hover:underline"
@@ -520,7 +521,7 @@ function CompanyTableRow({
                     <FoundViaChips items={c.foundVia} max={2} />
                 </span>
             </TableCell>
-            <TableCell className="text-ink-2 min-w-[260px] max-w-[380px] whitespace-normal">
+            <TableCell className="text-ink-2 max-w-[380px] min-w-[260px] whitespace-normal">
                 <span className="line-clamp-2 leading-snug">{word(c.whyCopy, c.why)}</span>
                 {c.excluded && c.excludedReason && (
                     <span className="text-ink-3 mt-0.5 block text-xs">
@@ -535,7 +536,7 @@ function CompanyTableRow({
                 <StagePill stage={c.stage} staleDays={c.staleDays} />
             </TableCell>
             <TableCell className="text-ink-2 text-right tabular-nums">{c.people}</TableCell>
-            <TableCell className="text-ink-3 whitespace-normal text-xs">
+            <TableCell className="text-ink-3 text-xs whitespace-normal">
                 {c.isNew ? t("companies.foundInLastRun") : relativeTime(c.lastActivityAt)}
             </TableCell>
         </TableRow>

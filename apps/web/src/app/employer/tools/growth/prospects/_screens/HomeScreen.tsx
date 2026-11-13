@@ -72,8 +72,10 @@ export function HomeScreen() {
     const segmentText = useSegmentText();
     const errorText = useErrorText();
     const { segmentId, href, startRun, activeRun, segments, segmentsLoading } = useProspects();
-    const home = useResource(segmentId ? `home:${segmentId}` : null, () =>
-        prospectsApi.home(segmentId!)
+    const home = useResource(
+        segmentId ? `home:${segmentId}` : null,
+        () => prospectsApi.home(segmentId!),
+        { keepAcrossMounts: true }
     );
     const finished = activeRun?.status === "completed";
     const reload = home.reload;

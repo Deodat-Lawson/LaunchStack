@@ -95,7 +95,9 @@ export function CompanyScreen({ id }: { id: string }) {
     const { href } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
-    const res = useResource(`company:${id}`, () => prospectsApi.company(id));
+    const res = useResource(`company:${id}`, () => prospectsApi.company(id), {
+        keepAcrossMounts: true,
+    });
     const c = res.data?.company ?? null;
     const [outreachOpen, setOutreachOpen] = useState(false);
     const [nextStep, setNextStep] = useState("");
@@ -219,7 +221,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 )}
             </div>
 
-            <header className="border-line @max-md:grid-cols-1 mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5">
+            <header className="border-line mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5 @max-md:grid-cols-1">
                 <div className="min-w-0">
                     <h1 className="text-ink text-[22px] font-semibold tracking-[-0.02em]">
                         {c ? c.name : <Skeleton className="h-6 w-72" />}
@@ -249,7 +251,7 @@ export function CompanyScreen({ id }: { id: string }) {
                     )}
                 </div>
                 {c && (
-                    <div className="@max-md:justify-start flex flex-wrap items-center justify-end gap-2">
+                    <div className="flex flex-wrap items-center justify-end gap-2 @max-md:justify-start">
                         <StageMenu
                             stage={c.deal.stage}
                             moves={c.deal.allowedMoves}
@@ -281,7 +283,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 </p>
             )}
 
-            <div className="@max-lg:grid-cols-1 grid grid-cols-[1fr_340px] gap-8">
+            <div className="grid grid-cols-[1fr_340px] gap-8 @max-lg:grid-cols-1">
                 <div className="min-w-0">
                     {!c ? (
                         <>

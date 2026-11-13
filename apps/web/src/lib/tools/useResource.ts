@@ -31,14 +31,21 @@ export interface Resource<T> {
  * skipped rather than started. Without that, the "latest request wins"
  * guard below discards every response that lands after a newer request
  * began, and a run sheet polling a slow endpoint never updates at all.
+ *
+ * `keepAcrossMounts` remembers the last result per key for this page load,
+ * so a screen that is left and reopened (a tab switch) shows it at once and
+ * refreshes in the background instead of starting from a skeleton.
  */
 export function useResource<T>(
     key: string | null,
     fetcher: () => Promise<T>,
-    options: { pollMs?: number | null } = {}
+    options: { pollMs?: number | null; keepAcrossMounts?: boolean } = {}
 ): Resource<T> {
-    const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState<boolean>(key !== null);
+    const keep = options.keepAcrossMounts === true;
+    const [data, setData] = useState<T | null>(() =>
+        keep && key !== null ? ((remembered.get(key) as T | undefined) ?? null) : null
+    );
+    const [loading, setLoading] = useState<boolean>(key !== null && !(keep && remembered.has(key)));
     const [error, setError] = useState<string | null>(null);
     const [errorStatus, setErrorStatus] = useState<number | null>(null);
     const t = useTranslations("tools.resource");
@@ -50,6 +57,8 @@ export function useResource<T>(
     const keyRef = useRef(key);
     const seq = useRef(0);
     const inflight = useRef(false);
+    const keepRef = useRef(keep);
+    keepRef.current = keep;
 
     const load = useCallback(async (first: boolean) => {
         const mine = ++seq.current;
@@ -58,6 +67,7 @@ export function useResource<T>(
         try {
             const next = await fetcherRef.current();
             if (mine !== seq.current) return;
+            if (keepRef.current && keyRef.current !== null) remember(keyRef.current, next);
             setData(next);
             setError(null);
             setErrorStatus(null);
@@ -81,7 +91,13 @@ export function useResource<T>(
             setLoading(false);
             return;
         }
-        void load(true);
+        // A remembered result shows now; this fetch only refreshes it.
+        const known = keepRef.current && remembered.has(key);
+        if (known) {
+            setData(remembered.get(key) as T);
+            setLoading(false);
+        }
+        void load(!known);
     }, [key, load]);
 
     useEffect(() => {
@@ -95,8 +111,28 @@ export function useResource<T>(
 
     const reload = useCallback(() => load(false), [load]);
     const mutate = useCallback((updater: (current: T) => T) => {
-        setData(current => (current === null ? current : updater(current)));
+        setData(current => {
+            if (current === null) return current;
+            const next = updater(current);
+            if (keepRef.current && keyRef.current !== null) remember(keyRef.current, next);
+            return next;
+        });
     }, []);
 
     return { data, loading, error, errorStatus, reload, mutate };
+}
+
+/** Last results by key, for `keepAcrossMounts`; the oldest goes past the cap. */
+const remembered = new Map<string, unknown>();
+const REMEMBER_MAX = 40;
+
+function remember(key: string, value: unknown): void {
+    remembered.delete(key);
+    remembered.set(key, value);
+    if (remembered.size > REMEMBER_MAX) remembered.delete(remembered.keys().next().value!);
+}
+
+/** Forget remembered results (sign-out, workspace switch, tests). */
+export function forgetResources(): void {
+    remembered.clear();
 }

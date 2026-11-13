@@ -7,16 +7,19 @@
  * Whatever does not get published — the web process died after commit, Inngest
  * was down — the reconciler delivers. The reconciler also re-dispatches runs
  * nothing is driving any more, lets go of holds a finished run still has,
- * records attempts whose worker died mid-call as unknown, and drops raw
- * replies past the retention window.
+ * records attempts whose worker died mid-call as unknown, drops raw replies
+ * past the retention window, and deletes graph groups made from deleted files.
  */
+import type { ScenarioGraphPort } from "@launchstack/pipelines/scenarios/v2";
 import {
+    buildsWithDeletedSources,
     claimDispatch,
     claimDueDispatches,
     createV2Store,
     markAbandonedAttempts,
     markDispatchFailed,
     markDispatchSent,
+    markGraphBuildDeleted,
     purgeRawReplies,
     redispatchStalledRuns,
     releaseTerminalHolds,
@@ -27,6 +30,7 @@ import { newLeaseOwner, RUN_MESSAGES } from "@launchstack/pipelines/scenarios/v2
 import { inngest } from "~/server/inngest/client";
 
 import { createAppScenarioCredits } from "./credits";
+import { scenarioGraphPort } from "./graph";
 
 export const SCENARIO_RUN_V2_EVENT = "scenarios/run.v2.requested" as const;
 
@@ -101,6 +105,8 @@ export interface ReconcileReport {
     holdsReleased: number;
     abandonedAttempts: number;
     purgedReplies: number;
+    /** Graph builds deleted because a file they were made from was deleted. */
+    graphsDeleted: number;
 }
 
 /**
@@ -117,6 +123,8 @@ export async function reconcileScenarioRunsV2(
         now?: Date;
         publish?: PublishDispatch;
         retentionDays?: number;
+        /** The graph service; defaults to the configured one (null: none). */
+        graph?: ScenarioGraphPort | null;
     } = {}
 ): Promise<ReconcileReport> {
     const now = options.now ?? new Date();
@@ -129,6 +137,7 @@ export async function reconcileScenarioRunsV2(
         holdsReleased: 0,
         abandonedAttempts: 0,
         purgedReplies: 0,
+        graphsDeleted: 0,
     };
 
     const stalled = await redispatchStalledRuns({ now });
@@ -164,5 +173,36 @@ export async function reconcileScenarioRunsV2(
     );
     const retention = options.retentionDays ?? readRawRetentionDays();
     report.purgedReplies = await purgeRawReplies(new Date(now.getTime() - retention * 86_400_000));
+    report.graphsDeleted = await deleteGraphsOfDeletedSources(
+        options.graph === undefined ? scenarioGraphPort() : options.graph,
+        now
+    );
     return report;
+}
+
+/**
+ * Delete the Neo4j group and the frozen snapshot of every graph build made
+ * from a file that has since been deleted. A group that can't be deleted now
+ * (the service is down) is tried again on the next pass; the snapshot goes
+ * only once the group is gone, so the two stores never disagree for long.
+ */
+export async function deleteGraphsOfDeletedSources(
+    graph: ScenarioGraphPort | null,
+    now: Date
+): Promise<number> {
+    if (!graph) return 0;
+    let deleted = 0;
+    for (const build of await buildsWithDeletedSources()) {
+        try {
+            await graph.deleteGroup(build.groupId);
+            await markGraphBuildDeleted(build.id, now);
+            deleted += 1;
+        } catch (error) {
+            console.warn("[scenarios:v2] could not delete a graph group yet:", {
+                buildId: build.id,
+                error: error instanceof Error ? error.message : String(error),
+            });
+        }
+    }
+    return deleted;
 }

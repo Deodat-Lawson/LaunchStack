@@ -47,6 +47,8 @@ import {
     redispatchStalledRuns,
     releaseTerminalHolds,
     type AcceptRunInput,
+    buildsWithDeletedSources,
+    markGraphBuildDeleted,
 } from "./store";
 
 const url = process.env.TEST_DATABASE_URL;
@@ -616,6 +618,53 @@ describe.skipIf(!url)("scenario v2 store (Postgres)", () => {
             SELECT owner_run_id, owner_epoch FROM pdr_ai_v2_scenario_graph_builds
             WHERE build_key = ${build.buildKey}`);
         expect(row).toEqual({ owner_run_id: other.run.id, owner_epoch: 2 });
+    });
+
+    it("finds graph builds made from a deleted file and drops their snapshot", async () => {
+        const accepted = await acceptRun(input(), credits, handle.db);
+        const runId = accepted.run.id;
+        const gone = `d${randomUUID().replace(/-/g, "")}`.slice(0, 64);
+        const kept = `k${randomUUID().replace(/-/g, "")}`.slice(0, 64);
+        // A manifest that read a file which no longer exists, and one that read none.
+        await handle.db.execute(sql`
+            INSERT INTO pdr_ai_v2_scenario_source_manifests
+                (company_id, run_id, generation, manifest, manifest_hash, document_ids)
+            VALUES (${companyId}, ${runId}, 1, '{}'::jsonb, ${gone}, '[987654321]'::jsonb)`);
+        const other = await acceptRun(input(), credits, handle.db);
+        await handle.db.execute(sql`
+            INSERT INTO pdr_ai_v2_scenario_source_manifests
+                (company_id, run_id, generation, manifest, manifest_hash, document_ids)
+            VALUES (${companyId}, ${other.run.id}, 1, '{}'::jsonb, ${kept}, '[]'::jsonb)`);
+        const addBuild = async (manifestHash: string) => {
+            const [b] = await run<{ id: number }>(sql`
+                INSERT INTO pdr_ai_v2_scenario_graph_builds
+                    (company_id, build_key, group_id, manifest_hash, ontology_hash,
+                     policy_version, state, owner_run_id)
+                VALUES (${companyId}, ${`bk-${manifestHash}`.slice(0, 64)},
+                        ${`g-${manifestHash}`.slice(0, 64)}, ${manifestHash},
+                        ${"o".repeat(64)}, 'graphiti-extract@1', 'frozen', ${runId})
+                RETURNING id`);
+            await handle.db.execute(sql`
+                INSERT INTO pdr_ai_v2_scenario_graph_snapshots
+                    (company_id, build_id, data, graph_hash)
+                VALUES (${companyId}, ${b!.id}, '{}'::jsonb, ${"h".repeat(64)})`);
+            return b!.id;
+        };
+        const stale = await addBuild(gone);
+        const fresh = await addBuild(kept);
+
+        const found = await buildsWithDeletedSources(100, handle.db);
+        expect(found.map(b => b.id)).toContain(stale);
+        expect(found.map(b => b.id)).not.toContain(fresh);
+
+        await markGraphBuildDeleted(stale, new Date(), handle.db);
+        const snapshots = await run<{ build_id: number }>(sql`
+            SELECT build_id FROM pdr_ai_v2_scenario_graph_snapshots
+            WHERE build_id IN (${stale}, ${fresh})`);
+        expect(snapshots.map(s => s.build_id)).toEqual([fresh]);
+        expect((await buildsWithDeletedSources(100, handle.db)).map(b => b.id)).not.toContain(
+            stale
+        );
     });
 
     it("purges old raw replies and marks abandoned attempts unknown", async () => {

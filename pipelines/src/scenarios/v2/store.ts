@@ -10,7 +10,8 @@
  */
 import { and, asc, eq, inArray, isNotNull, isNull, lt, or, sql } from "drizzle-orm";
 
-import { getDb, type DbClient } from "@launchstack/store/client";
+import { getDb, toRows, type DbClient } from "@launchstack/store/client";
+import { document } from "@launchstack/store/schema";
 
 import { toRunRecord } from "../db";
 import {
@@ -1618,5 +1619,52 @@ export async function markAbandonedAttempts(
         }
         for (const [runId, n] of perRun) await tx.execute(bumpUnknownAttempts(runId, n));
         return stale.length;
+    });
+}
+
+// ─── Source deletion ─────────────────────────────────────────────────────────
+
+/**
+ * Graph builds made from a file that has since been deleted. Their Neo4j
+ * group and frozen snapshot hold facts extracted from that file, so they go
+ * too (design §3.3.5: retention and deletion track both stores).
+ */
+export async function buildsWithDeletedSources(
+    limit = 20,
+    db: DbClient = getDb()
+): Promise<Array<{ id: number; groupId: string }>> {
+    const rows = await db.execute(sql`
+        select b.id, b.group_id
+        from ${scenarioGraphBuilds} b
+        where b.deleted_at is null
+          and exists (
+            select 1
+            from ${scenarioSourceManifests} m,
+                 jsonb_array_elements_text(m.document_ids) as d(id)
+            where m.company_id = b.company_id
+              and m.manifest_hash = b.manifest_hash
+              and not exists (select 1 from ${document} doc where doc.id = d.id::bigint)
+          )
+        order by b.id
+        limit ${limit}
+    `);
+    return toRows<{ id: number; group_id: string }>(rows).map(r => ({
+        id: Number(r.id),
+        groupId: r.group_id,
+    }));
+}
+
+/** After its Neo4j group is gone: drop the snapshot and mark the build deleted (never reused). */
+export async function markGraphBuildDeleted(
+    buildId: number,
+    at: Date,
+    db: DbClient = getDb()
+): Promise<void> {
+    await db.transaction(async tx => {
+        await tx.delete(scenarioGraphSnapshots).where(eq(scenarioGraphSnapshots.buildId, buildId));
+        await tx
+            .update(scenarioGraphBuilds)
+            .set({ deletedAt: at, snapshotId: null, state: "failed", error: "source_deleted" })
+            .where(eq(scenarioGraphBuilds.id, buildId));
     });
 }

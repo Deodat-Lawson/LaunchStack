@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
-import { IconDrive } from "~/components/icons/brand";
+import { GoogleDriveLogo } from "~/components/icons/brand";
 import {
     GoogleDriveBanner,
     setDriveBarHidden,
@@ -1155,7 +1155,9 @@ export function DocumentViewer({
                   {
                       id: "drive",
                       label: driveBarHidden ? tDrive("show") : tDrive("hide"),
-                      icon: <IconDrive size={14} />,
+                      // Drive's own mark, as on the bar it shows and hides:
+                      // the line glyph read as a hexagon, not as Drive.
+                      icon: <GoogleDriveLogo size={14} />,
                       onSelect: () => setDriveBarHidden(!driveBarHidden),
                       iconOnly: true,
                       tone: driveBarHidden ? undefined : ("on" as const),

@@ -812,6 +812,77 @@ describe("PdfViewerWithNotes citations", () => {
         expect(document.querySelector('[data-pdf-page="1"] [class*="outline-"]')).toBeNull();
         expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
     });
+    /**
+     * Chat citations claim page 1 for a passage the index kept no page for,
+     * so the page a citation names is a hint, not a fact. The reader, ten
+     * pages in, must not be sent back to the first page on its word alone.
+     */
+    function citeAt(rerender: (ui: React.ReactElement) => void, page: number | null, text: string) {
+        rerender(
+            <PdfViewerWithNotes
+                url="/api/files/9"
+                notes={[]}
+                onCreateAnchoredNote={jest.fn()}
+                citationHighlight={{ text, page, nonce: 1 }}
+            />
+        );
+    }
+    async function readTo(page: number) {
+        const box = (await toolbar()).getByLabelText("Page number");
+        fireEvent.change(box, { target: { value: String(page) } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        await waitFor(() => expect(box).toHaveValue(String(page)));
+        return box;
+    }
+
+    it("stays on the reader's page while the text has yet to confirm a cited page", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(20, "The gross margin improved for the third year running.");
+        let release!: (text: string) => void;
+        mockTextDelays.set(
+            "/api/files/9",
+            new Map([[1, new Promise<string>(resolve => (release = resolve))]])
+        );
+        const { rerender } = renderViewer();
+        const box = await readTo(12);
+
+        // The citation says page 1; page 1's text has not arrived yet.
+        citeAt(rerender, 1, "gross margin improved for the third year");
+        await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 50));
+        });
+        expect(box).toHaveValue("12");
+
+        // Page 1 does not hold it; page 20 does, and the viewer goes there.
+        await act(async () => {
+            release(mockPageText);
+            await new Promise(resolve => setTimeout(resolve, 50));
+        });
+        await waitFor(() => expect(box).toHaveValue("20"));
+    });
+
+    it("leaves the reader where they were when no page holds the cited passage", async () => {
+        mockNumPages = 30;
+        const { rerender } = renderViewer();
+        const box = await readTo(12);
+
+        citeAt(rerender, 1, "a sentence this document never says anywhere at all");
+        await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        });
+        expect(box).toHaveValue("12");
+    });
+
+    it("takes a scanned page's word for it: its hint is all there is", async () => {
+        mockNumPages = 30;
+        for (let page = 1; page <= 30; page++) mockPageTexts.set(page, "");
+        const { rerender } = renderViewer();
+        const box = await readTo(12);
+
+        citeAt(rerender, 7, "the gross margin improved for the third year");
+        await waitFor(() => expect(box).toHaveValue("7"));
+    });
+
     it("searches a citation again in a document that replaces the last", async () => {
         mockNumPages = 30;
         mockPageTexts.set(12, "The gross margin improved for the third year running.");

@@ -67,6 +67,7 @@
     "./vantage/schema": "./src/vantage/schema.ts",
     "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
     "./accelerators/types": "./src/proposals/accelerators/types.ts",
+    "./vantage/scoped-evidence": "./src/vantage/scoped-evidence.ts",
     "./vantage/weekly-review-v21": "./src/vantage/weekly-review-v21.ts",
     "./vantage/weekly-review-validation": "./src/vantage/weekly-review-validation.ts"
   },
@@ -300,6 +301,10 @@
       "./accelerators/types": {
         "types": "./dist/proposals/accelerators/types.d.ts",
         "default": "./dist/proposals/accelerators/types.js"
+      },
+      "./vantage/scoped-evidence": {
+        "types": "./dist/vantage/scoped-evidence.d.ts",
+        "default": "./dist/vantage/scoped-evidence.js"
       },
       "./vantage/weekly-review-v21": {
         "types": "./dist/vantage/weekly-review-v21.d.ts",

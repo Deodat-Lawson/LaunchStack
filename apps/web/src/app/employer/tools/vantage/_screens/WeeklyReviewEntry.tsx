@@ -16,6 +16,18 @@ import {
 import { AgendaScreen } from "./AgendaScreen";
 import type { WeeklyReviewV21 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 
+type ScopedSourceCoverage = {
+    documentId: string;
+    parentVersion: string;
+    scopeHash: string;
+    coverage: {
+        state: "full_document_reviewed" | "relevant_spans_reviewed" | "insufficient_evidence";
+        qualification: string;
+        includedUnits: number;
+        requiredUnits: number;
+        originalCompleteness: "verified_complete" | "unknown";
+    };
+};
 type Saved = {
     id: string;
     version: number;
@@ -23,7 +35,10 @@ type Saved = {
         topics: (WeeklyReviewV21["topics"][number] & { id: string })[];
     };
     decisions: { topicId: string; decision: string; version: number }[];
-    evidence: { qualityEvidence?: string };
+    evidence: {
+        qualityEvidence?: string;
+        inputSnapshot?: { scopedEvidence?: ScopedSourceCoverage[] };
+    };
 };
 type RunSummary = { id: string; status: string; week_start: string; created_at: string };
 type RunList = { enabled: boolean; activeId: string | null; runs: RunSummary[] };
@@ -304,6 +319,41 @@ export function WeeklyReviewEntry({ week: initialWeek }: { week?: string | null 
                     {review.evidence?.qualityEvidence === "injected-deterministic" && (
                         <p className="text-ink-2 text-sm">{t("synthetic")}</p>
                     )}
+                    {review.evidence?.inputSnapshot?.scopedEvidence?.length ? (
+                        <section
+                            aria-label={t("sourceCoverage")}
+                            className="border-line space-y-3 rounded border p-4"
+                        >
+                            <h2 className="font-semibold">{t("sourceCoverage")}</h2>
+                            {review.evidence.inputSnapshot.scopedEvidence.map(source => (
+                                <div
+                                    key={source.documentId + ":" + source.scopeHash}
+                                    className="space-y-1 text-sm"
+                                >
+                                    <p>
+                                        {t("coverageSource", {
+                                            document: source.documentId,
+                                            version: source.parentVersion,
+                                        })}
+                                    </p>
+                                    <p>{t(source.coverage.state)}</p>
+                                    <p>{source.coverage.qualification}</p>
+                                    <p>
+                                        {t("coverageUnits", {
+                                            included: source.coverage.includedUnits,
+                                            required: source.coverage.requiredUnits,
+                                        })}
+                                    </p>
+                                    {source.coverage.state === "relevant_spans_reviewed" && (
+                                        <p>{t("configuredSpansOnly")}</p>
+                                    )}
+                                    {source.coverage.originalCompleteness === "unknown" && (
+                                        <p>{t("originalCompletenessUnknown")}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </section>
+                    ) : null}
                     <header>
                         <h2 className="text-lg font-semibold">{review.report.headline}</h2>
                         <p>{review.report.brief}</p>

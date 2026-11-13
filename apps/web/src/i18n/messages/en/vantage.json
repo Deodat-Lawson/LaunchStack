@@ -707,6 +707,14 @@
     "selectDocument": "Select a document",
     "personalStars": "Personal starred documents",
     "starHelp": "Choose up to eight readable documents to prioritize for your review. This does not make them company policy.",
-    "saveStars": "Save personal stars"
+    "saveStars": "Save personal stars",
+    "sourceCoverage": "Source review coverage",
+    "coverageSource": "Document {document}, version {version}",
+    "full_document_reviewed": "Full canonical indexed text reviewed",
+    "relevant_spans_reviewed": "Relevant configured spans reviewed",
+    "insufficient_evidence": "Insufficient evidence",
+    "coverageUnits": "Reviewed {included} of {required} required evidence units.",
+    "configuredSpansOnly": "Review coverage is limited to the configured spans of canonical indexed text.",
+    "originalCompletenessUnknown": "Completeness of the original PDF or OCR extraction is unknown."
   }
 }

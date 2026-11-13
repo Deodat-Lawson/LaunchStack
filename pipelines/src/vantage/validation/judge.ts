@@ -4,9 +4,21 @@ import {
     systemMessageFor,
     type ResolvedChatModel,
 } from "@launchstack/llm";
-import { RUBRIC_VERSION, type Judgment, type ValidationJudge } from "./contracts";
-import { fingerprint } from "./input";
-import { VALIDATION_SYSTEM_PROMPT } from "./rubric";
+import {
+    RUBRIC_VERSION,
+    SCOPED_EVALUATION_VERSION,
+    SCOPED_RUBRIC_VERSION,
+    EVALUATION_VERSION,
+    type Judgment,
+    type ValidationJudge,
+} from "./contracts";
+import {
+    fingerprint,
+    judgeInputPayload,
+    parseEvaluationInput,
+    MAX_EVALUATION_INPUT_BYTES,
+} from "./input";
+import { VALIDATION_SYSTEM_PROMPT, SCOPED_VALIDATION_SYSTEM_PROMPT } from "./rubric";
 import {
     judgmentSchemaFor,
     JUDGE_EVIDENCE_INSTRUCTIONS,
@@ -16,7 +28,12 @@ import {
 /** No model is selected implicitly; use the host's reviewed model configuration. One call, no retries. */
 export function createModelValidationJudge(
     model: ResolvedChatModel,
-    options: { configurationId: string; timeoutMs?: number; maxOutputTokens?: number },
+    options: {
+        configurationId: string;
+        timeoutMs?: number;
+        maxOutputTokens?: number;
+        evaluationVersion?: typeof EVALUATION_VERSION | typeof SCOPED_EVALUATION_VERSION;
+    },
     invoke: typeof invokeStructuredAttempt = invokeStructuredAttempt
 ): ValidationJudge {
     const timeoutMs = options.timeoutMs ?? 20000;
@@ -31,28 +48,35 @@ export function createModelValidationJudge(
         maxOutputTokens > 6000
     )
         throw new Error("Invalid validation judge limits or configuration identity.");
+    const evaluationVersion = options.evaluationVersion ?? EVALUATION_VERSION;
+    const rubricVersion =
+        evaluationVersion === SCOPED_EVALUATION_VERSION ? SCOPED_RUBRIC_VERSION : RUBRIC_VERSION;
     return {
         kind: "model",
-        id: `${model.modelId}/${options.configurationId}/${RUBRIC_VERSION}/${JUDGE_EVIDENCE_TRANSPORT_VERSION}`,
+        id: `${model.modelId}/${options.configurationId}/${rubricVersion}/${JUDGE_EVIDENCE_TRANSPORT_VERSION}`,
         async evaluate(request, signal) {
+            if (
+                request.input.version !== evaluationVersion ||
+                request.rubricVersion !== rubricVersion
+            )
+                throw new Error(
+                    "Judge configuration does not match the evaluation/rubric version."
+                );
+            const payload = judgeInputPayload(request.input);
+            if (evaluationVersion === SCOPED_EVALUATION_VERSION) {
+                parseEvaluationInput(request.input);
+                if (Buffer.byteLength(payload) > MAX_EVALUATION_INPUT_BYTES)
+                    throw new Error("Scoped Judge input exceeds 14000 bytes.");
+            }
             const result = await invoke(
                 model,
                 judgmentSchemaFor(request),
                 [
                     ...systemMessageFor(
                         model.behavior,
-                        `${VALIDATION_SYSTEM_PROMPT}\n${JUDGE_EVIDENCE_INSTRUCTIONS}`
+                        `${evaluationVersion === SCOPED_EVALUATION_VERSION ? SCOPED_VALIDATION_SYSTEM_PROMPT : VALIDATION_SYSTEM_PROMPT}\n${JUDGE_EVIDENCE_INSTRUCTIONS}`
                     ),
-                    new HumanMessage(
-                        JSON.stringify({
-                            scenario: request.input.scenario,
-                            candidate: {
-                                id: request.input.actual.id,
-                                pipelineVersion: request.input.actual.pipelineVersion,
-                            },
-                            outputUnits: request.outputUnits,
-                        })
-                    ),
+                    new HumanMessage(payload),
                 ],
                 { signal, timeoutMs, maxOutputTokens }
             );
@@ -65,7 +89,7 @@ export function createModelValidationJudge(
 export function createRecordedValidationJudge(
     records: readonly {
         inputFingerprint: string;
-        rubricVersion: typeof RUBRIC_VERSION;
+        rubricVersion: typeof RUBRIC_VERSION | typeof SCOPED_RUBRIC_VERSION;
         judgment: Judgment;
     }[],
     id = "synthetic-calibration-v1"

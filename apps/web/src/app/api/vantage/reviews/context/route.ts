@@ -4,8 +4,14 @@ import {
     weeklyReviewDatabase,
     weeklyReviewEnabled,
     weeklyReviewServices,
+    scopedEvidenceV2Enabled,
 } from "~/server/vantage/weekly-review-service";
 import { WeeklyReviewConflict } from "~/server/vantage/weekly-review-types";
+import {
+    WeeklyReviewSourceScopesSchema,
+    configuredSourceScopes,
+    retainedSourceScopes,
+} from "~/server/vantage/weekly-review-scoped-selection";
 import { reviewActor, reviewError } from "../_http";
 const id = z.string().regex(/^[1-9]\d{0,17}$/);
 export async function GET() {
@@ -17,18 +23,19 @@ export async function GET() {
             await weeklyReviewDatabase.transaction(async query => ({
                 documents,
                 enabled: weeklyReviewEnabled(),
+                scopedEvidenceEnabled: scopedEvidenceV2Enabled(),
                 canConfigure: auth.ctx.can("settings.manage"),
                 policy:
                     (
                         await query(
-                            "SELECT architecture_document_id,required_document_ids,version FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint",
+                            "SELECT architecture_document_id,required_document_ids,required_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint",
                             [auth.actor.companyId]
                         )
                     )[0] ?? null,
                 preferences:
                     (
                         await query(
-                            "SELECT star_document_ids,version FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2",
+                            "SELECT star_document_ids,star_source_scopes,version FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2",
                             [auth.actor.companyId, auth.actor.userId]
                         )
                     )[0] ?? null,
@@ -51,6 +58,7 @@ export async function POST(request: Request) {
                 expectedVersion: z.number().int().nonnegative(),
                 architectureDocumentId: id,
                 requiredDocumentIds: z.array(id).max(12),
+                requiredSourceScopes: WeeklyReviewSourceScopesSchema.optional(),
             })
             .strict()
             .parse(await request.json());
@@ -65,25 +73,38 @@ export async function POST(request: Request) {
             );
             const existing = (
                 await query(
-                    "SELECT version FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint FOR UPDATE",
+                    "SELECT version,required_source_scopes FROM pdr_ai_v2_vantage_weekly_review_policy WHERE company_id=$1::bigint FOR UPDATE",
                     [auth.actor.companyId]
                 )
             )[0];
             if (Number(existing?.version ?? 0) !== body.expectedVersion)
                 throw new WeeklyReviewConflict("stale_context_policy");
+            const allowedIds = [body.architectureDocumentId, ...body.requiredDocumentIds];
+            const scopes =
+                body.requiredSourceScopes === undefined
+                    ? retainedSourceScopes(existing?.required_source_scopes, allowedIds)
+                    : configuredSourceScopes(body.requiredSourceScopes, allowedIds);
+            if (
+                body.requiredSourceScopes !== undefined &&
+                Object.keys(scopes).length &&
+                !scopedEvidenceV2Enabled()
+            )
+                throw new WeeklyReviewConflict("scoped_evidence_disabled", 404);
             await weeklyReviewServices().authority.validateCompanySources(
                 query,
                 auth.actor,
                 body.architectureDocumentId,
-                body.requiredDocumentIds
+                body.requiredDocumentIds,
+                scopedEvidenceV2Enabled() ? scopes : {}
             );
             const rows = await query(
-                "INSERT INTO pdr_ai_v2_vantage_weekly_review_policy(company_id,architecture_document_id,required_document_ids) VALUES($1::bigint,$2::bigint,$3::jsonb) ON CONFLICT(company_id) DO UPDATE SET architecture_document_id=EXCLUDED.architecture_document_id,required_document_ids=EXCLUDED.required_document_ids,version=pdr_ai_v2_vantage_weekly_review_policy.version+1 WHERE pdr_ai_v2_vantage_weekly_review_policy.version=$4 RETURNING version",
+                "INSERT INTO pdr_ai_v2_vantage_weekly_review_policy(company_id,architecture_document_id,required_document_ids,required_source_scopes) VALUES($1::bigint,$2::bigint,$3::jsonb,$5::jsonb) ON CONFLICT(company_id) DO UPDATE SET architecture_document_id=EXCLUDED.architecture_document_id,required_document_ids=EXCLUDED.required_document_ids,required_source_scopes=EXCLUDED.required_source_scopes,version=pdr_ai_v2_vantage_weekly_review_policy.version+1 WHERE pdr_ai_v2_vantage_weekly_review_policy.version=$4 RETURNING version",
                 [
                     auth.actor.companyId,
                     body.architectureDocumentId,
                     JSON.stringify(body.requiredDocumentIds),
                     body.expectedVersion,
+                    JSON.stringify(scopes),
                 ]
             );
             if (!rows[0]) throw new WeeklyReviewConflict("stale_context_policy");
@@ -106,30 +127,43 @@ export async function PATCH(request: Request) {
             .object({
                 expectedVersion: z.number().int().nonnegative(),
                 starDocumentIds: z.array(id).max(8),
+                starSourceScopes: WeeklyReviewSourceScopesSchema.optional(),
             })
             .strict()
             .parse(await request.json());
         const version = await weeklyReviewDatabase.transaction(async query => {
             const existing = (
                 await query(
-                    "SELECT version FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2 FOR UPDATE",
+                    "SELECT version,star_source_scopes FROM pdr_ai_v2_vantage_weekly_review_preferences WHERE company_id=$1::bigint AND actor_id=$2 FOR UPDATE",
                     [auth.actor.companyId, auth.actor.userId]
                 )
             )[0];
             if (Number(existing?.version ?? 0) !== body.expectedVersion)
                 throw new WeeklyReviewConflict("stale_context_preferences");
+            const scopes =
+                body.starSourceScopes === undefined
+                    ? retainedSourceScopes(existing?.star_source_scopes, body.starDocumentIds)
+                    : configuredSourceScopes(body.starSourceScopes, body.starDocumentIds);
+            if (
+                body.starSourceScopes !== undefined &&
+                Object.keys(scopes).length &&
+                !scopedEvidenceV2Enabled()
+            )
+                throw new WeeklyReviewConflict("scoped_evidence_disabled", 404);
             await weeklyReviewServices().authority.validatePreferenceSources(
                 query,
                 auth.actor,
-                body.starDocumentIds
+                body.starDocumentIds,
+                scopedEvidenceV2Enabled() ? scopes : {}
             );
             const rows = await query(
-                "INSERT INTO pdr_ai_v2_vantage_weekly_review_preferences(company_id,actor_id,star_document_ids) VALUES($1::bigint,$2,$3::jsonb) ON CONFLICT(company_id,actor_id) DO UPDATE SET star_document_ids=EXCLUDED.star_document_ids,version=pdr_ai_v2_vantage_weekly_review_preferences.version+1 WHERE pdr_ai_v2_vantage_weekly_review_preferences.version=$4 RETURNING version",
+                "INSERT INTO pdr_ai_v2_vantage_weekly_review_preferences(company_id,actor_id,star_document_ids,star_source_scopes) VALUES($1::bigint,$2,$3::jsonb,$5::jsonb) ON CONFLICT(company_id,actor_id) DO UPDATE SET star_document_ids=EXCLUDED.star_document_ids,star_source_scopes=EXCLUDED.star_source_scopes,version=pdr_ai_v2_vantage_weekly_review_preferences.version+1 WHERE pdr_ai_v2_vantage_weekly_review_preferences.version=$4 RETURNING version",
                 [
                     auth.actor.companyId,
                     auth.actor.userId,
                     JSON.stringify(body.starDocumentIds),
                     body.expectedVersion,
+                    JSON.stringify(scopes),
                 ]
             );
             if (!rows[0]) throw new WeeklyReviewConflict("stale_context_preferences");

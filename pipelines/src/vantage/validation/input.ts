@@ -1,6 +1,13 @@
 ﻿import { createHash } from "node:crypto";
 import { z } from "zod";
-import { EvaluationInputSchema, type EvaluationInput, type OutputUnit } from "./contracts";
+import {
+    VersionedEvaluationInputSchema,
+    ScopedEvidenceDependencySchema,
+    SCOPED_EVALUATION_VERSION,
+    type ScopedEvidenceDependency,
+    type EvaluationInput,
+    type OutputUnit,
+} from "./contracts";
 type ContextSourceRefV0 = { kind: string; id: string; version: string };
 const contextSourceKeyV0 = (ref: ContextSourceRefV0) => `${ref.kind}:${ref.id}@${ref.version}`;
 
@@ -25,12 +32,37 @@ export function parseEvaluationInput(raw: unknown): EvaluationInput {
         throw new Error(
             "Evaluation input exceeds 14000 bytes; explicitly prepare smaller scenario excerpts. Nothing was truncated."
         );
-    const parsed = EvaluationInputSchema.safeParse(raw);
+    const parsed = VersionedEvaluationInputSchema.safeParse(raw);
     if (!parsed.success)
         throw new Error(
             "Invalid evaluation input. Use the versioned scenario/expectation/output schema."
         );
     const input = parsed.data;
+    if (input.version === SCOPED_EVALUATION_VERSION) {
+        validateScopedCoverage(
+            input.scenario.scopedEvidence,
+            input.scenario.documents,
+            input.scenario.asOf
+        );
+        const requiredRefs = input.scenario.scopedEvidence.flatMap(proof =>
+            proof.requiredUnits.map(
+                unit => proof.units.find(included => included.id === unit.id)!.ref
+            )
+        );
+        for (const ref of requiredRefs) {
+            if (
+                !input.scenario.expectations.some(
+                    expected =>
+                        expected.kind === "must_include" &&
+                        expected.importance === "critical" &&
+                        expected.evidence.some(evidence => evidence.sourceId === ref)
+                )
+            )
+                throw new Error(
+                    "Every required scoped unit needs a critical semantic coverage expectation."
+                );
+        }
+    }
     for (const list of [input.scenario.documents, input.scenario.expectations, input.actual.tasks])
         if (new Set(list.map(item => item.id)).size !== list.length)
             throw new Error("Evaluation IDs must be unique within each collection.");
@@ -220,4 +252,148 @@ export function normalizeVantageOutput(
             rationale: topic.rationale,
         })),
     };
+}
+
+/** Deterministic binding checks. Live authority and full-parent revalidation remain host-owned. */
+export function validateScopedCoverage(
+    rawProofs: readonly ScopedEvidenceDependency[],
+    documents: readonly {
+        id: string;
+        version: string;
+        hash: string;
+        purpose: string;
+        availableAt?: string;
+        text: string;
+    }[],
+    asOf: string
+): void {
+    const proofs = z.array(ScopedEvidenceDependencySchema).min(1).max(16).parse(rawProofs);
+    const assert = (condition: unknown, code: string) => {
+        if (!condition) throw new Error(code);
+    };
+    const hashText = (value: string) => createHash("sha256").update(value).digest("hex");
+    const hashValue = (value: unknown) => hashText(JSON.stringify(value));
+    assert(new Set(documents.map(doc => doc.id)).size === documents.length, "duplicate_source_ref");
+    assert(
+        new Set(proofs.map(proof => proof.documentId)).size === proofs.length,
+        "duplicate_scoped_parent"
+    );
+    const actor = proofs[0]!.actorId;
+    const company = proofs[0]!.companyId;
+    const units = new Map<string, ScopedEvidenceDependency["units"][number]>();
+    for (const proof of proofs) {
+        assert(
+            proof.actorId === actor && proof.companyId === company,
+            "scoped_authority_identity_mismatch"
+        );
+        assert(
+            proof.audience === (proof.companyReadable ? "company" : "actor"),
+            "authority_audience_mismatch"
+        );
+        assert(
+            !["company-architecture", "workspace-required"].includes(proof.purpose) ||
+                proof.companyReadable,
+            "required_context_audience"
+        );
+        assert(
+            Date.parse(proof.versionDate) <= Date.parse(asOf) &&
+                Date.parse(proof.availableAt) <= Date.parse(asOf),
+            "future_parent_version"
+        );
+        assert(
+            proof.coverage.state !== "insufficient_evidence" &&
+                proof.coverage.requiredUnits === proof.requiredUnits.length &&
+                proof.coverage.includedUnits === proof.units.length &&
+                proof.units.length === proof.requiredUnits.length,
+            "required_scope_incomplete"
+        );
+        assert(
+            new Set(proof.requiredUnits.map(unit => unit.id)).size === proof.requiredUnits.length &&
+                new Set(proof.units.map(unit => unit.id)).size === proof.units.length,
+            "duplicate_unit"
+        );
+        const expectedScopeHash = hashValue({
+            actorId: proof.actorId,
+            purpose: proof.purpose,
+            audience: proof.audience,
+            companyReadable: proof.companyReadable,
+            authorityRevision: proof.authorityRevision,
+            qualification: proof.coverage.qualification,
+            inventory: proof.requiredUnits,
+        });
+        assert(expectedScopeHash === proof.scopeHash, "scope_hash_mismatch");
+        for (let i = 0; i < proof.requiredUnits.length; i++) {
+            const required = proof.requiredUnits[i]!;
+            assert(
+                required.start < required.end &&
+                    required.end <= proof.parentChars &&
+                    required.end - required.start <= 6000 &&
+                    (i === 0 || proof.requiredUnits[i - 1]!.end <= required.start),
+                "invalid_scope_range"
+            );
+            const unit = proof.units[i]!;
+            assert(
+                unit.id === required.id &&
+                    unit.start === required.start &&
+                    unit.end === required.end &&
+                    unit.excerptHash === required.excerptHash,
+                "required_unit_mismatch"
+            );
+            const expectedRef = `unit:${hashValue([proof.documentId, proof.parentVersion, proof.parentHash, proof.scopeHash, unit.id])}`;
+            assert(unit.ref === expectedRef && !units.has(unit.ref), "invalid_scoped_ref");
+            const doc = documents.find(doc => doc.id === unit.ref);
+            assert(
+                doc &&
+                    doc.version === proof.parentVersion &&
+                    doc.hash === unit.excerptHash &&
+                    doc.purpose === proof.purpose &&
+                    doc.text.length === unit.end - unit.start &&
+                    hashText(doc.text) === unit.excerptHash,
+                "scoped_source_mismatch"
+            );
+            assert(
+                doc!.availableAt === undefined || doc!.availableAt === proof.availableAt,
+                "scoped_source_date_mismatch"
+            );
+            assert(
+                unit.anchors.reduce((sum, anchor) => sum + anchor.end - anchor.start, 0) ===
+                    unit.end - unit.start &&
+                    unit.anchors.every(
+                        (anchor, index) =>
+                            anchor.start < anchor.end &&
+                            (index === 0 || anchor.ordinal === unit.anchors[index - 1]!.ordinal + 1)
+                    ),
+                "invalid_chunk_anchors"
+            );
+            units.set(unit.ref, unit);
+        }
+        if (proof.coverage.state === "full_document_reviewed") {
+            assert(
+                proof.requiredUnits[0]!.start === 0 &&
+                    proof.requiredUnits.at(-1)!.end === proof.parentChars &&
+                    proof.requiredUnits.every(
+                        (unit, i) => i === 0 || proof.requiredUnits[i - 1]!.end === unit.start
+                    ),
+                "invalid_full_document_coverage"
+            );
+            const fullText = proof.units
+                .map(unit => documents.find(doc => doc.id === unit.ref)!.text)
+                .join("");
+            assert(hashText(fullText) === proof.parentHash, "parent_hash_mismatch");
+        }
+    }
+    assert(
+        documents.filter(doc => doc.id.startsWith("unit:")).every(doc => units.has(doc.id)) &&
+            documents.filter(doc => units.has(doc.id)).length === units.size,
+        "unbound_scoped_source"
+    );
+}
+
+/** Exact human-message payload used by the model Judge. Shared with scoped admission. */
+export function judgeInputPayload(input: EvaluationInput): string {
+    return JSON.stringify({
+        scenario: input.scenario,
+        candidate: { id: input.actual.id, pipelineVersion: input.actual.pipelineVersion },
+        outputUnits: outputUnits(input),
+    });
 }

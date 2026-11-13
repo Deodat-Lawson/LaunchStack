@@ -2,6 +2,8 @@
     CRITERIA,
     EVALUATION_VERSION,
     RUBRIC_VERSION,
+    SCOPED_EVALUATION_VERSION,
+    SCOPED_RUBRIC_VERSION,
     JudgmentSchema,
     RATED_CRITERIA,
     type EvaluationInput,
@@ -186,8 +188,12 @@ export async function evaluateVantage(
     const started = performance.now();
     const issues = checkOutputIntegrity(input);
     const report: EvaluationReport = {
-        version: EVALUATION_VERSION,
-        rubricVersion: RUBRIC_VERSION,
+        version: input.version,
+        rubricVersion:
+            input.version === SCOPED_EVALUATION_VERSION ? SCOPED_RUBRIC_VERSION : RUBRIC_VERSION,
+        ...(input.version === SCOPED_EVALUATION_VERSION
+            ? { scopedEvidence: structuredClone(input.scenario.scopedEvidence) }
+            : {}),
         scenarioId: input.scenario.id,
         scenarioVersion: input.scenario.version,
         scenarioFingerprint: fingerprint(input.scenario),
@@ -242,7 +248,7 @@ export async function evaluateVantage(
                 if (controller.signal.aborted) throw new Error("cancelled");
                 return options.judge!.evaluate(
                     {
-                        rubricVersion: RUBRIC_VERSION,
+                        rubricVersion: report.rubricVersion,
                         input: structuredClone(input),
                         outputUnits: outputUnits(input),
                     },
@@ -297,7 +303,9 @@ export async function evaluateVantage(
             );
         report.verdict = failed
             ? "fail"
-            : complete && input.scenario.contextCompleteness === "complete"
+            : complete &&
+                (input.scenario.contextCompleteness === "complete" ||
+                    input.scenario.contextCompleteness === "scoped")
               ? "pass"
               : "needs-review";
         return report;

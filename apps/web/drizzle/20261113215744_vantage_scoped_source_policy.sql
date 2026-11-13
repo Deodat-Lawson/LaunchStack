@@ -1,0 +1,2 @@
+ALTER TABLE "pdr_ai_v2_vantage_weekly_review_policy" ADD COLUMN "required_source_scopes" jsonb DEFAULT '{}'::jsonb NOT NULL;--> statement-breakpoint
+ALTER TABLE "pdr_ai_v2_vantage_weekly_review_preferences" ADD COLUMN "star_source_scopes" jsonb DEFAULT '{}'::jsonb NOT NULL;

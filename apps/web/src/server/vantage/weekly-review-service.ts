@@ -25,6 +25,12 @@ export function weeklyReviewEnabled() {
 export function budgetAwareInternalRetrievalEnabled() {
     return process.env.VANTAGE_INTERNAL_RETRIEVAL_V1_ENABLED === "true";
 }
+export function scopedEvidenceV2Enabled() {
+    return (
+        budgetAwareInternalRetrievalEnabled() &&
+        process.env.VANTAGE_SCOPED_EVIDENCE_V2_ENABLED === "true"
+    );
+}
 export const weeklyReviewDatabase: WeeklyReviewDatabase = {
     async transaction(work) {
         return getEngine().db.transaction(async tx => {
@@ -62,6 +68,7 @@ async function currentActor() {
 export function weeklyReviewServices() {
     const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, currentActor, {
         internalRetrievalV1: budgetAwareInternalRetrievalEnabled(),
+        scopedEvidenceV2: scopedEvidenceV2Enabled(),
     });
     return {
         authority,
@@ -91,6 +98,7 @@ export async function generateWeeklyReview(
         role: context.role,
         mandatoryCoverage: context.mandatoryCoverage,
         sources: context.sources,
+        ...(context.scopedEvidence?.length ? { scopedEvidence: context.scopedEvidence } : {}),
     };
     const inputHash = reviewFingerprint({
         week: args.weekStart,
@@ -98,15 +106,20 @@ export async function generateWeeklyReview(
         role: context.role,
         sources: context.sources,
         epoch: context.authorityEpoch,
-        ...(internalRetrievalV1 ? { budgetProfile: "internal-v1" } : {}),
+        ...(internalRetrievalV1
+            ? { budgetProfile: context.scopedEvidence?.length ? "scoped-v2" : "internal-v1" }
+            : {}),
+        ...(context.scopedEvidence?.length ? { scopedEvidence: context.scopedEvidence } : {}),
     });
-    const dependencies = context.sources.map(({ kind, id, version, hash, purpose }) => ({
-        kind,
-        id,
-        version,
-        hash,
-        purpose,
-    }));
+    const dependencies =
+        context.dependencies ??
+        context.sources.map(({ kind, id, version, hash, purpose }) => ({
+            kind,
+            id,
+            version,
+            hash,
+            purpose,
+        }));
     const reserved = await repository.reserve(
         current,
         args.weekStart,
@@ -124,7 +137,9 @@ export async function generateWeeklyReview(
     input.candidateId = reserved.id;
     const budgetPorts = internalRetrievalV1
         ? {
-              budgetProfile: "internal-v1" as const,
+              budgetProfile: context.scopedEvidence?.length
+                  ? ("scoped-v2" as const)
+                  : ("internal-v1" as const),
               selectionDiagnostics: context.selectionDiagnostics,
           }
         : {};

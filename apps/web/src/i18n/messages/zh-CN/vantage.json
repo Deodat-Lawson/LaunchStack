@@ -707,6 +707,14 @@
     "selectDocument": "????",
     "personalStars": "??????",
     "starHelp": "??????????????????????????????????",
-    "saveStars": "??????"
+    "saveStars": "??????",
+    "sourceCoverage": "来源审阅覆盖范围",
+    "coverageSource": "文档 {document}，版本 {version}",
+    "full_document_reviewed": "已审阅全部规范化索引文本",
+    "relevant_spans_reviewed": "已审阅配置的相关文本片段",
+    "insufficient_evidence": "证据不足",
+    "coverageUnits": "已审阅 {required} 个必需证据单元中的 {included} 个。",
+    "configuredSpansOnly": "审阅覆盖范围仅限于规范化索引文本中配置的片段。",
+    "originalCompletenessUnknown": "原始 PDF 或 OCR 提取的完整性未知。"
   }
 }

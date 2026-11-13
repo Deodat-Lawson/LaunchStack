@@ -1,3 +1,7 @@
+import {
+    createScopedSourceReader,
+    type WeeklyReviewSourceScopes,
+} from "./weekly-review-scoped-selection";
 import { createHash } from "node:crypto";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
 import {
@@ -46,7 +50,7 @@ export type WeeklyReviewAuthorityActor = WeeklyReviewActor & {
 export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
     loadActor: () => Promise<WeeklyReviewAuthorityActor>,
-    options: { internalRetrievalV1?: boolean } = {}
+    options: { internalRetrievalV1?: boolean; scopedEvidenceV2?: boolean } = {}
 ) {
     async function fresh(
         query: WeeklyReviewQuery,
@@ -145,13 +149,27 @@ export function createWeeklyReviewAuthority(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,
             architectureId: string,
-            requiredIds: string[]
+            requiredIds: string[],
+            scopes: WeeklyReviewSourceScopes = {}
         ) {
+            if (
+                Object.keys(scopes).length &&
+                !(options.internalRetrievalV1 && options.scopedEvidenceV2)
+            )
+                throw new WeeklyReviewConflict("scoped_evidence_disabled", 404);
             if (options.internalRetrievalV1)
-                return validateInternalConfiguration(query, fresh, assertSourcePurpose, expected, {
-                    architectureId,
-                    requiredIds,
-                });
+                return validateInternalConfiguration(
+                    query,
+                    fresh,
+                    assertSourcePurpose,
+                    expected,
+                    {
+                        architectureId,
+                        requiredIds,
+                        scopes,
+                    },
+                    options.scopedEvidenceV2
+                );
             const { actor } = await fresh(query, expected, true);
             if (actor.canConfigure !== true)
                 throw new WeeklyReviewConflict("review_configuration_denied", 403);
@@ -166,12 +184,26 @@ export function createWeeklyReviewAuthority(
         async validatePreferenceSources(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,
-            starIds: string[]
+            starIds: string[],
+            scopes: WeeklyReviewSourceScopes = {}
         ) {
+            if (
+                Object.keys(scopes).length &&
+                !(options.internalRetrievalV1 && options.scopedEvidenceV2)
+            )
+                throw new WeeklyReviewConflict("scoped_evidence_disabled", 404);
             if (options.internalRetrievalV1)
-                return validateInternalConfiguration(query, fresh, assertSourcePurpose, expected, {
-                    starIds,
-                });
+                return validateInternalConfiguration(
+                    query,
+                    fresh,
+                    assertSourcePurpose,
+                    expected,
+                    {
+                        starIds,
+                        scopes,
+                    },
+                    options.scopedEvidenceV2
+                );
             const { actor } = await fresh(query, expected, true);
             if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
             if (starIds.length > 8) throw new WeeklyReviewConflict("context_budget_exceeded");
@@ -214,7 +246,8 @@ export function createWeeklyReviewAuthority(
                     assertSourcePurpose,
                     expected,
                     week,
-                    identity
+                    identity,
+                    options.scopedEvidenceV2
                 );
             }
             return database.transaction(async query => {
@@ -300,7 +333,8 @@ export function createWeeklyReviewAuthority(
             // New acquisition limits govern new candidates. Historical reads and
             // decisions retain the established exact-frozen-dependency reader.
             const bounded =
-                options.internalRetrievalV1 && phase !== "read" && phase !== "decision"
+                dependencies.some(dependency => dependency.kind === "scoped-document") ||
+                (options.internalRetrievalV1 && phase !== "read" && phase !== "decision")
                     ? boundedInternalQuery(query)
                     : null;
             if (bounded) query = bounded.query;
@@ -317,7 +351,43 @@ export function createWeeklyReviewAuthority(
             const read = bounded
                 ? createInternalSourceReader(query, actor, bounded.acquisition, assertSourcePurpose)
                 : null;
-            for (const dependency of dependencies)
+            const readScoped = bounded
+                ? createScopedSourceReader(
+                      query,
+                      actor,
+                      bounded.acquisition,
+                      assertSourcePurpose,
+                      epoch
+                  )
+                : null;
+            for (const dependency of dependencies) {
+                if (dependency.kind === "scoped-document") {
+                    if (
+                        !dependency.scope ||
+                        !readScoped ||
+                        dependency.scope.dependency.documentId !== dependency.id ||
+                        dependency.scope.dependency.parentVersion !== dependency.version ||
+                        dependency.scope.dependency.parentHash !== dependency.hash ||
+                        dependency.scope.dependency.purpose !== dependency.purpose
+                    )
+                        throw new WeeklyReviewConflict("source_authority_changed", 403);
+                    const frozen = dependency.scope;
+                    const result = await readScoped(
+                        dependency.id,
+                        dependency.purpose,
+                        frozen.request.asOf,
+                        {
+                            version: dependency.version,
+                            expectedParentHash: dependency.hash,
+                            qualification: frozen.dependency.coverage.qualification,
+                            requiredUnits: frozen.dependency.requiredUnits,
+                        },
+                        frozen.dependency.authorityRevision,
+                        frozen
+                    );
+                    current.push(result.dependency);
+                    continue;
+                }
                 current.push(
                     read
                         ? await read(
@@ -334,6 +404,7 @@ export function createWeeklyReviewAuthority(
                               dependency.purpose
                           )
                 );
+            }
             assertFrozenSources(dependencies, current);
         },
     };

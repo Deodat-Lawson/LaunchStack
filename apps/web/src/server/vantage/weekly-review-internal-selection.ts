@@ -1,3 +1,8 @@
+import {
+    configuredSourceScopes,
+    createScopedSourceReader,
+    type WeeklyReviewSourceScopes,
+} from "./weekly-review-scoped-selection";
 import { createHash } from "node:crypto";
 import { scopeAllowsDocument } from "~/lib/authz/scope-types";
 import {
@@ -8,6 +13,7 @@ import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
 import {
     WeeklyReviewConflict,
     type SourcePurpose,
+    type FrozenDependency,
     type WeeklyReviewActor,
     type WeeklyReviewContext,
     type WeeklyReviewDatabase,
@@ -208,7 +214,8 @@ function inputFor(
     week: string,
     role: string,
     sources: WeeklyReviewSource[],
-    mandatoryCount: number
+    mandatoryCount: number,
+    scopedEvidence?: WeeklyReviewContext["scopedEvidence"]
 ): WeeklyReviewInput {
     return {
         candidateId: identity.candidateId,
@@ -217,6 +224,7 @@ function inputFor(
         role,
         mandatoryCoverage: { required: mandatoryCount, included: mandatoryCount },
         sources,
+        ...(scopedEvidence?.length ? { scopedEvidence } : {}),
     };
 }
 
@@ -226,7 +234,8 @@ export async function collectInternalWeeklyReviewContext(
     assertPurpose: PurposeAssertion,
     expected: WeeklyReviewActor,
     week: string,
-    identity: ReviewInputIdentity
+    identity: ReviewInputIdentity,
+    scopedEnabled = false
 ): Promise<WeeklyReviewContext> {
     return database.transaction(async raw => {
         const { query, acquisition, deadlineAt } = boundedInternalQuery(raw);
@@ -251,11 +260,51 @@ export async function collectInternalWeeklyReviewContext(
         );
         const read = createInternalSourceReader(query, actor, acquisition, assertPurpose);
         const sources: WeeklyReviewSource[] = [];
-        for (const [id, purpose] of selection) sources.push(await read(id, purpose, cutoff));
+        const dependencies: FrozenDependency[] = [];
+        const scopedEvidence: NonNullable<WeeklyReviewContext["scopedEvidence"]> = [];
+        const companyIds = [
+            String(policy?.architecture_document_id),
+            ...ids(policy?.required_document_ids),
+        ];
+        const companyScopes = scopedEnabled
+            ? configuredSourceScopes(policy?.required_source_scopes, companyIds)
+            : {};
+        const starScopes = scopedEnabled
+            ? configuredSourceScopes(pref?.star_source_scopes, ids(pref?.star_document_ids))
+            : {};
+        const readScoped = createScopedSourceReader(
+            query,
+            actor,
+            acquisition,
+            assertPurpose,
+            epoch
+        );
+        for (const [id, purpose] of selection) {
+            const scope = purpose === "personal-star" ? starScopes[id] : companyScopes[id];
+            if (scope) {
+                const result = await readScoped(
+                    id,
+                    purpose,
+                    cutoff,
+                    scope,
+                    purpose === "personal-star"
+                        ? "preferences:" + databaseText(pref?.version ?? 0)
+                        : "policy:" + databaseText(policy?.version ?? 0)
+                );
+                sources.push(...result.sources);
+                dependencies.push(result.dependency);
+                scopedEvidence.push(result.descriptor);
+            } else {
+                const source = await read(id, purpose, cutoff);
+                sources.push(source);
+                dependencies.push(source);
+            }
+        }
+        const profile = scopedEvidence.length ? "scoped-v2" : "internal-v1";
         const budget = () =>
             calculateWeeklyReviewBudget(
-                inputFor(identity, week, actor.role, sources, mandatoryCount),
-                "internal-v1"
+                inputFor(identity, week, actor.role, sources, mandatoryCount, scopedEvidence),
+                profile
             );
         if (!budget().feasible) throw new WeeklyReviewConflict("mandatory_context_budget_exceeded");
         const diagnostics: SelectionDiagnostics = {
@@ -290,8 +339,15 @@ export async function collectInternalWeeklyReviewContext(
                     continue;
                 }
                 const next = calculateWeeklyReviewBudget(
-                    inputFor(identity, week, actor.role, [...sources, source], mandatoryCount),
-                    "internal-v1"
+                    inputFor(
+                        identity,
+                        week,
+                        actor.role,
+                        [...sources, source],
+                        mandatoryCount,
+                        scopedEvidence
+                    ),
+                    profile
                 );
                 if (!next.feasible) {
                     diagnostics.omitted.push({
@@ -304,6 +360,7 @@ export async function collectInternalWeeklyReviewContext(
                     continue;
                 }
                 sources.push(source);
+                dependencies.push(source);
             } catch (error) {
                 if (!(error instanceof WeeklyReviewConflict)) throw error;
                 if (error.code === "source_access_denied") {
@@ -349,6 +406,21 @@ export async function collectInternalWeeklyReviewContext(
             mandatoryCoverage: diagnostics.mandatoryCoverage,
             inputIdentity: identity,
             selectionDiagnostics: diagnostics,
+            ...(scopedEvidence.length
+                ? {
+                      scopedEvidence,
+                      dependencies: dependencies.map(
+                          ({ kind, id, version, hash, purpose, scope }) => ({
+                              kind,
+                              id,
+                              version,
+                              hash,
+                              purpose,
+                              ...(scope ? { scope } : {}),
+                          })
+                      ),
+                  }
+                : {}),
         };
     });
 }
@@ -360,7 +432,10 @@ export async function validateInternalConfiguration(
     fresh: Fresh,
     assertPurpose: PurposeAssertion,
     expected: WeeklyReviewActor,
-    update: { architectureId: string; requiredIds: string[] } | { starIds: string[] }
+    update:
+        | { architectureId: string; requiredIds: string[]; scopes?: WeeklyReviewSourceScopes }
+        | { starIds: string[]; scopes?: WeeklyReviewSourceScopes },
+    scopedEnabled = false
 ) {
     const { query, acquisition, deadlineAt } = boundedInternalQuery(raw);
     const { actor } = await fresh(query, expected, true, deadlineAt);
@@ -386,16 +461,50 @@ export async function validateInternalConfiguration(
     const now = new Date().toISOString();
     const read = createInternalSourceReader(query, actor, acquisition, assertPurpose);
     const sources: WeeklyReviewSource[] = [];
-    for (const [id, purpose] of selection) sources.push(await read(id, purpose, now));
+    const companyIds = [
+        String(company ? update.architectureId : policy?.architecture_document_id),
+        ...(company ? update.requiredIds : ids(policy?.required_document_ids)),
+    ];
+    const companyScopes = scopedEnabled
+        ? configuredSourceScopes(
+              company ? update.scopes : policy?.required_source_scopes,
+              companyIds
+          )
+        : {};
+    const starScopes = scopedEnabled
+        ? configuredSourceScopes(
+              company ? pref?.star_source_scopes : update.scopes,
+              company ? ids(pref?.star_document_ids) : update.starIds
+          )
+        : {};
+    if (!company && Object.keys(starScopes).some(id => companyIds.includes(id)))
+        throw new WeeklyReviewConflict("personal_scope_cannot_narrow_required", 400);
+    const scopedEvidence: NonNullable<WeeklyReviewContext["scopedEvidence"]> = [];
+    const readScoped = createScopedSourceReader(
+        query,
+        actor,
+        acquisition,
+        assertPurpose,
+        "configuration"
+    );
+    for (const [id, purpose] of selection) {
+        const scope = purpose === "personal-star" ? starScopes[id] : companyScopes[id];
+        if (scope) {
+            const result = await readScoped(id, purpose, now, scope, "configuration");
+            sources.push(...result.sources);
+            scopedEvidence.push(result.descriptor);
+        } else sources.push(await read(id, purpose, now));
+    }
     const budget = calculateWeeklyReviewBudget(
         inputFor(
             { candidateId: "00000000-0000-4000-8000-000000000000", asOf: now },
             now.slice(0, 10),
             actor.role,
             sources,
-            mandatoryCount
+            mandatoryCount,
+            scopedEvidence
         ),
-        "internal-v1"
+        scopedEvidence.length ? "scoped-v2" : "internal-v1"
     );
     if (!budget.feasible) throw new WeeklyReviewConflict("mandatory_context_budget_exceeded");
     return sources.filter(source =>

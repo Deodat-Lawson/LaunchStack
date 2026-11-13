@@ -1,3 +1,7 @@
+import type {
+    PreparedScopedEvidence,
+    ScopedEvidenceRequest,
+} from "@launchstack/pipelines/vantage/scoped-evidence";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
 
 export interface WeeklyReviewActor {
@@ -11,7 +15,8 @@ export type SourcePurpose =
     | "personal-star"
     | "retrieved";
 export interface FrozenDependency {
-    kind: "document" | "company";
+    kind: "document" | "company" | "scoped-document";
+    scope?: { request: ScopedEvidenceRequest; dependency: PreparedScopedEvidence["dependency"] };
     id: string;
     version: string;
     hash: string;
@@ -53,6 +58,8 @@ export interface WeeklyReviewContext {
     preferenceVersion: number;
     authorityEpoch: string;
     mandatoryCoverage: { required: number; included: number };
+    dependencies?: FrozenDependency[];
+    scopedEvidence?: PreparedScopedEvidence["dependency"][];
     inputIdentity?: { candidateId: string; asOf: string };
     selectionDiagnostics?: SelectionDiagnostics;
 }

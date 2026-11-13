@@ -1,8 +1,17 @@
+import {
+    fingerprint,
+    SCOPED_EVALUATION_VERSION,
+    SCOPED_RUBRIC_VERSION,
+} from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 import {
     calculateWeeklyReviewBudget,
+    weeklyReviewEvaluation,
+    weeklyReviewAdmissionBytes,
+    validateScopedWeeklyReviewInput,
+    type WeeklyReviewV21,
     type WeeklyReviewInput,
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import {
@@ -65,7 +74,9 @@ function reportReadEvidence(value: unknown): unknown {
     if (!value || typeof value !== "object") return value;
     const evidence = value as Record<string, unknown>;
     if (
-        evidence.schemaVersion !== "vantage-admission/v2" ||
+        !["vantage-admission/v2", "vantage-admission/v3"].includes(
+            String(evidence.schemaVersion)
+        ) ||
         !evidence.selectionDiagnostics ||
         typeof evidence.selectionDiagnostics !== "object"
     )
@@ -313,20 +324,37 @@ export function createWeeklyReviewRepository(
                     reportHash?: string;
                     inputHash?: string;
                     evaluationHash?: string;
+                    evaluationInputBytes?: number;
+                    judgeInputBytes?: number;
                     inputSnapshot?: WeeklyReviewInput;
+                    scopedEvidence?: WeeklyReviewInput["scopedEvidence"];
+                    sourceRegistry?: unknown;
+                    freezeHash?: string;
                     budget?: ReturnType<typeof calculateWeeklyReviewBudget>;
                     evaluation?: {
                         status?: string;
                         verdict?: string;
                         error?: unknown;
                         integrityIssues?: { severity?: string }[];
+                        scopedEvidence?: WeeklyReviewInput["scopedEvidence"];
+                        version?: string;
+                        rubricVersion?: string;
+                        scenarioId?: string;
+                        scenarioVersion?: string;
+                        scenarioFingerprint?: string;
+                        inputFingerprint?: string;
+                        candidateId?: string;
+                        pipelineVersion?: string;
+                        contextCompleteness?: string;
                     };
                 } | null;
                 if (
                     !evidence ||
-                    !["vantage-admission/v1", "vantage-admission/v2"].includes(
-                        evidence.schemaVersion ?? ""
-                    ) ||
+                    ![
+                        "vantage-admission/v1",
+                        "vantage-admission/v2",
+                        "vantage-admission/v3",
+                    ].includes(evidence.schemaVersion ?? "") ||
                     evidence.candidateId !== id ||
                     evidence.reportHash !== hash(input.report) ||
                     !/^[a-f0-9]{64}$/.test(evidence.inputHash ?? "") ||
@@ -338,7 +366,17 @@ export function createWeeklyReviewRepository(
                     evidence.evaluation.integrityIssues.some(issue => issue.severity === "error")
                 )
                     throw new WeeklyReviewConflict("candidate_admission_invalid");
-                if (evidence.schemaVersion === "vantage-admission/v2") {
+                if (
+                    dependenciesOf(row).some(
+                        dependency => dependency.kind === "scoped-document"
+                    ) !==
+                    (evidence.schemaVersion === "vantage-admission/v3")
+                )
+                    throw new WeeklyReviewConflict("candidate_admission_invalid");
+                if (
+                    evidence.schemaVersion === "vantage-admission/v2" ||
+                    evidence.schemaVersion === "vantage-admission/v3"
+                ) {
                     try {
                         if (
                             !evidence.inputSnapshot ||
@@ -348,10 +386,126 @@ export function createWeeklyReviewRepository(
                             throw new Error("invalid_input");
                         const budget = calculateWeeklyReviewBudget(
                             evidence.inputSnapshot,
-                            "internal-v1"
+                            evidence.schemaVersion === "vantage-admission/v3"
+                                ? "scoped-v2"
+                                : "internal-v1"
                         );
                         if (!budget.feasible || hash(budget) !== hash(evidence.budget))
                             throw new Error("invalid_budget");
+                        if (evidence.schemaVersion === "vantage-admission/v3") {
+                            const snapshot = evidence.inputSnapshot;
+                            const reservedWeek =
+                                row.week_start instanceof Date
+                                    ? row.week_start.toISOString().slice(0, 10)
+                                    : scalarText(row.week_start).slice(0, 10);
+                            if (snapshot.week !== reservedWeek)
+                                throw new Error("invalid_reserved_week");
+                            validateScopedWeeklyReviewInput(snapshot);
+                            if (
+                                !snapshot.scopedEvidence?.length ||
+                                fingerprint(evidence.scopedEvidence) !==
+                                    fingerprint(snapshot.scopedEvidence) ||
+                                fingerprint(evidence.evaluation.scopedEvidence) !==
+                                    fingerprint(snapshot.scopedEvidence)
+                            )
+                                throw new Error("invalid_scope");
+                            const frozen = dependenciesOf(row);
+                            const scoped = frozen.filter(
+                                dependency => dependency.kind === "scoped-document"
+                            );
+                            if (
+                                fingerprint(
+                                    scoped.map(dependency => dependency.scope?.dependency)
+                                ) !== fingerprint(snapshot.scopedEvidence)
+                            )
+                                throw new Error("invalid_frozen_scope");
+                            const mandatory = frozen.filter(
+                                dependency =>
+                                    dependency.purpose === "company-architecture" ||
+                                    dependency.purpose === "workspace-required"
+                            );
+                            if (
+                                snapshot.mandatoryCoverage.required !== mandatory.length ||
+                                snapshot.mandatoryCoverage.included !== mandatory.length
+                            )
+                                throw new Error("invalid_mandatory_coverage");
+                            for (const dependency of frozen.filter(
+                                dependency => dependency.kind === "document"
+                            ))
+                                if (
+                                    !snapshot.sources.some(
+                                        source =>
+                                            source.ref ===
+                                            "doc:" + dependency.id + "@" + dependency.version
+                                    )
+                                )
+                                    throw new Error("missing_frozen_source");
+                            for (const source of snapshot.sources) {
+                                if (source.ref.startsWith("unit:")) continue;
+                                if (
+                                    !frozen.some(
+                                        dependency =>
+                                            dependency.kind === "document" &&
+                                            source.ref ===
+                                                "doc:" + dependency.id + "@" + dependency.version &&
+                                            dependency.version === source.version &&
+                                            dependency.hash === source.hash &&
+                                            createHash("sha256")
+                                                .update(source.text, "utf8")
+                                                .digest("hex") === source.hash &&
+                                            dependency.purpose === source.purpose
+                                    )
+                                )
+                                    throw new Error("invalid_frozen_source");
+                            }
+                            const evaluation = weeklyReviewEvaluation(
+                                input.report as WeeklyReviewV21,
+                                snapshot
+                            );
+                            const assessed = evidence.evaluation;
+                            if (
+                                assessed.version !== SCOPED_EVALUATION_VERSION ||
+                                assessed.rubricVersion !== SCOPED_RUBRIC_VERSION ||
+                                assessed.scenarioId !== evaluation.scenario.id ||
+                                assessed.scenarioVersion !== evaluation.scenario.version ||
+                                assessed.scenarioFingerprint !== fingerprint(evaluation.scenario) ||
+                                assessed.inputFingerprint !== fingerprint(evaluation) ||
+                                assessed.candidateId !== evaluation.actual.id ||
+                                assessed.pipelineVersion !== evaluation.actual.pipelineVersion ||
+                                assessed.contextCompleteness !==
+                                    evaluation.scenario.contextCompleteness
+                            )
+                                throw new Error("invalid_assessment_identity");
+                            const admissionBytes = weeklyReviewAdmissionBytes(
+                                input.report as WeeklyReviewV21,
+                                snapshot
+                            );
+                            if (
+                                admissionBytes.evaluationInputBytes !==
+                                    evidence.evaluationInputBytes ||
+                                admissionBytes.judgeInputBytes !== evidence.judgeInputBytes ||
+                                admissionBytes.judgeInputBytes > budget.limits.judgeInputBytes
+                            )
+                                throw new Error("invalid_judge_budget");
+                            if (
+                                hash(evaluation) !== evidence.evaluationHash ||
+                                Buffer.byteLength(JSON.stringify(evaluation)) >
+                                    budget.limits.judgeInputBytes ||
+                                hash(snapshot.sources) !== evidence.freezeHash ||
+                                hash(
+                                    snapshot.sources.map(
+                                        ({ ref, version, hash, purpose, title }) => ({
+                                            ref,
+                                            version,
+                                            hash,
+                                            purpose,
+                                            title,
+                                        })
+                                    )
+                                ) !== hash(evidence.sourceRegistry)
+                            )
+                                throw new Error("invalid_evaluation");
+                        }
                     } catch {
                         throw new WeeklyReviewConflict("candidate_admission_invalid");
                     }

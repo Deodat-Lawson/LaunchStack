@@ -121,6 +121,9 @@ export const vantageWeeklyReviewPolicy = pgTable("vantage_weekly_review_policy",
     requiredDocumentIds: jsonb("required_document_ids")
         .notNull()
         .default(sql`'[]'::jsonb`),
+    requiredSourceScopes: jsonb("required_source_scopes")
+        .notNull()
+        .default(sql`'{}'::jsonb`),
     version: integer("version").notNull().default(1),
 });
 export const vantageWeeklyReviewPreferences = pgTable(
@@ -131,6 +134,9 @@ export const vantageWeeklyReviewPreferences = pgTable(
         starDocumentIds: jsonb("star_document_ids")
             .notNull()
             .default(sql`'[]'::jsonb`),
+        starSourceScopes: jsonb("star_source_scopes")
+            .notNull()
+            .default(sql`'{}'::jsonb`),
         version: integer("version").notNull().default(1),
     },
     t => ({

@@ -263,6 +263,7 @@ export function compileScopedEvidence(
         documentId: request.documentId,
         parentVersion: request.version,
         parentHash,
+        parentChars: parentText.length,
         scopeHash,
         authorityRevision: authority.authorityRevision,
         purpose: authority.purpose,
@@ -355,8 +356,9 @@ export function scopedWeeklyReviewBudget(
             included: prepared.dependency.coverage.includedUnits,
         },
         sources: prepared.modelFacingProjection.sources,
+        scopedEvidence: [prepared.dependency],
     };
-    const budget = calculateWeeklyReviewBudget(input, "internal-v1");
+    const budget = calculateWeeklyReviewBudget(input, "scoped-v2");
     const projectionBytes = Buffer.byteLength(
         JSON.stringify({ ...context, ...prepared.modelFacingProjection })
     );

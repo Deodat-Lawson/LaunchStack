@@ -18,7 +18,7 @@
     },
     "guest": {
       "label": "Guest",
-      "description": "Sees only the folders they have been added to."
+      "description": "Sees only what is shared with them."
     }
   },
   "permissions": {
@@ -52,7 +52,7 @@
       "manage": "Connect and disconnect Google Drive, Slack, GitHub, and agent connectors"
     },
     "analytics": {
-      "view": "The statistics dashboard and per-document stats"
+      "view": "The workspace's usage and spending, by person and by document"
     },
     "audit": {
       "view": "Read the audit log"
@@ -135,7 +135,7 @@
     "subFiltered": "{shown} of {count, plural, one {# group} other {# groups}}",
     "filterPlaceholder": "Filter groups",
     "newGroup": "New group",
-    "empty": "No groups yet. A group lets you share with several people in one step.",
+    "empty": "No groups yet.",
     "noMatch": "No group matches “{query}”.",
     "members": "{count, plural, one {# member} other {# members}}",
     "madeByYou": "Made by you"
@@ -202,22 +202,23 @@
   },
   "inviteDialog": {
     "invalidEmail": "Enter a full email address, like ada@example.com.",
-    "sentToast": "Invitation sent to {email}",
     "sendError": "The invitation wasn't sent.",
     "sentTitle": "Invitation sent",
-    "sentBody": "{email} was emailed a link. If mail isn't set up here, send them this link yourself.",
+    "sentBody": "{email} was emailed a link.",
+    "notEmailedTitle": "Invitation created",
+    "notEmailedBody": "No email was sent. Send {email} this link yourself.",
     "linkLabel": "Invitation link",
     "copyLink": "Copy link",
     "inviteAnother": "Invite someone else",
     "title": "Invite people",
-    "description": "They get an email with a link to join with the role you pick.",
+    "description": "They get a link to join with the role you pick.",
     "chooseRole": "Choose a role",
     "sending": "Sending…",
     "send": "Send invitation"
   },
   "tool": {
     "title": "Team",
-    "about": "Who is in the workspace, the groups you share with, and what everyone has been doing. Roles, invitations, join links and the audit log are in Workspace › People and access.",
+    "about": "Roles, invitations, join links and the audit log are in Workspace › People and access.",
     "nav": {
       "people": "People",
       "groups": "Groups",
@@ -235,7 +236,7 @@
   },
   "activityScreen": {
     "title": "Activity",
-    "sub": "Who added, shared, moved, renamed or deleted what. Only what you can open shows here.",
+    "sub": "Only what you can open shows here.",
     "filterPlaceholder": "Filter activity",
     "whose": "Whose activity",
     "everyone": "Everyone",
@@ -301,7 +302,6 @@
       "title": "Share “{name}”",
       "descriptionFolder": "Everything inside follows the folder unless it has its own sharing.",
       "descriptionChat": "People you add can read this chat and continue it as their own.",
-      "descriptionDocument": "Who can open this file.",
       "loading": "Loading who has access…",
       "readOnly": "You can see who has access but not change it. Ask someone who can manage it.",
       "makeGroup": "Make a group of these {count} people…",
@@ -384,14 +384,14 @@
     "copyFailed": "Couldn't copy",
     "find": {
       "title": "Find investors",
-      "sub": "The venture funds raising a new fund right now — a fund that has just raised is about to invest.",
+      "sub": "Venture funds raising a new fund right now.",
       "focusPlaceholder": "Focus — climate, health, fintech…",
       "focusLabel": "Focus: words in the fund's name",
       "stateLabel": "Fund's state",
       "anywhere": "Anywhere",
       "withinLabel": "Filed within",
       "spvs": "Include single-deal SPVs and syndicates",
-      "sourceNote": "From SEC Form D filings — public, no account."
+      "sourceNote": "From SEC Form D filings."
     },
     "draftIntro": "Draft intro",
     "copyIntro": "Copy intro prompt",

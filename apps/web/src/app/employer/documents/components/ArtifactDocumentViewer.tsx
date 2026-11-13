@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { artifactMarkerOf } from "~/lib/artifact-document";
+import { artifactMarkerOf, isFromClaude } from "~/lib/artifact-document";
 import type { DocumentType } from "../types/document";
 import { ArtifactPreview, SourceView } from "./artifact/ArtifactPreview";
 import { artifactTypeMeta } from "./artifact/artifact-meta";
@@ -71,7 +71,9 @@ export function ArtifactDocumentViewer({ document }: { document: DocumentType })
             <div className="border-line flex h-10 shrink-0 items-center gap-2 border-b px-3">
                 <Icon className="text-ink-3 size-4 shrink-0" aria-hidden />
                 <span className="text-ink-2 truncate text-xs font-medium">{tTypes(type)}</span>
-                <span className="text-ink-3 truncate text-xs">{t("claudeArtifact")}</span>
+                <span className="text-ink-3 truncate text-xs">
+                    {isFromClaude(document.ocrMetadata) ? t("claudeArtifact") : t("sandboxedPage")}
+                </span>
                 <div className="flex-1" />
                 {meta.previewable && (
                     <ToggleGroup

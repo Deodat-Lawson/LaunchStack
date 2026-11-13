@@ -357,7 +357,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             <AiAllowanceCard />
 
             <div ref={signInRef} className="scroll-mt-4" />
-            <Section title={t("signIn.title")} description={t("signIn.description")}>
+            <Section title={t("signIn.title")}>
                 {connectFailure && (
                     <StatusNote tone="danger">
                         {connectErrorMessage(

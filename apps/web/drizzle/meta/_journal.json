@@ -327,8 +327,15 @@
     {
       "idx": 46,
       "version": "7",
-      "when": 1794543767689,
-      "tag": "20261113042247_extraction_tables",
+      "when": 1794291479555,
+      "tag": "20261110061759_mcp_staged_files",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1794545048261,
+      "tag": "20261113044408_extraction_tables",
       "breakpoints": true
     }
   ]

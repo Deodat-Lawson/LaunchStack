@@ -1150,11 +1150,13 @@ export function PdfViewerWithNotes({
     // ---------------------------------------------------------------------
 
     // Where on the page: searched in the text layer of the page the
-    // extracted text points to — until that is known, the hinted page — and
-    // re-run as layers render until the passage is found. Never in whatever
-    // page happens to be drawn: a loose window of the snippet can occur on
-    // a page in view, and taking it would claim the citation for the wrong
-    // page. Only when no page holds the passage are the drawn pages tried.
+    // extracted text points to, once it has, and re-run as layers render
+    // until the passage is found. Not on the page the citation names before
+    // then: that is a hint (chat citations name page 1 when the index kept
+    // no page), and a loose window of the snippet there would move the
+    // reader on its word. Never in whatever page happens to be drawn
+    // either, for the same reason. Only when no page holds the passage are
+    // the drawn pages tried.
     useEffect(() => {
         if (!citationHighlight) {
             setCiteOverlay(null);
@@ -1174,14 +1176,11 @@ export function PdfViewerWithNotes({
         }
 
         const needles = citationNeedles(citationHighlight.text, citationHighlight.matchText);
-        const hintedPage = citationHighlight.page ?? null;
         const candidatePages = target
             ? target.page !== null
                 ? [target.page]
                 : Array.from(renderedPages).sort((a, b) => a - b)
-            : hintedPage
-              ? [hintedPage]
-              : [];
+            : [];
         for (const pageNumber of candidatePages) {
             if (!renderedPages.has(pageNumber)) continue;
             const pageEl = pageRefs.current.get(pageNumber);
@@ -1211,9 +1210,14 @@ export function PdfViewerWithNotes({
         scrollToQuad,
     ]);
 
-    // Which page: the hinted page is shown at once, so the reader sees
-    // movement while it draws; the extracted text then confirms it or finds
-    // the page that really holds the passage, and the viewer goes there.
+    // Which page: the one whose extracted text holds the passage, searched
+    // from the page the citation names, and gone to only once found. The
+    // named page is a hint, not a fact — a chat citation names page 1 when
+    // the index kept no page — so moving there first took a reader ten
+    // pages in back to the start while the text was read, and left them
+    // there when no page held the passage. Not found, the reader stays put,
+    // unless the named page has no text at all (a scan): then nothing can
+    // contradict the hint, and it is all there is to go on.
     // The strongest needle is tried on every page before a weaker one on
     // any, so a loose window of the snippet on an earlier page never beats
     // the whole snippet further on.
@@ -1224,7 +1228,6 @@ export function PdfViewerWithNotes({
         const { nonce } = citationHighlight;
         const hintedPage = citationHighlight.page ?? null;
         setCiteTarget(null);
-        if (hintedPage && pageRefs.current.has(hintedPage)) goToPage(hintedPage);
         const needles = citationNeedles(citationHighlight.text, citationHighlight.matchText);
         const order = pageOrder(numPages, hintedPage);
         const run = async () => {
@@ -1235,12 +1238,17 @@ export function PdfViewerWithNotes({
                     if (pagedNonce.current !== nonce) return;
                     if (textContainsNeedle(text, [needle])) {
                         setCiteTarget({ nonce, page });
-                        if (page !== hintedPage) goToPage(page);
+                        goToPage(page);
                         return;
                     }
                 }
             }
-            if (pagedNonce.current === nonce) setCiteTarget({ nonce, page: null });
+            if (pagedNonce.current !== nonce) return;
+            setCiteTarget({ nonce, page: null });
+            if (hintedPage && hintedPage <= numPages) {
+                const hinted = await pageText(hintedPage);
+                if (pagedNonce.current === nonce && hinted.trim() === "") goToPage(hintedPage);
+            }
         };
         void run();
     }, [citationHighlight, numPages, pdfDoc, goToPage, pageText]);

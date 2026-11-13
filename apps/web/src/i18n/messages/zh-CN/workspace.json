@@ -92,8 +92,7 @@
       "description": "图表、思维导图和流程图——你亲手绘制的来源"
     },
     "workflows": {
-      "label": "工作流",
-      "description": "在你的来源之间自动执行重复任务"
+      "label": "工作流"
     },
     "workspace": {
       "label": "工作区",
@@ -125,8 +124,7 @@
       "description": "成员、群组，以及工作区里谁做了什么"
     },
     "workflows": {
-      "label": "工作流",
-      "description": "在你的来源之间自动执行重复任务"
+      "label": "工作流"
     },
     "mindmap": {
       "label": "新建思维导图",
@@ -184,8 +182,7 @@
       "description": "角色、邀请、加入链接、审计"
     },
     "profile": {
-      "label": "公司档案",
-      "description": "AI 提取的公司情报"
+      "label": "公司档案"
     },
     "agentsNodes": {
       "label": "智能体与节点",
@@ -283,7 +280,7 @@
   },
   "studioDrawer": {
     "title": "工作台应用",
-    "description": "打开一个工作区应用——按住 ⌘ 点击可在当前内容旁边打开。列出哪些应用取决于你的权限。",
+    "description": "按住 ⌘ 点击应用，可在当前内容旁边打开。",
     "openBeside": "在旁边打开",
     "comingSoon": "即将推出",
     "comingSoonReason": "即将推出。",
@@ -355,11 +352,7 @@
       "back": "返回工作区"
     },
     "workflows": {
-      "title": "工作流（即将推出）",
-      "body": "串联能感知来源的步骤：“每周五总结新的客户访谈，起草一条 Slack 更新，并排队等待审阅。”目前正在设计中。",
-      "scheduled": "定时或由事件触发",
-      "composable": "可组合的操作：查询、起草、改写、导出、通知",
-      "dryRun": "首次运行前可预演预览"
+      "title": "工作流（即将推出）"
     },
     "mindmap": {
       "linkTitle": "思维导图",
@@ -398,8 +391,8 @@
       "unknownType": "未知",
       "signIn": "请登录后重试。",
       "storageFailed": "存储上传失败（HTTP {status}）。",
-      "invalidStorage": "存储服务的响应无效。",
-      "noUrl": "存储服务未返回 URL。",
+      "invalidStorage": "上传未完成，请重试。",
+      "noUrl": "上传未完成，请重试。",
       "versionFailed": "版本上传失败",
       "timedOut": "上传超时。",
       "unavailable": "存储服务不可用。"
@@ -415,6 +408,7 @@
     "askAbout": "就此提问",
     "shareHint": "共享 · {audience}",
     "deleteDocument": "删除文档",
+    "editLinkedHint": "在这里编辑。保存时会写入该 Google 文档。",
     "previewingBanner": "正在预览 v{number}。搜索仍使用当前版本。",
     "mindmapError": "无法打开此思维导图：{error}",
     "processing": "该来源仍在处理中——索引完成后将显示内容。",
@@ -424,7 +418,6 @@
     "versionsTab": "版本",
     "notesTab": "笔记",
     "versionHistory": "版本历史",
-    "uploadedRevisions": "该来源已上传的各个版本。",
     "uploadingPercent": "正在上传 {percent}%…",
     "indexingVersion": "正在为新版本建立索引…",
     "uploadNewVersion": "上传新版本",
@@ -494,7 +487,7 @@
     "chatRenameFailed": "无法重命名该对话",
     "chatDeleteFailed": "无法删除该对话",
     "chatContinued": "已在新对话中继续",
-    "chatContinuedDescription": "此副本归你所有且仅你可见，原对话保持不变。",
+    "chatContinuedDescription": "此副本归你所有且仅你可见。",
     "chatContinueFailed": "无法继续该对话",
     "chatNoLongerShared": "该对话已不再与你共享",
     "runDeleted": "已删除",
@@ -503,7 +496,6 @@
     "continuationFailed": "无法加载导入的会话以继续",
     "queuedEditGone": "该排队消息已发送或被移除，你的编辑内容仍保留在输入框中。",
     "forkSaved": "分支已保存为新对话",
-    "forkSavedDescription": "截至此处的对话轮次都已带上，原对话保持不变。",
     "recoveryRetryFailed": "无法保存提示词恢复副本。请先释放浏览器存储空间再重试；原对话完好无损。",
     "retryFailed": "无法重试此回答",
     "recoveryEditFailed": "无法保存提示词恢复副本。请先释放浏览器存储空间再编辑；原对话完好无损。",
@@ -548,7 +540,7 @@
       "titleSplit": "在这里打开内容",
       "titleEmpty": "你的工作区已就绪，随时可以开始",
       "hintSplit": "选择一个应用，或从侧边栏把标签页或来源拖到这里。",
-      "hintEmpty": "打开一个应用即可开始。之后可以把标签页或来源拖到任意边缘来拆分，或按住 ⌘ 点击在旁边打开。"
+      "hintEmpty": "把来源或标签页拖到任意边缘来拆分，或按住 ⌘ 点击在旁边打开。"
     },
     "actions": {
       "newChat": "新对话",
@@ -594,7 +586,7 @@
     "sendFailed": "发送问题失败"
   },
   "chatRoutes": {
-    "noImages": "提供视觉路由的模型不接受图片。",
+    "noImages": "此模型无法读取图片。",
     "alwaysReasons": "提供推理路由的模型始终会进行推理，无需切换。"
   },
   "server": {

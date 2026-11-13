@@ -19,6 +19,7 @@ import {
     Building2 as IconBuilding,
     ChartColumn as IconChart,
     File as IconFile,
+    FilePen as IconFilePen,
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
@@ -38,7 +39,6 @@ import {
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
-    IconGoogleDocs,
     IconDropbox,
     IconDrive,
     IconGithub,
@@ -370,7 +370,8 @@ export interface DemotedFeature {
     label: string;
     Icon: ComponentType<IconProps>;
     kbd?: string;
-    desc: string;
+    /** The row's second line; left out where it would only repeat the label. */
+    desc?: string;
     href: string;
     /** Permission the row's action needs; without it the row is left out. */
     requires?: Permission;
@@ -410,11 +411,11 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=team",
     },
     {
+        // A "coming soon" pane: nothing to describe yet.
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
         kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.workflows")!.defaultKeys),
-        desc: "Automate recurring tasks across your sources",
         href: "/employer/documents?feature=workflows",
     },
     {
@@ -559,7 +560,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "profile",
         label: "Company profile",
         Icon: IconBuilding,
-        desc: "AI-extracted company intel",
         href: "/employer/documents?feature=workspace&at=%2Fcompany",
     },
     {
@@ -594,7 +594,8 @@ export interface StudioFeature {
     id: string;
     label: string;
     Icon: ComponentType<IconProps>;
-    desc: string;
+    /** What the app is for: the picker's second line, a tab's tooltip. */
+    desc?: string;
     /**
      * The link that opens this app's tab — "Open in a new browser tab" uses
      * it. Always `/employer/documents?feature=<id>` (or a deep link into the
@@ -824,7 +825,6 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         id: "workflows",
         label: "Workflows",
         Icon: IconWorkflow,
-        desc: "Automate recurring tasks across your sources",
     },
     // Bug reports and feature requests while the product is in testing. Not
     // a picker tile: whether an instance takes reports at all is the
@@ -881,8 +881,9 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         // Authoring, not ingesting: these hand the user somewhere to write
         // rather than asking for a file. A mindmap becomes citable once it is
-        // published back here; a Google Doc is citable from the moment it is
-        // created and re-syncs as it is edited; pasted text is a note.
+        // published back here; a File is written in LaunchStack's editor or
+        // in Google Docs, and is citable from the moment it is created and
+        // re-reads as it is edited; pasted text is a note.
         group: "Create",
         items: [
             {
@@ -892,10 +893,10 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 desc: "Diagram it, then cite it",
             },
             {
-                id: "google-doc",
-                label: "Google Doc",
-                Icon: IconGoogleDocs,
-                desc: "Write it in Google Docs",
+                id: "file",
+                label: "File",
+                Icon: IconFilePen,
+                desc: "Write it here or in Google Docs",
             },
             {
                 id: "paste",
@@ -1043,6 +1044,21 @@ const STUDIO_APP_MESSAGE_KEYS = {
     feedback: "feedback",
 } as const;
 
+/** Workflows has a name but nothing to describe: its pane is a placeholder. */
+const STUDIO_APP_DESCRIPTION_KEYS = {
+    chat: "chat",
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    investors: "investors",
+    workspace: "workspace",
+    settings: "settings",
+    usage: "usage",
+    mindmap: "mindmap",
+    feedback: "feedback",
+} as const;
+
 const STUDIO_DENIED_NOTE_KEYS = { team: "team" } as const;
 
 /** A Studio app's name — a tab's label, a picker tile, a launcher button. */
@@ -1060,10 +1076,10 @@ export function studioFeatureLabel(
 export function studioFeatureDescription(
     text: StudioText,
     feature: Pick<StudioFeature, "id" | "desc">
-): string {
+): string | undefined {
     const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
     if (tool) return text.tools(`${tool}.description`);
-    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    const key = lookup(STUDIO_APP_DESCRIPTION_KEYS, feature.id);
     return key ? text.workspace(`studioApps.${key}.description`) : feature.desc;
 }
 
@@ -1111,9 +1127,31 @@ const PALETTE_LINK_LABEL_KEYS = {
     byok: "byok",
 } as const;
 
-/** Every palette row has a description of its own — the tools' rows included. */
+/**
+ * The rows with a second line, the tools' rows included. Draft, Rewrite and
+ * Company profile have none (theirs only repeated the name), nor does
+ * Workflows, whose pane is a placeholder.
+ */
 const PALETTE_LINK_DESCRIPTION_KEYS = {
-    ...PALETTE_LINK_LABEL_KEYS,
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    mindmap: "mindmap",
+    artifacts: "artifacts",
+    "agent-sessions": "agentSessions",
+    brand: "brand",
+    prospects: "prospects",
+    investors: "investors",
+    audit: "audit",
+    usage: "usage",
+    spending: "spending",
+    workspace: "workspace",
+    "workspace-general": "workspaceGeneral",
+    settings: "settings",
+    "people-access": "peopleAccess",
+    "agents-nodes": "agentsNodes",
+    byok: "byok",
     growth: "growth",
     proposals: "proposals",
     vantage: "vantage",
@@ -1136,7 +1174,7 @@ export function demotedFeatureLabel(
 export function demotedFeatureDescription(
     text: StudioText,
     feature: Pick<DemotedFeature, "id" | "desc">
-): string {
+): string | undefined {
     const key = lookup(PALETTE_LINK_DESCRIPTION_KEYS, feature.id);
     return key ? text.workspace(`paletteLinks.${key}.description`) : feature.desc;
 }

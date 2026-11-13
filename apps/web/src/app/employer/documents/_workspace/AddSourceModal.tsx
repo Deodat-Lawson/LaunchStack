@@ -12,9 +12,10 @@ import { useFormatter, useTranslations } from "next-intl";
 import { folderLeafName, isUnfiledFolder } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
 import {
-    Zap as IconBolt,
     Check as IconCheck,
     Folder as IconFolder,
+    Loader2,
+    PenLine,
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -39,6 +40,9 @@ import { startFileUploads, startLinkTask } from "./processing/uploadTasks";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { detectSourceType } from "@launchstack/conversion/types";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
+import { IconGoogleDocs } from "~/components/icons/brand";
+import { Label } from "~/components/ui/label";
+import { createFile } from "./fileEditing";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
 import dynamic from "next/dynamic";
@@ -91,9 +95,12 @@ import type { IconProps } from "~/components/icons/types";
  *   - Mindmap: `/api/mindmaps` → the workspace opens the new map's editor in
  *     place; it is a source from the moment it exists and citable once
  *     published.
- *   - Google Doc: `/api/google-docs` → creates a native Doc in the workspace's
- *     Drive and opens it in a new tab; the source exists here immediately and
- *     the Drive reconciler folds later edits back in. The tab is hidden unless
+ *   - File: written one of two ways. "Write it here" posts `/api/files`, which
+ *     makes a Markdown file in the folder; the workspace opens it in the
+ *     viewer's editor. "Write it in Google Docs" posts `/api/google-docs`,
+ *     which creates a native Doc in the workspace's Drive and opens it in a
+ *     new tab; the source exists here immediately and the Drive reconciler
+ *     folds later edits back in. That option is shown only when
  *     `/api/connectors/google` reports the feature enabled.
  *   - Connectors: Slack/GitHub start the workspace OAuth flow at
  *     `/api/connectors/<provider>/oauth/start`. Notion uses the same route
@@ -137,7 +144,7 @@ export interface AddSourceModalProps {
      * still going up, a link the server is fetching, a Drive, Gmail or
      * Obsidian import. The dialog closes; the workspace opens the Processing
      * tab, which shows each one's progress from here on. Not called for what
-     * is made rather than added (a mindmap, a new Google Doc).
+     * is made rather than added (a mindmap, a new file or Google Doc).
      */
     onQueued?: () => void;
     /** Create a folder; may resolve to the path it really got ("Name (2)"). */
@@ -158,6 +165,12 @@ export interface AddSourceModalProps {
      */
     onMindmapCreated?: (mindmapId: number) => void;
     /**
+     * A file was made to be written in LaunchStack's editor. The workspace
+     * opens it with the editor showing; without a handler the dialog just
+     * closes and the list refreshes.
+     */
+    onFileCreated?: (documentId: number) => void;
+    /**
      * What the Coding sessions tab does with a session once it is a source:
      * refresh the library after an import, open one, or continue it in chat.
      * Without these the browser falls back to navigating.
@@ -169,7 +182,7 @@ export interface AddSourceModalProps {
     };
 }
 
-/** Shape of GET /api/connectors/google — gates the Create → Google Doc tab. */
+/** Shape of GET /api/connectors/google — gates Create → File's Google Docs option. */
 interface GoogleConnectionStatus {
     enabled: boolean;
     connected: boolean;
@@ -229,7 +242,7 @@ function extColor(ext: string): string {
 /** Tabs that add to the folder the person picks — the destination bar offers the picker. */
 const PICKS_FOLDER = new Set([
     "mindmap",
-    "google-doc",
+    "file",
     "paste",
     "files",
     "folder",
@@ -243,8 +256,9 @@ const PICKS_FOLDER = new Set([
 /**
  * Tab ids that moved. Google Drive was a Connect tab; a link to it (a
  * bookmark, an old reconnect link) opens Files, where Drive is picked now.
+ * Google Doc became File, which writes it here or in Google Docs.
  */
-const TAB_ALIASES: Record<string, string> = { drive: "files" };
+const TAB_ALIASES: Record<string, string> = { drive: "files", "google-doc": "file" };
 
 function openingTab(initialTab: string | undefined): string {
     if (!initialTab) return "files";
@@ -277,7 +291,7 @@ function fixedAudience(
 /** Each Add a source tab's key in `sources.addSourceModal.tabs`. */
 const TAB_KEYS = {
     mindmap: "mindmap",
-    "google-doc": "googleDoc",
+    file: "file",
     paste: "paste",
     files: "files",
     folder: "folder",
@@ -337,6 +351,7 @@ export function AddSourceModal({
     initialUrl,
     initialText,
     onMindmapCreated,
+    onFileCreated,
     sessions,
 }: AddSourceModalProps) {
     const t = useTranslations("sources.addSourceModal");
@@ -371,8 +386,9 @@ export function AddSourceModal({
     }, [open, onClose]);
 
     // Drive-linked files are dark by default. Rather than show a permanently
-    // greyed tab on every deployment that has not enabled them, ask once per
-    // opening and leave the tab out until we know it is available.
+    // greyed option on every deployment that has not enabled them, ask once
+    // per opening and leave File's Google Docs option out until we know it is
+    // available.
     useEffect(() => {
         if (!open) return;
         let cancelled = false;
@@ -393,9 +409,7 @@ export function AddSourceModal({
 
     if (!open) return null;
 
-    const groups = googleStatus?.enabled
-        ? ADD_TABS
-        : ADD_TABS.map(g => ({ ...g, items: g.items.filter(i => i.id !== "google-doc") }));
+    const groups = ADD_TABS;
     const allTabs: AddSourceTab[] = groups.flatMap(g => g.items);
     const active = allTabs.find(item => item.id === tab) ?? allTabs[0]!;
 
@@ -410,12 +424,28 @@ export function AddSourceModal({
         onUploaded();
         onClose();
     };
+    /** A file to write here: the workspace opens it in the editor. */
+    const handleFileCreated = (documentId: number) => {
+        if (onFileCreated) {
+            onFileCreated(documentId);
+            return;
+        }
+        onUploaded();
+        onClose();
+    };
 
     let panel: React.ReactNode = null;
     if (tab === "mindmap") {
         panel = <MindmapPanel folder={folder} onCreated={onMindmapCreated} />;
-    } else if (tab === "google-doc") {
-        panel = <GoogleDocPanel folder={folder} status={googleStatus} onCreated={handleCreated} />;
+    } else if (tab === "file") {
+        panel = (
+            <FilePanel
+                folder={folder}
+                googleStatus={googleStatus}
+                onFileCreated={handleFileCreated}
+                onGoogleDocCreated={handleCreated}
+            />
+        );
     } else if (tab === "files") {
         panel = (
             <FilesPanel
@@ -780,60 +810,59 @@ function MindmapPanel({
 }
 
 // ---------------------------------------------------------------------------
-// Create → Google Doc
+// Create → File
 // ---------------------------------------------------------------------------
 
 /**
- * Creates a real Google Doc in the workspace's Drive and opens it in a new
- * tab. Unlike the Mindmap path, the source exists in LaunchStack immediately —
- * seeded with its title — and the Drive reconciler folds later edits back in
- * as new versions, so we stay put rather than navigating away.
+ * A file to write, two ways. "Write it here" makes a Markdown file in the
+ * folder and hands it to the workspace, which opens it in the viewer's editor
+ * — the source exists, and becomes citable, from the start. "Write it in
+ * Google Docs" makes a native Doc in the workspace's Drive and opens it in a
+ * new tab; the Drive reconciler folds later edits back in as new versions, so
+ * we stay put rather than navigating away. That option needs the deployment to
+ * have Drive-linked files on, and a Google account connected for the
+ * workspace — without one it offers the connection instead.
  */
-function GoogleDocPanel({
+function FilePanel({
     folder,
-    status,
-    onCreated,
+    googleStatus,
+    onFileCreated,
+    onGoogleDocCreated,
 }: {
     folder: string;
-    status: GoogleConnectionStatus | null;
-    onCreated: () => void;
+    googleStatus: GoogleConnectionStatus | null;
+    onFileCreated: (documentId: number) => void;
+    onGoogleDocCreated: () => void;
 }) {
-    const t = useTranslations("sources.addSourceModal.googleDoc");
-    const tc = useTranslations("common");
+    const t = useTranslations("sources.addSourceModal.file");
     const [title, setTitle] = useState("");
-    const [busy, setBusy] = useState(false);
+    const [busy, setBusy] = useState<null | "here" | "google">(null);
+    const google = googleStatus?.enabled ? googleStatus : null;
 
-    if (status && !status.connected) {
-        return (
-            <div>
-                <p
-                    style={{
-                        fontSize: 13,
-                        color: "var(--ink-3)",
-                        marginBottom: 14,
-                        lineHeight: 1.55,
-                    }}
-                >
-                    {t.rich("connectIntro", {
-                        b: chunks => <strong style={{ color: "var(--ink-2)" }}>{chunks}</strong>,
-                    })}
-                </p>
-                <Button
-                    onClick={() => {
-                        window.location.href =
-                            status.connectUrl ?? "/api/connectors/google/oauth/start";
-                    }}
-                >
-                    {t("connectGoogle")}
-                </Button>
-            </div>
-        );
-    }
+    const writeHere = async () => {
+        if (busy) return;
+        setBusy("here");
+        try {
+            const made = await createFile(
+                { title: title.trim() || undefined, folder },
+                t("here.createFailed")
+            );
+            onFileCreated(made.documentId);
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : t("here.createFailed"));
+            setBusy(null);
+        }
+    };
 
-    const create = async () => {
+    const writeInGoogleDocs = async () => {
+        if (busy || !google) return;
+        if (!google.connected) {
+            window.location.href = google.connectUrl ?? "/api/connectors/google/oauth/start";
+            return;
+        }
         // Open the tab synchronously so popup blockers allow it, then point it.
         const newTab = window.open("", "_blank");
-        setBusy(true);
+        setBusy("google");
         try {
             const res = await fetch("/api/google-docs", {
                 method: "POST",
@@ -844,99 +873,130 @@ function GoogleDocPanel({
             if (!res.ok) throw new Error(body.message ?? `HTTP ${res.status}`);
             if (body.url && newTab) newTab.location.href = body.url;
             else newTab?.close();
-            toast.success(t("created"));
-            onCreated();
+            toast.success(t("google.created"));
+            onGoogleDocCreated();
         } catch (err) {
             newTab?.close();
-            toast.error(err instanceof Error ? err.message : t("createFailed"));
-            setBusy(false);
+            toast.error(err instanceof Error ? err.message : t("google.createFailed"));
+            setBusy(null);
         }
     };
 
     return (
-        <div>
-            <p style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 14, lineHeight: 1.55 }}>
-                {status?.accountEmail ? t("introAs", { email: status.accountEmail }) : t("intro")}
-            </p>
+        <div className="flex flex-col gap-3">
+            <p className="text-ink-3 text-[13px] leading-relaxed">{t("intro")}</p>
 
-            <label
-                style={{
-                    display: "block",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "var(--ink-2)",
-                    marginBottom: 6,
-                }}
-            >
-                {tc("fields.title")}
-                <input
+            <div className="flex flex-col gap-1.5">
+                <Label htmlFor="add-file-title" className="text-ink-2 text-xs font-semibold">
+                    {t("titleLabel")}
+                </Label>
+                <Input
+                    id="add-file-title"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                     placeholder={t("untitled")}
                     maxLength={200}
-                    disabled={busy}
+                    disabled={busy !== null}
                     onKeyDown={e => {
-                        if (e.key === "Enter" && !busy) void create();
+                        if (e.key === "Enter") void writeHere();
                     }}
-                    style={{
-                        display: "block",
-                        width: "100%",
-                        marginTop: 6,
-                        padding: "8px 10px",
-                        borderRadius: 8,
-                        border: "1px solid var(--line)",
-                        background: "var(--panel)",
-                        color: "var(--ink)",
-                        fontSize: 13,
-                        fontWeight: 400,
-                    }}
+                    className="text-[13px]"
                 />
-            </label>
+            </div>
 
-            <button
-                disabled={busy}
-                onClick={() => void create()}
-                style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 10,
-                    width: "100%",
-                    marginTop: 12,
-                    padding: "10px 12px",
-                    borderRadius: 10,
-                    border: "1px solid var(--line)",
-                    background: busy ? "var(--accent-soft)" : "var(--panel)",
-                    textAlign: "left",
-                    cursor: busy ? "wait" : "pointer",
-                }}
-            >
-                <span style={{ fontSize: 18, lineHeight: 1.2 }} aria-hidden>
-                    📄
-                </span>
-                <span style={{ minWidth: 0 }}>
-                    <span
-                        style={{
-                            display: "block",
-                            fontSize: 13,
-                            fontWeight: 600,
-                            color: "var(--ink)",
-                        }}
-                    >
-                        {t("blank")}
-                    </span>
-                    <span
-                        style={{
-                            display: "block",
-                            fontSize: 11.5,
-                            color: "var(--ink-3)",
-                            lineHeight: 1.4,
-                        }}
-                    >
-                        {busy ? t("creating") : t("opensInNewTab")}
-                    </span>
-                </span>
-            </button>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <FileOption
+                    icon={<PenLine className="text-brand-ink size-[18px]" />}
+                    title={t("here.title")}
+                    desc={busy === "here" ? t("here.creating") : t("here.desc")}
+                    busy={busy === "here"}
+                    disabled={busy !== null}
+                    onClick={() => void writeHere()}
+                    testId="add-file-here"
+                />
+                {google && (
+                    <FileOption
+                        icon={<IconGoogleDocs size={18} />}
+                        title={t("google.title")}
+                        desc={
+                            busy === "google"
+                                ? t("google.creating")
+                                : !google.connected
+                                  ? t.rich("google.connectDesc", {
+                                        b: chunks => (
+                                            <strong className="text-ink-2">{chunks}</strong>
+                                        ),
+                                    })
+                                  : google.accountEmail
+                                    ? t("google.descAs", { email: google.accountEmail })
+                                    : t("google.desc")
+                        }
+                        busy={busy === "google"}
+                        disabled={busy !== null}
+                        onClick={() => void writeInGoogleDocs()}
+                        footer={
+                            !google.connected ? (
+                                <span className="text-brand-ink mt-1.5 block text-xs font-semibold">
+                                    {t("google.connectGoogle")}
+                                </span>
+                            ) : null
+                        }
+                        testId="add-file-google"
+                    />
+                )}
+            </div>
         </div>
+    );
+}
+
+function FileOption({
+    icon,
+    title,
+    desc,
+    busy,
+    disabled,
+    onClick,
+    footer,
+    testId,
+}: {
+    icon: React.ReactNode;
+    title: string;
+    desc: React.ReactNode;
+    busy: boolean;
+    disabled: boolean;
+    onClick: () => void;
+    footer?: React.ReactNode;
+    testId: string;
+}) {
+    return (
+        <Button
+            type="button"
+            variant="outline"
+            disabled={disabled}
+            onClick={onClick}
+            data-testid={testId}
+            aria-busy={busy || undefined}
+            className={cn(
+                // A card, not a pill: two lines of text that wrap, aligned left.
+                // min-w-0 lets the card shrink to its grid column instead of
+                // spilling out of it when the Google account's address is long.
+                "border-line h-auto min-w-0 items-start justify-start gap-3 whitespace-normal rounded-[10px] p-3 text-left font-normal",
+                "hover:border-brand hover:bg-brand-soft/40",
+                busy ? "bg-brand-soft cursor-wait disabled:opacity-100" : "bg-panel",
+                disabled && !busy && "opacity-60"
+            )}
+        >
+            <span className="bg-panel-2 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                {busy ? <Loader2 className="text-brand-ink size-4 animate-spin" /> : icon}
+            </span>
+            <span className="min-w-0">
+                <span className="text-ink block text-[13px] font-semibold">{title}</span>
+                <span className="text-ink-3 block text-[11.5px] leading-snug [overflow-wrap:anywhere]">
+                    {desc}
+                </span>
+                {footer}
+            </span>
+        </Button>
     );
 }
 
@@ -1131,24 +1191,6 @@ function FilesPanel({ kind, userId, category, onUploaded, onSynced }: FilesPanel
                     onChange={e => addFiles(e.target.files)}
                 />
             </div>
-            {kind === "files" && (
-                <div
-                    style={{
-                        marginTop: 16,
-                        padding: "12px 14px",
-                        background: "var(--line-2)",
-                        borderRadius: 8,
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                    }}
-                >
-                    <IconBolt size={14} />
-                    <span>{t("ocrNote")}</span>
-                </div>
-            )}
 
             {staged.length > 0 && (
                 <div style={{ marginTop: 16 }}>

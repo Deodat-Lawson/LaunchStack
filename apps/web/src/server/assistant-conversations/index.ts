@@ -6,7 +6,10 @@
  * - `./validate` — checks the input, with errors a model can act on.
  * - `./render` — the Markdown transcript, its content hash and size limit.
  * - `./save` — first save (a new private source) and re-save (a new version).
- * - `./follow-up` + `./follow-up-model` — the follow-up note, after the response.
+ * - `./follow-up` + `./follow-up-model` — the follow-up note itself.
+ * - `./follow-up-queue` — where it runs: an Inngest job on the worker
+ *   (`./follow-up-job`, ASSISTANT_CONVERSATIONS_EXECUTOR=worker) or after
+ *   the response in the web process (`./after-response`).
  */
 export {
     ConversationSaveError,

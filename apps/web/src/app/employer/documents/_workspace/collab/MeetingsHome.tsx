@@ -87,9 +87,6 @@ export function MeetingsHome({
                         <h1 className="display text-ink @max-sm:text-[23px] m-0 text-[30px] leading-[1.1] tracking-tight">
                             {t("heading")}
                         </h1>
-                        <p className="text-ink-3 mt-2 max-w-[640px] text-[13.5px] leading-relaxed">
-                            {t("intro")}
-                        </p>
                     </div>
                     <Button onClick={() => onStart()} className="shrink-0">
                         <Plus className="size-4" /> {ts("newMeeting")}
@@ -125,7 +122,7 @@ export function MeetingsHome({
                             hint={
                                 live.length > 0
                                     ? t("runningCount", { count: live.length })
-                                    : t("recentHint")
+                                    : undefined
                             }
                         />
                         <div className="grid grid-cols-2 gap-3">
@@ -176,7 +173,6 @@ export function MeetingsHome({
                     <SectionHeading
                         Icon={Bot}
                         title={t("yourAgents", { count: agents.length })}
-                        hint={t("agentsHint")}
                         action={
                             onManageAgents ? (
                                 <Button variant="outline" size="sm" onClick={onManageAgents}>
@@ -271,10 +267,7 @@ function WorkflowCard({
             {words.basis && (
                 <div
                     className="text-ink-3 flex items-start gap-1.5 text-[11.5px] leading-snug"
-                    title={ts("basisTitle", {
-                        origin: words.basis.origin,
-                        usedBy: words.basis.usedBy,
-                    })}
+                    title={words.basis.origin}
                 >
                     <BookOpen className="mt-px size-3 shrink-0" />
                     <span>
@@ -284,7 +277,7 @@ function WorkflowCard({
                     </span>
                 </div>
             )}
-            {workflow.phases.length > 0 ? (
+            {workflow.phases.length > 0 && (
                 <ol className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
                     {workflow.phases.map((phase, index) => (
                         <li key={phase.id} className="flex items-center gap-1">
@@ -301,8 +294,6 @@ function WorkflowCard({
                         </li>
                     ))}
                 </ol>
-            ) : (
-                <div className="text-ink-3 text-[11.5px] italic">{t("noPhases")}</div>
             )}
             <div className="flex items-center gap-2">
                 <div className="flex -space-x-1.5">

@@ -68,7 +68,7 @@ export function WeekSuggestions({
             case "follow-through":
                 return t("aside.toSettle", { count: g.items.length });
             case "record":
-                return t("aside.record");
+                return undefined;
         }
     };
     return (

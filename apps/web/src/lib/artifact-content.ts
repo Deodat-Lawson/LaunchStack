@@ -94,6 +94,18 @@ export function artifactSearchText(content: string): string {
         .slice(0, SEARCH_TEXT_LIMIT);
 }
 
+/**
+ * How ingestion reads each artifact type. The stored file is always
+ * text/plain (an artifact is untrusted code, and a stored HTML or SVG file
+ * opened directly would run on this origin), but HTML and Markdown are read
+ * as what they are, so search and citations see their text, not their markup.
+ */
+export function artifactIngestMimeType(type: ArtifactType): string {
+    if (type === "html") return "text/html";
+    if (type === "markdown") return "text/markdown";
+    return "text/plain";
+}
+
 /** File extension the download route and the export button both use. */
 export function artifactFileExtension(type: ArtifactType): string {
     switch (type) {

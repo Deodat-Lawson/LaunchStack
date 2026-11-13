@@ -140,7 +140,7 @@ function PaneShell({
 }: {
     title: string;
     body?: string;
-    children: ReactNode;
+    children?: ReactNode;
     footer: ReactNode;
 }) {
     return (
@@ -235,7 +235,7 @@ export function ChatPane(_: PaneProps) {
 
 interface ComingSoonPaneProps extends PaneProps {
     title: string;
-    body: string;
+    body?: string;
     bullets: string[];
 }
 
@@ -359,7 +359,6 @@ export function WorkflowsPane({ onClose }: PaneProps) {
     return (
         <PaneShell
             title={t("workflows.title")}
-            body={t("workflows.body")}
             footer={
                 <>
                     <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
@@ -369,11 +368,7 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                     </Button>
                 </>
             }
-        >
-            <BulletList
-                items={[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")]}
-            />
-        </PaneShell>
+        />
     );
 }
 

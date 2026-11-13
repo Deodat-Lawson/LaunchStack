@@ -19,6 +19,7 @@ import {
     Building2 as IconBuilding,
     ChartColumn as IconChart,
     File as IconFile,
+    FilePen as IconFilePen,
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
@@ -37,7 +38,6 @@ import {
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
-    IconGoogleDocs,
     IconDropbox,
     IconDrive,
     IconGithub,
@@ -862,8 +862,9 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
     {
         // Authoring, not ingesting: these hand the user somewhere to write
         // rather than asking for a file. A mindmap becomes citable once it is
-        // published back here; a Google Doc is citable from the moment it is
-        // created and re-syncs as it is edited; pasted text is a note.
+        // published back here; a File is written in LaunchStack's editor or
+        // in Google Docs, and is citable from the moment it is created and
+        // re-reads as it is edited; pasted text is a note.
         group: "Create",
         items: [
             {
@@ -873,10 +874,10 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 desc: "Diagram it, then cite it",
             },
             {
-                id: "google-doc",
-                label: "Google Doc",
-                Icon: IconGoogleDocs,
-                desc: "Write it in Google Docs",
+                id: "file",
+                label: "File",
+                Icon: IconFilePen,
+                desc: "Write it here or in Google Docs",
             },
             {
                 id: "paste",

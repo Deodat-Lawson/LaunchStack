@@ -32,6 +32,7 @@ import notes from "./notes.json";
 import processing from "./processing.json";
 import feedback from "./feedback.json";
 import usage from "./usage.json";
+import fileEditing from "./fileEditing.json";
 
 const messages = {
     common,
@@ -63,6 +64,7 @@ const messages = {
     processing,
     feedback,
     usage,
+    fileEditing,
 };
 
 export default messages;

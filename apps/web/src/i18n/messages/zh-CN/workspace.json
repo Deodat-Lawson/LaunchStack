@@ -405,6 +405,7 @@
     "askAbout": "就此提问",
     "shareHint": "共享 · {audience}",
     "deleteDocument": "删除文档",
+    "editLinkedHint": "在这里编辑。保存时会写入该 Google 文档。",
     "previewingBanner": "正在预览 v{number}。搜索仍使用当前版本。",
     "mindmapError": "无法打开此思维导图：{error}",
     "processing": "该来源仍在处理中——索引完成后将显示内容。",

@@ -13,9 +13,10 @@ import { ADD_TABS } from "../types";
  *
  * The Create group does not ingest anything: Mindmap makes a document in the
  * Mindmap app and sends the user to the editor, where publishing it back turns
- * the diagram into a citable source; Google Doc makes a real Doc in the
- * workspace's Drive and opens it in a new tab. These tests pin both routes —
- * the entry point is the whole reason the features know about each other.
+ * the diagram into a citable source; File makes a Markdown file and hands it
+ * to the workspace's editor, or a real Doc in the workspace's Drive opened in
+ * a new tab. These tests pin every route — the entry point is the whole
+ * reason the features know about each other.
  */
 
 // `mock`-prefixed so jest's factory hoisting allows the reference.
@@ -29,7 +30,7 @@ const fetchMock = jest.fn();
 
 /** Response the URL-aware mock returns for anything but the status probe. */
 let defaultResponse: Record<string, unknown>;
-/** What GET /api/connectors/google reports; drives whether the tab exists. */
+/** What GET /api/connectors/google reports; drives whether File offers Google Docs. */
 let googleStatus: Record<string, unknown>;
 
 function jsonOk(body: unknown, status = 201) {
@@ -62,7 +63,7 @@ beforeAll(() => {
 beforeEach(() => {
     mockPush.mockReset();
     fetchMock.mockReset();
-    // Default: Drive-linked files are dark, so the Google Doc tab is absent and
+    // Default: Drive-linked files are dark, so File offers no Google Docs and
     // the Mindmap assertions below see the modal exactly as it ships today.
     googleStatus = { enabled: false, connected: false };
     defaultResponse = { mindmap: { id: 42 } };
@@ -450,7 +451,7 @@ describe("creating a mindmap", () => {
  * The Drive-linked files feature is dark by default, so the tab has to be
  * absent — not disabled — unless the deployment reports it enabled.
  */
-describe("creating a Google Doc", () => {
+describe("Create → File", () => {
     const openedTabs: Array<{ location: { href: string }; close: jest.Mock }> = [];
 
     beforeEach(() => {
@@ -471,102 +472,172 @@ describe("creating a Google Doc", () => {
         };
     }
 
-    it("hides the tab when the deployment has the feature off", async () => {
+    it("lists File in the Create group, where Google Doc used to be", async () => {
+        expect(ADD_TABS[0]?.items.map(i => i.id)).toContain("file");
+        expect(ADD_TABS[0]?.items.map(i => i.id)).not.toContain("google-doc");
         mount();
-        await waitFor(() => expect(callTo("/api/connectors/google")).toBeDefined());
-        expect(screen.queryByRole("button", { name: "Google Doc" })).not.toBeInTheDocument();
+        // Always there: writing here needs no Google account.
+        expect(screen.getByRole("button", { name: "File" })).toBeInTheDocument();
+        await settleStatus();
     });
 
-    it("shows the tab once the deployment reports it enabled", async () => {
-        enabled();
-        mount();
-        await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Google Doc" })).toBeInTheDocument()
-        );
+    it("opens File for an old link to the Google Doc tab", async () => {
+        mount({ initialTab: "google-doc" });
+        expect(screen.getByTestId("add-file-here")).toBeInTheDocument();
+        await settleStatus();
     });
 
-    it("offers Connect instead of Create when no account is linked yet", async () => {
-        enabled({ connected: false, connectUrl: "/api/connectors/google/oauth/start" });
-        const user = userEvent.setup();
-        mount();
+    describe("writing it here", () => {
+        it("makes a file in the chosen folder and hands it to the workspace's editor", async () => {
+            defaultResponse = { documentId: 77, title: "Q3 Planning" };
+            const onFileCreated = jest.fn();
+            const onUploaded = jest.fn();
+            const user = userEvent.setup();
+            mount({ initialTab: "file", defaultCategory: "Strategy", onFileCreated, onUploaded });
 
-        await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Google Doc" })).toBeInTheDocument()
-        );
-        await user.click(screen.getByRole("button", { name: "Google Doc" }));
+            await user.type(screen.getByLabelText("Title"), "Q3 Planning");
+            await user.click(screen.getByTestId("add-file-here"));
 
-        expect(screen.getByRole("button", { name: "Connect Google" })).toBeInTheDocument();
-        expect(screen.queryByText("Blank document")).not.toBeInTheDocument();
+            await waitFor(() => expect(onFileCreated).toHaveBeenCalledWith(77));
+            expect(sentBody<{ title: string; folder: string }>("/api/files")).toEqual({
+                title: "Q3 Planning",
+                folder: "Strategy",
+            });
+            // Made, not queued: the workspace opens it rather than the Processing tab.
+            expect(onUploaded).not.toHaveBeenCalled();
+        });
+
+        it("sends no title when the field is left blank, letting the server default", async () => {
+            defaultResponse = { documentId: 78, title: "Untitled document" };
+            const user = userEvent.setup();
+            mount({ initialTab: "file", onFileCreated: jest.fn() });
+
+            await user.click(screen.getByTestId("add-file-here"));
+
+            await waitFor(() => expect(callTo("/api/files")).toBeDefined());
+            expect(sentBody<{ title?: string }>("/api/files").title).toBeUndefined();
+        });
+
+        it("closes and refreshes when the workspace has no editor to open", async () => {
+            defaultResponse = { documentId: 79, title: "Notes" };
+            const onUploaded = jest.fn();
+            const onClose = jest.fn();
+            const user = userEvent.setup();
+            mount({ initialTab: "file", onUploaded, onClose });
+
+            await user.click(screen.getByTestId("add-file-here"));
+
+            await waitFor(() => expect(onClose).toHaveBeenCalled());
+            expect(onUploaded).toHaveBeenCalled();
+        });
+
+        it("stays put and says why when the file cannot be made", async () => {
+            fetchMock.mockImplementation((url: string) =>
+                Promise.resolve(
+                    url === "/api/connectors/google"
+                        ? jsonOk(googleStatus, 200)
+                        : jsonOk(
+                              { error: "edit_denied", message: "You can't add to Strategy." },
+                              403
+                          )
+                )
+            );
+            const onFileCreated = jest.fn();
+            const user = userEvent.setup();
+            mount({ initialTab: "file", onFileCreated });
+
+            await user.click(screen.getByTestId("add-file-here"));
+
+            await waitFor(() => expect(callTo("/api/files")).toBeDefined());
+            expect(onFileCreated).not.toHaveBeenCalled();
+            await waitFor(() => expect(screen.getByTestId("add-file-here")).not.toBeDisabled());
+        });
     });
 
-    it("creates the doc in the chosen folder and opens it in a new tab", async () => {
-        enabled();
-        defaultResponse = {
-            success: true,
-            documentId: 51,
-            url: "https://docs.google.com/document/d/doc1/edit",
-        };
-        const onUploaded = jest.fn();
-        const user = userEvent.setup();
-        mount({ defaultCategory: "Strategy", onUploaded });
+    describe("writing it in Google Docs", () => {
+        it("is not offered when the deployment has the feature off", async () => {
+            mount({ initialTab: "file" });
+            await settleStatus();
+            expect(screen.getByTestId("add-file-here")).toBeInTheDocument();
+            expect(screen.queryByTestId("add-file-google")).not.toBeInTheDocument();
+        });
 
-        await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Google Doc" })).toBeInTheDocument()
-        );
-        await user.click(screen.getByRole("button", { name: "Google Doc" }));
-        await user.type(screen.getByPlaceholderText("Untitled document"), "Q3 Planning");
-        await user.click(screen.getByText("Blank document"));
+        it("is offered once the deployment reports it enabled", async () => {
+            enabled();
+            mount({ initialTab: "file" });
+            await waitFor(() => expect(screen.getByTestId("add-file-google")).toBeInTheDocument());
+            expect(screen.getByTestId("add-file-google")).toHaveTextContent("team@example.com");
+        });
 
-        await waitFor(() => expect(callTo("/api/google-docs")).toBeDefined());
-        const body = sentBody<{ title: string; folder: string }>("/api/google-docs");
-        expect(body).toEqual({ title: "Q3 Planning", folder: "Strategy" });
+        it("offers to connect Google when no account is linked yet", async () => {
+            enabled({ connected: false, connectUrl: "/api/connectors/google/oauth/start" });
+            mount({ initialTab: "file" });
 
-        // The tab is opened synchronously and pointed afterwards, so a popup
-        // blocker sees a real user gesture.
-        await waitFor(() =>
-            expect(openedTabs[0]!.location.href).toBe(
-                "https://docs.google.com/document/d/doc1/edit"
-            )
-        );
-        await waitFor(() => expect(onUploaded).toHaveBeenCalled());
-    });
+            await waitFor(() => expect(screen.getByTestId("add-file-google")).toBeInTheDocument());
+            expect(screen.getByTestId("add-file-google")).toHaveTextContent("Connect Google");
+        });
 
-    it("sends no title when the field is left blank, letting the server default", async () => {
-        enabled();
-        defaultResponse = { success: true, documentId: 51, url: "https://docs.google.com/x" };
-        const user = userEvent.setup();
-        mount();
+        it("creates the doc in the chosen folder and opens it in a new tab", async () => {
+            enabled();
+            defaultResponse = {
+                success: true,
+                documentId: 51,
+                url: "https://docs.google.com/document/d/doc1/edit",
+            };
+            const onUploaded = jest.fn();
+            const user = userEvent.setup();
+            mount({ initialTab: "file", defaultCategory: "Strategy", onUploaded });
 
-        await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Google Doc" })).toBeInTheDocument()
-        );
-        await user.click(screen.getByRole("button", { name: "Google Doc" }));
-        await user.click(screen.getByText("Blank document"));
+            await waitFor(() => expect(screen.getByTestId("add-file-google")).toBeInTheDocument());
+            await user.type(screen.getByLabelText("Title"), "Q3 Planning");
+            await user.click(screen.getByTestId("add-file-google"));
 
-        await waitFor(() => expect(callTo("/api/google-docs")).toBeDefined());
-        expect(sentBody<{ title?: string }>("/api/google-docs").title).toBeUndefined();
-    });
+            await waitFor(() => expect(callTo("/api/google-docs")).toBeDefined());
+            const body = sentBody<{ title: string; folder: string }>("/api/google-docs");
+            expect(body).toEqual({ title: "Q3 Planning", folder: "Strategy" });
 
-    it("closes the blank tab when creation fails", async () => {
-        enabled();
-        fetchMock.mockImplementation((url: string) =>
-            Promise.resolve(
-                url === "/api/connectors/google"
-                    ? jsonOk(googleStatus, 200)
-                    : jsonOk({ success: false, message: "Not connected" }, 409)
-            )
-        );
-        const onUploaded = jest.fn();
-        const user = userEvent.setup();
-        mount({ onUploaded });
+            // The tab is opened synchronously and pointed afterwards, so a popup
+            // blocker sees a real user gesture.
+            await waitFor(() =>
+                expect(openedTabs[0]!.location.href).toBe(
+                    "https://docs.google.com/document/d/doc1/edit"
+                )
+            );
+            await waitFor(() => expect(onUploaded).toHaveBeenCalled());
+            expect(callTo("/api/files")).toBeUndefined();
+        });
 
-        await waitFor(() =>
-            expect(screen.getByRole("button", { name: "Google Doc" })).toBeInTheDocument()
-        );
-        await user.click(screen.getByRole("button", { name: "Google Doc" }));
-        await user.click(screen.getByText("Blank document"));
+        it("sends no title when the field is left blank, letting the server default", async () => {
+            enabled();
+            defaultResponse = { success: true, documentId: 51, url: "https://docs.google.com/x" };
+            const user = userEvent.setup();
+            mount({ initialTab: "file" });
 
-        await waitFor(() => expect(openedTabs[0]!.close).toHaveBeenCalled());
-        expect(onUploaded).not.toHaveBeenCalled();
+            await waitFor(() => expect(screen.getByTestId("add-file-google")).toBeInTheDocument());
+            await user.click(screen.getByTestId("add-file-google"));
+
+            await waitFor(() => expect(callTo("/api/google-docs")).toBeDefined());
+            expect(sentBody<{ title?: string }>("/api/google-docs").title).toBeUndefined();
+        });
+
+        it("closes the blank tab when creation fails", async () => {
+            enabled();
+            fetchMock.mockImplementation((url: string) =>
+                Promise.resolve(
+                    url === "/api/connectors/google"
+                        ? jsonOk(googleStatus, 200)
+                        : jsonOk({ success: false, message: "Not connected" }, 409)
+                )
+            );
+            const onUploaded = jest.fn();
+            const user = userEvent.setup();
+            mount({ initialTab: "file", onUploaded });
+
+            await waitFor(() => expect(screen.getByTestId("add-file-google")).toBeInTheDocument());
+            await user.click(screen.getByTestId("add-file-google"));
+
+            await waitFor(() => expect(openedTabs[0]!.close).toHaveBeenCalled());
+            expect(onUploaded).not.toHaveBeenCalled();
+        });
     });
 });

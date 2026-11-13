@@ -181,7 +181,16 @@ export async function POST(request: Request) {
                 inferMimeFromName(doc.url);
             const needsProxy =
                 isPrivateBlobUrl(doc.url) || (isS3Storage() && doc.url.startsWith("http"));
-            const url = needsProxy ? `/api/documents/${Number(doc.id)}/content` : doc.url;
+            // The proxy answers with whatever version is current, and the
+            // browser keeps it for an hour. Naming the version in the address
+            // makes a new one (an edit, a Drive sync, an upload) a new URL:
+            // the cache cannot hand back the old file, and an open preview
+            // sees its address change and loads again.
+            const url = needsProxy
+                ? `/api/documents/${Number(doc.id)}/content${
+                      doc.currentVersionId !== null ? `?v=${Number(doc.currentVersionId)}` : ""
+                  }`
+                : doc.url;
 
             return {
                 ...doc,

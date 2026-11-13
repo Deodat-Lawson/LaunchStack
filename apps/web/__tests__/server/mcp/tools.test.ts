@@ -169,6 +169,7 @@ describe("the tool registry", () => {
             "fetch",
             "list_sources",
             "find_similar_companies",
+            "list_prospects",
             "save_conversation",
             "add_document",
             "start_upload",
@@ -178,12 +179,13 @@ describe("the tool registry", () => {
     it("lists the read tools to a read-only key and every tool to a read-write key of a member", async () => {
         expect(
             (await listed(principal({ scopes: ["launchstack:read"] }))).map(t => t.name)
-        ).toEqual(["search", "fetch", "list_sources", "find_similar_companies"]);
+        ).toEqual(["search", "fetch", "list_sources", "find_similar_companies", "list_prospects"]);
         expect((await listed(principal())).map(t => t.name)).toEqual([
             "search",
             "fetch",
             "list_sources",
             "find_similar_companies",
+            "list_prospects",
             "save_conversation",
             "add_document",
             "start_upload",
@@ -196,6 +198,7 @@ describe("the tool registry", () => {
             "fetch",
             "list_sources",
             "find_similar_companies",
+            "list_prospects",
         ]);
     });
 

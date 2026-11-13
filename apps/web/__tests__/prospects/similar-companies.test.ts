@@ -40,7 +40,8 @@ describe("findSimilarCompanies", () => {
             {
                 offering: "Specialty coffee beans",
                 buyers: ["coffee shops"],
-                place: "Baltimore, MD",
+                places: ["Baltimore, MD"],
+                depth: "quick",
                 limit: 5,
             },
             {
@@ -60,11 +61,14 @@ describe("findSimilarCompanies", () => {
         );
         expect(asked[0]!.territory).toEqual({ country: "US", region: "Baltimore" });
         expect(asked[0]!.categoryIds).toContain('["shop"="coffee"]');
-        expect(result.place).toEqual({
-            country: "US",
-            region: "Baltimore",
-            label: "Baltimore, United States",
-        });
+        expect(result.places).toEqual([
+            {
+                asked: "Baltimore, MD",
+                country: "US",
+                region: "Baltimore",
+                label: "Baltimore, United States",
+            },
+        ]);
         expect(result.matching).toBe("semantic");
         expect(result.companies.map(c => c.name)).toEqual(["Bean Coffee Shop"]);
         expect(result.companies[0]).toMatchObject({
@@ -79,7 +83,8 @@ describe("findSimilarCompanies", () => {
             {
                 offering: "Specialty coffee beans",
                 buyers: ["coffee shops"],
-                place: "Baltimore",
+                places: ["Baltimore"],
+                depth: "quick",
                 limit: 5,
             },
             {
@@ -114,7 +119,8 @@ describe("findSimilarCompanies", () => {
             {
                 offering: "Specialty coffee beans",
                 buyers: ["coffee shops"],
-                place: "Baltimore",
+                places: ["Baltimore"],
+                depth: "quick",
                 limit: 5,
             },
             {
@@ -159,7 +165,7 @@ describe("findSimilarCompanies", () => {
     it("refuses a place it cannot find", async () => {
         await expect(
             findSimilarCompanies(
-                { offering: "Coffee", place: "Nowhereland", limit: 5 },
+                { offering: "Coffee", places: ["Nowhereland"], depth: "quick", limit: 5 },
                 {
                     embed: null,
                     judgeFit: null,
@@ -169,5 +175,130 @@ describe("findSimilarCompanies", () => {
                 }
             )
         ).rejects.toBeInstanceOf(SimilarCompaniesError);
+    });
+    it("reads shortlisted homepages in thorough mode: what they say, and their pictures", async () => {
+        const result = await findSimilarCompanies(
+            {
+                offering: "Specialty coffee beans",
+                buyers: ["coffee shops"],
+                places: ["Baltimore"],
+                limit: 5,
+            },
+            {
+                embed: fakeEmbed,
+                judgeFit: null,
+                geocode: baltimore,
+                vocabulary,
+                searchCompanies: null,
+                searchPlaces: async () => [place("Bean Coffee Shop", "shop=coffee")],
+                readPage: async url => ({
+                    url,
+                    finalUrl: url,
+                    status: 200,
+                    contentType: "text/html",
+                    title: "Bean Coffee Shop",
+                    text: "Neighbourhood coffee shop pouring single-origin coffee beans.",
+                    truncated: false,
+                    fetchedAt: "2026-11-13T00:00:00Z",
+                    image: "https://beancoffeeshop.example/og.jpg",
+                    icon: "https://beancoffeeshop.example/icon.png",
+                }),
+            }
+        );
+        expect(result.depth).toBe("thorough");
+        expect(result.companies[0]).toMatchObject({
+            description: expect.stringContaining("single-origin coffee beans"),
+            imageUrl: "https://beancoffeeshop.example/og.jpg",
+            iconUrl: "https://beancoffeeshop.example/icon.png",
+        });
+    });
+
+    it("searches several places, skips excluded domains, and tells the fit check who is asking and what is not wanted", async () => {
+        const searched: string[] = [];
+        const told: Array<{ brief: string; where: string; seller: unknown }> = [];
+        const result = await findSimilarCompanies(
+            {
+                offering: "Specialty coffee beans",
+                buyers: ["coffee shops"],
+                places: ["Baltimore", "Washington, DC", "Atlantis"],
+                exclude: ["beancoffeeshop.example", "other roasters"],
+                seller: "A small roaster in Baltimore.",
+                depth: "quick",
+                limit: 5,
+            },
+            {
+                embed: fakeEmbed,
+                vocabulary,
+                searchCompanies: null,
+                geocode: async p =>
+                    p === "Atlantis"
+                        ? null
+                        : p.startsWith("Washington")
+                          ? { country: "US", region: "Washington" }
+                          : { country: "US", region: "Baltimore" },
+                searchPlaces: async ({ territory }) => {
+                    searched.push(territory.region ?? "");
+                    return territory.region === "Baltimore"
+                        ? [
+                              place("Bean Coffee Shop", "shop=coffee"),
+                              place("Harbor Coffee Shop", "shop=coffee"),
+                          ]
+                        : [place("Capitol Coffee Shop", "shop=coffee")];
+                },
+                judgeFit: async ({ brief, where, seller, candidates }) => {
+                    told.push({ brief, where, seller });
+                    return new Map(candidates.map(c => [c.id, { fit: true, reason: "Yes." }]));
+                },
+            }
+        );
+        expect(searched.sort()).toEqual(["Baltimore", "Washington"]);
+        expect(result.unknownPlaces).toEqual(["Atlantis"]);
+        expect(result.companies.map(c => [c.name, c.place]).sort()).toEqual([
+            ["Capitol Coffee Shop", "Washington, DC"],
+            ["Harbor Coffee Shop", "Baltimore"],
+        ]);
+        expect(told[0]!.where).toBe("Baltimore, United States; Washington, United States");
+        expect(told[0]!.brief).toContain("Not wanted: other roasters.");
+        expect(told[0]!.seller).toEqual({ identity: "A small roaster in Baltimore." });
+    });
+
+    it("keeps checking down the ranking and reports who was left out and why", async () => {
+        let round = 0;
+        const result = await findSimilarCompanies(
+            {
+                offering: "Specialty coffee beans",
+                buyers: ["coffee shops"],
+                places: ["Baltimore"],
+                depth: "quick",
+                limit: 1,
+            },
+            {
+                embed: fakeEmbed,
+                vocabulary,
+                geocode: baltimore,
+                searchCompanies: null,
+                searchPlaces: async () => [
+                    place("First Coffee Shop", "shop=coffee"),
+                    place("Second Coffee Shop", "shop=coffee"),
+                    place("Third Coffee Shop", "shop=coffee"),
+                ],
+                judgeFit: async ({ candidates }) => {
+                    round += 1;
+                    return new Map(
+                        candidates.map(c => [
+                            c.id,
+                            round === 1
+                                ? { fit: false, reason: "A competitor." }
+                                : { fit: true, reason: "Buys beans." },
+                        ])
+                    );
+                },
+            }
+        );
+        expect(round).toBe(2);
+        expect(result.companies).toHaveLength(1);
+        expect(result.leftOut).toEqual(
+            expect.arrayContaining([expect.objectContaining({ reason: "A competitor." })])
+        );
     });
 });

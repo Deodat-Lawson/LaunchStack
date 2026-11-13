@@ -125,9 +125,10 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full dev guide.
 A deployment is self-hosted unless you set `DEPLOYMENT_MODE=cloud`, and the
 defaults are chosen for that case: usage is recorded but never gated, no
 telemetry is loaded, no assets are fetched from a CDN, and the instance
-identifies itself by the host you serve it from. **The first person to sign up
-becomes the owner** of the workspace they create, already verified — there is no
-separate admin bootstrap.
+identifies itself by the host you serve it from. Whoever signs up owns the
+workspace they create, already verified — there is no separate admin bootstrap.
+Sign-up is open to anyone who can reach the instance; see the
+[self-hosting guide](docs/self-hosting.md) before putting one on a public address.
 
 This repository builds the application. The marketing site at launchstack.app is
 a separate app ([`apps/landing`](apps/landing)) that Docker and Compose do not

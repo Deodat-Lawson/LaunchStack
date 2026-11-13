@@ -37,9 +37,12 @@ The public marketing site is **not** part of a self-hosted deployment. It is a
 separate app (`apps/landing`, deployed independently); Docker and Compose build
 `apps/web` only. On a self-hosted instance `/` redirects to `/signin`.
 
-**The first person to sign up becomes the owner** of the workspace they create,
-already verified — there is no separate admin bootstrap step and no approval
-queue to clear for that first account.
+**Whoever signs up owns the workspace they create**, already verified — there
+is no separate admin bootstrap step and no approval queue. That also means
+sign-up is open: anyone who can reach the instance can create an account and a
+workspace of their own, which uses your model keys. There is no invite-only
+switch yet; keep a private instance off the public internet or set
+`AI_MONTHLY_TOKEN_LIMIT_PER_USER`.
 
 ## Prerequisites
 

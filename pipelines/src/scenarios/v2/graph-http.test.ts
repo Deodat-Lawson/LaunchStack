@@ -81,22 +81,33 @@ const WIRE_EDGE = {
 };
 
 describe("createGraphitiHttpPort", () => {
-    it("ingests in snake_case and maps outcomes and usage back", async () => {
-        const { impl, sent } = fakeFetch({
-            body: {
-                outcomes: [
-                    { uuid: "b1-E1", status: "done" },
-                    { uuid: "b1-E2", status: "failed", error: "ValueError" },
-                ],
-                usage: {
-                    calls: 9,
-                    input_tokens: 4200,
-                    output_tokens: 610,
-                    embedding_tokens: 88,
-                    unmetered_calls: 0,
+    it("ingests in snake_case, an episode per request, and adds up outcomes and usage", async () => {
+        const { impl, sent } = fakeFetch(
+            {
+                body: {
+                    outcomes: [{ uuid: "b1-E1", status: "done" }],
+                    usage: {
+                        calls: 5,
+                        input_tokens: 2200,
+                        output_tokens: 310,
+                        embedding_tokens: 40,
+                        unmetered_calls: 0,
+                    },
                 },
             },
-        });
+            {
+                body: {
+                    outcomes: [{ uuid: "b1-E2", status: "failed", error: "ValueError" }],
+                    usage: {
+                        calls: 4,
+                        input_tokens: 2000,
+                        output_tokens: 300,
+                        embedding_tokens: 48,
+                        unmetered_calls: 0,
+                    },
+                },
+            }
+        );
         const result = await port(impl).ingest({
             groupId: "build-1",
             ontology: BASE_ONTOLOGY,
@@ -111,6 +122,11 @@ describe("createGraphitiHttpPort", () => {
             usage: { calls: 9, inputTokens: 4200, outputTokens: 610, embeddingTokens: 88 },
         });
 
+        expect(sent).toHaveLength(2);
+        expect(sent.map(r => (r.body as { episodes: Array<{ uuid: string }> }).episodes)).toEqual([
+            [expect.objectContaining({ uuid: "b1-E1" })],
+            [expect.objectContaining({ uuid: "b1-E2" })],
+        ]);
         const [request] = sent;
         expect(request!.method).toBe("POST");
         expect(request!.url).toBe("http://scenario-graph:8000/v1/groups/build-1/episodes");
@@ -147,12 +163,11 @@ describe("createGraphitiHttpPort", () => {
     });
 
     it("reports one outcome per episode, in input order, even if the reply drops one", async () => {
-        const { impl } = fakeFetch({
-            body: {
-                outcomes: [{ uuid: "b1-E2", status: "done" }],
-                usage: { calls: 1, input_tokens: 1, output_tokens: 1, embedding_tokens: 0 },
-            },
-        });
+        const usage = { calls: 1, input_tokens: 1, output_tokens: 1, embedding_tokens: 0 };
+        const { impl } = fakeFetch(
+            { body: { outcomes: [], usage } },
+            { body: { outcomes: [{ uuid: "b1-E2", status: "done" }], usage } }
+        );
         const { outcomes } = await port(impl).ingest({
             groupId: "build-1",
             ontology: BASE_ONTOLOGY,

@@ -35,9 +35,10 @@ export interface GraphitiHttpPortOptions {
     /** Timeout for health, reads, search and delete. Default 30 s. */
     timeoutMs?: number;
     /**
-     * Timeout for one ingest call, which runs model extraction for every
-     * episode in it. Default 15 minutes. A timed-out ingest keeps running on
-     * the service; the next attempt reconciles through `listEpisodes`.
+     * Timeout for one ingest request (one episode: the adapter sends a batch
+     * an episode at a time). Default 15 minutes, though Node's fetch gives up
+     * waiting for a reply after five. A timed-out ingest keeps running on the
+     * service; the next attempt reconciles through `listEpisodes`.
      */
     ingestTimeoutMs?: number;
     fetch?: typeof fetch;
@@ -307,36 +308,43 @@ export function createGraphitiHttpPort(options: GraphitiHttpPortOptions): Scenar
 
         async ingest({ groupId, ontology, episodes }) {
             const path = groupPath(groupId, "/episodes");
-            if (episodes.length === 0) {
-                return {
-                    outcomes: [],
-                    usage: { calls: 0, inputTokens: 0, outputTokens: 0, embeddingTokens: 0 },
-                };
-            }
-            const response = await call(
-                "POST",
-                path,
-                ingestResponse,
-                { ontology: toWireOntology(ontology), episodes: episodes.map(toWireEpisode) },
-                ingestTimeoutMs
-            );
-            // One outcome per input episode, in input order, whatever the reply held.
-            const byUuid = new Map(response.outcomes.map(o => [o.uuid, o]));
-            const outcomes: GraphIngestOutcome[] = episodes.map(episode => {
-                const outcome = byUuid.get(episode.uuid);
-                if (!outcome) {
-                    return { uuid: episode.uuid, status: "failed", error: "no outcome reported" };
-                }
-                return outcome.error === undefined
-                    ? { uuid: outcome.uuid, status: outcome.status }
-                    : { uuid: outcome.uuid, status: outcome.status, error: shorten(outcome.error) };
-            });
             const usage: GraphUsage = {
-                calls: response.usage.calls,
-                inputTokens: response.usage.input_tokens,
-                outputTokens: response.usage.output_tokens,
-                embeddingTokens: response.usage.embedding_tokens,
+                calls: 0,
+                inputTokens: 0,
+                outputTokens: 0,
+                embeddingTokens: 0,
             };
+            const outcomes: GraphIngestOutcome[] = [];
+            const wireOntology = toWireOntology(ontology);
+            // One episode per request. Node's fetch stops waiting for a reply
+            // after five minutes however long our own limit is, and a slow
+            // model extracts one episode in about a minute and a half: a batch
+            // in one request was abandoned while the service finished it.
+            for (const episode of episodes) {
+                const response = await call(
+                    "POST",
+                    path,
+                    ingestResponse,
+                    { ontology: wireOntology, episodes: [toWireEpisode(episode)] },
+                    ingestTimeoutMs
+                );
+                const outcome = response.outcomes.find(o => o.uuid === episode.uuid);
+                outcomes.push(
+                    !outcome
+                        ? { uuid: episode.uuid, status: "failed", error: "no outcome reported" }
+                        : outcome.error === undefined
+                          ? { uuid: outcome.uuid, status: outcome.status }
+                          : {
+                                uuid: outcome.uuid,
+                                status: outcome.status,
+                                error: shorten(outcome.error),
+                            }
+                );
+                usage.calls += response.usage.calls;
+                usage.inputTokens += response.usage.input_tokens;
+                usage.outputTokens += response.usage.output_tokens;
+                usage.embeddingTokens += response.usage.embedding_tokens;
+            }
             return { outcomes, usage };
         },
 

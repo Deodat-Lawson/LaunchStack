@@ -377,6 +377,17 @@ describe("v2 engine", () => {
         expect([...store.reservations.values()].every(r => r.status === "released")).toBe(true);
     });
 
+    it("fails a run that is unfinished but has nothing it can run", async () => {
+        const { store, deps } = setup({
+            // A report that forgets to finish the run.
+            stages: { report: async () => ({ output: "report" }) },
+        });
+        const run = store.seedRun(makeSpec());
+        const result = await driveV2(deps, run.id, { sleep: noSleep });
+        expect(result.last).toEqual({ state: "failed" });
+        expect(store.runs.get(run.id)!.error).toBe(RUN_MESSAGES.stalled);
+    });
+
     it("refuses runs that are not v2 and stops at a terminal status", async () => {
         const { store, deps } = setup();
         const run = store.seedRun(makeSpec());

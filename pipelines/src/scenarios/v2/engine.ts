@@ -286,7 +286,16 @@ export async function advanceWithFence(
 
     const units = await store.listUnits(run.id, run.generation);
     const unit = nextReadyUnit(units);
-    if (!unit) return { state: "skipped", reason: "no_ready_unit" };
+    if (!unit) {
+        // Unfinished, yet nothing can run: every unit committed without the
+        // report finishing the run, or a dependency that can never be met.
+        // Failing now beats being re-dispatched forever.
+        deps.log?.("scenario v2 run has no runnable unit", {
+            runId: run.id,
+            open: units.filter(u => u.status === "pending" || u.status === "running").length,
+        });
+        return fail(RUN_MESSAGES.stalled);
+    }
 
     // A unit that keeps killing its worker never records an error; its
     // attempt count still climbs, so it cannot loop forever.

@@ -50,6 +50,22 @@ import type { AcceptedReply } from "./journal";
 import { buildInitialPlan, firstFundedUnit } from "./plan";
 import type { ArtifactReader, ArtifactWrite, GraphBuildRecord } from "./stage";
 
+// The credit-hold port ships with the store: this module is the package's
+// `scenarios/v2/db` entry, and hosts implement the ledger side of it.
+export {
+    createScenarioCredits,
+    heldCredits,
+    settlementDescription,
+    settlementKey,
+    type CreditsTx,
+    type ReserveRequest,
+    type ReserveResult,
+    type ScenarioCreditsPort,
+    type ScenarioLedger,
+    type SettleRequest,
+    type SettleResult,
+} from "./credits";
+
 type Tx = Parameters<Parameters<DbClient["transaction"]>[0]>[0];
 
 const ACTIVE = ["queued", "running"] as const;

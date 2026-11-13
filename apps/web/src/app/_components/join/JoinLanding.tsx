@@ -27,6 +27,7 @@ import {
     useUser,
     type DeviceAccount,
 } from "~/lib/auth-client";
+import { announceAccountChange } from "~/lib/auth/account-sync";
 import { withAddAccount } from "~/lib/auth/device-accounts";
 import { withNext } from "~/components/auth/next-path";
 import { isBuiltinRole, normalizeRoleSlug } from "~/lib/authz/permissions";
@@ -395,6 +396,7 @@ export function JoinLanding({
             try {
                 await switchDeviceAccount(invitedAccount.sessionToken);
                 resetMyProfile();
+                announceAccountChange();
                 enterWorkspace(here);
                 return;
             } catch {

@@ -1,3 +1,4 @@
+import { announceAccountChange } from "~/lib/auth/account-sync";
 import { resetMyProfile } from "~/lib/profile/use-my-profile";
 
 /**
@@ -7,5 +8,7 @@ import { resetMyProfile } from "~/lib/profile/use-my-profile";
  */
 export function reloadAs(href: string): void {
     resetMyProfile();
+    // Other tabs are now acting as someone else too: tell them.
+    announceAccountChange();
     window.location.assign(href);
 }

@@ -168,6 +168,8 @@ describe("the tool registry", () => {
             "search",
             "fetch",
             "list_sources",
+            "find_similar_companies",
+            "list_prospects",
             "save_conversation",
             "add_document",
             "start_upload",
@@ -177,11 +179,13 @@ describe("the tool registry", () => {
     it("lists the read tools to a read-only key and every tool to a read-write key of a member", async () => {
         expect(
             (await listed(principal({ scopes: ["launchstack:read"] }))).map(t => t.name)
-        ).toEqual(["search", "fetch", "list_sources"]);
+        ).toEqual(["search", "fetch", "list_sources", "find_similar_companies", "list_prospects"]);
         expect((await listed(principal())).map(t => t.name)).toEqual([
             "search",
             "fetch",
             "list_sources",
+            "find_similar_companies",
+            "list_prospects",
             "save_conversation",
             "add_document",
             "start_upload",
@@ -193,6 +197,8 @@ describe("the tool registry", () => {
             "search",
             "fetch",
             "list_sources",
+            "find_similar_companies",
+            "list_prospects",
         ]);
     });
 
@@ -213,7 +219,8 @@ describe("the tool registry", () => {
             expect((tool.description as string).length).toBeGreaterThan(80);
             const annotations = tool.annotations as Record<string, boolean>;
             expect(annotations.destructiveHint).toBe(false);
-            expect(annotations.openWorldHint).toBe(false);
+            // Only find_similar_companies reads outside the workspace (maps, company indexes).
+            expect(annotations.openWorldHint).toBe(tool.name === "find_similar_companies");
             expect(annotations.readOnlyHint).toBe(
                 !["save_conversation", "add_document", "start_upload"].includes(tool.name as string)
             );

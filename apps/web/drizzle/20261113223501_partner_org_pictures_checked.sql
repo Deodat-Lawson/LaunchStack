@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_partner_orgs" ADD COLUMN "pictures_checked_at" timestamp with time zone;

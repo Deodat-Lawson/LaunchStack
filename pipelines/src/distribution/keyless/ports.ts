@@ -52,6 +52,12 @@ export interface KeylessPortsOptions {
     pagesPerCandidate?: number;
 }
 
+/**
+ * Companies read at once. Most of a run is waiting on other people's websites,
+ * and each is a different site, so what is read from each does not change.
+ */
+const ENRICH_CONCURRENCY = 5;
+
 const noModel: AgentModelPort = {
     respond: () =>
         Promise.reject(
@@ -164,6 +170,7 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
         creditsPerCandidate: 0,
         embed: options.embed ?? null,
         judgeFit: options.judgeFit ?? null,
+        enrichConcurrency: ENRICH_CONCURRENCY,
         plan: async input => ({
             plan: await buildKeylessPlan(input, {
                 embed: options.embed ?? null,

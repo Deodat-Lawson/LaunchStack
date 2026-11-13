@@ -133,6 +133,11 @@ export const partnerOrgs = pgTable(
         categories: jsonb("categories").$type<string[]>().notNull().default([]),
         sizeBand: varchar("size_band", { length: 32 }),
         description: text("description"),
+        /** The homepage's own share image and icon, as it declares them (https). */
+        imageUrl: varchar("image_url", { length: 2048 }),
+        iconUrl: varchar("icon_url", { length: 2048 }),
+        /** When the site was last checked for pictures, found or not. */
+        picturesCheckedAt: timestamp("pictures_checked_at", { withTimezone: true }),
         /** Link to a knowledge-graph organisation entity when one matches. */
         kgEntityId: bigint("kg_entity_id", { mode: "number" }),
         firstSeenRunId: varchar("first_seen_run_id", { length: 256 }),

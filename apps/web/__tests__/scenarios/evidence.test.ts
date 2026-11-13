@@ -203,3 +203,39 @@ it("goes on without a source that fails or takes too long", async () => {
     expect(warn).toHaveBeenCalledTimes(2);
     warn.mockRestore();
 });
+
+describe("prospects from Growth", () => {
+    const { listPartners } = jest.requireMock<{ listPartners: jest.Mock }>(
+        "@launchstack/pipelines/distribution/db"
+    );
+    const partner = (id: string, name: string, fit: number) => ({
+        org: { id: `org-${id}`, name, categories: [], sizeBand: null, description: "A café." },
+        relationship: { id, fitScore: fit, fitRationale: null, stage: "lead" },
+    });
+
+    it("reads the segment picked, and links each prospect back to its page", async () => {
+        listPartners.mockResolvedValue([
+            partner("d1", "Low Fit", 20),
+            partner("d2", "High Fit", 90),
+        ]);
+        const evidence = await gatherScenarioEvidence(
+            run({ prospects: true, prospectSegmentId: "seg-1" })
+        );
+        expect(listPartners).toHaveBeenCalledWith(5n, { programId: "seg-1" });
+        const prospects = evidence.filter(e => e.kind === "prospect");
+        expect(prospects.map(e => e.label)).toEqual(["Prospect: High Fit", "Prospect: Low Fit"]);
+        expect(prospects[0]!.href).toContain("feature=growth");
+        expect(decodeURIComponent(prospects[0]!.href!)).toContain("/prospects/companies/d2");
+    });
+
+    it("reads only the companies picked in Prospects", async () => {
+        listPartners.mockResolvedValue([partner("d1", "Picked", 20), partner("d2", "Other", 90)]);
+        const evidence = await gatherScenarioEvidence(
+            run({ prospects: true, prospectIds: ["d1"] })
+        );
+        expect(listPartners).toHaveBeenCalledWith(5n, {});
+        expect(evidence.filter(e => e.kind === "prospect").map(e => e.label)).toEqual([
+            "Prospect: Picked",
+        ]);
+    });
+});

@@ -6,9 +6,6 @@
 import type { ScenarioGraphPort } from "@launchstack/pipelines/scenarios/v2";
 import { createGraphitiHttpPort } from "@launchstack/pipelines/scenarios/v2/graph-http";
 
-/** Long enough for an ingestion batch on a slow extraction model. */
-const GRAPH_TIMEOUT_MS = 10 * 60_000;
-
 export function scenarioGraphPort(
     env: Record<string, string | undefined> = process.env
 ): ScenarioGraphPort | null {
@@ -16,7 +13,8 @@ export function scenarioGraphPort(
     if (!baseUrl) return null;
     return createGraphitiHttpPort({
         baseUrl,
+        // Empty in the app container: it only reads the unauthenticated
+        // health check; the worker, which drives units, holds the token.
         token: env.SCENARIO_GRAPH_TOKEN?.trim() ?? "",
-        timeoutMs: GRAPH_TIMEOUT_MS,
     });
 }

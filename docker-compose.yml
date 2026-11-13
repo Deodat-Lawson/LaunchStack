@@ -646,6 +646,10 @@ services:
       - ./apps/web/config:/app/apps/web/config:ro
     environment:
       <<: *shared-env
+      # Scenarios graph mode: the app only reads the graph service's
+      # unauthenticated health check to pick a new run's mode, so it gets the
+      # URL and never the token (the worker drives units and holds that).
+      SCENARIOS_GRAPH_URL: ${SCENARIOS_GRAPH_URL:-}
     ports:
       - "3000:3000"
 

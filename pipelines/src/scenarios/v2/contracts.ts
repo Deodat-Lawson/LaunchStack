@@ -287,6 +287,9 @@ export const RESERVED_ONTOLOGY_NAMES: readonly string[] = [
     "expired_at",
     "source_node_uuid",
     "target_node_uuid",
+    "reference_time",
+    "HAS_EPISODE",
+    "NEXT_EPISODE",
 ];
 
 /** The business schema every ontology starts from (design §3.3.2). */

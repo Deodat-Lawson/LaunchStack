@@ -163,7 +163,11 @@ export function SignInView({
                                 initialView={initialView}
                                 // A brand-new account from Google or GitHub
                                 // registers on /signup like any other.
-                                newUserRedirectTo={addAccount ? "/signup" : undefined}
+                                newUserRedirectTo={
+                                    addAccount
+                                        ? withNext("/signup", next === "/" ? null : next)
+                                        : undefined
+                                }
                                 signInPath={addAccount ? withAddAccount("/signin") : undefined}
                             />
                         )}

@@ -5,6 +5,7 @@
  * hooks below rather than importing better-auth directly, so the session
  * shape the app depends on stays defined in one place.
  */
+import { useEffect, useState } from "react";
 import { createAuthClient } from "better-auth/react";
 import { lastLoginMethodClient, multiSessionClient } from "better-auth/client/plugins";
 import { oauthProviderClient } from "@better-auth/oauth-provider/client";
@@ -121,6 +122,32 @@ export async function listDeviceAccounts(activeSessionToken?: string): Promise<D
     }
     await rememberActiveSession();
     return toDeviceAccounts((await authClient.multiSession.listDeviceSessions()).data);
+}
+
+/**
+ * The accounts signed in on this browser, for screens that offer to switch
+ * (the invitation page). Empty until loaded, and when signed out.
+ */
+export function useDeviceAccounts(): { accounts: DeviceAccount[]; activeUserId: string | null } {
+    const { data } = authClient.useSession();
+    const activeToken = data?.session.token;
+    const [accounts, setAccounts] = useState<DeviceAccount[]>([]);
+    useEffect(() => {
+        if (!activeToken) {
+            setAccounts([]);
+            return;
+        }
+        let cancelled = false;
+        listDeviceAccounts(activeToken)
+            .then(list => {
+                if (!cancelled) setAccounts(list);
+            })
+            .catch(() => undefined);
+        return () => {
+            cancelled = true;
+        };
+    }, [activeToken]);
+    return { accounts, activeUserId: data?.user.id ?? null };
 }
 
 /** Makes sure the account in hand stays signed in when another is added. */

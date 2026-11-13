@@ -38,6 +38,7 @@ import {
 } from "~/server/inngest/functions/googleDriveSync";
 import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
 import { notionSyncCron, notionSyncJob } from "~/server/inngest/functions/notionSync";
+import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
 
 export function createInngestHandler() {
     return serve({
@@ -68,6 +69,7 @@ export function createInngestHandler() {
             proposalsRunJob,
             scenarioRunJob,
             marketingRunJob,
+            assistantConversationFollowUpJob,
         ],
     });
 }

@@ -63,6 +63,19 @@ export function artifactMarkerOf(ocrMetadata: unknown): ArtifactDocumentMarker |
     };
 }
 
+/**
+ * Whether an artifact came from Claude. Artifacts added through the Add
+ * source tab are Claude artifacts by definition; one an assistant added over
+ * MCP says where it came from (`addedFrom.origin`), and HTML from ChatGPT or
+ * an uploaded file is sandboxed the same way without being called Claude's.
+ */
+export function isFromClaude(ocrMetadata: unknown): boolean {
+    if (!ocrMetadata || typeof ocrMetadata !== "object" || Array.isArray(ocrMetadata)) return true;
+    const addedFrom = (ocrMetadata as { addedFrom?: unknown }).addedFrom;
+    if (!addedFrom || typeof addedFrom !== "object") return true;
+    return (addedFrom as { origin?: unknown }).origin === "claude-artifact";
+}
+
 /** True when the document row is an imported Claude artifact. */
 export function isArtifactDocument(ocrMetadata: unknown): boolean {
     return artifactMarkerOf(ocrMetadata) !== null;

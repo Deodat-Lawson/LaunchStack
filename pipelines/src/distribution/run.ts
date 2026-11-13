@@ -40,6 +40,7 @@ import {
     type SearchCompaniesPort,
 } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
+import { fillMissingPictures } from "./pictures";
 import { mapInPool } from "./pool";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { bestTerritoryFit, placeLabel } from "./locate";
@@ -949,6 +950,7 @@ export async function runDistributionPipeline(
                 enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile }),
             () => ctx.signal?.aborted ?? false
         );
+        await fillPicturesAfterRun(ctx, ports);
         return await finalizeRun(ctx, prepared, enriched, startedAt);
     } catch (error) {
         await failRun(ctx, error instanceof Error ? error.message : String(error));
@@ -967,5 +969,22 @@ function isOwnSite(url: string, domain: string | null): boolean {
         return host === own || host.endsWith(`.${own}`);
     } catch {
         return false;
+    }
+}
+
+/**
+ * A picture for every company the run saved, not only the ones researched:
+ * after enrichment, sites still without one are read for theirs. Never fails
+ * the run; whatever is left is picked up by the next run or the backfill.
+ */
+export async function fillPicturesAfterRun(
+    ctx: Pick<RunContext, "companyId" | "signal">,
+    ports: Pick<DistributionPorts, "fetchPage">
+): Promise<{ checked: number; found: number }> {
+    try {
+        return await fillMissingPictures(ctx.companyId, url => ports.fetchPage(url, ctx.signal));
+    } catch (error) {
+        console.warn(`${LOG_PREFIX} filling company pictures failed:`, error);
+        return { checked: 0, found: 0 };
     }
 }

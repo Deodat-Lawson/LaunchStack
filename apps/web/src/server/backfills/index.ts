@@ -15,6 +15,7 @@ import {
     countUsersMissingMembership,
     provisionMissingMemberships,
 } from "./user-company-memberships";
+import { prospectPicturesBackfill } from "./prospect-pictures";
 import { countUnmarkedWebsiteSources, markWebsiteSources } from "./website-source-markers";
 import { applyWorkspaceAccessBackfill, countWorkspaceAccessRows } from "./workspace-access";
 
@@ -248,4 +249,5 @@ export const BACKFILLS: Backfill[] = [
     workspaceAccessBackfill,
     websiteSourceMarkersBackfill,
     fileUploadsRestamp,
+    prospectPicturesBackfill,
 ];

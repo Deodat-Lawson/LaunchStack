@@ -375,6 +375,23 @@ describe("v2 engine", () => {
         expect(final.error).toBe(RUN_MESSAGES.accessRevoked);
         expect(final.error).not.toContain("Board deck");
         expect([...store.reservations.values()].every(r => r.status === "released")).toBe(true);
+
+        // A stage that finds a source closed to the creator stops the run the same way, at once.
+        const mid = setup({
+            stages: {
+                sources: async () => {
+                    throw new AccessRevokedError("cannot read Board deck.pdf");
+                },
+            },
+        });
+        const run2 = mid.store.seedRun(makeSpec());
+        expect(await stepV2(mid.deps, run2.id)).toEqual({ state: "failed" });
+        expect(mid.store.runs.get(run2.id)!.error).toBe(RUN_MESSAGES.accessRevoked);
+        expect(mid.store.unit(run2.id, "sources")).toMatchObject({
+            status: "failed",
+            attempts: 1,
+            error: RUN_MESSAGES.accessRevoked,
+        });
     });
 
     it("fails a run that is unfinished but has nothing it can run", async () => {

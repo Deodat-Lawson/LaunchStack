@@ -407,6 +407,16 @@ export async function advanceWithFence(
                 ? { state: "waiting", unitKey: unit.key, retryAt }
                 : { state: "skipped", reason: "fenced" };
         }
+        if (error instanceof AccessRevokedError) {
+            // A stage found it can no longer read a source: no retry will
+            // help, and its message may name the source, so it stays in logs.
+            deps.log?.("scenario v2 run stopped: access revoked mid-unit", {
+                runId: run.id,
+                unit: unit.key,
+            });
+            await store.recordUnitError(fence, started.id, RUN_MESSAGES.accessRevoked);
+            return fail(RUN_MESSAGES.accessRevoked, started.id);
+        }
         const message = errorMessage(error);
         await store.recordUnitError(fence, started.id, message);
         deps.log?.("scenario v2 unit failed", {

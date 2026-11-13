@@ -10,9 +10,10 @@ import {
     ScanEye,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useToolActive } from "~/components/tool-app/nav";
 import { Button } from "~/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "~/components/ui/popover";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -115,6 +116,12 @@ export function ResultsGrid({
     const shown = open ?? lastOpen.current;
     const anchorRef = useRef<HTMLElement | null>(null);
     anchorRef.current = shown?.anchor ?? null;
+    // Tabs are hidden, not unmounted: a popover left open would float over
+    // whatever tab comes to the front (its own "Open source", for one).
+    const active = useToolActive();
+    useEffect(() => {
+        if (!active) setOpen(null);
+    }, [active]);
     const live = isLive(table.status);
     const words = useMemo(
         () => ({ yes: tw("yes"), no: tw("no"), listSeparator: tw("listSeparator") }),

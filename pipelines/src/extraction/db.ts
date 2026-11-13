@@ -111,18 +111,28 @@ export function createExtractionStore(): ExtractionStore {
         async claimRows(tableId, limit) {
             if (limit <= 0) return [];
             const db = getDb();
-            // One statement: the inner select locks the rows it picks and skips
-            // rows another claim already locked, so two callers never share one.
-            const picked = db
-                .select({ id: extractionRows.id })
-                .from(extractionRows)
-                .where(
-                    and(eq(extractionRows.tableId, tableId), eq(extractionRows.status, "pending"))
-                )
-                .orderBy(asc(extractionRows.id))
-                .limit(limit)
-                .for("update", { skipLocked: true });
+            // One statement. The pick is a CTE on purpose: with the locking
+            // select written straight into `IN (…)`, Postgres may run it again
+            // for each candidate row and claim far more than `limit` (it did:
+            // 23 of 24 with a limit of 8). A CTE that locks rows is evaluated
+            // once. It skips rows another claim already locked, so two callers
+            // never share one.
+            const picked = db.$with("picked").as(
+                db
+                    .select({ id: extractionRows.id })
+                    .from(extractionRows)
+                    .where(
+                        and(
+                            eq(extractionRows.tableId, tableId),
+                            eq(extractionRows.status, "pending")
+                        )
+                    )
+                    .orderBy(asc(extractionRows.id))
+                    .limit(limit)
+                    .for("update", { skipLocked: true })
+            );
             const rows = await db
+                .with(picked)
                 .update(extractionRows)
                 .set({
                     status: "running",
@@ -130,7 +140,10 @@ export function createExtractionStore(): ExtractionStore {
                     error: null,
                 })
                 .where(
-                    and(inArray(extractionRows.id, picked), eq(extractionRows.status, "pending"))
+                    and(
+                        inArray(extractionRows.id, db.select({ id: picked.id }).from(picked)),
+                        eq(extractionRows.status, "pending")
+                    )
                 )
                 .returning();
             return rows.map(toRowRecord).sort((a, b) => a.id - b.id);

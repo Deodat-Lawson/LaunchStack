@@ -124,6 +124,24 @@ export async function readExtractionDocument(
     };
 }
 
+/**
+ * How long one model call may take. A call that never answers would hold its
+ * batch (and so the table, and any cancel) open for good; past this the row
+ * fails with a reason and can be retried.
+ */
+export const MODEL_CALL_TIMEOUT_MS = 120_000;
+
+export function withinTime<T>(call: Promise<T>, ms = MODEL_CALL_TIMEOUT_MS): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(
+            () => reject(new Error(`The model did not answer within ${Math.round(ms / 1000)}s`)),
+            ms
+        );
+    });
+    return Promise.race([call, timeout]).finally(() => clearTimeout(timer));
+}
+
 const tokens = (usage: { inputTokens?: number; outputTokens?: number }) => ({
     inputTokens: usage.inputTokens ?? 0,
     outputTokens: usage.outputTokens ?? 0,
@@ -141,11 +159,13 @@ export const extractStructured: ExtractStructuredFn = async ({
     schemaName,
 }) => {
     const resolved = resolveConfiguredChatModel({ route: "fast", temperature: 0 });
-    const { result, usage } = await invokeStructuredWithUsage(
-        resolved,
-        schema,
-        [new SystemMessage(system), new HumanMessage(prompt)],
-        { name: schemaName }
+    const { result, usage } = await withinTime(
+        invokeStructuredWithUsage(
+            resolved,
+            schema,
+            [new SystemMessage(system), new HumanMessage(prompt)],
+            { name: schemaName }
+        )
     );
     return { result, usage: tokens(usage) };
 };
@@ -269,19 +289,21 @@ export const readImageFields: ReadImageFieldsFn = async ({ table, row, fields })
         if (!resolved) return null;
         const dataUrl = await imageDataUrl(doc);
         if (!dataUrl) return null;
-        const { result, usage } = await invokeStructuredWithUsage(
-            resolved,
-            visionSchema(fields),
-            [
-                new SystemMessage(VISION_SYSTEM),
-                new HumanMessage({
-                    content: [
-                        { type: "text", text: visionPrompt(doc.title, fields) },
-                        { type: "image_url", image_url: { url: dataUrl } },
-                    ],
-                }),
-            ],
-            { name: "image_fields" }
+        const { result, usage } = await withinTime(
+            invokeStructuredWithUsage(
+                resolved,
+                visionSchema(fields),
+                [
+                    new SystemMessage(VISION_SYSTEM),
+                    new HumanMessage({
+                        content: [
+                            { type: "text", text: visionPrompt(doc.title, fields) },
+                            { type: "image_url", image_url: { url: dataUrl } },
+                        ],
+                    }),
+                ],
+                { name: "image_fields" }
+            )
         );
         return { cells: visionCells(fields, result), usage: tokens(usage) };
     } catch (error) {

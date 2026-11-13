@@ -94,7 +94,9 @@ assert_match() { # assert_match <value> <ERE> <what>
   if printf '%s' "$1" | grep -Eq "$2"; then pass; else fail "$3: '$1' does not match $2"; fi
 }
 
-file_mode() { stat -f '%Lp' "$1" 2>/dev/null || stat -c '%a' "$1"; }
+# GNU stat first: its -f means "filesystem", prints a block and fails, so
+# trying the BSD form first would prepend that block to the answer on Linux.
+file_mode() { stat -c '%a' "$1" 2>/dev/null || stat -f '%Lp' "$1"; }
 envval() { sed -n "s/^$2=//p" "$1" | tail -n 1; } # envval <file> <KEY>
 log_has() { grep -q -- "$1" "$FAKE_DOCKER_LOG"; }
 log_line_of() { grep -n -- "$1" "$FAKE_DOCKER_LOG" | head -n 1 | cut -d: -f1; }
@@ -446,6 +448,16 @@ test_setup_stops_on_failed_preflight_or_health() {
   assert_file "$ENVF"
   assert_not_logged " pull --policy always\$" "nothing is pulled after a failed preflight"
   assert_not_logged " up -d" "nothing is started after a failed preflight"
+
+  # start and restart are guarded too: `config edit` then `restart` is how
+  # settings change.
+  : >"$FAKE_DOCKER_LOG"
+  run cli start
+  assert_rc_nonzero "start with failing preflight"
+  assert_contains "$OUT" "configuration check failed" "start names the reason"
+  run cli restart
+  assert_rc_nonzero "restart with failing preflight"
+  assert_not_logged " up -d" "start and restart touch nothing after a failed preflight"
   unset FAKE_DOCKER_PREFLIGHT_RC
 
   export FAKE_DOCKER_UNHEALTHY_VERSION=1.2.3 LAUNCHSTACK_HEALTH_TIMEOUT=0
@@ -514,9 +526,12 @@ test_lifecycle_commands() {
   run cli stop
   assert_rc 0 "stop"
   assert_logged " down --remove-orphans\$" "stop"
+  assert_logged "--profile \* down --remove-orphans\$" "stop reaches services whose profile was switched off"
   run cli restart
   assert_rc 0 "restart"
   assert_logged " up -d --remove-orphans --force-recreate\$" "restart"
+  a="$(log_line_of 'deploy-check.mjs')" b="$(log_line_of ' up -d --remove-orphans --force-recreate$')"
+  if [ "$a" -lt "$b" ]; then pass; else fail "restart must check the configuration before recreating ($a $b)"; fi
   run cli logs --no-follow app worker
   assert_logged " logs --tail 200 app worker\$" "logs"
   run cli logs

@@ -59,6 +59,20 @@ ls_check_docker() {
     ls_die "Docker is not installed. Install Docker Desktop or Docker Engine (https://docs.docker.com/get-docker/), then run this again."
   docker compose version >/dev/null 2>&1 ||
     ls_die "Docker Compose v2 is missing ('docker compose version' failed). Install the Compose plugin (https://docs.docker.com/compose/install/), then run this again."
+  local v major minor
+  v="$(docker compose version --short 2>/dev/null || true)"
+  v="${v#v}"
+  major="${v%%.*}"
+  minor="${v#*.}"
+  minor="${minor%%.*}"
+  case "$major$minor" in
+    "" | *[!0-9]*) ;;
+    *)
+      if [ "$major" -lt 2 ] || { [ "$major" -eq 2 ] && [ "$minor" -lt 24 ]; }; then
+        ls_die "Docker Compose $v is too old: LaunchStack needs 2.24 or newer. Update Docker (https://docs.docker.com/compose/install/), then run this again."
+      fi
+      ;;
+  esac
   docker info >/dev/null 2>&1 ||
     ls_die "Docker is installed but its daemon is not reachable. Start Docker (on Linux: 'sudo systemctl start docker', and add your user to the 'docker' group: https://docs.docker.com/engine/install/linux-postinstall/), then run this again."
 }

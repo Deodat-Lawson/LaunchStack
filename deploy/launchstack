@@ -102,11 +102,64 @@ need_docker() {
     die "Docker Compose v2 is missing ('docker compose version' failed). See https://docs.docker.com/compose/install/"
   docker info >/dev/null 2>&1 ||
     die "Cannot reach the Docker daemon. Start Docker (or add your user to the docker group) and run this again."
+  need_compose_version
+}
+
+# compose.yml uses `env_file` with `required: false`, which needs Compose 2.24.
+need_compose_version() {
+  local v major minor
+  v="$(docker compose version --short 2>/dev/null || true)"
+  v="${v#v}"
+  major="${v%%.*}"
+  minor="${v#*.}"
+  minor="${minor%%.*}"
+  case "$major$minor" in "" | *[!0-9]*) return 0 ;; esac
+  if [ "$major" -lt 2 ] || { [ "$major" -eq 2 ] && [ "$minor" -lt 24 ]; }; then
+    die "Docker Compose $v is too old: LaunchStack needs 2.24 or newer. Update Docker (https://docs.docker.com/compose/install/) and run this again."
+  fi
 }
 
 # The one place docker compose is invoked.
 compose() {
   docker compose --project-directory "$LAUNCHSTACK_HOME" -f "$COMPOSE_FILE_PATH" --env-file "$ENV_FILE" "$@"
+}
+
+# Every profile at once, for the calls that must reach services the current
+# COMPOSE_PROFILES no longer names (an extra that was switched off, Caddy
+# after a move back to local mode): Compose otherwise leaves them running.
+compose_all() {
+  compose --profile '*' "$@"
+}
+
+# Stop and remove the containers of services whose profile is no longer
+# active. `up --remove-orphans` does not: to Compose they are still declared.
+remove_disabled_services() {
+  local active all svc gone=""
+  active="$(compose config --services 2>/dev/null)" || return 0
+  all="$(compose_all config --services 2>/dev/null)" || return 0
+  for svc in $all; do
+    printf '%s\n' "$active" | grep -qx "$svc" || gone="$gone $svc"
+  done
+  [ -n "$gone" ] || return 0
+  # shellcheck disable=SC2086  # a word list on purpose
+  compose_all rm -sf $gone >/dev/null 2>&1 || warn "Could not stop the services that were switched off:$gone"
+}
+
+# Bring the stack to what .env describes: start what is enabled, remove what
+# is not.
+up_stack() { # up_stack [extra `compose up` flags]
+  remove_disabled_services
+  compose up -d --remove-orphans "$@"
+}
+
+up_failed_hint() {
+  err "Docker could not start every service (its message is above). 'port is already allocated' means another program has that port: pick another with 'launchstack config set LAUNCHSTACK_HTTP_PORT=<port>' (also LAUNCHSTACK_FILES_PORT, LAUNCHSTACK_INNGEST_PORT), then run 'launchstack setup' again so the address it prints matches."
+}
+
+# Octal permission bits of a file. GNU stat first: its -f means "filesystem"
+# and prints a block before failing, which a BSD-first fallback would keep.
+file_mode() {
+  stat -c '%a' "$1" 2>/dev/null || stat -f '%Lp' "$1" 2>/dev/null || true
 }
 
 # Pull every image the stack uses. LAUNCHSTACK_PULL_POLICY=missing pulls only
@@ -524,9 +577,15 @@ wait_healthy() {
         # The worker processes every upload: the stack is not up without it.
         case "$wstate" in
           "running healthy "* | "running none "*)
-            [ -t 1 ] && printf '\r\033[K'
-            ok "The app and the worker are healthy (after ${elapsed}s)."
-            return 0
+            # Uploads need object storage too; it is the slowest to open.
+            case "$(service_state "$LS_STORAGE_SERVICE")" in
+              "running starting "*) ;;
+              *)
+                [ -t 1 ] && printf '\r\033[K'
+                ok "The app and the worker are healthy (after ${elapsed}s)."
+                return 0
+                ;;
+            esac
             ;;
         esac
         ;;
@@ -621,8 +680,8 @@ run_preflight() { # run_preflight [--probe]
 
 start_stack() {
   step "Starting LaunchStack"
-  if ! compose up -d --remove-orphans; then
-    err "Docker could not start every service (its message is above). 'port is already allocated' means another program has that port: pick another with 'launchstack config set LAUNCHSTACK_HTTP_PORT=<port>' (also LAUNCHSTACK_FILES_PORT, LAUNCHSTACK_INNGEST_PORT), then run 'launchstack setup' again so the address it prints matches."
+  if ! up_stack; then
+    up_failed_hint
     return 1
   fi
   if ! wait_healthy; then
@@ -1138,6 +1197,7 @@ cmd_setup() {
 
   # ── Write ──
   S_GENERATED=0
+  SETUP_EXISTING=0
   S_KEPT=0
   S_ENV_OUT=""
   if [ "$existing" = 1 ]; then
@@ -1233,6 +1293,7 @@ cmd_setup() {
   fi
   chmod 600 "$ENV_FILE"
   ok "Wrote $ENV_FILE (secrets: $S_GENERATED generated, $S_KEPT kept)."
+  SETUP_EXISTING="$existing"
   if [ "$existing" = 1 ]; then
     say "    The previous file is saved as $ENV_FILE.previous."
   fi
@@ -1261,7 +1322,7 @@ cmd_setup() {
     return 1
   fi
   start_stack || return 1
-  print_ready fresh
+  if [ "$SETUP_EXISTING" = 1 ]; then print_ready; else print_ready fresh; fi
 }
 
 # ── start / stop / restart / status / logs ──────────────────────────────
@@ -1276,9 +1337,21 @@ LAUNCHSTACK_HEALTH_TIMEOUT (seconds, default 600) bounds the wait.
 EOF
 }
 
+# start and restart check the configuration first: `config edit` then
+# `restart` is how settings change, and a bad value must not come up as
+# "running" with one service quietly crash-looping.
+check_config_or_stop() {
+  step "Checking the configuration"
+  if ! run_preflight; then
+    err "The configuration check failed; nothing was started or changed. Fix the items above ('launchstack config edit'), then run this again."
+    return 1
+  fi
+}
+
 cmd_start() {
   need_env
   need_docker
+  check_config_or_stop || return 1
   start_stack || return 1
   print_ready
 }
@@ -1296,7 +1369,7 @@ cmd_stop() {
   need_env
   need_docker
   step "Stopping LaunchStack (volumes are kept)"
-  compose down --remove-orphans
+  compose_all down --remove-orphans
   ok "Stopped."
 }
 
@@ -1312,8 +1385,12 @@ EOF
 cmd_restart() {
   need_env
   need_docker
+  check_config_or_stop || return 1
   step "Restarting LaunchStack"
-  compose up -d --remove-orphans --force-recreate
+  if ! up_stack --force-recreate; then
+    up_failed_hint
+    return 1
+  fi
   if ! wait_healthy; then
     health_summary || true
     say "Look at the logs with: launchstack logs"
@@ -1382,9 +1459,20 @@ cmd_doctor() {
   local rc=0 mode
   need_env
   need_docker
-  mode="$(stat -f '%Lp' "$ENV_FILE" 2>/dev/null || stat -c '%a' "$ENV_FILE" 2>/dev/null || true)"
+  mode="$(file_mode "$ENV_FILE")"
   if [ -n "$mode" ] && [ "$mode" != "600" ]; then
     warn "$ENV_FILE has mode $mode; it holds secrets and should be 600 (chmod 600 '$ENV_FILE')."
+  fi
+  if [ -z "$(compose ps -q 2>/dev/null || true)" ] && compose config --quiet 2>/dev/null; then
+    # Nothing is running: probing would only report every service as
+    # unreachable. Check the settings and say what to do next.
+    step "Configuration (the stack is not running, so live checks are skipped)"
+    if run_preflight; then
+      ok "The configuration is valid. Start the stack with: launchstack start"
+    else
+      err "Preflight reported errors (above)."
+    fi
+    return 1
   fi
   step "Configuration and live checks"
   if run_preflight --probe; then
@@ -1539,7 +1627,7 @@ cmd_restore() {
 
   if [ -f "$ENV_FILE" ]; then
     step "Stopping the stack"
-    compose down --remove-orphans
+    compose_all down --remove-orphans
     cp -p "$ENV_FILE" "$ENV_FILE.before-restore"
     chmod 600 "$ENV_FILE.before-restore"
   fi
@@ -1630,7 +1718,7 @@ rollback_update() { # rollback_update <old image tag> <backup file or "">
     apply_bundle "$LAUNCHSTACK_HOME/.bundle.previous" || warn "Could not put the previous bundle files back."
   fi
   env_set LAUNCHSTACK_VERSION "$old_tag"
-  compose up -d --remove-orphans || true
+  up_stack || true
   if wait_healthy; then
     say "The previous version ($old_tag) is running again."
   else
@@ -1735,7 +1823,7 @@ cmd_update() {
     rollback_update "$old_tag" "$backup_file"
     return 1
   fi
-  if ! compose up -d --remove-orphans || ! wait_healthy; then
+  if ! up_stack || ! wait_healthy; then
     health_summary || true
     rollback_update "$old_tag" "$backup_file"
     return 1
@@ -1981,10 +2069,10 @@ cmd_uninstall() {
     need_docker
     if [ "$purge" = 1 ]; then
       step "Removing containers and volumes"
-      compose down --volumes --remove-orphans
+      compose_all down --volumes --remove-orphans
     else
       step "Removing containers (volumes are kept)"
-      compose down --remove-orphans
+      compose_all down --remove-orphans
     fi
   fi
   remove_cli_links

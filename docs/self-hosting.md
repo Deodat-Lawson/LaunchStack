@@ -110,6 +110,9 @@ pre-update backup. To move to a specific release, pass it:
 
 Releases are versioned images. An install stays on the version it was set up
 with until you run `update`; nothing changes underneath you.
+The exception is an `edge` install (the main branch, which is what the installer
+falls back to when no release carries a bundle): it runs the `latest` images
+and moves forward whenever they are pulled again.
 
 ## Backup and restore
 
@@ -193,7 +196,10 @@ launchstack restart
 
 The variables are documented in [`.env.example`](../.env.example) and
 summarised in the [deployment guide](deployment.md#environment-variables-summary).
-`launchstack doctor` tells you when a pair is incomplete.
+`restart` checks the configuration first and refuses to touch the running
+stack if it finds an error; `launchstack doctor` shows the same findings at
+any time. Turning an extra off (or moving from a domain back to this machine
+only) stops and removes its container on the next `setup` or `restart`.
 
 ## Unattended installs
 

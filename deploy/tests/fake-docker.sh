@@ -49,7 +49,7 @@ esac
 env_file=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --project-directory | -f) shift 2 ;;
+    --project-directory | -f | --profile) shift 2 ;;
     --env-file)
       env_file="$2"
       shift 2

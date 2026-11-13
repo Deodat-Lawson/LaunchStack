@@ -323,6 +323,13 @@
       "when": 1794079023629,
       "tag": "20261107191703_notion_per_user_connections",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1794464106488,
+      "tag": "20261112061506_extraction_tables",
+      "breakpoints": true
     }
   ]
 }

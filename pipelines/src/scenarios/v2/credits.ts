@@ -39,12 +39,17 @@ export function settlementKey(
 
 /**
  * The ledger line for a settled unit. Brief, cast, round and report keep the
- * shapes v1 wrote (the Usage tab words those); other units name their key.
+ * shapes v1 wrote; the ontology and every graph unit get one word each, so the
+ * Usage tab can word them too. Other units name their key.
  */
 export function settlementDescription(title: string, unitKey: string): string {
     const round = /^round:(\d+)$/.exec(unitKey);
     if (round) return `Scenario "${title}" (round ${Number(round[1])})`;
-    const unit = unitKey.startsWith("cast:") ? "cast" : unitKey;
+    const unit = unitKey.startsWith("cast:")
+        ? "cast"
+        : unitKey.startsWith("graph:")
+          ? "graph"
+          : unitKey;
     return `Scenario "${title}" (${unit})`;
 }
 

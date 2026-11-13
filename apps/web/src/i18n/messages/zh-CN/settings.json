@@ -1909,7 +1909,7 @@
       "proposalsRewrite": "提案：改写",
       "proposalsReview": "提案：审阅",
       "scenarioInterview": "情景“{title}”：访谈",
-      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} other {{unit}}}）",
+      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} ontology {证据类型} graph {证据图谱} other {{unit}}}）",
       "scenarioRound": "情景“{title}”（第 {round} 轮）"
     },
     "workspaceDetails": {

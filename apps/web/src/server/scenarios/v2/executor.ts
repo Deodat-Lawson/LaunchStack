@@ -8,11 +8,18 @@
  * process dies the lease lapses, and the next poll of the run resumes it
  * from its last committed unit.
  */
+import { randomUUID } from "node:crypto";
+
 import { after } from "next/server";
 
 import type { ScenarioRunRecord } from "@launchstack/pipelines/scenarios";
 import { markDispatchSent, type AcceptRunResult } from "@launchstack/pipelines/scenarios/v2/db";
-import { driveV2, type DriveV2Result } from "@launchstack/pipelines/scenarios/v2/engine";
+import { requestCancel } from "@launchstack/pipelines/scenarios/db";
+import {
+    driveV2,
+    type DriveV2Result,
+    type EngineDeps,
+} from "@launchstack/pipelines/scenarios/v2/engine";
 
 import { readScenariosExecutor } from "~/server/scenarios/executor";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
@@ -97,4 +104,26 @@ export function resumeV2IfStalled(
     if (run.leaseUntil && run.leaseUntil.getTime() > now.getTime()) return false;
     driveAfterResponse(run.id, "resume");
     return true;
+}
+
+/**
+ * Stop a v2 run. The flag stops new units at once; a run no driver holds is
+ * finished here under a lease of its own, so the fenced terminal write
+ * releases its credit holds in the same transaction. A driver holding the
+ * lease sees the flag at its next check or loses its commit to it.
+ */
+export async function cancelV2(
+    run: Pick<ScenarioRunRecord, "id" | "companyId">,
+    now: Date,
+    deps: Pick<EngineDeps, "store"> = createEngineDeps()
+): Promise<void> {
+    await requestCancel(run.companyId, run.id, now);
+    const fence = await deps.store.claimLease(
+        run.id,
+        `cancel:${randomUUID()}`,
+        now,
+        new Date(now.getTime() + 30_000)
+    );
+    if (!fence) return;
+    await deps.store.finishRun(fence, { status: "cancelled", error: null, at: now });
 }

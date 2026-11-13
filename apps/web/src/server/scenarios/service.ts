@@ -86,7 +86,7 @@ import { originalMediaDocument } from "~/server/workspace-sources";
 import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
-import { resumeIfStalledV2 } from "./v2/executor";
+import { cancelV2, resumeV2IfStalled } from "./v2/executor";
 import { assertV2Readable, v2DetailContext, v2Progress } from "./v2/service";
 import { leftWorkspaceName, recordSummary, toDetail, toPostTest, toSummary } from "./views";
 
@@ -483,7 +483,7 @@ export async function getScenarioDetail(
     locale: Locale = "en"
 ): Promise<ScenarioDetail> {
     const run = await readableContent(ctx, id);
-    if (run.contractVersion === 2) resumeIfStalledV2(run);
+    if (run.contractVersion === 2) resumeV2IfStalled(run);
     else resumeIfStalled(run);
     const isCreator = run.createdByUserId === ctx.authUserId;
     const cited = (run.evidence ?? []).flatMap(e => e.documentIds);
@@ -539,7 +539,9 @@ export async function cancelScenario(
     locale: Locale = "en"
 ): Promise<ScenarioSummary> {
     const run = await ownRun(ctx, id);
-    if (run.status === "queued" || run.status === "running") {
+    if (run.contractVersion === 2 && (run.status === "queued" || run.status === "running")) {
+        await cancelV2(run, new Date());
+    } else if (run.status === "queued" || run.status === "running") {
         const now = new Date();
         await requestCancel(ctx.companyId, id, now);
         // No live in-process executor: nothing will look at the flag, so stop it here.

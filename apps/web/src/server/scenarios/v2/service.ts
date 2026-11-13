@@ -87,8 +87,8 @@ import {
     type DetailContext,
     type V2Progress,
 } from "../views";
-import { createAppCreditsPort } from "./credits";
-import { dispatchAccepted } from "./dispatch";
+import { createAppScenarioCredits } from "./credits";
+import { startV2Run } from "./executor";
 
 type Ctx = Pick<WorkspaceContext, "authUserId" | "companyId" | "can" | "documentScope">;
 
@@ -263,7 +263,7 @@ export async function createScenarioV2(
                 },
                 flags,
             },
-            createAppCreditsPort()
+            createAppScenarioCredits()
         );
     } catch (error) {
         if (error instanceof IdempotencyConflictError) {
@@ -283,8 +283,10 @@ export async function createScenarioV2(
         }
         throw error;
     }
-    // Delivery after the commit; a lost send is the reconciler's to retry.
-    if (accepted.created) await dispatchAccepted(accepted);
+    // Delivery after the commit; a lost send is the reconciler's to retry. A
+    // replayed acceptance is safe to start again (the lease or the sent
+    // dispatch stops a second driver).
+    await startV2Run(accepted);
     const run = accepted.run;
     return {
         run: recordSummary(run, ctx.authUserId, await names([run.createdByUserId]), {

@@ -118,16 +118,20 @@ export async function resolveContextMode(
     if (endpoint?.models?.default?.id) {
         return { mode: "passage", fallbackReason: "workspace_endpoint" };
     }
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
         const health = await Promise.race([
             port.health(),
-            new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error("timeout")), 3_000)
-            ),
+            new Promise<never>((_, reject) => {
+                timer = setTimeout(() => reject(new Error("timeout")), 3_000);
+            }),
         ]);
         if (!health.ok) return { mode: "passage", fallbackReason: "graph_unavailable" };
     } catch {
         return { mode: "passage", fallbackReason: "graph_unavailable" };
+    } finally {
+        // An answer before the deadline must not leave the timer running.
+        clearTimeout(timer);
     }
     return { mode: "graph", fallbackReason: null };
 }

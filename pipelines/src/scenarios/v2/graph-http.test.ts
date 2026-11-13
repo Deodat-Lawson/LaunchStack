@@ -15,10 +15,10 @@ function fakeFetch(...replies: Array<{ status?: number; body?: unknown; text?: s
     const sent: Sent[] = [];
     const impl = (async (input: string | URL | Request, init?: RequestInit) => {
         sent.push({
-            url: String(input),
+            url: typeof input === "string" ? input : input instanceof URL ? input.href : input.url,
             method: init?.method ?? "GET",
             headers: init?.headers as Record<string, string>,
-            body: init?.body === undefined ? undefined : JSON.parse(String(init.body)),
+            body: typeof init?.body === "string" ? JSON.parse(init.body) : undefined,
         });
         const reply = replies.shift();
         if (!reply) throw new Error("no reply queued");

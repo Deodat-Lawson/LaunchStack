@@ -192,12 +192,15 @@ function describeBody(text: string): string {
                 body.detail
                     .map(d => {
                         const item = d as { loc?: unknown[]; msg?: unknown };
-                        return `${(item.loc ?? []).join(".")}: ${String(item.msg ?? "")}`;
+                        const msg = typeof item.msg === "string" ? item.msg : "";
+                        return `${(item.loc ?? []).join(".")}: ${msg}`;
                     })
                     .join("; ")
             );
         }
-        if (Array.isArray(body.errors)) parts.push(body.errors.map(String).join("; "));
+        if (Array.isArray(body.errors)) {
+            parts.push(body.errors.filter(e => typeof e === "string").join("; "));
+        }
         return shorten(parts.join(" — "));
     } catch {
         return shorten(text);

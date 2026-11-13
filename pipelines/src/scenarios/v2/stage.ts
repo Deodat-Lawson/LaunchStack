@@ -43,6 +43,12 @@ export interface GraphBuildRecord {
     state: GraphBuildState;
     ownerRunId: number | null;
     ownerEpoch: number;
+    /**
+     * Whether the owner run is still queued or running, when the reader knows.
+     * `graph:prepare` waits on a live owner and takes over from a finished one;
+     * absent counts as live unless the build failed.
+     */
+    ownerLive?: boolean;
     manifestHash: string;
     ontologyHash: string;
     policyVersion: string;

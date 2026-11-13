@@ -160,6 +160,23 @@ function formatFeed(feed: FeedItem[]): string {
         .join("\n\n");
 }
 
+/** Most facts from a persona's `knows` a turn reads. */
+export const MAX_KNOWN_FACTS = 5;
+
+/**
+ * What the persona knows from their own work, as a block after the persona
+ * (empty when the persona has no `knows`, so older worlds' prompts are
+ * unchanged byte for byte).
+ */
+function knownFacts(p: Persona): string {
+    const facts = (p.knows ?? [])
+        .map(f => clip(f, 200))
+        .filter(Boolean)
+        .slice(0, MAX_KNOWN_FACTS);
+    if (facts.length === 0) return "";
+    return `\nWhat you know from your own work:\n${facts.map(f => `- ${f}`).join("\n")}`;
+}
+
 export function buildDecisionRequest(
     world: World,
     agent: AgentState,
@@ -193,9 +210,10 @@ export function buildDecisionRequest(
         '"wouldPay": as things stand, would you spend your own or your company\'s money on what is on offer: "yes", "maybe" or "no".',
         '"objection": what still holds you back, in a few words of your own, or null if nothing does.',
     ].join("\n");
+    const known = knownFacts(agent.persona);
     return {
         purpose: "decide",
-        system: `${personaSystem(world, agent)}\n\n${BEHAVIOUR}`,
+        system: `${personaSystem(world, agent)}${known}\n\n${BEHAVIOUR}`,
         prompt,
         schema: DECISION_SCHEMA,
         maxOutputTokens: 700,

@@ -24,6 +24,8 @@ import {
     type SimulationModel,
 } from "@launchstack/simulation";
 
+import { BASES } from "./v2/contracts";
+
 /**
  * One model policy per purpose; turns run on the fast route because there are
  * hundreds of them. Timeouts bound one call: a hung turn fails only that
@@ -35,6 +37,11 @@ export const SCENARIO_MODELS = {
     brief: { route: "fast", temperature: 0.2, timeoutMs: 180_000 },
     report: { route: "default", temperature: 0.3, timeoutMs: 180_000 },
     interview: { route: "fast", temperature: 0.6, timeoutMs: 90_000 },
+    // Contract v2. The ontology is one careful call that shapes the whole
+    // graph; the cast plan and cast batches are many and run on the fast route.
+    ontology: { route: "default", temperature: 0.2, timeoutMs: 180_000 },
+    cast_plan: { route: "fast", temperature: 0.4, timeoutMs: 120_000 },
+    cast_v2: { route: "fast", temperature: 0.6, timeoutMs: 180_000 },
 } as const satisfies Record<ModelRequest["purpose"], ResolveChatModelOptions>;
 
 // `.nullable()`, never `.optional()`: strict json-schema mode sends optional fields as required.
@@ -102,6 +109,68 @@ const reportSchema = z.object({
 
 const answerSchema = z.object({ answer: z.string() });
 
+// ─── Contract v2 ─────────────────────────────────────────────────────────────
+
+const ontologyAttributeSchema = z.object({
+    name: z.string(),
+    type: z.enum(["string", "number", "boolean"]),
+    description: z.string(),
+});
+
+const ontologySchema = z.object({
+    entities: z.array(
+        z.object({
+            name: z.string(),
+            description: z.string(),
+            attributes: z.array(ontologyAttributeSchema),
+            motivatingEvidenceId: z.string(),
+        })
+    ),
+    edges: z.array(
+        z.object({
+            name: z.string(),
+            description: z.string(),
+            attributes: z.array(ontologyAttributeSchema),
+            endpoints: z.array(z.object({ source: z.string(), target: z.string() })),
+            motivatingEvidenceId: z.string(),
+        })
+    ),
+});
+
+const castPlanSchema = z.object({
+    slots: z.array(z.object({ slotId: z.string(), segment: z.string(), query: z.string() })),
+});
+
+/** One attributed field. Enum fields constrain the value; free text stays a string. */
+function attributed<T extends z.ZodTypeAny>(value: T) {
+    return z.object({
+        value: value.nullable(),
+        basis: z.enum(BASES as unknown as [string, ...string[]]),
+        evidenceIds: z.array(z.string()),
+        explanation: z.string().nullable(),
+    });
+}
+
+const castV2Schema = z.object({
+    members: z.array(
+        z.object({
+            slotId: z.string(),
+            name: z.string(),
+            handle: z.string(),
+            bio: z.string(),
+            interests: z.array(z.string()),
+            activity: z.number(),
+            influence: z.number(),
+            role: attributed(z.string()),
+            currentSolution: attributed(z.string()),
+            budget: attributed(z.enum(BUDGETS as [string, ...string[]])),
+            buyingRole: attributed(z.enum(BUYING_ROLES as [string, ...string[]])),
+            switchingCost: attributed(z.enum(SWITCHING_COSTS as [string, ...string[]])),
+            objection: attributed(z.string()),
+        })
+    ),
+});
+
 /** The zod mirror of each engine reply shape; a field missing here is stripped from every reply. */
 export const SCENARIO_SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown>> = {
     decide: decisionSchema,
@@ -109,6 +178,9 @@ export const SCENARIO_SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown
     brief: briefSchema,
     report: reportSchema,
     interview: answerSchema,
+    ontology: ontologySchema,
+    cast_plan: castPlanSchema,
+    cast_v2: castV2Schema,
 };
 
 export function createLlmSimulationModel(): SimulationModel {

@@ -160,6 +160,9 @@ export const config = {
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",
         "^@launchstack/pipelines$": "<rootDir>/../../pipelines/src/index.ts",
+        // The one subpath whose file is named differently (see pipelines/package.json exports).
+        "^@launchstack/pipelines/scenarios/v2/db$":
+            "<rootDir>/../../pipelines/src/scenarios/v2/store.ts",
         "^@launchstack/pipelines/(.*)$": "<rootDir>/../../pipelines/src/$1",
         "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
     },

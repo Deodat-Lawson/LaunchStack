@@ -86,6 +86,15 @@ docker compose --env-file .env up --build
   and text-file ingestion still works
 - `--profile backfill` — on-demand data backfills:
   `docker compose --profile backfill run --rm backfill --list`
+- `--profile scenarios-graph` — adds `neo4j` (Neo4j Community, unmodified,
+  heap 512 MB + page cache 256 MB by default) and `scenario-graph`, the
+  private Graphiti service behind Scenarios graph mode
+  ([`services/scenario-graph`](../services/scenario-graph/README.md)). Neither
+  publishes a port; only the worker calls the graph service. Set
+  `SCENARIOS_GRAPH_URL=http://scenario-graph:8000`, `SCENARIO_GRAPH_TOKEN` and
+  the service's own `GRAPH_LLM_*` / `GRAPH_EMBEDDING_*` provider settings
+  (see `.env.example`). Without it, runs that ask for graph mode fall back to
+  passages
 
 Example with the OCR parse engine:
 
@@ -258,6 +267,8 @@ modes, and migration from the pre-PR variables.
 | `BRAVE_SEARCH_API_KEY`                                                              | Optional    | Brave Search API credential                                                                                                                                                                                                                                             |
 | `TAVILY_API_KEY`                                                                    | Optional    | Tavily credential                                                                                                                                                                                                                                                       |
 | `SEARXNG_URL`                                                                       | Optional    | Base URL of a SearXNG instance with JSON output enabled, e.g. `http://searxng:8080` for the Compose `search` profile                                                                                                                                                    |
+| `SCENARIOS_GRAPH_URL` + `SCENARIO_GRAPH_TOKEN`                                      | Optional    | Worker only: the Scenarios graph service and its shared bearer token (`http://scenario-graph:8000` with the Compose `scenarios-graph` profile). Unset means graph mode falls back to passages                                                                           |
+| `GRAPH_LLM_*`, `GRAPH_EMBEDDING_*`, `NEO4J_PASSWORD`                                | Optional    | The graph service's own extraction model, embeddings and Neo4j password — separate from chat. See `.env.example` and the [service README](../services/scenario-graph/README.md)                                                                                         |
 | `SEARXNG_SECRET`                                                                    | Optional    | Compose only: signs the bundled SearXNG's cookies. Override the local default in production                                                                                                                                                                             |
 | `AZURE_DOC_INTELLIGENCE_*`                                                          | Optional    | OCR for scanned PDFs                                                                                                                                                                                                                                                    |
 | `DATALAB_API_KEY`                                                                   | Optional    | Alternative OCR                                                                                                                                                                                                                                                         |

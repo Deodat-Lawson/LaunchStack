@@ -1,0 +1,35 @@
+LaunchStack scenario graph service
+==================================
+
+This service bundles and uses the following third-party software.
+
+Graphiti (graphiti-core 0.31.2)
+  Copyright 2024, Zep Software, Inc.
+  Licensed under the Apache License, Version 2.0.
+  https://github.com/getzep/graphiti
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Graphiti is installed unmodified from PyPI into this service's image. The
+  service calls its public API (Graphiti, add_episode, search_, EpisodicNode,
+  OpenAIGenericClient, OpenAIEmbedder) and subclasses two of its clients
+  (app/backend.py); it does not change Graphiti's source.
+
+Neo4j Community Edition (neo4j:5.26-community)
+  Copyright (c) Neo4j Sweden AB.
+  Licensed under the GNU General Public License, version 3 (GPLv3).
+  https://neo4j.com/licensing/
+  Neo4j is NOT included in this service's image and is not redistributed by
+  this project. It runs as a separate, unmodified container from the official
+  `neo4j` image (docker-compose.yml, profile `scenarios-graph`), and this
+  service talks to it over the network with the Bolt protocol through the
+  Apache-2.0 licensed Neo4j Python driver.
+
+Neo4j Python driver (neo4j 6.4.1)
+  Copyright (c) Neo4j Sweden AB.
+  Licensed under the Apache License, Version 2.0.
+
+Other Python dependencies (FastAPI, Starlette, Uvicorn, Pydantic, OpenAI
+Python SDK, and their transitive dependencies pinned in requirements.txt) are
+installed unmodified under their own licenses: MIT, BSD-3-Clause or
+Apache-2.0, numpy under BSD-3-Clause with bundled permissive components, and
+certifi under MPL-2.0.

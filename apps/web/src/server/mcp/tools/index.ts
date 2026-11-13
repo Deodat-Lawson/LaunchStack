@@ -6,6 +6,7 @@
 import type { McpTool } from "../protocol";
 import { addDocumentTool } from "./add-document";
 import { fetchTool } from "./fetch";
+import { findSimilarCompaniesTool } from "./find-similar-companies";
 import { listSourcesTool } from "./list-sources";
 import { saveConversationTool } from "./save-conversation";
 import { searchTool } from "./search";
@@ -15,6 +16,7 @@ export const MCP_TOOLS: readonly McpTool[] = [
     searchTool,
     fetchTool,
     listSourcesTool,
+    findSimilarCompaniesTool,
     saveConversationTool,
     addDocumentTool,
     startUploadTool,

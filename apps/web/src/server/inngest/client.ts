@@ -123,6 +123,17 @@ export type ScenarioRunEvent = {
     };
 };
 
+/** A contract v2 scenario run to drive (the dispatch row's deterministic id is the event id). */
+export type ScenarioRunV2Event = {
+    name: "scenarios/run.v2.requested";
+    data: {
+        runId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+        generation: number;
+    };
+};
+
 export type MarketingRunEvent = {
     name: "marketing/run.requested";
     data: {
@@ -179,6 +190,7 @@ export type Events =
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent
+    | ScenarioRunV2Event
     | MarketingRunEvent;
 
 /**

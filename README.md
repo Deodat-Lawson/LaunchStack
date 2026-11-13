@@ -6,7 +6,7 @@
 [![CI](https://github.com/Deodat-Lawson/LaunchStack/actions/workflows/CI.yml/badge.svg)](https://github.com/Deodat-Lawson/LaunchStack/actions/workflows/CI.yml)
 [![types](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 
-[Run it](#run-it-locally) · [Repository layout](#repository-layout) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Chat models](docs/chat-models.md) · [Contributing](CONTRIBUTING.md)
+[Self-host](#self-host-in-two-commands) · [Develop](#run-it-locally) · [Repository layout](#repository-layout) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Chat models](docs/chat-models.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -18,7 +18,27 @@ To try Launchstack today, run the app below.
 
 ---
 
+## Self-host in two commands
+
+All the machine needs is Docker. No clone, no Node, no hand-edited `.env`.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Deodat-Lawson/LaunchStack/main/deploy/install.sh | bash
+```
+
+```bash
+launchstack setup
+```
+
+`setup` asks where people will reach the instance (this machine, your domain, or a bare public IP), for a chat model key and an embeddings key, generates every secret, checks the configuration, pulls the published images and starts the stack, with automatic HTTPS when you gave it a domain. Open the address it prints and create your account.
+
+Afterwards: `launchstack status`, `logs`, `doctor`, `update`, `backup` and `restore`. The full guide is [docs/self-hosting.md](docs/self-hosting.md).
+
+---
+
 ## Run it locally
+
+This is the path for working on Launchstack itself or running unreleased code. To just run an instance, use the two commands above.
 
 **Requirements:** Node ≥ 20 and pnpm 10.15.1 (`corepack enable` picks up the pinned version).
 
@@ -113,7 +133,9 @@ This repository builds the application. The marketing site at launchstack.app is
 a separate app ([`apps/landing`](apps/landing)) that Docker and Compose do not
 build — on your own instance, `/` is the sign-in page, not a pitch.
 
-Full details, including what degrades without which optional service, are in
+Install, update, backup and troubleshooting are in the
+[self-hosting guide](docs/self-hosting.md). What degrades without which
+optional service is in
 [Self-hosting defaults](docs/deployment.md#self-hosting-defaults).
 
 ---

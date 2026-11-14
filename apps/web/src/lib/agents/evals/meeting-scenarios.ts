@@ -247,14 +247,14 @@ export const MEETING_EVAL_SCENARIOS: MeetingEvalScenario[] = [
             "The previous build is still deployable; rollback takes about 12 minutes.",
         ],
         script: {
+            // The chair names both seats up front; each answers in turn before
+            // the chair speaks again and closes.
             pm: [
-                "Checkout error rate went from 0.2% to 3% after the 14:10 release. @eng what broke?",
-                "Thanks. @fin what is the blast radius in revenue terms?",
+                "Checkout error rate went from 0.2% to 3% after the 14:10 release. @eng, what broke? @fin, then the blast radius in revenue terms.",
                 "Decision: we'll go with the rollback. @eng owns it. MEETING_COMPLETE",
             ],
             eng: [
                 "A null address field in the new payment path. The previous build is deployable and rollback takes about 12 minutes. I'll own the rollback.",
-                "Rollback is mine, twelve minutes.",
             ],
             fin: ["At 3% error we're losing roughly a percent of daily checkout revenue per hour."],
         },

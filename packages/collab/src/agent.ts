@@ -35,6 +35,12 @@ export interface TurnContext {
         turns: number;
         /** True on the last phase — the one that has to land the objective. */
         last: boolean;
+        /**
+         * Seats still to speak in the phase's round, the speaker excluded, so
+         * an agent hands the floor to someone waiting and leaves their part to
+         * them. Optional on the wire: older hubs do not send it.
+         */
+        waiting?: string[];
     };
 }
 
@@ -119,6 +125,11 @@ export function buildSystemPrompt(persona: AgentPersona, ctx: TurnContext): stri
                     : " Stay inside the phase's goal; the next phase has its own."
             }`
         );
+        if (ctx.phase.waiting && ctx.phase.waiting.length > 0) {
+            lines.push(
+                `Still to speak in this phase: ${ctx.phase.waiting.map(id => `@${id}`).join(", ")}. Leave their part to them; if you hand the floor on, name one of them.`
+            );
+        }
     }
 
     if (roster) {
@@ -138,6 +149,7 @@ export function buildSystemPrompt(persona: AgentPersona, ctx: TurnContext): stri
         "",
         "## How to speak here",
         "- Write one chat message. No preamble, no sign-off, no role label — the channel already shows who you are.",
+        `- Speak only as ${persona.displayName}. Never write another participant's lines or answer a question put to someone else; they answer on their own turn.`,
         "- Address a specific participant with @their-id when you need something from them.",
         "- Be concrete: name numbers, tradeoffs, and owners. Do not restate what was already said.",
         `- This meeting ends after at most ${ctx.maxTurns} turns; you are on turn ${ctx.turnIndex + 1}.`,
@@ -206,6 +218,99 @@ export function extractCompletion(
     return { text: stripped, proposesCompletion: true };
 }
 
+function escapeRegExp(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Matches a line that opens with a seat's speaker label — `Dana (@finance):`,
+ * the form the transcript itself puts on every turn, bold or quoted or not.
+ * Plain `@finance:` is left alone: that is how people address each other.
+ */
+function speakerLabel(seat: { id: string; displayName: string }): RegExp {
+    const name = escapeRegExp(seat.displayName.trim());
+    return new RegExp(
+        `^[ \\t>]*(?:[*_]{1,3}[ \\t]*)?${name}[ \\t]*\\(@${escapeRegExp(seat.id)}\\)[ \\t]*(?:[*_]{1,3}[ \\t]*)?:(?:[ \\t]*[*_]{1,3})?[ \\t]*`,
+        "i"
+    );
+}
+
+export interface OwnVoice {
+    /** The reply with the speaker's own label dropped and anything said as another seat cut. */
+    text: string;
+    /** The seat the reply opened as, when it opened as someone else's turn. */
+    spokeAs?: string;
+    /** True when lines written as another seat were cut. */
+    cut: boolean;
+}
+
+/**
+ * Keeps a reply in its speaker's voice. Models continue the transcript's
+ * pattern and write the next person's turn too ("Dana (@finance): Looking at
+ * the cash impact…"), which puts words in a seat's mouth that it never said.
+ * Everything from the first line labelled as another participant is cut; a
+ * reply that opens that way is reported in `spokeAs` so the caller can ask
+ * again instead of posting it.
+ */
+export function keepOwnVoice(
+    text: string,
+    speaker: Pick<AgentPersona, "id" | "displayName">,
+    roster: ReadonlyArray<Pick<AgentPersona, "id" | "displayName">>
+): OwnVoice {
+    const lines = text.split("\n");
+    const first = lines.findIndex(line => line.trim().length > 0);
+    if (first === -1) return { text: "", cut: false };
+    lines[first] = lines[first]!.replace(speakerLabel(speaker), "");
+
+    const others = roster
+        .filter(seat => seat.id !== speaker.id)
+        .map(seat => ({ id: seat.id, label: speakerLabel(seat) }));
+    for (let i = first; i < lines.length; i++) {
+        const other = others.find(seat => seat.label.test(lines[i]!));
+        if (!other) continue;
+        const kept = lines.slice(0, i).join("\n").trim();
+        return { text: kept, cut: true, ...(kept ? {} : { spokeAs: other.id }) };
+    }
+    return { text: lines.join("\n").trim(), cut: false };
+}
+
+/** A sentence end: terminal punctuation, then closing quotes or emphasis, then a space or the end. */
+const SENTENCE_END = /[.!?…](?:["'”’)\]*_`]+)?(?=\s|$)/g;
+
+/**
+ * Cuts text back to its last complete sentence or line within `maxChars`
+ * (default: all of it), for a reply that ran into a length limit. A turn that
+ * stops mid-sentence reads as broken; one that stops a sentence early does
+ * not. When the only break would keep less than a fifth of the text, it cuts
+ * at a word and marks the cut with an ellipsis rather than throw the reply
+ * away.
+ */
+export function trimToCompleteSentence(text: string, maxChars?: number): string {
+    const source = text.trim();
+    if (!source) return "";
+    const window =
+        maxChars !== undefined && source.length > maxChars ? source.slice(0, maxChars) : source;
+    let cut = -1;
+    for (const match of window.matchAll(SENTENCE_END)) cut = match.index + match[0].length;
+    const lineBreak = window.lastIndexOf("\n");
+    if (lineBreak > cut) cut = lineBreak;
+    if (cut >= window.length * 0.2) return window.slice(0, cut).trimEnd();
+    const space = window.lastIndexOf(" ", window.length - 2);
+    return `${window.slice(0, space > 0 ? space : window.length - 1).trimEnd()}…`;
+}
+
+/** The last message of every turn: whose turn it is, so the reply is theirs alone. */
+function turnCue(persona: AgentPersona, opening: boolean): CollabChatMessage {
+    const who = `${persona.displayName} (@${persona.id})`;
+    const own = `Write ${persona.displayName}'s message only — no lines for anyone else.`;
+    return {
+        role: "user",
+        content: opening
+            ? `System: You are opening the meeting, ${who}. State the goal and your first substantive point. ${own}`
+            : `System: It is your turn, ${who}. ${own}`,
+    };
+}
+
 // ---------------------------------------------------------------------------
 // LLM-backed runtime
 // ---------------------------------------------------------------------------
@@ -238,36 +343,62 @@ export class LlmAgentRuntime implements AgentRuntime {
 
     async takeTurn({ persona, context, transcript }: AgentTurnRequest): Promise<AgentTurnResult> {
         const started = Date.now();
-        const messages: CollabChatMessage[] = [
+        const conversation: CollabChatMessage[] = [
             { role: "system", content: buildSystemPrompt(persona, context) },
             ...buildTranscriptMessages(persona, transcript),
         ];
-        if (transcript.length === 0) {
-            messages.push({
-                role: "user",
-                content:
-                    "System: You are opening the meeting. State the goal and your first substantive point.",
+        const ask = (cue: CollabChatMessage) =>
+            this.chat({
+                messages: [...conversation, cue],
+                route: persona.route,
+                temperature: persona.temperature ?? this.options.defaultTemperature,
+                maxTokens: this.options.maxTokens,
             });
+
+        let voice = keepOwnVoice(
+            await ask(turnCue(persona, context.turnIndex === 0)),
+            persona,
+            context.roster
+        );
+        let retried = false;
+        if (voice.spokeAs) {
+            // The whole reply was someone else's turn. Ask once more, naming the mistake.
+            const other = context.roster.find(seat => seat.id === voice.spokeAs);
+            const otherName = other ? `${other.displayName} (@${other.id})` : `@${voice.spokeAs}`;
+            retried = true;
+            voice = keepOwnVoice(
+                await ask({
+                    role: "user",
+                    content: `System: That draft was written as ${otherName}. You are ${persona.displayName} (@${persona.id}): write your own message from your own seat. ${otherName} answers for themselves on their turn.`,
+                }),
+                persona,
+                context.roster
+            );
+            if (voice.spokeAs) {
+                throw new Error(`spoke as @${voice.spokeAs} instead of in its own voice`);
+            }
         }
 
-        const raw = await this.chat({
-            messages,
-            route: persona.route,
-            temperature: persona.temperature ?? this.options.defaultTemperature,
-            maxTokens: this.options.maxTokens,
-        });
-
-        const { text, proposesCompletion } = extractCompletion(raw, context.completionMarker);
+        const { text, proposesCompletion } = extractCompletion(
+            voice.text,
+            context.completionMarker
+        );
         const capped =
             persona.maxTurnChars && text.length > persona.maxTurnChars
-                ? `${text.slice(0, persona.maxTurnChars - 1).trimEnd()}…`
+                ? trimToCompleteSentence(text, persona.maxTurnChars)
                 : text;
 
         return {
             text: capped,
             addressedTo: parseMentions(capped, context.roster),
             proposesCompletion,
-            meta: { nodeId: this.nodeId, latencyMs: Date.now() - started, route: persona.route },
+            meta: {
+                nodeId: this.nodeId,
+                latencyMs: Date.now() - started,
+                route: persona.route,
+                ...(voice.cut ? { cutOtherVoices: true } : {}),
+                ...(retried ? { retriedOwnVoice: true } : {}),
+            },
         };
     }
 }

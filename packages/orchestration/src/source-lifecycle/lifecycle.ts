@@ -180,6 +180,25 @@ export interface CreateDocumentVersionLifecycleParams {
     embeddingIndexKey?: string;
     /** Correlates the command across web, outbox and worker. Defaults to the job id. */
     traceId?: string;
+    /**
+     * Compare-and-set: the version the caller started from. Checked under the
+     * document row lock before a NEW version is inserted, so two saves made
+     * from the same version cannot both land (the second would silently
+     * replace the first). A retry that converges on its own earlier version
+     * through the creation key is not checked. Omit to append unconditionally.
+     */
+    expectedCurrentVersionId?: bigint | number | null;
+}
+
+/** The document moved on since the caller's `expectedCurrentVersionId`. */
+export class StaleDocumentVersionError extends Error {
+    constructor(
+        public readonly documentId: number,
+        public readonly currentVersionId: bigint | null
+    ) {
+        super(`Document ${documentId} is no longer at the expected version`);
+        this.name = "StaleDocumentVersionError";
+    }
 }
 
 export type CreatedDocumentVersionLifecycle = Omit<
@@ -692,6 +711,19 @@ export async function createDocumentVersionLifecycle(
                     )
                     .limit(1);
                 lifecycleVersion = existingVersion;
+
+                if (!lifecycleVersion && params.expectedCurrentVersionId !== undefined) {
+                    const expected =
+                        params.expectedCurrentVersionId === null
+                            ? null
+                            : BigInt(params.expectedCurrentVersionId);
+                    if (lifecycleDocument.currentVersionId !== expected) {
+                        throw new StaleDocumentVersionError(
+                            params.documentId,
+                            lifecycleDocument.currentVersionId
+                        );
+                    }
+                }
 
                 if (!lifecycleVersion) {
                     const [maxRow] = await tx

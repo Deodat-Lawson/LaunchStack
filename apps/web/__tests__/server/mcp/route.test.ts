@@ -182,7 +182,7 @@ describe("responses", () => {
             mcpRequest("ada", ping(3), { "mcp-protocol-version": "1999-01-01" })
         );
         expect(response.status).toBe(400);
-        expect(await response.json()).toMatchObject({ id: 3, error: { code: -32600 } });
+        expect(await response.json()).toMatchObject({ id: 3, error: { code: -32022 } });
     });
 });
 

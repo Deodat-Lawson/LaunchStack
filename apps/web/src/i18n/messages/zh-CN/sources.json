@@ -56,6 +56,7 @@
     "clearFilters": "清除筛选",
     "selectedCount": "已选择 {count} 个",
     "askAboutThese": "就这些提问",
+    "extractFields": "提取字段",
     "loading": "正在加载你的知识库…",
     "gridView": "网格视图",
     "listView": "列表视图",
@@ -92,9 +93,9 @@
         "label": "思维导图",
         "desc": "先画出来，再引用它"
       },
-      "googleDoc": {
-        "label": "Google 文档",
-        "desc": "在 Google 文档中撰写"
+      "file": {
+        "label": "文件",
+        "desc": "在这里或在 Google 文档中撰写"
       },
       "paste": {
         "label": "粘贴文本",
@@ -196,17 +197,26 @@
       "untitled": "未命名思维导图",
       "openingEditor": "正在打开编辑器…"
     },
-    "googleDoc": {
-      "connectIntro": "为此工作区连接一个 Google 账号后，新文档会创建在它的 Drive 中的 <b>LaunchStack</b> 文件夹里。",
-      "connectGoogle": "连接 Google",
-      "created": "已在 Google 文档中创建",
-      "createFailed": "无法创建该文档",
-      "intro": "在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
-      "introAs": "以 {email} 的身份在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
+    "file": {
+      "titleLabel": "标题",
       "untitled": "未命名文档",
-      "blank": "空白文档",
-      "creating": "正在 Google 文档中创建…",
-      "opensInNewTab": "在新标签页中打开"
+      "intro": "先起个标题，再选择在哪里撰写。",
+      "here": {
+        "title": "在这里撰写",
+        "desc": "使用 LaunchStack 的编辑器。保存为此文件夹中的 Markdown 文件，读取完成后即可引用。",
+        "creating": "正在打开编辑器…",
+        "createFailed": "无法创建该文件"
+      },
+      "google": {
+        "title": "在 Google 文档中撰写",
+        "desc": "在新标签页中打开。之后的编辑会作为新版本同步回来。",
+        "descAs": "以 {email} 的身份。在新标签页中打开，之后的编辑会作为新版本同步回来。",
+        "connectDesc": "为此工作区连接一个 Google 账号后，新文档会创建在它的 Drive 中的 <b>LaunchStack</b> 文件夹里。",
+        "connectGoogle": "连接 Google",
+        "creating": "正在 Google 文档中创建…",
+        "created": "已在 Google 文档中创建",
+        "createFailed": "无法创建该文档"
+      }
     },
     "files": {
       "files": {
@@ -882,6 +892,7 @@
     "youtube": "YouTube",
     "paste": "笔记",
     "mindmap": "思维导图",
+    "sandboxedPage": "沙盒页面",
     "artifact": "Claude 工件"
   },
   "domains": {

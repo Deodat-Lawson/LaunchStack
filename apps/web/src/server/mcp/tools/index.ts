@@ -4,14 +4,18 @@
  * ones the caller's credential and membership both allow.
  */
 import type { McpTool } from "../protocol";
+import { addDocumentTool } from "./add-document";
 import { fetchTool } from "./fetch";
 import { listSourcesTool } from "./list-sources";
 import { saveConversationTool } from "./save-conversation";
 import { searchTool } from "./search";
+import { startUploadTool } from "./start-upload";
 
 export const MCP_TOOLS: readonly McpTool[] = [
     searchTool,
     fetchTool,
     listSourcesTool,
     saveConversationTool,
+    addDocumentTool,
+    startUploadTool,
 ];

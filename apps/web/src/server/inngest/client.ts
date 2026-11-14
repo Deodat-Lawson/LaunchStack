@@ -4,7 +4,12 @@ import type { TrendSearchEventData } from "@launchstack/pipelines/trend-search";
 import type { ProspectorEventData } from "@launchstack/pipelines/client-prospector";
 import type { DistributionRunEventData } from "@launchstack/pipelines/distribution/types";
 import type { ProposalRunEventData } from "@launchstack/pipelines/proposals/types";
+import type {
+    RepoExplainerJobEventData,
+    RepoWorkspaceSyncEventData,
+} from "@launchstack/pipelines/repo-workspace";
 import type { DocumentEdit, ReviewAction } from "@launchstack/editing";
+import type { AssistantClient } from "~/server/db/schema/mcp";
 
 // Retired event types (ADR-003): document/process.requested,
 // company-metadata/extract.requested and notes-anchors/rehydrate.requested
@@ -77,12 +82,12 @@ export type WebsiteCrawlEvent = {
 
 export type RepoWorkspaceSyncEvent = {
     name: "repo-workspace/sync.requested";
-    data: import("@launchstack/pipelines/repo-workspace").RepoWorkspaceSyncEventData;
+    data: RepoWorkspaceSyncEventData;
 };
 
 export type RepoExplainerJobEvent = {
     name: "repo-explainer/job.requested";
-    data: import("@launchstack/pipelines/repo-workspace").RepoExplainerJobEventData;
+    data: RepoExplainerJobEventData;
 };
 
 /** Drains the founder-weekly-review outbox. Carries no run-specific payload. */
@@ -120,6 +125,17 @@ export type ScenarioRunEvent = {
         companyId: string;
         /** Auth id of whoever started the run; their AI allowance is charged. Absent on older events. */
         userId?: string;
+    };
+};
+
+export type ExtractionRunEvent = {
+    name: "extraction/run.requested";
+    data: {
+        tableId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+        /** Auth id of whoever made the table; the usage is counted against them. */
+        userId: string;
     };
 };
 
@@ -162,6 +178,29 @@ export type NotionSyncEvent = {
     };
 };
 
+/**
+ * Write the follow-up note for one save of an assistant conversation
+ * (ASSISTANT_CONVERSATIONS_EXECUTOR=worker). Ids and short values only: the
+ * job reads the transcript back from the saved document, so the payload stays
+ * small however long the conversation is.
+ */
+export type AssistantConversationFollowUpEvent = {
+    name: "assistant-conversations/follow-up.requested";
+    data: {
+        /** `assistant_conversations.id`. */
+        conversationRowId: number;
+        documentId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+        /** The saver's auth id: the note's owner, whose AI allowance the model call counts against. */
+        authUserId: string;
+        title: string;
+        family: AssistantClient;
+        /** The save's content hash; a run whose hash the row no longer has writes nothing. */
+        contentHash: string;
+    };
+};
+
 export type Events =
     | TrendSearchEvent
     | ClientProspectorEvent
@@ -179,7 +218,9 @@ export type Events =
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent
-    | MarketingRunEvent;
+    | ExtractionRunEvent
+    | MarketingRunEvent
+    | AssistantConversationFollowUpEvent;
 
 /**
  * Create the Inngest client.

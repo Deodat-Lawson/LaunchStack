@@ -69,6 +69,11 @@ jobs:
       - name: Route files export only handlers and segment config
         run: node scripts/ci/check-route-exports.mjs
 
+      # The self-host preflight (`launchstack doctor`, `pnpm deploy:check`).
+      # Dependency-free like the script itself, so it runs before install.
+      - name: Self-host preflight tests
+        run: node --test apps/web/scripts/deploy-check.test.mjs
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -150,6 +155,23 @@ jobs:
 
       - name: Adeu docs-editing service tests (incl. protocol contract tests)
         run: python -m pytest services/adeu-ai-docs-editing/tests -q
+
+  # The self-host installer and `launchstack` CLI (deploy/). Plain bash against
+  # a fake `docker`, so it needs nothing installed. macOS still ships bash 3.2
+  # and the CLI must run there, hence the second runner.
+  self-host-cli:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck
+        if: matrix.os == 'ubuntu-latest'
+        run: shellcheck deploy/launchstack deploy/install.sh deploy/tests/*.sh scripts/ops/build-self-host-bundle.sh
+      - name: CLI and installer tests
+        run: /bin/bash deploy/tests/run.sh
 
   document-converter:
     runs-on: ubuntu-latest

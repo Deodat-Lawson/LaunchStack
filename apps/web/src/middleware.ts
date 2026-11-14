@@ -70,6 +70,10 @@ const isPublicApiRoute = createRouteMatcher([
     // the route authenticates every request itself and answers 401 with the
     // RFC 9728 challenge that tells an assistant how to sign in.
     "/api/mcp",
+    // Where a CLI assistant sends a file's bytes after `start_upload`. No
+    // session or bearer: the one-time secret in the path is the credential,
+    // checked by the route; filing the file still takes an authenticated call.
+    "/api/mcp/uploads/(.*)",
     // Prometheus scrapes without a session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     "/api/metrics",

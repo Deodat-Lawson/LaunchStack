@@ -128,9 +128,13 @@ export async function workspaceName(companyId: string): Promise<string | null> {
     return row?.name ?? null;
 }
 
-/** Plain-language lines for the consent screen, one per thing granted. */
-/** What a connection may do, one line each, in the order the consent screen lists them. */
-export type ScopeLine = "read" | "write" | "identity" | "offline";
+/**
+ * What a connection may do, one line each, in the order the consent screen
+ * lists them. The write scope grants two things, each with its own audience,
+ * so it gets two lines: saved conversations (private to the person) and
+ * added documents (seen by whoever can open the folder they go into).
+ */
+export type ScopeLine = "read" | "write" | "addDocuments" | "identity" | "offline";
 
 export function scopeLines(
     scopes: string[],
@@ -139,8 +143,9 @@ export function scopeLines(
     const lines: ScopeLine[] = [];
     // A scope the person's role cannot use is never offered by the server
     // (tools/list filters by permission), so it is not promised here either.
+    // Saving a conversation and adding a document both need documents.upload.
     if (scopes.includes(MCP_SCOPE_READ) && access.canRead) lines.push("read");
-    if (scopes.includes(MCP_SCOPE_WRITE) && access.canSave) lines.push("write");
+    if (scopes.includes(MCP_SCOPE_WRITE) && access.canSave) lines.push("write", "addDocuments");
     if (scopes.some(s => s === "openid" || s === "profile" || s === "email")) {
         lines.push("identity");
     }
@@ -157,6 +162,7 @@ export function describeScopes(
     const english: Record<ScopeLine, string> = {
         read: `Search and read the files you can open in ${workspace}`,
         write: `Save conversations to ${workspace}, visible only to you, with a follow-up note LaunchStack writes`,
+        addDocuments: `Add documents and files you give it to a folder you can edit in ${workspace}, after asking you which one; anyone who can open that folder can see them`,
         identity: "See your name and email address",
         offline: "Stay connected until you disconnect it in Settings",
     };

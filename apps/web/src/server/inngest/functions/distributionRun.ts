@@ -45,7 +45,13 @@ export const distributionRunJob = inngest.createFunction(
         id: "distribution-run",
         name: "Distribution Discovery Run",
         retries: 1,
-        concurrency: [{ key: "event.data.companyId", limit: 2 }, { limit: 8 }],
+        // Inngest counts running steps, not runs: two runs per workspace, each
+        // researching ENRICH_PARALLEL companies at once. At "2" a single run
+        // only ever researched two companies at a time.
+        concurrency: [
+            { key: "event.data.companyId", limit: 2 * ENRICH_PARALLEL },
+            { limit: 4 * ENRICH_PARALLEL },
+        ],
         onFailure: async ({ error, event }) => {
             const parsed = DistributionRunEventDataSchema.safeParse(event.data.event.data);
             if (!parsed.success) {

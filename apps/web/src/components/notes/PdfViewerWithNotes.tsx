@@ -114,11 +114,12 @@ interface Props {
     notes: PdfNoteLite[];
     /**
      * When the parent wants the viewer to scroll to a given note (e.g. the
-     * user clicked a note card in the sidebar), set this. Setting the same
-     * id twice in a row still triggers a scroll — use a {noteId, nonce}
-     * object from the parent if re-triggering the same jump is desired.
+     * user clicked a note card in the sidebar), set this. The jump is consumed
+     * once; refreshing notes or rerendering the parent must not replay it.
      */
     scrollToNoteId?: number | null;
+    /** Increment on an explicit click to jump to the same note again. */
+    scrollToNoteNonce?: number;
     /**
      * Fires when the user highlights text and clicks the floating
      * "Add note here" button. Parent is expected to open the note editor
@@ -380,6 +381,7 @@ export function PdfViewerWithNotes({
     url,
     notes,
     scrollToNoteId,
+    scrollToNoteNonce = 0,
     onCreateAnchoredNote,
     onCreateHighlight,
     onRecolorHighlight,
@@ -1059,25 +1061,48 @@ export function PdfViewerWithNotes({
         [updateDrawn, noteViewAnchor]
     );
 
-    // Scroll to a pinned note when the parent requests it.
+    // A selected pin can outlive the jump that selected it. In particular,
+    // the host rebuilds `notes` on a header click or when starting/saving a
+    // draft. Those renders must not pull the reader back to the old note.
+    const consumedNoteJump = useRef<{ url: string; id: number; nonce: number } | null>(null);
     useEffect(() => {
-        if (!scrollToNoteId) return;
+        if (scrollToNoteId == null) {
+            consumedNoteJump.current = null;
+            return;
+        }
+        const consumed = consumedNoteJump.current;
+        if (
+            consumed?.url === url &&
+            consumed.id === scrollToNoteId &&
+            consumed.nonce === scrollToNoteNonce
+        )
+            return;
+        // Keep the request pending until the file, note and page boxes exist.
+        if (!numPages || !sizesComplete) return;
         const note = notes.find(x => x.id === scrollToNoteId);
         if (!note) return;
         const placed =
             note.quads.length > 0 && note.page
                 ? { page: note.page, quads: note.quads }
                 : relocated.get(note.id);
-        if (placed) scrollToQuad(placed.page, placed.quads[0]);
-        else {
-            // 0 means searched for and not found; the hint is all that is left.
-            const found = notePages.get(note.id);
-            const page = found && found > 0 ? found : note.page;
-            if (page) scrollToQuad(page, undefined);
-        }
-        // Only a new request scrolls; the note being found later does not.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [scrollToNoteId, notes, scrollToQuad]);
+        // A moved note's page is only a hint until its quote has been searched.
+        const found = notePages.get(note.id);
+        if (!placed && needsPage(note) && found === undefined) return;
+        const page = placed?.page ?? (found && found > 0 ? found : note.page);
+        if (!page || !pageRefs.current.has(page)) return;
+        scrollToQuad(page, placed?.quads[0]);
+        consumedNoteJump.current = { url, id: scrollToNoteId, nonce: scrollToNoteNonce };
+    }, [
+        url,
+        scrollToNoteId,
+        scrollToNoteNonce,
+        notes,
+        numPages,
+        sizesComplete,
+        relocated,
+        notePages,
+        scrollToQuad,
+    ]);
 
     // Pick up where the reader left off, once the pages have their sizes so
     // the offsets are right. A reader who has already scrolled is not

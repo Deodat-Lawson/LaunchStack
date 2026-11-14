@@ -166,11 +166,15 @@ export const workspaceInvitations = pgTable(
         acceptedAt: timestamp("accepted_at", { withTimezone: true }),
         acceptedByUserId: bigint("accepted_by_user_id", { mode: "bigint" }),
         revokedAt: timestamp("revoked_at", { withTimezone: true }),
-        /** Set when the invited person turned it down; a resend clears it. */
-        declinedAt: timestamp("declined_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        /**
+         * Set when the invited person turned it down; a resend clears it.
+         * Declared last because the migration appended it: the CI check that
+         * rebuilds the schema both ways compares column order too.
+         */
+        declinedAt: timestamp("declined_at", { withTimezone: true }),
     },
     table => ({
         tokenHashUnique: uniqueIndex("workspace_invitations_token_hash_unique").on(table.tokenHash),

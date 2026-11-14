@@ -83,7 +83,12 @@ export function ProgramRow({
                     score === null || stale ? "text-ink-3" : "text-ink font-semibold"
                 )}
             >
-                {score === null ? "—" : format.number(score)}
+                {/* Unscored stays blank; "—" means scored without enough evidence. */}
+                {view.freshness.status === "not_assessed"
+                    ? null
+                    : score === null
+                      ? "—"
+                      : format.number(score)}
             </span>
         </ToolLink>
     );

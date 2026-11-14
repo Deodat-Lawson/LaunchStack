@@ -1650,8 +1650,6 @@ export function coverageMarkdown(dossiers: ProgramIntelligence[]): string {
         `- Conflicts left unresolved: ${conflicts.map(item => `${item.programId} ${item.field}`).join("; ") || "none"}.`,
         "- Historical example: a public application is recorded only with a separate acceptance excerpt. Answers are not copied. When the checked official pages link no example, that is recorded as unavailable on those pages, not as a rejection, and sites elsewhere were not searched.",
         "",
-        "Company-fit scoring and the discovery, detail, and tracker screens are outside this delivery.",
-        "",
     ];
     return lines.join("\n");
 }

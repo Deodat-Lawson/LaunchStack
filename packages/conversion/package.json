@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/conversion",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Any source in, ingestable evidence out: the document converter with one converter per supported type and its wire contract, audio and video transcription (each with its own folder, contract, and client), OCR primitives and provider adapters, archive expansion, the extraction router, and the EvidenceDocument every converter promises to emit.",
     "license": "Apache-2.0",
     "type": "module",

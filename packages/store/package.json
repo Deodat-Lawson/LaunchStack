@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/store",
-    "version": "0.1.0",
-    "description": "LaunchStack's shared persistence: the Drizzle client bound to the engine schema (25 tables), the raw postgres.js client, sealed credential storage, signed file-access tokens, per-workspace credit metering, and one-off backfills. Owns the engine migration ledger (drizzle/, ledger _launchstack_migrations). Configuration is injected \u2014 nothing here reads process.env.",
+    "version": "0.2.0",
+    "description": "LaunchStack's shared persistence: the Drizzle client bound to the engine schema (25 tables), the raw postgres.js client, sealed credential storage, signed file-access tokens, per-workspace credit metering, and one-off backfills. Owns the engine migration ledger (drizzle/, ledger _launchstack_migrations). Configuration is injected — nothing here reads process.env.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,
